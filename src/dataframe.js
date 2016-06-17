@@ -15,6 +15,18 @@ export default class DataFrame {
         }
     }
 
+    * __iter__(callback) {
+        for (const row of this) {
+            yield callback(row);
+        }
+    }
+
+    * __filter__(callback) {
+        for (const row of this) {
+            if (callback(row)) { yield row; }
+        }
+    }
+
     _build(data, schema) {
         return match(data)
                 (() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);})
@@ -70,13 +82,23 @@ export default class DataFrame {
     select(columns = []) {
         return new DataFrame(this.__rows__.map(
             row => row.select(returnArray(columns))
-        ), returnArray(columns));
+        ), this.__schema__.filter(column => returnArray(columns).includes(column[0])));
     }
 
     filter(condition = () => true) {
+        return new DataFrame([...this.__filter__(
+            row => condition(row)
+        )], this.__schema__);
+    }
+
+    filterOld(condition = () => true) {
         return new DataFrame(this.__rows__.filter(
             row => condition(row)
-        ), this.columns);
+        ), this.__schema__);
+    }
+
+    map(modification = () => true) {
+        return new DataFrame([...this.__iter__((line) => modification(line))], this.__schema__);
     }
 
     withColumn(columnName, columnFunc = () => null) {

@@ -23,11 +23,16 @@ export default class Row {
     _build(data) {
         return match(data)
                 (() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);})
-                ((value) => (value instanceof Object || Array || Row), () => this._fromAny(data))();
+                ((value) => (value instanceof Object || Row), () => this._fromObject(data))
+                ((value) => (value instanceof Array), () => this._fromArray(data))();
     }
 
-    _fromAny(thing) {
-        return this.__schema__.forEach(column => {this[column[0]] = thing[column[0]];});
+    _fromObject(object) {
+        return this.__schema__.forEach(column => {this[column[0]] = object[column[0]];});
+    }
+
+    _fromArray(array) {
+        return Object.entries(this.__schema__).forEach(column => {this[column[1][0]] = array[column[0]];});
     }
 
     size() {

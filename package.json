@@ -5,7 +5,8 @@
   "main": "./lib",
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
-    "compile": "NODE_ENV=production babel -d lib/ src/"
+    "compile": "NODE_ENV=production babel -d lib/ src/",
+    "benchmark": "NODE_ENV=production babel-node benchmark.js"
   },
   "author": "Guillaume Mousnier",
   "license": "MIT",

@@ -11,6 +11,20 @@ function tryCatch(callback) {
     }
 }
 
+test('DataFrame rows can be', (assert) => {
+    const df = new DataFrame({
+        'column1': [3, 6, 8],
+        'column2': ['3', '4', '5', '6'],
+        'column3': [],
+    }, [['column1', 'number'], ['column2', 'string'], ['column3', 'any']]);
+
+    assert.equal(df.count(), 4, 'counted');
+    assert.equal(df.filter((line) => line.column1 > 3).count(), 2, 'filtered');
+    assert.equal(df.map((line) => typeof line).count(), 4, 'modified (but not mutated)');
+
+    assert.end();
+});
+
 test('DataFrame can be created correctly', (assert) => {
     const dfFromObject = new DataFrame({
         'column1': [3, 6, 8],
@@ -35,13 +49,10 @@ test('DataFrame can be created correctly', (assert) => {
 test('DataFrame raise error when created', (assert) => {
     assert.throws(() => new DataFrame(''), 'from string');
     assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, of type InputTypeError');
-
     assert.throws(() => new DataFrame(), 'from nothing');
     assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, of type InputTypeError');
-
     assert.throws(() => new DataFrame(445), 'from number');
     assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, of type InputTypeError');
-
     assert.throws(() => new DataFrame([]), 'from empty array');
     assert.equal(tryCatch(() => new DataFrame([])).name, 'EmptyInputError', 'from empty array, of type EmptyInputError');
     assert.throws(() => new DataFrame({}), 'from empty dict');
@@ -62,11 +73,8 @@ test('DataFrame has a valid schema', (assert) => {
     };
 
     const dfWithSchema = new DataFrame(object, [['c1', 'number'], ['c2', 'number']]);
-
     const dfWithTooLargeSchema = new DataFrame(object, [['c1', 'number'], ['c2', 'number'], ['c3', 'any'], ['c4', 'any']]);
-
     const dfWithTooLittleSchema = new DataFrame(object, [['c1', 'number']]);
-
     const dfWithOnlyColumns = new DataFrame(object, ['c1', 'c2']);
 
     assert.deepEqual(dfWithoutSchema.__schema__, [['column1', 'number'], ['column2', 'string']], 'infered from data');
@@ -75,9 +83,11 @@ test('DataFrame has a valid schema', (assert) => {
     assert.deepEqual(dfWithTooLittleSchema.__schema__, [['c1', 'number']], 'even giving too few columns when created');
     assert.deepEqual(dfWithOnlyColumns.__schema__, [['c1', 'any'], ['c2', 'any']], 'even giving only columns names');
     assert.deepEqual(new DataFrame(object, []).__schema__, [], 'even giving only empty schema');
+    assert.deepEqual(dfWithSchema.select('c2').__schema__, [['c2', 'number']], 'after selecting columns');
 
     assert.end();
 });
+
 
 // test('DataFrame has an invalid schema, throwing a SchemaError', (assert) => {
 //     const object = {
