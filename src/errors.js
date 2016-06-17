@@ -22,3 +22,11 @@ export class SchemaError extends Error {
         this.name = 'SchemaError';
     }
 }
+
+export class SchemaTypeError extends Error {
+    constructor(type) {
+        super();
+        this.message = `SchemaTypeError: ${type} while only supporting Array as Schema`;
+        this.name = 'SchemaTypeError';
+    }
+}

@@ -1,5 +1,5 @@
 import { returnArray, match, transpose } from './reusables.js';
-import { InputTypeError, EmptyInputError, SchemaError } from './errors.js';
+import { InputTypeError, EmptyInputError, SchemaError, SchemaTypeError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
@@ -27,13 +27,20 @@ export default class DataFrame {
     }
 
     _fromDict(dict, schema) {
-        const realSchema = schema ? schema : this._inferSchemaFromDict(dict);
+        const realSchema = schema ? this._formatSchema(schema) : this._inferSchemaFromDict(dict);
         return [realSchema, transpose(Object.values(dict)).map(row => new Row(row, realSchema))];
     }
 
     _fromArray(array, schema) {
-        const realSchema = schema ? schema : this._inferSchemaFromArray(array);
+        const realSchema = schema ? this._formatSchema(schema) : this._inferSchemaFromArray(array);
         return [realSchema, array.map(row => new Row(row, realSchema))];
+    }
+
+    _formatSchema(schema) {
+        if (!Array.isArray(schema)) {
+            throw new SchemaTypeError(typeof schema);
+        }
+        return schema.map(column => Array.isArray(column) ? column : [column, 'any']);
     }
 
     _inferSchemaFromDict(dict) {
