@@ -3,7 +3,7 @@ import { InputTypeError } from './errors.js';
 
 export default class Row {
     constructor(row = [], schema = []) {
-        this.__columns__ = schema;
+        this.__schema__ = schema;
         this._build(row);
         this.__size__ = Object.keys(this.__publics__()).length;
     }
@@ -27,7 +27,7 @@ export default class Row {
     }
 
     _fromAny(thing) {
-        return this.__columns__.forEach(column => {this[column] = thing[column];});
+        return this.__schema__.forEach(column => {this[column[0]] = thing[column[0]];});
     }
 
     size() {

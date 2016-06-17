@@ -25,18 +25,12 @@ test('DataFrame can be created correctly', (assert) => {
 
     const dfFromDF = new DataFrame(dfFromArray);
 
+    console.log(dfFromArray);
+
     assert.deepEqual([dfFromObject.count(), dfFromObject.columns.length], [4, 2], 'from object');
     assert.deepEqual([dfFromArray.count(), dfFromArray.columns.length], [3, 6], 'from array');
     assert.deepEqual([dfFromDF.count(), dfFromDF.columns.length], [3, 6], 'from dataframe');
-    // console.log(df);
-    // console.log(df.select('column2'));
-    // console.log(df.count());
-    // console.log(df.filter((line) => line.column1 > 3).count());
-    // console.log(df.filter((line) => line.column2 <= 5).count());
-    // console.log(df.withColumn('column2', (line) => line.column2 * 2));
-    // console.log(df.withColumn('column3', (line) => line.column2 / 4));
-    // console.log(df.withColumn('column4'));
-    // console.log(df.withColumn('column5', (line, index) => index + 1));
+
     assert.end();
 });
 

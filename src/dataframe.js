@@ -1,10 +1,11 @@
 import { returnArray, match, transpose } from './reusables.js';
-import { InputTypeError, EmptyInputError } from './errors.js';
+import { InputTypeError, EmptyInputError, SchemaError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
-    constructor(data, schema = []) {
-        [this.columns, this.__rows__] = this._build(data);
+    constructor(data, schema) {
+        [this.__schema__, this.__rows__] = this._build(data, schema);
+        this.columns = this.__schema__.map(column => column[0]);
         this._checkSchema();
     }
 
@@ -14,33 +15,40 @@ export default class DataFrame {
         }
     }
 
-    _build(data) {
+    _build(data, schema) {
         return match(data)
                 (() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);})
-                ((value) => (value instanceof Object), () => this._fromDict(data))
-                ((value) => (value instanceof Array), () => this._fromArray(data))
-                ((value) => (value instanceof DataFrame), () => [data.columns, data.__rows__])
+                ((value) => (value instanceof Object), () => this._fromDict(data, schema))
+                ((value) => (value instanceof Array), () => this._fromArray(data, schema))
+                ((value) => (value instanceof DataFrame), () => [data.__schema__, data.__rows__])
                 ((value) => (value instanceof Object) && Object.keys(value).length === 0,
                     () => {throw new EmptyInputError(typeof data);})
                 ((value) => Array.isArray(value) && value.length === 0, () => {throw new EmptyInputError(typeof data);})();
     }
 
-    _fromDict(dict) {
-        const columns = Object.keys(dict);
-        return [columns, transpose(Object.values(dict)).map(row => new Row(row, columns))];
+    _fromDict(dict, schema) {
+        const realSchema = schema ? schema : this._inferSchemaFromDict(dict);
+        return [realSchema, transpose(Object.values(dict)).map(row => new Row(row, realSchema))];
     }
 
-    _fromArray(array) {
-        const columns = [...Array(Math.max(...array.map(row => row.length))).keys()];
-        return [columns, array.map(row => new Row(row, columns))];
+    _fromArray(array, schema) {
+        const realSchema = schema ? schema : this._inferSchemaFromArray(array);
+        return [realSchema, array.map(row => new Row(row, realSchema))];
+    }
+
+    _inferSchemaFromDict(dict) {
+        return Object.keys(dict).map(column => [column, typeof dict[column][0]]);
+    }
+
+    _inferSchemaFromArray(array) {
+        return [...Array(Math.max(...array.map(row => row.length))).keys()].map(
+            column => [column, typeof array[0][column]]
+        );
     }
 
     _checkSchema() {
-        if (this.__rows__[0].size() !== this.columns.length) {
-            throw new Error(
-                `ShemaError: ${this.__rows__[0].size()} columns found while
-                having ${this.columns.length} in schema`
-            );
+        if (this.__rows__[0].size() !== this.__schema__.length) {
+            throw new SchemaError(this.__rows__[0].size(), this.columns.length);
         }
     }
 

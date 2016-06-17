@@ -13,3 +13,12 @@ export class EmptyInputError extends Error {
         this.name = 'EmptyInputError';
     }
 }
+
+export class SchemaError extends Error {
+    constructor(nColumns, expected) {
+        super();
+        this.message = `ShemaError: ${nColumns} columns found while
+                        having ${expected} in schema`;
+        this.name = 'SchemaError';
+    }
+}
