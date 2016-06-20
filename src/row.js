@@ -1,15 +1,17 @@
-import { returnArray, match } from './reusables.js';
-import { InputTypeError } from './errors.js';
+import { match, isArrayOfType } from './reusables.js';
+import { InputTypeError, SchemaError } from './errors.js';
+
+const Any = {};
 
 export default class Row {
-    constructor(row = [], schema = []) {
-        this.__schema__ = schema;
+    constructor(row, schema) {
+        this.__schema__ = this._validateSchema(schema);
+        this.__size__ = this.__schema__.length;
         this._build(row);
-        this.__size__ = Object.keys(this.__publics__()).length;
     }
 
     * [Symbol.iterator]() {
-        for (const column of Object.keys(this)) {
+        for (const column of Object.values(this.__publics__())) {
             yield column;
         }
     }
@@ -20,11 +22,23 @@ export default class Row {
         ).map(column => ({[column]: this[column]})));
     }
 
+    _validateSchema(schema) {
+        return match(schema,
+                [(value) => !(value instanceof Array), () => {throw new SchemaError(typeof schema);}],
+                [(value) => !isArrayOfType(value, Array), () => {throw new SchemaError(`[${typeof schema[0]}]`);}],
+                [(value) => !isArrayOfType(value[0], String), () => {throw new SchemaError(`[[${typeof schema[0][0]}, X]]`);}],
+                [(value) => !isArrayOfType(value[0], Object, 1), () => {throw new SchemaError(`[[X, ${typeof schema[0][1]}]]`);}],
+                [() => true, () => schema]
+            );
+    }
+
     _build(data) {
-        return match(data)
-                (() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);})
-                ((value) => (value instanceof Object || Row), () => this._fromObject(data))
-                ((value) => (value instanceof Array), () => this._fromArray(data))();
+        return match(data,
+                [(value) => (value instanceof Array), () => this._fromArray(data)],
+                [(value) => (value instanceof Row), () => this._fromObject(data)],
+                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)],
+                [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);}]
+            );
     }
 
     _fromObject(object) {
@@ -44,19 +58,20 @@ export default class Row {
     }
 
     toArray() {
-        return Array([...this.__publics__()]);
+        return [...this];
     }
 
-    select(columns = []) {
-        return new Row(returnArray(columns).map(
-            column => this.__publics__()[column]
-        ), columns);
+    select(...columns) {
+        return new Row(columns.map(column => this.__publics__()[column]),
+            columns.map(column => this.__schema__.find(colSchema => colSchema[0] === column)).filter(colSchema => colSchema)
+        );
     }
 
-    add(columnName, value = null) {
-        const newColumns = this.__columns__.includes(columnName) ? this.__columns__ : [...this.__columns__, columnName];
-        return new Row(newColumns.map(
-            column => column === columnName ? value : this.__publics__()[column]
-        ), newColumns);
+    set(columnName, value, type = Any) {
+        const newSchema = this.__schema__.find(colSchema => colSchema[0] === columnName) ?
+            this.__schema__ : [...this.__schema__, [columnName, type]];
+        return new Row(newSchema.map(
+            column => column[0] === columnName ? value : this.__publics__()[column[0]]
+        ), newSchema);
     }
 }

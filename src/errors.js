@@ -15,10 +15,9 @@ export class EmptyInputError extends Error {
 }
 
 export class SchemaError extends Error {
-    constructor(nColumns, expected) {
+    constructor(schema) {
         super();
-        this.message = `ShemaError: ${nColumns} columns found while
-                        having ${expected} in schema`;
+        this.message = `ShemaError: ${schema} found while expecting [[String, Object]]`;
         this.name = 'SchemaError';
     }
 }
