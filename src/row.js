@@ -1,13 +1,15 @@
 import { match, isArrayOfType } from './reusables.js';
-import { InputTypeError, SchemaError } from './errors.js';
+import { InputTypeError, SchemaError, NoSuchColumnError } from './errors.js';
 
 const Any = {};
 
 export default class Row {
     constructor(row, schema) {
         this.__schema__ = this._validateSchema(schema);
+        this.__columns__ = this.__schema__.map(column => column[0]);
         this.__size__ = this.__schema__.length;
         this._build(row);
+        Object.freeze(this);
     }
 
     * [Symbol.iterator]() {
@@ -62,7 +64,11 @@ export default class Row {
     }
 
     select(...columns) {
-        return new Row(columns.map(column => this.__publics__()[column]),
+        return new Row(
+            columns.map(column => {
+                if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columns);}
+                return this.__publics__()[column];
+            }),
             columns.map(column => this.__schema__.find(colSchema => colSchema[0] === column)).filter(colSchema => colSchema)
         );
     }

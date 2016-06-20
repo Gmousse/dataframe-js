@@ -1,51 +1,69 @@
-// import tape from 'tape';
-// const test = tape;
-//
-// import DataFrame from '../src/dataframe.js';
-//
-// function tryCatch(callback) {
-//     try {
-//         callback();
-//     } catch (err) {
-//         return err;
-//     }
-// }
-//
-// test('DataFrame rows can be', (assert) => {
-//     const df = new DataFrame({
-//         'column1': [3, 6, 8],
-//         'column2': ['3', '4', '5', '6'],
-//         'column3': [],
-//     }, [['column1', 'number'], ['column2', 'string'], ['column3', 'any']]);
-//
-//     assert.equal(df.count(), 4, 'counted');
-//     assert.equal(df.filter((line) => line.column1 > 3).count(), 2, 'filtered');
-//     assert.equal(df.map((line) => typeof line).count(), 4, 'modified (but not mutated)');
-//
-//     assert.end();
-// });
-//
-// test('DataFrame can be created correctly', (assert) => {
-//     const dfFromObject = new DataFrame({
-//         'column1': [3, 6, 8],
-//         'column2': [3, 4, 5, 6],
-//     });
-//
-//     const dfFromArray = new DataFrame([
-//         [1, 6, 9, 10, 12],
-//         [1, 2],
-//         [6, 6, 9, 8, 9, 12],
-//     ]);
-//
-//     const dfFromDF = new DataFrame(dfFromArray);
-//
-//     assert.deepEqual([dfFromObject.count(), dfFromObject.columns.length], [4, 2], 'from object');
-//     assert.deepEqual([dfFromArray.count(), dfFromArray.columns.length], [3, 6], 'from array');
-//     assert.deepEqual([dfFromDF.count(), dfFromDF.columns.length], [3, 6], 'from dataframe');
-//
-//     assert.end();
-// });
-//
+import tape from 'tape';
+const test = tape;
+
+import DataFrame from '../src/dataframe.js';
+
+function tryCatch(callback) {
+    try {
+        callback();
+    } catch (err) {
+        return err;
+    }
+}
+
+test('DataFrame can be created correctly', (assert) => {
+    const dfFromObjectOfArrays = new DataFrame({
+        'column1': [3, 6, 8],
+        'column2': [3, 4, 5, 6],
+    }, [['column1', Number], ['column2', Number]]);
+
+    const dfFromArrayOfArrays = new DataFrame([
+        [1, 6, 9, 10, 12],
+        [1, 2],
+        [6, 6, 9, 8, 9, 12],
+    ], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
+
+    const dfFromArrayOfObjects = new DataFrame([
+        {c1: 1, c2: 6, c3: 9, c4: 10, c5: 12},
+        {c4: 1, c3: 2},
+        {c1: 6, c5: 6, c2: 9, c4: 8, c3: 9, c6: 12},
+    ], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
+
+    const dfFromDF = new DataFrame(dfFromArrayOfArrays);
+
+    assert.deepEqual([dfFromObjectOfArrays.count(), dfFromObjectOfArrays.columns.length], [4, 2], 'from Object of Arrays');
+    assert.deepEqual([dfFromArrayOfArrays.count(), dfFromArrayOfArrays.columns.length], [3, 6], 'from Array of Arrays');
+    assert.deepEqual([dfFromArrayOfObjects.count(), dfFromArrayOfObjects.columns.length], [3, 6], 'from Array of Objects');
+    assert.deepEqual([dfFromDF.count(), dfFromDF.columns.length], [3, 6], 'from an other Dataframe');
+
+    assert.end();
+});
+
+test('DataFrame can\'t be created', (assert) => {
+    assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, throwing InputTypeError');
+    assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, throwing InputTypeError');
+    assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, throwing InputTypeError');
+    assert.equal(tryCatch(() => new DataFrame([])).name, 'EmptyInputError', 'from empty array, throwing EmptyInputError');
+    assert.equal(tryCatch(() => new DataFrame({})).name, 'EmptyInputError', 'from empty dict, throwing EmptyInputError');
+
+    assert.end();
+});
+
+test('DataFrame rows can be', (assert) => {
+    const df = new DataFrame({
+        'column1': [3, 6, 8],
+        'column2': ['3', '4', '5', '6'],
+        'column3': [],
+    }, [['column1', Number], ['column2', String], ['column3', Object]]);
+
+    assert.equal(df.count(), 4, 'counted');
+    assert.equal(df.filter((line) => line.column1 > 3).count(), 2, 'filtered');
+    assert.equal(df.map((line) => line.set('column1', 3)).count(), 4, 'modified (but not mutated)');
+
+    assert.end();
+});
+
+
 // test('DataFrame raise error when created', (assert) => {
 //     assert.throws(() => new DataFrame(''), 'from string');
 //     assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, of type InputTypeError');
@@ -100,13 +118,3 @@
 // //
 // //     assert.end();
 // // });
-//
-// // console.log(df);
-// // console.log(df.select('column2'));
-// // console.log(df.count());
-// // console.log(df.filter((line) => line.column1 > 3).count());
-// // console.log(df.filter((line) => line.column2 <= 5).count());
-// // console.log(df.withColumn('column2', (line) => line.column2 * 2));
-// // console.log(df.withColumn('column3', (line) => line.column2 / 4));
-// // console.log(df.withColumn('column4'));
-// // console.log(df.withColumn('column5', (line, index) => index + 1));

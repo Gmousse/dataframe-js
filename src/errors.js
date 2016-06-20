@@ -29,3 +29,11 @@ export class SchemaTypeError extends Error {
         this.name = 'SchemaTypeError';
     }
 }
+
+export class NoSuchColumnError extends Error {
+    constructor(column, columns) {
+        super();
+        this.message = `NoSuchColumnError: ${column} not found in [${columns.join(', ')}]`;
+        this.name = 'NoSuchColumnError';
+    }
+}

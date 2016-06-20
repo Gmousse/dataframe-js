@@ -35,15 +35,15 @@ export default class DataFrame {
     }
 
     _build(data, schema) {
-        return match(data)
-                (() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);})
-                ((value) => (value instanceof Object), () => this._fromDict(data, schema))
-                ((value) => (value instanceof Array), () => this._fromArray(data, schema))
-                ((value) => (value instanceof DataFrame), () => [data.__schema__, data.__rows__])
-                ((value) => (value instanceof Object) && Object.keys(value).length === 0,
-                    () => {throw new EmptyInputError(typeof data);})
-                ((value) => Array.isArray(value) && value.length === 0,
-                    () => {throw new EmptyInputError(typeof data);})();
+        return match(data,
+                [(value) => Array.isArray(value) && value.length === 0,
+                    () => {throw new EmptyInputError(typeof data);}],
+                [(value) => (value instanceof Object) && Object.keys(value).length === 0,
+                    () => {throw new EmptyInputError(typeof data);}],
+                [(value) => (value instanceof Array), () => this._fromArray(data, schema)],
+                [(value) => (value instanceof DataFrame), () => [data.__schema__, data.__rows__]],
+                [(value) => (value instanceof Object), () => this._fromDict(data, schema)],
+                [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);}]);
     }
 
     _fromDict(dict, schema) {
