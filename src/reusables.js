@@ -14,7 +14,7 @@ export function isArrayOfType(value, ofType, index = 0) {
      );
 }
 
-function* makeGenerator(thing) {
+export function* makeGenerator(thing) {
     yield* thing;
 }
 

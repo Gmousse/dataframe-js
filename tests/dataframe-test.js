@@ -49,6 +49,30 @@ test('DataFrame can\'t be created', (assert) => {
     assert.end();
 });
 
+test('DataFrame can\'t be converted', (assert) => {
+    const dfFromArrayOfArrays = new DataFrame([
+        [1, 6, 9, 10, 12],
+        [1, 2],
+        [6, 6, 9, 8, 9, 12],
+    ], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
+
+    assert.deepEqual(
+        dfFromArrayOfArrays.toDict(),
+        {
+            c1: [1, 1, 6],
+            c2: [6, 2, 6],
+            c3: [9, undefined, 9],
+            c4: [10, undefined, 8],
+            c5: [12, undefined, 9],
+            c6: [undefined, undefined, 12],
+        }, 'into dict');
+    assert.deepEqual(
+        dfFromArrayOfArrays.toArray(),
+        [[1, 6, 9, 10, 12, undefined], [1, 2, undefined, undefined, undefined, undefined], [6, 6, 9, 8, 9, 12]], 'into array');
+
+    assert.end();
+});
+
 test('DataFrame rows can be', (assert) => {
     const df = new DataFrame({
         'column1': [3, 6, 8],
@@ -57,28 +81,38 @@ test('DataFrame rows can be', (assert) => {
     }, [['column1', Number], ['column2', String], ['column3', Object]]);
 
     assert.equal(df.count(), 4, 'counted');
-    assert.equal(df.filter((line) => line.column1 > 3).count(), 2, 'filtered');
-    assert.equal(df.map((line) => line.set('column1', 3)).count(), 4, 'modified (but not mutated)');
+    assert.deepEqual(
+        df.filter((line) => line.column1 > 3).toArray(),
+        [[6, '4', undefined], [8, '5', undefined]], 'filtered'
+    );
+    assert.deepEqual(
+        df.map((line) => line.set('column1', 3)).toArray(),
+        [[3, '3', undefined], [3, '4', undefined], [3, '5', undefined], [3, '6', undefined]], 'modified (but not mutated)'
+    );
+    assert.deepEqual(
+        df.filter((line) => line.column1 > 3).map((line) => line.set('column1', 3)).toArray(),
+         [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified'
+     );
+    assert.deepEqual(
+        df.chain((line) => line.column1 > 3, (line) => line.set('column1', 3)).toArray(),
+         [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified by chains (giving the same result, but faster)'
+     );
+
+    const expectedShow = [
+        '| column1   | column2   | column3   |',
+        '------------------------------------',
+        '| 3         | 3         | undefined |',
+        '| 6         | 4         | undefined |',
+        '| 8         | 5         | undefined |',
+        '| undefined | 6         | undefined |',
+    ].join('\n');
+
+    assert.equal(df.show(10, true), expectedShow, 'showed as string table');
+
 
     assert.end();
 });
 
-
-// test('DataFrame raise error when created', (assert) => {
-//     assert.throws(() => new DataFrame(''), 'from string');
-//     assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, of type InputTypeError');
-//     assert.throws(() => new DataFrame(), 'from nothing');
-//     assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, of type InputTypeError');
-//     assert.throws(() => new DataFrame(445), 'from number');
-//     assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, of type InputTypeError');
-//     assert.throws(() => new DataFrame([]), 'from empty array');
-//     assert.equal(tryCatch(() => new DataFrame([])).name, 'EmptyInputError', 'from empty array, of type EmptyInputError');
-//     assert.throws(() => new DataFrame({}), 'from empty dict');
-//     assert.equal(tryCatch(() => new DataFrame({})).name, 'EmptyInputError', 'from empty dict, of type EmptyInputError');
-//
-//     assert.end();
-// });
-//
 // test('DataFrame has a valid schema', (assert) => {
 //     const dfWithoutSchema = new DataFrame({
 //         'column1': [3, 6, 8],

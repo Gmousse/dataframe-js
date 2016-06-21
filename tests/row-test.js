@@ -14,15 +14,18 @@ function tryCatch(callback) {
 test('Row can be created', (assert) => {
     assert.equal(
         new Row([1, 3, 6], [['c1', Number], ['c2', Number], ['c3', Number]]).size(),
-        3, 'from array');
+        3, 'from array'
+    );
     assert.equal(
         new Row({c1: 2, c2: 2, c3: 4}, [['c1', Number], ['c2', Number], ['c3', Number]]).size(),
-        3, 'from dict');
+        3, 'from dict'
+    );
     assert.equal(
         new Row(
             new Row({c1: 2, c3: 4}, [['c1', Number], ['c3', Number]]),
             [['c1', Number], ['c2', Number], ['c3', Number]]).size(),
-        3, 'from an other row');
+        3, 'from an other row'
+    );
 
     assert.end();
 });
@@ -30,19 +33,24 @@ test('Row can be created', (assert) => {
 test('Row can\'t be created', (assert) => {
     assert.equal(
         tryCatch(() => new Row()).name,
-        'SchemaError', 'from nothing, throwing SchemaError');
+        'SchemaError', 'from nothing, throwing SchemaError'
+    );
     assert.equal(
         tryCatch(() => new Row([1, 3, 6], ['c1', 'c2', 'c3'])).name, 'SchemaError',
-        'from a wrong schema, throwing SchemaError');
+        'from a wrong schema, throwing SchemaError'
+    );
     assert.equal(
         tryCatch(() => new Row([1, 3, 6], [['c1', 'number'], ['c2', 'number'], ['c3', 'number']])).name,
-         'SchemaError', 'from a wrong schema (2), throwing SchemaError');
+         'SchemaError', 'from a wrong schema (2), throwing SchemaError'
+     );
     assert.equal(
         tryCatch(() => new Row(1, [['c1', Number], ['c2', Number], ['c3', Number]])).name,
-        'InputTypeError', 'from a wrong type, throwing InputTypeError');
+        'InputTypeError', 'from a wrong type, throwing InputTypeError'
+    );
     assert.equal(
         tryCatch(() => new Row(null, [['c1', Number], ['c2', Number], ['c3', Number]])).name,
-        'InputTypeError', 'from a wrong type (2), throwing InputTypeError');
+        'InputTypeError', 'from a wrong type (2), throwing InputTypeError'
+    );
 
     assert.end();
 });
@@ -50,10 +58,12 @@ test('Row can\'t be created', (assert) => {
 test('Row can be converted', (assert) => {
     assert.deepEqual(
         new Row([1, 3, 6], [['c1', Number], ['c2', Number], ['c3', Number]]).toDict(),
-        {c1: 1, c2: 3, c3: 6}, 'into dict');
+        {c1: 1, c2: 3, c3: 6}, 'into dict'
+    );
     assert.deepEqual(
         new Row([1, 3, 6], [['c1', Number], ['c2', Number], ['c3', Number]]).toArray(),
-        [1, 3, 6], 'into array');
+        [1, 3, 6], 'into array'
+    );
 
     assert.end();
 });
@@ -75,10 +85,12 @@ test('Row can\'t be modified', (assert) => {
     const df = new Row([1, 'yo', 9, ['yo']], [['c1', Number], ['c2', String], ['c3', Number], ['c4', Array]]);
     assert.equal(
         tryCatch(() => df.select('c4', 'c#').toDict()).name,
-        'NoSuchColumnError', 'via a selection of non-existing column, throwing NoSuchColumnError');
+        'NoSuchColumnError', 'via a selection of non-existing column, throwing NoSuchColumnError'
+    );
     assert.equal(
         tryCatch(() => {df.c1 = 4;}).name,
-        'TypeError', 'via a direct assignment (mutate), throwing TypeError');
+        'TypeError', 'via a direct assignment (mutate), throwing TypeError'
+    );
 
     assert.end();
 });
