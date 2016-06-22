@@ -1,12 +1,13 @@
 import { returnArray, match, transpose } from './reusables.js';
-import { InputTypeError, EmptyInputError, SchemaError, SchemaTypeError } from './errors.js';
+import { InputTypeError, EmptyInputError } from './errors.js';
 import Row from './row.js';
+
+function Any(value) {return value;}
 
 export default class DataFrame {
     constructor(data, schema) {
         [this.__schema__, this.__rows__] = this._build(data, schema);
         this.columns = this.__schema__.map(column => column[0]);
-        this._checkSchema();
         Object.freeze(this);
     }
 
@@ -17,9 +18,10 @@ export default class DataFrame {
     }
 
     * __iter__(func, limit = Infinity) {
+        let token = limit;
         for (const row of this) {
-            if (limit <= 0) return;
-            limit --;
+            if (token <= 0) return;
+            token --;
             const chain = func(row);
             if (chain) {yield chain;}
         }
@@ -59,26 +61,14 @@ export default class DataFrame {
     }
 
     _inferSchemaFromArray(array) {
-        console.log(array);
-        return [...Array(Math.max(...array.map(row => row.length))).keys()].map(
-            column => [column, typeof array[0][column]]
+        return match(array[0],
+                [(value) => (value instanceof Array),
+                 () => [...Array(Math.max(...array.map(row => row.length))).keys()].map(
+                    column => [column, Any]
+                )],
+                [(value) => (value instanceof Row), (value) => value.__schema__],
+                [(value) => (value instanceof Object), (value) => Object.keys(value).map(column => [column, typeof value[column][0]])]
         );
-    }
-
-    _checkSchema() {
-        if (this.__rows__[0].size() !== this.__schema__.length) {
-            throw new SchemaError(this.__rows__[0].size(), this.columns.length);
-        }
-    }
-
-    _buildChain(operations) {
-        return operations.reduce(
-            (p, n) => (x) => {
-                if (typeof n(x) === 'boolean') {
-                    return n(x) ? x : false;
-                }
-                return x ? n(x) : false;
-            }, (x) => x);
     }
 
     toDict() {
@@ -92,23 +82,32 @@ export default class DataFrame {
     }
 
     chain(...operations) {
-        return new DataFrame([...this.__iter__(this._buildChain([...operations]))]);
-    }
-
-    select(columns = []) {
-        return new DataFrame(this.__rows__.map(
-            row => row.select(returnArray(columns))
-        ), this.__schema__.filter(column => returnArray(columns).includes(column[0])));
+        return new DataFrame([...this.__iter__(
+            operations.reduce(
+                (p, n) => (x) => {
+                    if (typeof p(x) === 'boolean') {
+                        return false;
+                    }
+                    if (typeof n(p(x)) === 'boolean') {
+                        return n(p(x)) ? p(x) : false;
+                    }
+                    return p(x) ? n(p(x)) : false;
+                }, (x) => x)
+        )]);
     }
 
     filter(condition = () => true) {
-        return new DataFrame([...this.__iter__(
-            row => condition(row) ? row : false
-        )], this.__schema__);
+        return new DataFrame([...this.__iter__(row => condition(row) ? row : false)], this.__schema__);
     }
 
     map(modification = () => true) {
         return new DataFrame([...this.__iter__((line) => modification(line))], this.__schema__);
+    }
+
+    select(...columns) {
+        return new DataFrame(this.__rows__.map(
+            row => row.select(...columns)
+        ), this.__schema__.filter(column => returnArray(columns).includes(column[0])));
     }
 
     withColumn(columnName, columnFunc = () => null) {

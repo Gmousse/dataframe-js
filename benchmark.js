@@ -34,14 +34,14 @@ class Benchmark {
 
 
 const df2 = new DataFrame([
-    [1, 6, 9, 10, 12],
-    [1, 2],
-    [6, 6, 9, 8, 9, 12],
-]);
+        [1, 6, 9, 10, 12],
+        [1, 2],
+        [6, 6, 9, 8, 9, 12],
+], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
 
 console.log(df2.chain(
-        (line) => line['0'] === 1,
-        (line) => line.add('0', 5),
+        (line) => line['c1'] === 1,
+        (line) => line.set('c1', 5),
     ))
 
 // const bench = new Benchmark();

@@ -20,6 +20,6 @@ export function* makeGenerator(thing) {
 
 export function match(value, ...cases) {
     const casesGen = makeGenerator(cases);
-    const checker = nextCase => nextCase[0](value) ? nextCase[1]() : checker(casesGen.next().value);
+    const checker = nextCase => nextCase[0](value) ? nextCase[1](value) : checker(casesGen.next().value);
     return checker(casesGen.next().value);
 }

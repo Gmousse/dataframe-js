@@ -49,7 +49,7 @@ test('DataFrame can\'t be created', (assert) => {
     assert.end();
 });
 
-test('DataFrame can\'t be converted', (assert) => {
+test('DataFrame can\'t be', (assert) => {
     const dfFromArrayOfArrays = new DataFrame([
         [1, 6, 9, 10, 12],
         [1, 2],
@@ -65,10 +65,47 @@ test('DataFrame can\'t be converted', (assert) => {
             c4: [10, undefined, 8],
             c5: [12, undefined, 9],
             c6: [undefined, undefined, 12],
-        }, 'into dict');
+        }, 'converted into dict');
     assert.deepEqual(
         dfFromArrayOfArrays.toArray(),
-        [[1, 6, 9, 10, 12, undefined], [1, 2, undefined, undefined, undefined, undefined], [6, 6, 9, 8, 9, 12]], 'into array');
+        [[1, 6, 9, 10, 12, undefined], [1, 2, undefined, undefined, undefined, undefined], [6, 6, 9, 8, 9, 12]], 'converted into array');
+
+    const dfFromDict = new DataFrame({
+        'column1': [3, 6, 8],
+        'column2': ['3', '4', '5', '6'],
+        'column3': [],
+    }, [['column1', Number], ['column2', String], ['column3', Object]]);
+
+    const expectedShow = [
+        '| column1   | column2   | column3   |',
+        '------------------------------------',
+        '| 3         | 3         | undefined |',
+        '| 6         | 4         | undefined |',
+        '| 8         | 5         | undefined |',
+        '| undefined | 6         | undefined |',
+    ].join('\n');
+
+    assert.equal(dfFromDict.show(10, true), expectedShow, 'showed as string table');
+
+    assert.end();
+});
+
+test('DataFrame columns can be', (assert) => {
+    const df = new DataFrame([
+        [1, 6, 9, 10, 12],
+        [1, 2],
+        [6, 6, 9, 8, 9, 12],
+    ], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
+
+    assert.equal(df.columns.length, 6, 'counted');
+    assert.deepEqual(
+        df.select('c2').toArray(),
+        [[6], [2], [6]], 'selected, with only one column'
+    );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').toDict(),
+        {c2: [6, 2, 6], c3: [9, undefined, 9], c4: [10, undefined, 8]}, 'selected, with only multiple columns'
+    );
 
     assert.end();
 });
@@ -97,18 +134,10 @@ test('DataFrame rows can be', (assert) => {
         df.chain((line) => line.column1 > 3, (line) => line.set('column1', 3)).toArray(),
          [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified by chains (giving the same result, but faster)'
      );
-
-    const expectedShow = [
-        '| column1   | column2   | column3   |',
-        '------------------------------------',
-        '| 3         | 3         | undefined |',
-        '| 6         | 4         | undefined |',
-        '| 8         | 5         | undefined |',
-        '| undefined | 6         | undefined |',
-    ].join('\n');
-
-    assert.equal(df.show(10, true), expectedShow, 'showed as string table');
-
+    assert.deepEqual(
+        df.chain((line) => line.column1 > 3, (line) => line.set('column1', 3), (line) => line.column2 === '5').toArray(),
+         [[3, '5', undefined]], 'filtered and modified and filtered (again) by chains'
+     );
 
     assert.end();
 });
