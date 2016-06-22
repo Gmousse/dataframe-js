@@ -57,17 +57,17 @@ export default class DataFrame {
     }
 
     _inferSchemaFromDict(dict) {
-        return Object.keys(dict).map(column => [column, typeof dict[column][0]]);
+        return Object.keys(dict).map(column => [column, Any]);
     }
 
     _inferSchemaFromArray(array) {
         return match(array[0],
                 [(value) => (value instanceof Array),
                  () => [...Array(Math.max(...array.map(row => row.length))).keys()].map(
-                    column => [column, Any]
+                    column => [String(column), Any]
                 )],
                 [(value) => (value instanceof Row), (value) => value.__schema__],
-                [(value) => (value instanceof Object), (value) => Object.keys(value).map(column => [column, typeof value[column][0]])]
+                [(value) => (value instanceof Object), (value) => Object.keys(value).map(column => [column, Any])]
         );
     }
 
@@ -102,6 +102,18 @@ export default class DataFrame {
 
     map(modification = () => true) {
         return new DataFrame([...this.__iter__((line) => modification(line))], this.__schema__);
+    }
+
+    ____deprecatedFilter____(condition = () => true) {
+        return new DataFrame(this.__rows__.filter(
+            row => condition(row)
+        ), this.__schema__);
+    }
+
+    ____deprecatedMap____(modification = () => true) {
+        return new DataFrame(this.__rows__.map(
+            row => modification(row)
+        ), this.__schema__);
     }
 
     select(...columns) {

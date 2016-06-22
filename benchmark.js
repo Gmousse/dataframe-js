@@ -28,41 +28,38 @@ class Benchmark {
     }
 }
 
-// const df2 = new DataFrame(
-//     [...Array(100000).keys()].map(row => [row])
-// );
+const df = new DataFrame(
+    [...Array(100000).keys()].map(row => [row])
+);
 
+const bench = new Benchmark();
 
-const df2 = new DataFrame([
-        [1, 6, 9, 10, 12],
-        [1, 2],
-        [6, 6, 9, 8, 9, 12],
-], [['c1', Number], ['c2', Number], ['c3', Number], ['c4', Number], ['c5', Number], ['c6', Number]]);
-
-console.log(df2.chain(
-        (line) => line['c1'] === 1,
-        (line) => line.set('c1', 5),
-    ))
-
-// const bench = new Benchmark();
-//
 // bench.compare (
-//     () => df2.filter((line) => line['0'] > 3),
-//     () => df2.____deprecatedFilter____((line) => line['0'] > 3),
+//     () => df.filter(line => line['0'] > 3),
+//     () => df.____deprecatedFilter____(line => line['0'] > 3),
 //     20
 // );
 //
 // bench.compare (
-//     () => df2.map(() => 18),
-//     () => df2.____deprecatedMap____(() => 18),
+//     () => df.map(line => line.set('0', 18)),
+//     () => df.____deprecatedMap____(line => line.set('0', 18)),
 //     20
 // );
-//
-// bench.compare (
-//     () => df2.chain(
-//         (line) => line['0'] > 3,
-//         (line) => typeof line
-//     ),
-//     () => df2.filter((line) => line['0'] > 40000).map((line) => typeof line),
-//     20
-// );
+
+bench.compare (
+    () => df.chain(
+        line => line['0'] > 40000,
+        line => line.set('0', 18)
+    ),
+    () => df.filter(line => line['0'] > 40000).map(line => line.set('0', 18)),
+    20
+);
+
+bench.compare (
+    () => df.chain(
+        (line) => line['0'] > 40000,
+        (line) => line.set('0', 18)
+    ),
+    () => [...Array(100000).keys()].map(row => row).filter(line => line > 40000).map(line => line.set('0', 18)),
+    20
+);
