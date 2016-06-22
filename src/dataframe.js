@@ -1,5 +1,5 @@
 import { returnArray, match, transpose } from './reusables.js';
-import { InputTypeError, EmptyInputError } from './errors.js';
+import { InputTypeError, EmptyInputError, SchemaTypeError } from './errors.js';
 import Row from './row.js';
 
 function Any(value) {return value;}
@@ -53,7 +53,7 @@ export default class DataFrame {
         if (!Array.isArray(schema)) {
             throw new SchemaTypeError(typeof schema);
         }
-        return schema.map(column => Array.isArray(column) ? column : [column, 'any']);
+        return schema.map(column => Array.isArray(column) ? column : [column, Any]);
     }
 
     _inferSchemaFromDict(dict) {
@@ -110,13 +110,18 @@ export default class DataFrame {
         ), this.__schema__.filter(column => returnArray(columns).includes(column[0])));
     }
 
-    withColumn(columnName, columnFunc = () => null) {
-        const newColumns = this.columns.includes(columnName) ? this.columns : [...this.columns, columnName];
+    withColumn(columnName, columnFunc = () => undefined) {
         return new DataFrame(this.__rows__.map(
             (row, index) => {
-                return row.add(columnName, columnFunc(row, index));
+                return row.set(columnName, columnFunc(row, index));
             }
-        ), newColumns);
+        ), this.columns.includes(columnName) ? this.__schema__ : [...this.__schema__, [columnName, Any]]);
+    }
+
+    drop(columnName) {
+        return new DataFrame(this.__rows__.map(
+            (row) => row.delete(columnName)
+        ), this.__schema__.filter(column => column[0] !== columnName));
     }
 
     count() {

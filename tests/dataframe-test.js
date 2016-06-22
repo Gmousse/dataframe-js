@@ -106,6 +106,18 @@ test('DataFrame columns can be', (assert) => {
         df.select('c2', 'c3', 'c4').toDict(),
         {c2: [6, 2, 6], c3: [9, undefined, 9], c4: [10, undefined, 8]}, 'selected, with only multiple columns'
     );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').withColumn('c5', (row) => row.c2 - 2).toDict(),
+        {c2: [6, 2, 6], c3: [9, undefined, 9], c4: [10, undefined, 8], c5: [4, 0, 4]}, 'created'
+    );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').withColumn('c4', (row) => row.c4 ? row.c4 - 2 : 0 - 2).toDict(),
+        {c2: [6, 2, 6], c3: [9, undefined, 9], c4: [8, -2, 6]}, 'modified'
+    );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').drop('c4').toDict(),
+        {c2: [6, 2, 6], c3: [9, undefined, 9]}, 'deleted'
+    );
 
     assert.end();
 });
@@ -124,7 +136,7 @@ test('DataFrame rows can be', (assert) => {
     );
     assert.deepEqual(
         df.map((line) => line.set('column1', 3)).toArray(),
-        [[3, '3', undefined], [3, '4', undefined], [3, '5', undefined], [3, '6', undefined]], 'modified (but not mutated)'
+        [[3, '3', undefined], [3, '4', undefined], [3, '5', undefined], [3, '6', undefined]], 'modified'
     );
     assert.deepEqual(
         df.filter((line) => line.column1 > 3).map((line) => line.set('column1', 3)).toArray(),

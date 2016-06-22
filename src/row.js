@@ -73,11 +73,18 @@ export default class Row {
         );
     }
 
-    set(columnName, value, type = Any) {
-        const newSchema = this.__schema__.find(colSchema => colSchema[0] === columnName) ?
-            this.__schema__ : [...this.__schema__, [columnName, type]];
+    set(columnToSet, value, type = Any) {
+        const newSchema = this.__columns__.includes(columnToSet) ?
+            this.__schema__ : [...this.__schema__, [columnToSet, type]];
         return new Row(newSchema.map(
-            column => column[0] === columnName ? value : this.__publics__()[column[0]]
+            column => column[0] === columnToSet ? value : this.__publics__()[column[0]]
         ), newSchema);
+    }
+
+    delete(columnToDel) {
+        if (!this.__columns__.includes(columnToDel)) {
+            throw new NoSuchColumnError(columnToDel, this.__columns__);
+        }
+        return this.select(...this.__columns__.filter(column => column !== columnToDel));
     }
 }

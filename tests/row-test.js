@@ -72,6 +72,7 @@ test('Row can be modified', (assert) => {
     const df = new Row([1, 'yo', 9, ['yo']], [['c1', Number], ['c2', String], ['c3', Number], ['c4', Array]]);
     assert.deepEqual(df.select('c2', 'c4').toDict(), {c2: 'yo', c4: ['yo']}, 'via a selection');
     assert.deepEqual(df.select('c4', 'c1').toDict(), {c4: ['yo'], c1: 1}, 'via a selection, with respect of order');
+    assert.deepEqual(df.delete('c2').toDict(), {c1: 1, c3: 9, c4: ['yo']}, 'via a deletion');
     assert.deepEqual(df.set('c4', 18).toDict(), {c1: 1, c2: 'yo', c3: 9, c4: 18}, 'by setting a column value');
     assert.deepEqual(df.set('c5', 35).toDict(), {c1: 1, c2: 'yo', c3: 9, c4: ['yo'], c5: 35},
      'by setting a non-existing column resulting on a column creation');
@@ -86,6 +87,10 @@ test('Row can\'t be modified', (assert) => {
     assert.equal(
         tryCatch(() => df.select('c4', 'c#').toDict()).name,
         'NoSuchColumnError', 'via a selection of non-existing column, throwing NoSuchColumnError'
+    );
+    assert.equal(
+        tryCatch(() => df.delete('c#').toDict()).name,
+        'NoSuchColumnError', 'via a deletion of non-existing column, throwing NoSuchColumnError'
     );
     assert.equal(
         tryCatch(() => {df.c1 = 4;}).name,
