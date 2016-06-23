@@ -6,7 +6,8 @@ function Any(value) {return value;}
 
 export default class DataFrame {
     constructor(data, schema) {
-        [this.columns, this.__rows__] = this._build(data, schema);
+        [this.__schema__, this.__rows__] = this._build(data, schema);
+        this.columns = this.__schema__.map(column => column[0]);
         Object.freeze(this);
     }
 
@@ -18,7 +19,7 @@ export default class DataFrame {
 
     * __iter__(func, limit = Infinity) {
         let token = limit;
-        for (const row of this.__rows__) {
+        for (const row of this) {
             if (token <= 0) return;
             token --;
             const chain = func(row);
@@ -28,7 +29,7 @@ export default class DataFrame {
 
     _build(data, schema) {
         return match(data,
-                [(value) => (value instanceof DataFrame), () => [data.columns, data.__rows__]],
+                [(value) => (value instanceof DataFrame), () => [data.__schema__, data.__rows__]],
                 [(value) => Array.isArray(value) && value.length === 0,
                     () => {throw new EmptyInputError(typeof data);}],
                 [(value) => (value instanceof Object) && Object.keys(value).length === 0,
@@ -39,7 +40,7 @@ export default class DataFrame {
     }
 
     _fromDict(dict, schema) {
-        const realSchema = schema ? schema : this._inferSchemaFromDict(dict);
+        const realSchema = schema ? this._formatSchema(schema) : this._inferSchemaFromDict(dict);
         return [realSchema, transpose(Object.values(dict)).map(row => new Row(row, realSchema))];
     }
 
@@ -52,21 +53,21 @@ export default class DataFrame {
         if (!Array.isArray(schema)) {
             throw new SchemaTypeError(typeof schema);
         }
-        return schema.map(column => Array.isArray(column) ? column : column);
+        return schema.map(column => Array.isArray(column) ? column : [column, Any]);
     }
 
     _inferSchemaFromDict(dict) {
-        return Object.keys(dict).map(column => column);
+        return Object.keys(dict).map(column => [column, Any]);
     }
 
     _inferSchemaFromArray(array) {
         return match(array[0],
                 [(value) => (value instanceof Array),
                  () => [...Array(opMax(array.map(row => row.length))).keys()].map(
-                    column => String(column)
+                    column => [String(column), Any]
                 )],
                 [(value) => (value instanceof Row), (value) => value.__schema__],
-                [(value) => (value instanceof Object), (value) => Object.keys(value).map(column => column)]
+                [(value) => (value instanceof Object), (value) => Object.keys(value).map(column => [column, Any])]
         );
     }
 
@@ -85,8 +86,14 @@ export default class DataFrame {
             operations.reduce(
                 (p, n) => (x) => {
                     const prev = p(x);
-                    const next = prev ? n(prev) : false;
-                    return next === true ? prev : next;
+                    if (prev) {
+                        const next = n(prev);
+                        if (typeof next === 'boolean') {
+                            return next ? prev : false;
+                        }
+                        return next;
+                    }
+                    return false;
                 }, (x) => x)
         )]);
     }

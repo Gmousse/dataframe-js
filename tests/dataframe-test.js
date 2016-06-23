@@ -142,6 +142,8 @@ test('DataFrame rows can be', (assert) => {
         df.filter((line) => line.column1 > 3).map((line) => line.set('column1', 3)).toArray(),
          [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified'
      );
+
+    console.log(df.chain((line) => line.column1 > 3, (line) => line.set('column1', 3)).toArray());
     assert.deepEqual(
         df.chain((line) => line.column1 > 3, (line) => line.set('column1', 3)).toArray(),
          [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified by chains (giving the same result, but faster)'

@@ -18,6 +18,10 @@ export function* makeGenerator(thing) {
     yield* thing;
 }
 
+export function opMax(values) {
+    return values.reduce((p, n) => Math.max(p, n), 0);
+}
+
 export function match(value, ...cases) {
     const casesGen = makeGenerator(cases);
     const checker = nextCase => nextCase[0](value) ? nextCase[1](value) : checker(casesGen.next().value);

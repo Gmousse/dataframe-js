@@ -28,8 +28,12 @@ class Benchmark {
     }
 }
 
+
+const arr = [...Array(1000000).keys()].map(row => [row, row]);
+
 const df = new DataFrame(
-    [...Array(100000).keys()].map(row => [row])
+    arr,
+    ['0', '1']
 );
 
 const bench = new Benchmark();
@@ -46,20 +50,21 @@ const bench = new Benchmark();
 //     20
 // );
 
-bench.compare (
-    () => df.chain(
-        line => line['0'] > 40000,
-        line => line.set('0', 18)
-    ),
-    () => df.filter(line => line['0'] > 40000).map(line => line.set('0', 18)),
-    20
-);
+// bench.compare (
+//     () => df.chain(
+//         line => line['0'] > 40000,
+//         line => line.set('0', 18)
+//     ),
+//     () => df.filter(line => line['0'] > 40000).map(line => line.set('0', 18)),
+//     20
+// );
 
 bench.compare (
     () => df.chain(
         (line) => line['0'] > 40000,
-        (line) => line.set('0', 18)
+        (line) => line.set('0', line['0'] + 18),
+        (line) => line['0'] < 80000
     ),
-    () => [...Array(100000).keys()].map(row => row).filter(line => line > 40000).map(line => line.set('0', 18)),
-    20
+    () => arr.filter(line => line[0] > 40000).map(line => [line[0] + 18, line[1]]).filter(line => line[0] < 80000),
+    4
 );

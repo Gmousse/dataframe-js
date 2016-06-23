@@ -5,9 +5,11 @@ const Any = {};
 
 export default class Row {
     constructor(row, schema) {
-        this.__schema__ = schema;
+        this.__schema__ = this._validateSchema(schema);
+        this.__columns__ = this.__schema__.map(column => column[0]);
         this.__size__ = this.__schema__.length;
         this._build(row);
+        Object.freeze(this);
     }
 
     * [Symbol.iterator]() {
@@ -22,6 +24,16 @@ export default class Row {
         ).map(column => ({[column]: this[column]})));
     }
 
+    _validateSchema(schema) {
+        return match(schema,
+                [(value) => !(value instanceof Array), () => {throw new SchemaError(typeof schema);}],
+                [(value) => !isArrayOfType(value, Array), () => {throw new SchemaError(`[${typeof schema[0]}]`);}],
+                [(value) => !isArrayOfType(value[0], String), () => {throw new SchemaError(`[[${typeof schema[0][0]}, X]]`);}],
+                [(value) => !isArrayOfType(value[0], Object, 1), () => {throw new SchemaError(`[[X, ${typeof schema[0][1]}]]`);}],
+                [() => true, () => schema]
+            );
+    }
+
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
@@ -32,11 +44,11 @@ export default class Row {
     }
 
     _fromObject(object) {
-        return this.__schema__.forEach(column => {this[column] = object[column];});
+        return this.__schema__.forEach(column => {this[column[0]] = object[column[0]];});
     }
 
     _fromArray(array) {
-        return Object.entries(this.__schema__).forEach(column => {this[column[1]] = array[column[0]];});
+        return Object.entries(this.__schema__).forEach(column => {this[column[1][0]] = array[column[0]];});
     }
 
     size() {
@@ -62,8 +74,8 @@ export default class Row {
     }
 
     set(columnToSet, value, type = Any) {
-        const newSchema = this.__schema__.includes(columnToSet) ?
-            this.__schema__ : [...this.__schema__, columnToSet];
+        const newSchema = this.__columns__.includes(columnToSet) ?
+            this.__schema__ : [...this.__schema__, [columnToSet, type]];
         return new Row(newSchema.map(
             column => column[0] === columnToSet ? value : this.__publics__()[column[0]]
         ), newSchema);
