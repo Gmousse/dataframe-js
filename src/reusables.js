@@ -40,12 +40,12 @@ export function* __iter__(func, data, limit = Infinity) {
 }
 
 export function chain(data, ...operations) {
-    return [...__iter__(
+    return __iter__(
         operations.reduce(
             (p, n) => (x) => {
                 const prev = p(x);
                 const next = prev ? n(prev) : false;
                 return next === true ? prev : next;
             }, (x) => x)
-    , data)];
+    , data);
 }

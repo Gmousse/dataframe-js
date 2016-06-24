@@ -1,8 +1,6 @@
 import { match, isArrayOfType } from './reusables.js';
 import { InputTypeError, SchemaError, NoSuchColumnError } from './errors.js';
 
-const Any = {};
-
 export default class Row {
     constructor(data, columns) {
         this.__columns__ = columns;
@@ -33,11 +31,11 @@ export default class Row {
     }
 
     _fromObject(object) {
-        return Object.assign({}, this.__columns__.map(column => ({[column]: object[column]})));
+        return Object.assign({}, ...this.__columns__.map(column => ({[column]: object[column]})));
     }
 
     _fromArray(array) {
-        return Object.assign({}, this.__columnsWithIndex__.map(column => ({[column[1]]:  array[column[0]]})));
+        return Object.assign({}, ...this.__columnsWithIndex__.map(column => ({[column[1]]: array[column[0]]})));
     }
 
     size() {
@@ -45,21 +43,20 @@ export default class Row {
     }
 
     toDict() {
-        return this.__publics__();
+        return this.__row__;
     }
 
     toArray() {
-        return [...this];
+        return [...Object.values(this.__row__)];
     }
 
     select(...columns) {
-        return new Row(
-            columns.map(column => {
-                if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columns);}
-                return this.__publics__()[column];
-            }),
-            columns.map(column => this.__schema__.find(colSchema => colSchema[0] === column)).filter(colSchema => colSchema)
-        );
+        this.__row__ = columns.map(column => {
+            if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columns);}
+            return this.__row__[column];
+        });
+        this.__columns__ = columns.map(column => this.__columns__.find(col => col === column)).filter(col => col);
+        return this;
     }
 
     get(columnToGet) {
