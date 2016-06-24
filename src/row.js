@@ -1,30 +1,17 @@
-import { match, isArrayOfType } from './reusables.js';
-import { InputTypeError, SchemaError, NoSuchColumnError } from './errors.js';
+import { match } from './reusables.js';
+import { InputTypeError, NoSuchColumnError } from './errors.js';
 
 export default class Row {
     constructor(data, columns) {
-        this.__columns__ = columns;
+        this.__columns__ = columns ? columns : Object.keys(data);
         this.__columnsWithIndex__ = Object.entries(columns);
-        this.__size__ = this.__columns__.length;
         this.__row__ = this._build(data);
-    }
-
-    * [Symbol.iterator]() {
-        for (const column of Object.values(this.__publics__())) {
-            yield column;
-        }
-    }
-
-    __publics__() {
-        return Object.assign({}, ...Object.keys(this).filter(
-            column => !column.includes('__')
-        ).map(column => ({[column]: this[column]})));
     }
 
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
-                [(value) => (value instanceof Row), () => this._fromObject(data)],
+                [(value) => (value instanceof Row), () => this._fromObject(data.__row__)],
                 [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)],
                 [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);}]
             );
@@ -39,7 +26,7 @@ export default class Row {
     }
 
     size() {
-        return this.__size__;
+        return this.__columns__.length;
     }
 
     toDict() {
@@ -51,21 +38,19 @@ export default class Row {
     }
 
     select(...columns) {
-        this.__row__ = columns.map(column => {
+        return new Row(columns.map(column => {
             if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columns);}
             return this.__row__[column];
-        });
-        this.__columns__ = columns.map(column => this.__columns__.find(col => col === column)).filter(col => col);
-        return this;
+        }), columns);
     }
 
     get(columnToGet) {
-        return this.__row__[this.__columnsWithIndex__.find(column => column[1] === columnToGet)[0]];
+        return this.__row__[columnToGet];
     }
 
     set(columnToSet, value) {
-        this.__row__[columnToSet] = value;
-        return this;
+        const newRow = Object.assign({}, this.__row__, {[columnToSet]: value});
+        return new Row(newRow, Object.keys(newRow));
     }
 
     delete(columnToDel) {

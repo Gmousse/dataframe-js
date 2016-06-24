@@ -33,6 +33,11 @@ export default class DataFrame {
         return [array.map(row => new Row(row, columns)), columns];
     }
 
+    transpose() {
+        const newColumns = [...Array(this.count()).keys()];
+        return new DataFrame(transpose(transpose(Object.values(this.toDict()))).map(row => new Row(row, newColumns)), newColumns);
+    }
+
     toDict() {
         return Object.assign({}, ...Object.entries(
             transpose([...this.__rows__].map(row => row.toArray()))
@@ -59,16 +64,35 @@ export default class DataFrame {
     }
 
     select(...columns) {
-        this.columns = this.columns.filter(column => columns.includes(column));
-        this.__rows__ = this.__rows__.map(
+        return new DataFrame([...this.__rows__.map(
             row => row.select(...columns)
-        );
-        return this;
+        )], columns);
+    }
+
+    withColumn(columnName, columnFunc = () => undefined) {
+        return new DataFrame(this.__rows__.map(
+            (row, index) => {
+                return row.set(columnName, columnFunc(row, index));
+            }
+        ), this.columns.includes(columnName) ? this.columns : [...this.columns, columnName]);
+    }
+
+    drop(columnName) {
+        return new DataFrame(this.__rows__.map(
+            (row) => row.delete(columnName)
+        ), this.columns.filter(column => column !== columnName));
     }
 
     chain(...funcs) {
-        this.__rows__ = chain(this.__rows__, ...funcs);
-        return this;
+        return new DataFrame([...chain(this.__rows__, ...funcs)], this.columns);
+    }
+
+    filter(condition = () => true) {
+        return new DataFrame([...__iter__(row => condition(row) ? row : false, this.__rows__)], this.columns);
+    }
+
+    map(modification = () => true) {
+        return new DataFrame([...__iter__((line) => modification(line), this.__rows__)], this.columns);
     }
 
     count() {

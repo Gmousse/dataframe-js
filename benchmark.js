@@ -39,11 +39,12 @@ const df = new DataFrame(
 const bench = new Benchmark();
 
 bench.compare (
-    () => [...df.chain(
-        (line) => line.__row__['c0'] > 40000,
-        (line) => line.set('c0', line.__row__['c0'] + 18),
-        (line) => line.__row__['c0'] < 80000
-    )],
-    () => arr.filter(line => line[0] > 40000).map(line => [line[0] + 18, line[1]]).filter(line => line[0] < 80000),
+    () => df.chain(
+        (line) => line.get('c0') > 40000,
+        (line) => line.set('c0', line.get('c0') + 18),
+        (line) => line.get('c0') < 80000,
+        (line) => line.set('c1', line.get('c0') + 18)
+    ),
+    () => arr.filter(line => line[0] > 40000).map(line => [line[0] + 18, line[1]]).filter(line => line[0] < 80000).map(line => [line[0], line[0] + 18]),
     4
 );
