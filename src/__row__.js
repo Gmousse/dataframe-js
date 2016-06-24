@@ -4,11 +4,10 @@ import { InputTypeError, SchemaError, NoSuchColumnError } from './errors.js';
 const Any = {};
 
 export default class Row {
-    constructor(data, columns) {
-        this.__columns__ = columns;
-        this.__columnsWithIndex__ = Object.entries(columns);
-        this.__size__ = this.__columns__.length;
-        this.__row__ = this._build(data);
+    constructor(row, schema) {
+        this.__schema__ = schema;
+        this.__size__ = this.__schema__.length;
+        this._build(row);
     }
 
     * [Symbol.iterator]() {
@@ -33,11 +32,11 @@ export default class Row {
     }
 
     _fromObject(object) {
-        return Object.assign({}, this.__columns__.map(column => ({[column]: object[column]})));
+        return this.__schema__.forEach(column => {this[column] = object[column];});
     }
 
     _fromArray(array) {
-        return Object.assign({}, this.__columnsWithIndex__.map(column => ({[column[1]]:  array[column[0]]})));
+        return Object.entries(this.__schema__).forEach(column => {this[column[1]] = array[column[0]];});
     }
 
     size() {
@@ -62,13 +61,12 @@ export default class Row {
         );
     }
 
-    get(columnToGet) {
-        return this.__row__[this.__columnsWithIndex__.find(column => column[1] === columnToGet)[0]];
-    }
-
-    set(columnToSet, value) {
-        this.__row__[columnToSet] = value;
-        return this;
+    set(columnToSet, value, type = Any) {
+        const newSchema = this.__schema__.includes(columnToSet) ?
+            this.__schema__ : [...this.__schema__, columnToSet];
+        return new Row(newSchema.map(
+            column => column[0] === columnToSet ? value : this.__publics__()[column[0]]
+        ), newSchema);
     }
 
     delete(columnToDel) {

@@ -27,3 +27,25 @@ export function match(value, ...cases) {
     const checker = nextCase => nextCase[0](value) ? nextCase[1](value) : checker(casesGen.next().value);
     return checker(casesGen.next().value);
 }
+
+
+export function* __iter__(func, data, limit = Infinity) {
+    let token = limit;
+    for (const row of data) {
+        if (token <= 0) return;
+        token --;
+        const modifiedRow = func(row);
+        if (modifiedRow) {yield modifiedRow;}
+    }
+}
+
+export function chain(data, ...operations) {
+    return [...__iter__(
+        operations.reduce(
+            (p, n) => (x) => {
+                const prev = p(x);
+                const next = prev ? n(prev) : false;
+                return next === true ? prev : next;
+            }, (x) => x)
+    , data)];
+}
