@@ -167,21 +167,6 @@ df.select('column1', 'column3').show()
 | undefined | undefined |
 ```
 
-**Select Columns:**
-
-`df.select(...columns : String)`
-
-```javascript
-df.select('column1', 'column3').show()
-
-| column1   | column3   |
-------------------------
-| 3         | undefined |
-| 6         | undefined |
-| 8         | undefined |
-| undefined | undefined |
-```
-
 **Add or Modify Column:**
 
 `df.withColumn(columnName : String, func: function)`
@@ -223,6 +208,16 @@ df.drop('d2').show()
 | undefined | undefined |
 ```
 
+**Get distinct values in a Column:**
+
+`df.distinct(columnName : String)`
+
+```javascript
+df.distinct('d2')
+
+[3, 4, 15, 6]
+```
+
 #### Working with rows
 
 By working on rows, you will modify the each row on your DataFrame.
@@ -255,8 +250,8 @@ df.count()
 
 `df.chain(...funcs : Function)`
 
-Chain is an *optimized way to chain filters and maps* on DataFrame.
-It can be 10 - 100 x faster than standard .map() and .filter().
+Chain is an *optimized way to make sequences of filters and maps* on DataFrame.
+It can be 10 - 100 x faster than standard chains of .map() and .filter().
 In filters and maps, you can use Row Api in order to get or set Row data.
 
 ```javascript
@@ -293,3 +288,74 @@ For some operations you can use the standard way:
 `df.map(func : Function)`
 
 `df.filter(func : Function)`
+
+**Reduce rows:**
+
+Exactly the same than Array.reduce().
+
+`df.reduce(func : Function, init : Any)`
+
+```javascript
+// Compute a value from rows, starting from value 0
+df.reduce((p, n) => n.get('column1') + p, 0)
+
+// Compute a row from rows
+df2.reduce((p, n) => (
+        n.set('column1', p.get('column1') + n.get('column1'))
+         .set('column2', p.get('column2') + n.get('column2'))
+))
+```
+
+**Group row by column values:**
+
+Create an Array of DataFrame based on a column value and do whatever you want on these.
+Each DataFrame has an additional property `.group` giving the value using to make the group.
+`df.groupBy(columnName : String)`
+
+```javascript
+const df = new DataFrame({
+    'id': [3, 6, 8, 1, 1, 3, 8],
+    'value': [1, 0, 1, 1, 1, 2, 4],
+}, ['id', 'value']);
+
+// Group By id and show each dataframe
+df.groupBy('id').forEach(dfByValue => dfByValue.show(10, true))
+
+| id        | value     |
+------------------------
+| 3         | 1         |
+| 3         | 2         |
+
+| id        | value     |
+------------------------
+| 6         | 0         |
+
+| id        | value     |
+------------------------
+| 8         | 1         |
+| 8         | 4         |
+
+| id        | value     |
+------------------------
+| 1         | 1         |
+| 1         | 1         |
+
+// Group By id and return an object containing group and dataframe
+df.groupBy('id').map(dfByValue => ({group: dfByValue.group, df: dfByValue.toDict()}))
+
+[ { group: 3, df: { id: [Object], value: [Object] } },
+  { group: 6, df: { id: [Object], value: [Object] } },
+  { group: 8, df: { id: [Object], value: [Object] } },
+  { group: 1, df: { id: [Object], value: [Object] } } ]
+
+// Get sum of value by id with a simple formating
+df.groupBy('id').map(dfByValue => (
+    {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
+)
+
+[ { group: 3, result: 3 },
+  { group: 6, result: 0 },
+  { group: 8, result: 5 },
+  { group: 1, result: 2 } ]
+
+```

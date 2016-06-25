@@ -29,7 +29,7 @@ export function match(value, ...cases) {
 }
 
 
-export function* __iter__(func, data, limit = Infinity) {
+export function* iter(data, func, limit = Infinity) {
     let token = limit;
     for (const row of data) {
         if (token <= 0) return;
@@ -40,12 +40,13 @@ export function* __iter__(func, data, limit = Infinity) {
 }
 
 export function chain(data, ...operations) {
-    return __iter__(
+    return iter(
+        data,
         operations.reduce(
             (p, n) => (x) => {
                 const prev = p(x);
                 const next = prev ? n(prev) : false;
                 return next === true ? prev : next;
             }, (x) => x)
-    , data);
+        );
 }

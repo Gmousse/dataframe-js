@@ -1,4 +1,4 @@
-import { match, transpose, chain, __iter__ } from './reusables.js';
+import { match, transpose, chain, iter } from './reusables.js';
 import { InputTypeError, EmptyInputError } from './errors.js';
 import Row from './row.js';
 
@@ -58,7 +58,7 @@ export default class DataFrame {
         const toShow = [
             header,
             Array(header.length).join('-'),
-            ...__iter__((row) => makeRow(row.toArray()), this.__rows__, rows),
+            ...iter(this.__rows__, row => makeRow(row.toArray()), rows),
         ].join('\n');
         return returnAsString ? toShow : console.log(toShow);
     }
@@ -83,16 +83,42 @@ export default class DataFrame {
         ), this.columns.filter(column => column !== columnName));
     }
 
+    distinct(columnName) {
+        return [...new Set(...this.select(columnName).transpose().toArray())];
+    }
+
     chain(...funcs) {
         return new DataFrame([...chain(this.__rows__, ...funcs)], this.columns);
     }
 
-    filter(condition = () => true) {
-        return new DataFrame([...__iter__(row => condition(row) ? row : false, this.__rows__)], this.columns);
+    filter(condition) {
+        const filteredRows = [...iter(this.__rows__, row => condition(row) ? row : false)];
+        return filteredRows.length > 0 ? new DataFrame(filteredRows, this.columns) : undefined;
     }
 
-    map(modification = () => true) {
-        return new DataFrame([...__iter__((line) => modification(line), this.__rows__)], this.columns);
+    map(modification) {
+        return new DataFrame([...iter(this.__rows__, row => modification(row))], this.columns);
+    }
+
+    reduce(func, init) {
+        return typeof init === 'undefined' ? this.__rows__.reduce((p, n) => func(p, n)) :
+         this.__rows__.reduce((p, n) => func(p, n), init);
+    }
+
+    reduceRight(func, init) {
+        return typeof init === 'undefined' ? this.__rows__.reduceRight((p, n) => func(p, n)) :
+         this.__rows__.reduceRight((p, n) => func(p, n), init);
+    }
+
+    groupBy(columnName) {
+        return [...iter(
+            this.distinct(columnName),
+            (value) => {
+                const groupedDF = this.filter(row => row.get(columnName) === value);
+                groupedDF.group = value;
+                return groupedDF;
+            }
+        )];
     }
 
     count() {

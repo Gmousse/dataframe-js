@@ -126,6 +126,9 @@ test('DataFrame columns can be', (assert) => {
         df.select('c2', 'c3', 'c4').drop('c4').toDict(),
         {c2: [6, 2, 6], c3: [9, undefined, 9]}, 'deleted'
     );
+    assert.deepEqual(
+        df.distinct('c1'), [1, 6], 'distinct, giving an array of unique values'
+    );
 
     assert.end();
 });
@@ -159,6 +162,53 @@ test('DataFrame rows can be', (assert) => {
     assert.deepEqual(
         df.chain((line) => line.get('column1') > 3, (line) => line.set('column1', 3), (line) => line.get('column2') === '5').toArray(),
          [[3, '5', undefined]], 'filtered and modified and filtered (again) by chains'
+     );
+
+    const df2 = df.withColumn('column1', (row) => row.get('column1') ? row.get('column1') : 0);
+
+    assert.equal(
+        df2.reduce((p, n) => n.get('column1') + p, 0), 17, 'reduced to obtain a value'
+     );
+
+    assert.deepEqual(
+        df2.reduce((p, n) => (
+            n.set('column1', p.get('column1') + n.get('column1'))
+             .set('column2', p.get('column2') + n.get('column2'))
+         )).toArray(), [17, '3456', undefined], 'reduced to obtain a row'
+     );
+
+    assert.deepEqual(
+        df2.reduceRight((p, n) => (
+            n.set('column1', p.get('column1') + n.get('column1'))
+             .set('column2', p.get('column2') + n.get('column2'))
+         )).toArray(), [17, '6543', undefined], 'reduced by right to obtain a row'
+     );
+
+    const df3 = new DataFrame({
+        'id': [3, 6, 8, 1, 1, 3, 8],
+        'value': [1, 0, 1, 1, 1, 2, 4],
+    }, ['id', 'value']);
+
+    assert.deepEqual(
+        df3.groupBy('id').map(dfByValue => dfByValue.toDict()),
+        [
+            {id: [3, 3], value: [1, 2]},
+            {id: [6], value: [0]},
+            {id: [8, 8], value: [1, 4]},
+            {id: [1, 1], value: [1, 1]},
+        ], 'groupBy a column value'
+     );
+
+    assert.deepEqual(
+        df3.groupBy('id').map(dfByValue => (
+            {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
+        ),
+        [
+            { group: 3, result: 3 },
+            { group: 6, result: 0 },
+            { group: 8, result: 5 },
+            { group: 1, result: 2 },
+        ], 'groupBy and compute the sum by group'
      );
 
     assert.end();
