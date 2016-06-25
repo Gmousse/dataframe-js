@@ -69,7 +69,7 @@ test('Row can be modified', (assert) => {
     assert.deepEqual(df.set('c5', 35).toDict(), {c1: 1, c2: 'yo', c3: 9, c4: ['yo'], c5: 35},
      'by setting a non-existing column resulting on a column creation');
     assert.deepEqual(df.set('c5', 35).toDict(), {c1: 1, c2: 'yo', c3: 9, c4: ['yo'], c5: 35},
-     'by setting a non-existing column resulting on a column creation');
+     'by setting a non-existing column resulting in a column creation');
 
     assert.end();
 });

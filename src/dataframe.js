@@ -48,7 +48,7 @@ export default class DataFrame {
         return [...this].map(row => row.toArray());
     }
 
-    show(limit = 10, onlyReturn = false) {
+    show(rows = 10, returnAsString = false) {
         const makeRow = (row) => (
             `| ${row.map(
                 column => String(column).substring(0, 10) + Array(10 - String(column).length).join(' ')
@@ -58,21 +58,21 @@ export default class DataFrame {
         const toShow = [
             header,
             Array(header.length).join('-'),
-            ...__iter__((row) => makeRow(row.toArray()), this.__rows__, limit),
+            ...__iter__((row) => makeRow(row.toArray()), this.__rows__, rows),
         ].join('\n');
-        return onlyReturn ? toShow : console.log(toShow);
+        return returnAsString ? toShow : console.log(toShow);
     }
 
     select(...columns) {
-        return new DataFrame([...this.__rows__.map(
+        return new DataFrame(this.__rows__.map(
             row => row.select(...columns)
-        )], columns);
+        ), columns);
     }
 
-    withColumn(columnName, columnFunc = () => undefined) {
+    withColumn(columnName, func = () => undefined) {
         return new DataFrame(this.__rows__.map(
             (row, index) => {
-                return row.set(columnName, columnFunc(row, index));
+                return row.set(columnName, func(row, index));
             }
         ), this.columns.includes(columnName) ? this.columns : [...this.columns, columnName]);
     }
