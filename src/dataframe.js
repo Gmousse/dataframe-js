@@ -3,14 +3,25 @@ import { InputTypeError, EmptyInputError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
-    constructor(data, columns) {
+    constructor(data, columns, ...plugins) {
         [this.__rows__, this.columns] = this._build(data, columns);
+        this.plugins = plugins;
+        if (plugins.length > 0) {
+            Object.assign(this, ...plugins.map(Plugin => {
+                const pluginInstance = new Plugin(this);
+                return {[pluginInstance.name]: pluginInstance};
+            }));
+        }
     }
 
     * [Symbol.iterator]() {
         for (const row of this.__rows__) {
             yield row;
         }
+    }
+
+    __newInstance__(data, columns) {
+        return new DataFrame(data, columns, ...this.plugins);
     }
 
     _build(data, columns) {
@@ -35,7 +46,7 @@ export default class DataFrame {
 
     transpose() {
         const newColumns = [...Array(this.count()).keys()];
-        return new DataFrame(transpose(transpose(Object.values(this.toDict()))).map(row => new Row(row, newColumns)), newColumns);
+        return this.__newInstance__(transpose(transpose(Object.values(this.toDict()))).map(row => new Row(row, newColumns)), newColumns);
     }
 
     toDict() {
@@ -64,13 +75,13 @@ export default class DataFrame {
     }
 
     select(...columns) {
-        return new DataFrame(this.__rows__.map(
+        return this.__newInstance__(this.__rows__.map(
             row => row.select(...columns)
         ), columns);
     }
 
     withColumn(columnName, func = () => undefined) {
-        return new DataFrame(this.__rows__.map(
+        return this.__newInstance__(this.__rows__.map(
             (row, index) => {
                 return row.set(columnName, func(row, index));
             }
@@ -78,7 +89,7 @@ export default class DataFrame {
     }
 
     drop(columnName) {
-        return new DataFrame(this.__rows__.map(
+        return this.__newInstance__(this.__rows__.map(
             (row) => row.delete(columnName)
         ), this.columns.filter(column => column !== columnName));
     }
@@ -88,16 +99,16 @@ export default class DataFrame {
     }
 
     chain(...funcs) {
-        return new DataFrame([...chain(this.__rows__, ...funcs)], this.columns);
+        return this.__newInstance__([...chain(this.__rows__, ...funcs)], this.columns);
     }
 
     filter(condition) {
         const filteredRows = [...iter(this.__rows__, row => condition(row) ? row : false)];
-        return filteredRows.length > 0 ? new DataFrame(filteredRows, this.columns) : undefined;
+        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.columns) : undefined;
     }
 
     map(modification) {
-        return new DataFrame([...iter(this.__rows__, row => modification(row))], this.columns);
+        return this.__newInstance__([...iter(this.__rows__, row => modification(row))], this.columns);
     }
 
     reduce(func, init) {
@@ -124,5 +135,4 @@ export default class DataFrame {
     count() {
         return [...this].length;
     }
-
 }

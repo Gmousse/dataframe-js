@@ -50,3 +50,7 @@ export function chain(data, ...operations) {
             }, (x) => x)
         );
 }
+
+export function isNumber(x) {
+    return !isNaN(parseFloat(x)) && isFinite(x);
+}

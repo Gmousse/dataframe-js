@@ -1,7 +1,7 @@
 import tape from 'tape';
 const test = tape;
 
-import Row from '../src/row.js';
+import { Row } from '../src/index.js';
 
 function tryCatch(callback) {
     try {
