@@ -128,6 +128,11 @@ export default class DataFrame {
         )];
     }
 
+    sortBy(columnName, reverse = false) {
+        const sortedRows = this.__rows__.sort((p, n) => p.get(columnName) - n.get(columnName));
+        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this.columns);
+    }
+
     count(valueToCount, columnName = this.columns[0]) {
         return valueToCount ? this.filter(row => row.get(columnName) === valueToCount).count() : [...this].length;
     }

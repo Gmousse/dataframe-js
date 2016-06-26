@@ -330,7 +330,7 @@ df2.reduce((p, n) => (
 ))
 ```
 
-**Group row by column values:**
+**Group rows by column values:**
 
 Create an Array of DataFrame based on a column value and do whatever you want on these.
 Each DataFrame has an additional property `.group` giving the value using to make the group.
@@ -381,6 +381,43 @@ df.groupBy('id').map(dfByValue => (
   { group: 6, result: 0 },
   { group: 8, result: 5 },
   { group: 1, result: 2 } ]
+
+```
+
+**Sort rows by column:**
+
+`df.sortBy(columnName : String, reverse = false : Boolean)`
+
+```javascript
+const df = new DataFrame({
+    'id': [3, 6, 8, 1, 1, 3, 8],
+    'value': [1, 0, 1, 1, 1, 2, 4],
+}, ['id', 'value']);
+
+// Sort DataFrame by id
+df.sortBy('id').toArray()
+
+[
+    [1, 1],
+    [1, 1],
+    [3, 1],
+    [3, 2],
+    [6, 0],
+    [8, 1],
+    [8, 4],
+]
+
+// Sort DataFrame by id and reverse
+df.sortBy('id', true).toArray()
+[
+    [8, 4],
+    [8, 1],
+    [6, 0],
+    [3, 2],
+    [3, 1],
+    [1, 1],
+    [1, 1],
+]
 
 ```
 

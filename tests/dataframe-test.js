@@ -206,6 +206,32 @@ test('DataFrame rows can be', (assert) => {
         ], 'groupBy and compute the sum by group'
      );
 
+    assert.deepEqual(
+        df3.sortBy('id').toArray(),
+        [
+            [1, 1],
+            [1, 1],
+            [3, 1],
+            [3, 2],
+            [6, 0],
+            [8, 1],
+            [8, 4],
+        ], 'sort by a column'
+     );
+
+    assert.deepEqual(
+        df3.sortBy('id', true).toArray(),
+        [
+            [8, 4],
+            [8, 1],
+            [6, 0],
+            [3, 2],
+            [3, 1],
+            [1, 1],
+            [1, 1],
+        ], 'sort and reverse by a column'
+     );
+
     assert.end();
 });
 
