@@ -29,7 +29,7 @@ Discover this flexible data structure and / or contribute to in order to make it
 
 ## Installation
 
-`npm install trucbidule`
+`npm install git+http://93.15.96.71:10080/odin/dataframe-js.git#feature/begin`
 
 ## Modules
 
