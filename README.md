@@ -122,7 +122,7 @@ df.toArray()
 
 **Display some rows as String:**
 
-`df.toShow(rows : Number, onlyReturn : Boolean)`
+`df.show(rows : Number, onlyReturn : Boolean)`
 
 ```javascript
 df.show() // console.log the DataFrame with the first 10nth rows
@@ -251,11 +251,23 @@ df.show()
 **Count rows:**
 
 `df.count()`
+`df.count(valueToCount : Any, columnName = this.columns[0] : String)`
 
 ```javascript
+// Counting rows
 df.count()
 
 4
+
+// Counting specific value in a column
+df.count(5, 'column2')
+
+1
+
+// Counting specific value in a selected column
+df.select('column1').count(5)
+
+0
 ```
 
 **Filter or/and Modify rows (FASTER METHOD):**

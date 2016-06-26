@@ -1,5 +1,5 @@
 import { match, transpose, chain, iter } from './reusables.js';
-import { InputTypeError, EmptyInputError } from './errors.js';
+import { InputTypeError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
@@ -27,10 +27,6 @@ export default class DataFrame {
     _build(data, columns) {
         return match(data,
                 [(value) => (value instanceof DataFrame), () => [data.__rows__, data.columns]],
-                [(value) => Array.isArray(value) && value.length === 0,
-                    () => {throw new EmptyInputError(typeof data);}],
-                [(value) => (value instanceof Object) && Object.keys(value).length === 0,
-                    () => {throw new EmptyInputError(typeof data);}],
                 [(value) => (value instanceof Array), () => this._fromArray(data, columns)],
                 [(value) => (value instanceof Object), () => this._fromDict(data, columns)],
                 [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array']);}]);
@@ -104,7 +100,7 @@ export default class DataFrame {
 
     filter(condition) {
         const filteredRows = [...iter(this.__rows__, row => condition(row) ? row : false)];
-        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.columns) : undefined;
+        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.columns) : this.__newInstance__([], []);
     }
 
     map(modification) {
@@ -132,7 +128,7 @@ export default class DataFrame {
         )];
     }
 
-    count() {
-        return [...this].length;
+    count(valueToCount, columnName = this.columns[0]) {
+        return valueToCount ? this.filter(row => row.get(columnName) === valueToCount).count() : [...this].length;
     }
 }

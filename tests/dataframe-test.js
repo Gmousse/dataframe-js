@@ -43,8 +43,6 @@ test('DataFrame can\'t be created', (assert) => {
     assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, throwing InputTypeError');
     assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, throwing InputTypeError');
     assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, throwing InputTypeError');
-    assert.equal(tryCatch(() => new DataFrame([])).name, 'EmptyInputError', 'from empty array, throwing EmptyInputError');
-    assert.equal(tryCatch(() => new DataFrame({})).name, 'EmptyInputError', 'from empty dict, throwing EmptyInputError');
 
     assert.end();
 });
@@ -141,6 +139,8 @@ test('DataFrame rows can be', (assert) => {
     }, ['column1', 'column2', 'column3']);
 
     assert.equal(df.count(), 4, 'counted');
+    assert.equal(df.count('4', 'column2'), 1, 'counted based on a specific value in a column');
+    assert.equal(df.count(9, 'column1'), 0, 'counted based on a specific value in a selected column');
     assert.deepEqual(
         df.filter((line) => line.get('column1') > 3).toArray(),
         [[6, '4', undefined], [8, '5', undefined]], 'filtered'
@@ -149,12 +149,10 @@ test('DataFrame rows can be', (assert) => {
         df.map((line) => line.set('column1', 3)).toArray(),
         [[3, '3', undefined], [3, '4', undefined], [3, '5', undefined], [3, '6', undefined]], 'modified'
     );
-
     assert.deepEqual(
         df.filter((line) => line.get('column1') > 3).map((line) => line.set('column1', 3)).toArray(),
          [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified'
      );
-
     assert.deepEqual(
         df.chain((line) => line.get('column1') > 3, (line) => line.set('column1', 3)).toArray(),
          [[3, '4', undefined], [3, '5', undefined]], 'filtered and modified by chains (giving the same result, but faster)'
@@ -169,14 +167,12 @@ test('DataFrame rows can be', (assert) => {
     assert.equal(
         df2.reduce((p, n) => n.get('column1') + p, 0), 17, 'reduced to obtain a value'
      );
-
     assert.deepEqual(
         df2.reduce((p, n) => (
             n.set('column1', p.get('column1') + n.get('column1'))
              .set('column2', p.get('column2') + n.get('column2'))
          )).toArray(), [17, '3456', undefined], 'reduced to obtain a row'
      );
-
     assert.deepEqual(
         df2.reduceRight((p, n) => (
             n.set('column1', p.get('column1') + n.get('column1'))
@@ -198,7 +194,6 @@ test('DataFrame rows can be', (assert) => {
             {id: [1, 1], value: [1, 1]},
         ], 'groupBy a column value'
      );
-
     assert.deepEqual(
         df3.groupBy('id').map(dfByValue => (
             {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
@@ -250,35 +245,27 @@ test('DataFrame Math module can ', (assert) => {
     assert.equal(
         df.math.max('column1'), 8, 'compute the maximal numeric value of a column'
     );
-
     assert.equal(
         df.math.max('column2'), 6, 'compute the maximal value of a column ignoring non-numeric value'
     );
-
     assert.equal(
         df.math.min('column1'), 3, 'compute the minimal numeric value of a column'
     );
-
     assert.equal(
         df.math.mean('column1'), 5.666666666666667, 'compute the mean of a column'
     );
-
     assert.equal(
         df.math.sd('column1'), 2.516611478423583, 'compute the standard deviation of a column'
     );
-
     assert.equal(
         df.math.sd('column1', true), 2.0548046676563256, 'compute the population standard deviation of a column'
     );
-
     assert.equal(
         df.math.var('column1'), 6.333333333333333, 'compute the variance of a column'
     );
-
     assert.equal(
         df.math.var('column1', true), 4.222222222222222, 'compute the population variance of a column'
     );
-
     assert.deepEqual(
         df.math.stats('column1'),
         {
