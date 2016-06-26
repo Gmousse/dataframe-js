@@ -31,6 +31,18 @@ Discover this flexible data structure and / or contribute to in order to make it
 
 `npm install trucbidule`
 
+## Modules
+
+You can add modules on dataframe-js when creating DataFrame instance:
+
+`const df = new DataFrame(obj, ['column1', 'column2', 'column3'], fakeModule, anotherModule)`
+
+and you can call them by their name:
+
+`df.fakemodule.test(4)`
+
+If you want to create your own module, look at the MathModule (integrated by default) `./src/math.js` as example.
+
 ## API
 
 The dataframe-js api provides some shortcuts to treat and manipulate easily.
@@ -359,3 +371,29 @@ df.groupBy('id').map(dfByValue => (
   { group: 1, result: 2 } ]
 
 ```
+
+**Math Module:**
+
+Get the max value of a column:
+
+`df.math.max(columnName : String)`
+
+Get the min value of a column:
+
+`df.math.min(columnName : String)`
+
+Get the mean of a column:
+
+`df.math.mean(columnName : String)`
+
+Get the standard deviation of a column:
+
+`df.math.sd(columnName : String, population = true : Boolean)`
+
+Get the variance of a column:
+
+`df.math.var(columnName : String, population = true : Boolean)`
+
+Get all these stats of a column:
+
+`df.math.stats(columnName : String)`

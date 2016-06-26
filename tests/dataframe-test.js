@@ -214,6 +214,32 @@ test('DataFrame rows can be', (assert) => {
     assert.end();
 });
 
+test('DataFrame modules can be', (assert) => {
+    const obj = {
+        'column1': [3, 6, 8],
+        'column2': ['3', '4', '5', '6', 'yolo'],
+        'column3': [],
+    };
+
+    class fakeModule {
+        constructor(dataframe) {
+            this.df = dataframe;
+            this.name = 'fakemodule';
+        }
+
+        test(x) {
+            return x * 2;
+        }
+    }
+
+    assert.equal(
+        new DataFrame(obj, ['column1', 'column2', 'column3'], fakeModule).fakemodule.test(4),
+        8, 'added and called'
+    );
+
+    assert.end();
+});
+
 test('DataFrame Math module can ', (assert) => {
     const df = new DataFrame({
         'column1': [3, 6, 8],
