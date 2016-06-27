@@ -37,3 +37,11 @@ export class NoSuchColumnError extends Error {
         this.name = 'NoSuchColumnError';
     }
 }
+
+export class NotTheSameSchemaError extends Error {
+    constructor(columns, expected) {
+        super();
+        this.message = `NotTheSameSchemaError: [${columns.join(', ')}] while expecting [${expected.join(', ')}]`;
+        this.name = 'NotTheSameSchemaError';
+    }
+}

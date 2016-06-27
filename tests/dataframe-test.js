@@ -185,13 +185,6 @@ test('DataFrame rows can be', (assert) => {
         'value': [1, 0, 1, 1, 1, 2, 4],
     }, ['id', 'value']);
 
-    const df4 = new DataFrame({
-        'id': [3, 1, 8],
-        'value2': [1, 0, 1],
-    }, ['id', 'value2']);
-
-    df3.join(df4, 'id');
-
     assert.deepEqual(
         df3.groupBy('id').map(dfByValue => dfByValue.toDict()),
         [
@@ -237,6 +230,27 @@ test('DataFrame rows can be', (assert) => {
             [1, 1],
             [1, 1],
         ], 'sort and reverse by a column'
+     );
+
+    const df4 = new DataFrame({
+        'id': [3, 1, 8],
+        'value': [1, 0, 1],
+    }, ['id', 'value']);
+
+    assert.deepEqual(
+        df3.union(df4).toArray(),
+        [
+            [8, 4],
+            [8, 1],
+            [6, 0],
+            [3, 2],
+            [3, 1],
+            [1, 1],
+            [1, 1],
+            [3, 1],
+            [1, 0],
+            [8, 1],
+        ], 'union two DataFrames'
      );
 
     assert.end();

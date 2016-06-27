@@ -1,5 +1,5 @@
 import { match, transpose, chain, iter } from './reusables.js';
-import { InputTypeError } from './errors.js';
+import { InputTypeError, NotTheSameSchemaError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
@@ -137,18 +137,32 @@ export default class DataFrame {
         return valueToCount ? this.filter(row => row.get(columnName) === valueToCount).count() : [...this].length;
     }
 
-    join(dfToJoin, on, how = 'left') {
-        const joinMethods = {
-            left: () => this.leftJoin(dfToJoin, on)
+    union(dfToUnion) {
+        if ([...new Set([...this.columns].filter(x => !new Set(dfToUnion.columns).has(x)))].length > 0) {
+            throw new NotTheSameSchemaError(dfToUnion.columns, this.columns);
         }
-        return joinMethods[how]()
+        return this.__newInstance__([...this, ...dfToUnion], this.columns);
     }
 
-    leftJoin(dfToJoin, on) {
-        const groupedDfToJoin = dfToJoin.groupBy(on);
-        console.log(dfToJoin.columns.filter(column => !this.columns.includes(column) || column === on))
-        // this.groupBy(on).map(group =>
-    }
-
-
+    // join(dfToJoin, on, how = 'left') {
+    //     const joinMethods = {
+    //         left: () => this.leftJoin(dfToJoin, on),
+    //     };
+    //     return joinMethods[how]();
+    // }
+    //
+    //
+    //
+    // leftJoin(dfToJoin, on) {
+    //     const newColumns = dfToJoin.columns.filter(column => !this.columns.includes(column));
+    //     const groupedDfToJoin = dfToJoin.groupBy(on);
+    //     return this.groupBy(on).map(groupedDf => this.__newInstance__(
+    //         groupedDf.__rows__.reduce((p, n) => {
+    //             return new Row(Object.assign({}, ));
+    //         })
+    //     ));
+    //     return this.groupBy(on).map(group => new DataFrame(group.__rows__.map(row => newColumns.reduce((p, n) => (
+    //         p ? row.set(n, groupedDfToJoin.filter(groupedDF => groupedDF.group === n)) : p.set(n, groupedDfToJoin.filter(groupedDF => groupedDF.group === n))
+    //     )), false), [...this.columns, newColumns]));
+    // }
 }

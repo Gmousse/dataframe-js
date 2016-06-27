@@ -421,6 +421,12 @@ df.sortBy('id', true).toArray()
 
 ```
 
+**Union two DataFrames:**
+
+Concatenate 2 DataFrames with the same columns.
+
+`df.union(df2 : DataFrame)`
+
 **Math Module:**
 
 Get the max value of a column:
