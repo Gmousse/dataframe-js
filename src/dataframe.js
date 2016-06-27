@@ -136,4 +136,19 @@ export default class DataFrame {
     count(valueToCount, columnName = this.columns[0]) {
         return valueToCount ? this.filter(row => row.get(columnName) === valueToCount).count() : [...this].length;
     }
+
+    join(dfToJoin, on, how = 'left') {
+        const joinMethods = {
+            left: () => this.leftJoin(dfToJoin, on)
+        }
+        return joinMethods[how]()
+    }
+
+    leftJoin(dfToJoin, on) {
+        const groupedDfToJoin = dfToJoin.groupBy(on);
+        console.log(dfToJoin.columns.filter(column => !this.columns.includes(column) || column === on))
+        // this.groupBy(on).map(group =>
+    }
+
+
 }

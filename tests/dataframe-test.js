@@ -185,6 +185,13 @@ test('DataFrame rows can be', (assert) => {
         'value': [1, 0, 1, 1, 1, 2, 4],
     }, ['id', 'value']);
 
+    const df4 = new DataFrame({
+        'id': [3, 1, 8],
+        'value2': [1, 0, 1],
+    }, ['id', 'value2']);
+
+    df3.join(df4, 'id');
+
     assert.deepEqual(
         df3.groupBy('id').map(dfByValue => dfByValue.toDict()),
         [
