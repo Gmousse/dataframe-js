@@ -45,7 +45,7 @@ If you want to create your own module, look at the MathModule (integrated by def
 
 ## API
 
-The dataframe-js api provides some shortcuts to treat and manipulate easily.
+The dataframe-js api provides some shortcuts to treat and manipulate data easily.
 You can see additional use cases in `./tests/`.
 
 #### Create DataFrame
@@ -478,9 +478,9 @@ df.union(df2)
 ]
 ```
 
-**Joins two DataFrames:**
+**Join two DataFrames:**
 
-We provide different methods to joins DataFrames similar to SQL (with several diffrences).
+We provide different methods to join DataFrames similar to SQL (with several diffrences).
 
 `df.join(df2 : DataFrame, on : String, how = 'inner' : String)`
 
@@ -508,17 +508,65 @@ We provide different methods to joins DataFrames similar to SQL (with several di
 | 3         | 6         |
 
 df1.join(df2, 'id', 'inner')
+
+| id        | value     | value2    |
+------------------------------------
+| 3         | 1         | undefined |
+| 1         | 0         | undefined |
+| 8         | 1         | undefined |
+| 1         | undefined | 0         |
+| 8         | undefined | 2         |
+| 3         | undefined | 6         |
+
 df1.join(df2, 'id', 'full')
+
+| id        | value     | value2    |
+------------------------------------
+| 3         | 1         | undefined |
+| 1         | 0         | undefined |
+| 8         | 1         | undefined |
+| 2         | undefined | 1         |
+| 1         | undefined | 0         |
+| 6         | undefined | 1         |
+| 8         | undefined | 2         |
+| 3         | undefined | 6         |
+
 df1.join(df2, 'id', 'outer')
+
+| id        | value     | value2    |
+------------------------------------
+| 2         | undefined | 1         |
+| 6         | undefined | 1         |
+
 df1.join(df2, 'id', 'left')
+
+| id        | value     | value2    |
+------------------------------------
+| 3         | 1         | undefined |
+| 1         | 0         | undefined |
+| 8         | 1         | undefined |
+| 1         | undefined | 0         |
+| 8         | undefined | 2         |
+| 3         | undefined | 6         |
+
 df1.join(df2, 'id', 'right')
 
+| id        | value     | value2    |
+------------------------------------
+| 2         | undefined | 1         |
+| 1         | undefined | 0         |
+| 6         | undefined | 1         |
+| 8         | undefined | 2         |
+| 3         | undefined | 6         |
+| 3         | 1         | undefined |
+| 1         | 0         | undefined |
+| 8         | 1         | undefined |
 
 
 ```
 
 
-###Math Module:
+### Math Module:
 
 **Get the max value of a column:**
 
