@@ -31,10 +31,10 @@ export function match(value, ...cases) {
 
 export function* iter(data, func, limit = Infinity) {
     let token = limit;
-    for (const row of data) {
+    for (const iteration of data) {
         if (token <= 0) return;
         token --;
-        const modifiedRow = func(row);
+        const modifiedRow = func(iteration);
         if (modifiedRow) {yield modifiedRow;}
     }
 }

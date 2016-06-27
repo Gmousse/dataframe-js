@@ -205,6 +205,29 @@ df.withColumn('column2', (row) => row.get('column2') * 2).show()
 | undefined | 12        | undefined |
 ```
 
+**Set columns:**
+
+Attribute new columns (giving a column of undefined) or removing columns by passing a new columns array:
+
+`df.setColumns(columns : Array)`
+
+```javascript
+df.columns
+
+['column1', 'column2', 'column3']
+
+// Adding one empty column and removing one
+df.setColumns(['column1', 'column3', 'column4'])
+
+| column1   | column3   | column4   |
+------------------------------------
+| 3         | undefined | undefined |
+| 6         | undefined | undefined |
+| 8         | undefined | undefined |
+| undefined | undefined | undefined |
+
+```
+
 **Drop a Column:**
 
 `df.drop(columnName : String)`
@@ -427,28 +450,96 @@ Concatenate 2 DataFrames with the same columns.
 
 `df.union(df2 : DataFrame)`
 
-**Math Module:**
+```javascript
+const df = new DataFrame({
+    'id': [3, 6, 8, 1, 1, 3, 8],
+    'value': [1, 0, 1, 1, 1, 2, 4],
+}, ['id', 'value']);
 
-Get the max value of a column:
+
+const df2 = new DataFrame({
+    'id': [3, 1, 8],
+    'value': [1, 0, 1],
+}, ['id', 'value']);
+
+df.union(df2)
+
+[
+    [8, 4],
+    [8, 1],
+    [6, 0],
+    [3, 2],
+    [3, 1],
+    [1, 1],
+    [1, 1],
+    [3, 1],
+    [1, 0],
+    [8, 1],
+]
+```
+
+**Joins two DataFrames:**
+
+We provide different methods to joins DataFrames similar to SQL (with several diffrences).
+
+`df.join(df2 : DataFrame, on : String, how = 'inner' : String)`
+
+`how = 'inner'` OR `df.innerJoin(df2, on)`
+`how = 'full'` OR `df.fullJoin(df2, on)`
+`how = 'outer'` OR `df.outerJoin(df2, on)`
+`how = 'left'` OR `df.leftJoin(df2, on)`
+`how = 'right'` OR `df.rightJoin(df2, on)`
+
+```javascript
+// df1
+| id        | value     |
+------------------------
+| 3         | 1         |
+| 1         | 0         |
+| 8         | 1         |
+
+// df2
+| id        | value2    |
+------------------------
+| 2         | 1         |
+| 1         | 0         |
+| 6         | 1         |
+| 8         | 2         |
+| 3         | 6         |
+
+df1.join(df2, 'id', 'inner')
+df1.join(df2, 'id', 'full')
+df1.join(df2, 'id', 'outer')
+df1.join(df2, 'id', 'left')
+df1.join(df2, 'id', 'right')
+
+
+
+```
+
+
+###Math Module:
+
+**Get the max value of a column:**
 
 `df.math.max(columnName : String)`
 
-Get the min value of a column:
+**Get the min value of a column:**
 
 `df.math.min(columnName : String)`
 
-Get the mean of a column:
+**Get the mean of a column:**
 
 `df.math.mean(columnName : String)`
 
-Get the standard deviation of a column:
+**Get the standard deviation of a column:**
 
 `df.math.sd(columnName : String, population = true : Boolean)`
 
-Get the variance of a column:
+**Get the variance of a column:**
 
 `df.math.var(columnName : String, population = true : Boolean)`
 
-Get all these stats of a column:
+**Get all these stats of a column:**
 
 `df.math.stats(columnName : String)`

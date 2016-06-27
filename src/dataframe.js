@@ -84,6 +84,10 @@ export default class DataFrame {
         ), this.columns.includes(columnName) ? this.columns : [...this.columns, columnName]);
     }
 
+    setColumns(newColumns) {
+        return this.__newInstance__(this.__rows__, newColumns);
+    }
+
     drop(columnName) {
         return this.__newInstance__(this.__rows__.map(
             (row) => row.delete(columnName)
@@ -144,25 +148,73 @@ export default class DataFrame {
         return this.__newInstance__([...this, ...dfToUnion], this.columns);
     }
 
-    // join(dfToJoin, on, how = 'left') {
-    //     const joinMethods = {
-    //         left: () => this.leftJoin(dfToJoin, on),
-    //     };
-    //     return joinMethods[how]();
-    // }
-    //
-    //
-    //
-    // leftJoin(dfToJoin, on) {
-    //     const newColumns = dfToJoin.columns.filter(column => !this.columns.includes(column));
-    //     const groupedDfToJoin = dfToJoin.groupBy(on);
-    //     return this.groupBy(on).map(groupedDf => this.__newInstance__(
-    //         groupedDf.__rows__.reduce((p, n) => {
-    //             return new Row(Object.assign({}, ));
-    //         })
-    //     ));
-    //     return this.groupBy(on).map(group => new DataFrame(group.__rows__.map(row => newColumns.reduce((p, n) => (
-    //         p ? row.set(n, groupedDfToJoin.filter(groupedDF => groupedDF.group === n)) : p.set(n, groupedDfToJoin.filter(groupedDF => groupedDF.group === n))
-    //     )), false), [...this.columns, newColumns]));
-    // }
+    join(dfToJoin, on, how = 'full') {
+        const joinMethods = {
+            inner: () => this.innerJoin(dfToJoin, on),
+            full: () => this.fullJoin(dfToJoin, on),
+            outer: () => this.outerJoin(dfToJoin, on),
+            left: () => this.leftJoin(dfToJoin, on),
+            right: () => this.rightJoin(dfToJoin, on),
+        };
+        return joinMethods[how]();
+    }
+
+    innerJoin(dfToJoin, on) {
+        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const actualGroupedDFs = this.groupBy(on);
+        const groupedDFsToJoin = dfToJoin.groupBy(on);
+        return [...iter([
+            ...actualGroupedDFs.filter(
+                groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
+            ),
+            ...groupedDFsToJoin.filter(
+                groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
+            ),
+        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+    }
+
+    fullJoin(dfToJoin, on) {
+        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        return [...iter([
+            ...this.groupBy(on), ...dfToJoin.groupBy(on),
+        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+    }
+
+    outerJoin(dfToJoin, on) {
+        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const actualGroupedDFs = this.groupBy(on);
+        const groupedDFsToJoin = dfToJoin.groupBy(on);
+        return [...iter([
+            ...actualGroupedDFs.filter(
+                groupedDF => typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined'
+            ),
+            ...groupedDFsToJoin.filter(
+                groupedDF => typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined'
+            ),
+        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+    }
+
+    leftJoin(dfToJoin, on) {
+        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const actualGroupedDFs = this.groupBy(on);
+        const groupedDFsToJoin = dfToJoin.groupBy(on);
+        return [...iter([
+            ...actualGroupedDFs,
+            ...groupedDFsToJoin.filter(
+                groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
+            ),
+        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+    }
+
+    rightJoin(dfToJoin, on) {
+        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const actualGroupedDFs = this.groupBy(on);
+        const groupedDFsToJoin = dfToJoin.groupBy(on);
+        return [...iter([
+            ...groupedDFsToJoin,
+            ...actualGroupedDFs.filter(
+                groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
+            ),
+        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+    }
 }
