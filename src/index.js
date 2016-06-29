@@ -1,7 +1,8 @@
 import DataFrame from './dataframe.js';
 import Row from './row.js';
-import MathModule from './math.js';
+import MathModule from './modules/math.js';
+import Benchmark from './extras/benchmark.js';
 
-const DataFrameWithBasicModules = (data, columns, ...plugins) => new DataFrame(data, columns, MathModule, ...plugins);
+const DataFrameWithBasicModules = (data, columns, ...modules) => new DataFrame(data, columns, MathModule, ...modules);
 
-export { DataFrameWithBasicModules as DataFrame, Row };
+export { DataFrameWithBasicModules as DataFrame, Row, Benchmark };

@@ -1,6 +1,4 @@
-import DataFrame from './src/dataframe.js';
-
-class Benchmark {
+export default class Benchmark {
 
     * __benchmarks__(func, repeats) {
         for (const bench of Array(repeats)) {
@@ -27,24 +25,3 @@ class Benchmark {
         return [benchmarkResult1, benchmarkResult2];
     }
 }
-
-
-const arr = [...Array(1000000).keys()].map(row => [row, row]);
-
-const df = new DataFrame(
-    arr,
-    ['c0', 'c1']
-);
-
-const bench = new Benchmark();
-
-bench.compare (
-    () => df.chain(
-        (line) => line.get('c0') > 40000,
-        (line) => line.set('c0', line.get('c0') + 18),
-        (line) => line.get('c0') < 80000,
-        (line) => line.set('c1', line.get('c0') + 18)
-    ),
-    () => arr.filter(line => line[0] > 40000).map(line => [line[0] + 18, line[1]]).filter(line => line[0] < 80000).map(line => [line[0], line[0] + 18]),
-    4
-);

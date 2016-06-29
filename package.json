@@ -7,6 +7,7 @@
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
     "compile": "NODE_ENV=production babel -d lib/ src/",
     "benchmark": "NODE_ENV=production babel-node benchmark.js",
+    "try": "NODE_ENV=production babel-node test.js",
     "lint": "eslint -c .eslintrc ./src"
   },
   "author": "Guillaume Mousnier",

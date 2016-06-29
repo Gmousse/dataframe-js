@@ -1,5 +1,5 @@
-export function returnArray(thing) {
-    return Array.isArray(thing) ? thing : [thing];
+export function returnArray(x) {
+    return Array.isArray(x) ? x : [x];
 }
 
 export function transpose(table) {
@@ -14,8 +14,8 @@ export function isArrayOfType(value, ofType, index = 0) {
      );
 }
 
-export function* makeGenerator(thing) {
-    yield* thing;
+export function* makeGenerator(x) {
+    yield* x;
 }
 
 export function opMax(values) {

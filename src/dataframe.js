@@ -3,11 +3,11 @@ import { InputTypeError, NotTheSameSchemaError } from './errors.js';
 import Row from './row.js';
 
 export default class DataFrame {
-    constructor(data, columns, ...plugins) {
+    constructor(data, columns, ...modules) {
         [this.__rows__, this.columns] = this._build(data, columns);
-        this.plugins = plugins;
-        if (plugins.length > 0) {
-            Object.assign(this, ...plugins.map(Plugin => {
+        this.modules = modules;
+        if (modules.length > 0) {
+            Object.assign(this, ...modules.map(Plugin => {
                 const pluginInstance = new Plugin(this);
                 return {[pluginInstance.name]: pluginInstance};
             }));
@@ -21,7 +21,7 @@ export default class DataFrame {
     }
 
     __newInstance__(data, columns) {
-        return new DataFrame(data, columns, ...this.plugins);
+        return new DataFrame(data, columns, ...this.modules);
     }
 
     _build(data, columns) {

@@ -8,7 +8,6 @@ The DataFrame uses 2 main concepts in its structure:
 - Rows containing data and providing tools to manipulate these in a unit level (Row).
 - Columns (labels) providing ways to select and manipulate data on a larger level (DataFrame).
 
-A simple example:
 ````javascript
 
 | column1   | column2   | column3   | <--- Columns
@@ -25,11 +24,22 @@ To resume:
 -   dataframe-js provides a simple (and efficient) way to manipulate data in javascript (better in es6).
 -   Moreover it's compatible with arrays and dictionnaries (hash, object) and you can switch from or to these structures when you want.
 
-Discover this flexible data structure and / or contribute to in order to make it smarter, stronger and easier.
+Discover this flexible data structure and become a contributor in order to make it smarter, stronger and easier.
 
 ## Installation
 
 `npm install git+http://93.15.96.71:10080/odin/dataframe-js.git#feature/begin`
+
+## Usage
+
+To use it, simply import the library and use DataFrame.
+
+```javascript
+import { DataFrame } from 'dataframe-js';
+
+df = new DataFrame(myData, myColumns);
+
+```
 
 ## Modules
 
@@ -41,7 +51,7 @@ and you can call them by their name:
 
 `df.fakemodule.test(4)`
 
-If you want to create your own module, look at the MathModule (integrated by default) `./src/math.js` as example.
+If you want to create your own module, look at the MathModule (integrated by default) `./src/modules/math.js` as example.
 
 ## API
 

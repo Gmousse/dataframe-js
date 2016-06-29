@@ -1,4 +1,4 @@
-import { isNumber } from './reusables.js';
+import { isNumber } from '../reusables.js';
 
 export default class MathModule {
 
