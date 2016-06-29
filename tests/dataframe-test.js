@@ -13,8 +13,8 @@ function tryCatch(callback) {
 
 test('DataFrame can be created correctly', (assert) => {
     const dfFromObjectOfArrays = new DataFrame({
-        'column1': [3, 6, 8],
-        'column2': [3, 4, 5, 6],
+        column1: [3, 6, 8],
+        column2: [3, 4, 5, 6],
     }, ['column1', 'column2']);
 
     const dfFromArrayOfArrays = new DataFrame([
@@ -67,6 +67,8 @@ test('DataFrame can be', (assert) => {
     ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 
     assert.deepEqual(
+        dfFromArrayOfArrays.dim(), [3, 6], 'measured, getting dimmensions');
+    assert.deepEqual(
         dfFromArrayOfArrays.toDict(), {
             c1: [1, 1, 6],
             c2: [6, 2, 6],
@@ -84,9 +86,9 @@ test('DataFrame can be', (assert) => {
         'converted into array');
 
     const dfFromDict = new DataFrame({
-        'column1': [3, 6, 8],
-        'column2': ['3', '4', '5', '6'],
-        'column3': [],
+        column1: [3, 6, 8],
+        column2: ['3', '4', '5', '6'],
+        column3: [],
     }, ['column1', 'column2', 'column3']);
 
     const expectedShow = [
@@ -99,12 +101,6 @@ test('DataFrame can be', (assert) => {
     ].join('\n');
 
     assert.equal(dfFromDict.show(10, true), expectedShow, 'showed as string table');
-    assert.deepEqual(dfFromDict.transpose().toDict(), {
-        '0': [3, '3', undefined],
-        '1': [6, '4', undefined],
-        '2': [8, '5', undefined],
-        '3': [undefined, '6', undefined],
-    }, 'transposed');
 
     assert.end();
 });
@@ -153,6 +149,17 @@ test('DataFrame columns can be', (assert) => {
         }, 'deleted'
     );
     assert.deepEqual(
+        df.select('c2', 'c3', 'c4').rename('c16', 'c17', 'c18').columns,
+            ['c16', 'c17', 'c18'], 'renamed'
+    );
+    assert.deepEqual(
+        df.restructure('c2', 'c3', 'c36').toDict(), {
+            c2: [6, 2, 6],
+            c3: [9, undefined, 9],
+            c36: [undefined, undefined, undefined],
+        }, 'restructured'
+    );
+    assert.deepEqual(
         df.distinct('c1'), [1, 6], 'distinct, giving an array of unique values'
     );
 
@@ -161,9 +168,9 @@ test('DataFrame columns can be', (assert) => {
 
 test('DataFrame rows can be', (assert) => {
     const df = new DataFrame({
-        'column1': [3, 6, 8],
-        'column2': ['3', '4', '5', '6'],
-        'column3': [],
+        column1: [3, 6, 8],
+        column2: ['3', '4', '5', '6'],
+        column3: [],
     }, ['column1', 'column2', 'column3']);
 
     assert.equal(df.count(), 4, 'counted');
@@ -220,8 +227,8 @@ test('DataFrame rows can be', (assert) => {
     );
 
     const df3 = new DataFrame({
-        'id': [3, 6, 8, 1, 1, 3, 8],
-        'value': [1, 0, 1, 1, 1, 2, 4],
+        id: [3, 6, 8, 1, 1, 3, 8],
+        value: [1, 0, 1, 1, 1, 2, 4],
     }, ['id', 'value']);
 
     assert.deepEqual(
@@ -283,8 +290,8 @@ test('DataFrame rows can be', (assert) => {
     );
 
     const df4 = new DataFrame({
-        'id': [3, 1, 8],
-        'value': [1, 0, 1],
+        id: [3, 1, 8],
+        value: [1, 0, 1],
     }, ['id', 'value']);
 
     assert.deepEqual(
@@ -303,8 +310,8 @@ test('DataFrame rows can be', (assert) => {
     );
 
     const df5 = new DataFrame({
-        'id': [2, 1, 6, 8, 3],
-        'value': [1, 0, 1, 2, 6],
+        id: [2, 1, 6, 8, 3],
+        value: [1, 0, 1, 2, 6],
     }, ['id', 'value2']);
 
     assert.deepEqual(
@@ -366,9 +373,9 @@ test('DataFrame rows can be', (assert) => {
 
 test('DataFrame modules can be', (assert) => {
     const obj = {
-        'column1': [3, 6, 8],
-        'column2': ['3', '4', '5', '6', 'yolo'],
-        'column3': [],
+        column1: [3, 6, 8],
+        column2: ['3', '4', '5', '6', 'yolo'],
+        column3: [],
     };
 
     class fakeModule {
@@ -385,52 +392,6 @@ test('DataFrame modules can be', (assert) => {
     assert.equal(
         new DataFrame(obj, ['column1', 'column2', 'column3'], fakeModule).fakemodule.test(4),
         8, 'added and called'
-    );
-
-    assert.end();
-});
-
-test('DataFrame Math module can ', (assert) => {
-    const df = new DataFrame({
-        'column1': [3, 6, 8],
-        'column2': ['3', '4', '5', '6', 'yolo'],
-        'column3': [],
-    }, ['column1', 'column2', 'column3']);
-
-    assert.equal(
-        df.math.max('column1'), 8, 'compute the maximal numeric value of a column'
-    );
-    assert.equal(
-        df.math.max('column2'), 6, 'compute the maximal value of a column ignoring non-numeric value'
-    );
-    assert.equal(
-        df.math.min('column1'), 3, 'compute the minimal numeric value of a column'
-    );
-    assert.equal(
-        df.math.mean('column1'), 5.666666666666667, 'compute the mean of a column'
-    );
-    assert.equal(
-        df.math.sd('column1'), 2.516611478423583, 'compute the standard deviation of a column'
-    );
-    assert.equal(
-        df.math.sd('column1', true), 2.0548046676563256, 'compute the population standard deviation of a column'
-    );
-    assert.equal(
-        df.math.var('column1'), 6.333333333333333, 'compute the variance of a column'
-    );
-    assert.equal(
-        df.math.var('column1', true), 4.222222222222222, 'compute the population variance of a column'
-    );
-    assert.deepEqual(
-        df.math.stats('column1'), {
-            mean: 5.666666666666667,
-            min: 3,
-            max: 8,
-            var: 6.333333333333333,
-            varpop: 4.222222222222222,
-            sd: 2.516611478423583,
-            sdpop: 2.0548046676563256,
-        }, 'compute all these stats for a column'
     );
 
     assert.end();

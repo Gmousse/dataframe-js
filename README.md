@@ -51,7 +51,7 @@ and you can call them by their name:
 
 `df.fakemodule.test(4)`
 
-If you want to create your own module, look at the MathModule (integrated by default) `./src/modules/math.js` as example.
+If you want to create your own module, look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
 
 ## API
 
@@ -159,6 +159,17 @@ df.show()
 
 ```
 
+**Get the DataFrame dimensions:**
+
+`df.dim()`
+
+```javascript
+df.dim()
+
+[4, 3] // [height, weight]
+
+```
+
 **Transpose DataFrame (columns become rows and conversely):**
 
 `df.transpose()`
@@ -215,11 +226,11 @@ df.withColumn('column2', (row) => row.get('column2') * 2).show()
 | undefined | 12        | undefined |
 ```
 
-**Set columns:**
+**Restructure columns:**
 
 Attribute new columns (giving a column of undefined) or removing columns by passing a new columns array:
 
-`df.setColumns(columns : Array)`
+`df.Restructure(...columns : String)`
 
 ```javascript
 df.columns
@@ -227,7 +238,7 @@ df.columns
 ['column1', 'column2', 'column3']
 
 // Adding one empty column and removing one
-df.setColumns(['column1', 'column3', 'column4'])
+df.Restructure('column1', 'column3', 'column4')
 
 | column1   | column3   | column4   |
 ------------------------------------
@@ -236,6 +247,20 @@ df.setColumns(['column1', 'column3', 'column4'])
 | 8         | undefined | undefined |
 | undefined | undefined | undefined |
 
+```
+
+**Rename columns:**
+
+`df.rename(...columns : String)`
+
+```javascript
+df.columns
+
+['column1', 'column2', 'column3']
+
+df.rename('column1', 'column3', 'column4').columns
+
+['column1', 'column3', 'column4']
 ```
 
 **Drop a Column:**
@@ -576,28 +601,28 @@ df1.join(df2, 'id', 'right')
 ```
 
 
-### Math Module:
+### Stat Module:
 
 **Get the max value of a column:**
 
-`df.math.max(columnName : String)`
+`df.stat.max(columnName : String)`
 
 **Get the min value of a column:**
 
-`df.math.min(columnName : String)`
+`df.stat.min(columnName : String)`
 
 **Get the mean of a column:**
 
-`df.math.mean(columnName : String)`
+`df.stat.mean(columnName : String)`
 
 **Get the standard deviation of a column:**
 
-`df.math.sd(columnName : String, population = true : Boolean)`
+`df.stat.sd(columnName : String, population = true : Boolean)`
 
 **Get the variance of a column:**
 
-`df.math.var(columnName : String, population = true : Boolean)`
+`df.stat.var(columnName : String, population = true : Boolean)`
 
 **Get all these stats of a column:**
 
-`df.math.stats(columnName : String)`
+`df.stat.stats(columnName : String)`

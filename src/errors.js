@@ -45,3 +45,11 @@ export class NotTheSameSchemaError extends Error {
         this.name = 'NotTheSameSchemaError';
     }
 }
+
+export class WrongMatrixStructureError extends Error {
+    constructor(structure, expected) {
+        super();
+        this.message = `WrongMatrixStructureError: [${structure.join(', ')}] while expecting [${expected.join(', ')}]`;
+        this.name = 'WrongMatrixStructureError';
+    }
+}
