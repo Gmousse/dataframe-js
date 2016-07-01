@@ -13,8 +13,8 @@ export default class Matrix {
         return arrayEqual(this.df.dim(), df.dim(), true);
     }
 
-    hasTransposedStruct(df) {
-        return this.df.dim()[1] === df.dim()[0];
+    hasSameTransposedStruct(df) {
+        return arrayEqual(this.df.dim(), df.dim().reverse(), true);
     }
 
     add(df) {
@@ -24,9 +24,9 @@ export default class Matrix {
         const columns = [...Array(this.df.dim()[1]).keys()];
         return this.df.__newInstance__([...iter(
             Object.keys(this.df.__rows__),
-            key => {
-                const a = this.df.__rows__[key].toArray();
-                const b = df.__rows__[key].toArray();
+            rowKey => {
+                const a = this.df.__rows__[rowKey].toArray();
+                const b = df.__rows__[rowKey].toArray();
                 return columns.map(column => a[column] + b[column]);
             }
         )], this.df.columns);
@@ -37,18 +37,24 @@ export default class Matrix {
     }
 
     dot(df) {
-        if (!this.hasTransposedStruct()(df)) {
-            throw new WrongMatrixStructureError(this.df.dim()[1], df.dim()[0]);
+        if (!this.hasSameTransposedStruct(df)) {
+            throw new WrongMatrixStructureError(this.df.dim(), df.dim().reverse());
         }
-        const columns = [...Array(this.df.dim()[1]).keys()];
+        const transposedDF = df.matrix.transpose();
+        const columns = [...Array(this.df.dim()[0]).keys()];
         return this.df.__newInstance__([...iter(
             Object.keys(this.df.__rows__),
-            key => {
-                const a = this.df.__rows__[key].toArray();
-                const b = df.__rows__[key].toArray();
-                return columns.map(column => a[column] + b[column]);
+            rowKey => {
+                const a = this.df.__rows__[rowKey].toArray();
+                return [...iter(
+                    columns,
+                    column => {
+                        const b = transposedDF.__rows__[column].toArray();
+                        return Object.keys(b).reduce((p, n) => p + b[n] * a[n], 0);
+                    }
+                )];
             }
-        )], this.df.columns);
+        )], columns);
     }
 
     transpose() {
