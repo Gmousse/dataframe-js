@@ -1,10 +1,10 @@
 import { isNumber } from '../reusables.js';
 
-export default class MathModule {
+export default class Stat {
 
     constructor(dataframe) {
         this.df = dataframe;
-        this.name = 'math';
+        this.name = 'stat';
     }
 
     max(columnName) {

@@ -1,4 +1,4 @@
-import { match, transpose, chain, iter } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual } from './reusables.js';
 import { InputTypeError, NotTheSameSchemaError } from './errors.js';
 import Row from './row.js';
 
@@ -40,11 +40,6 @@ export default class DataFrame {
         return [array.map(row => new Row(row, columns)), columns];
     }
 
-    transpose() {
-        const newColumns = [...Array(this.count()).keys()];
-        return this.__newInstance__(transpose(transpose(Object.values(this.toDict()))).map(row => new Row(row, newColumns)), newColumns);
-    }
-
     toDict() {
         return Object.assign({}, ...Object.entries(
             transpose([...this.__rows__].map(row => row.toArray()))
@@ -70,6 +65,10 @@ export default class DataFrame {
         return returnAsString ? toShow : console.log(toShow);
     }
 
+    dim() {
+        return [this.count(), this.columns.length];
+    }
+
     select(...columns) {
         return this.__newInstance__(this.__rows__.map(
             row => row.select(...columns)
@@ -84,8 +83,12 @@ export default class DataFrame {
         ), this.columns.includes(columnName) ? this.columns : [...this.columns, columnName]);
     }
 
-    setColumns(newColumns) {
+    restructure(...newColumns) {
         return this.__newInstance__(this.__rows__, newColumns);
+    }
+
+    rename(...newColumnsName) {
+        return this.__newInstance__(this.__rows__.map(row => row.toArray()), newColumnsName);
     }
 
     drop(columnName) {
@@ -95,7 +98,7 @@ export default class DataFrame {
     }
 
     distinct(columnName) {
-        return [...new Set(...this.select(columnName).transpose().toArray())];
+        return [...new Set(...transpose(this.select(columnName).toArray()))];
     }
 
     chain(...funcs) {
@@ -142,7 +145,7 @@ export default class DataFrame {
     }
 
     union(dfToUnion) {
-        if ([...new Set([...this.columns].filter(x => !new Set(dfToUnion.columns).has(x)))].length > 0) {
+        if (!arrayEqual(this.columns, dfToUnion.columns)) {
             throw new NotTheSameSchemaError(dfToUnion.columns, this.columns);
         }
         return this.__newInstance__([...this, ...dfToUnion], this.columns);
@@ -170,14 +173,14 @@ export default class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
     }
 
     fullJoin(dfToJoin, on) {
         const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
         return [...iter([
             ...this.groupBy(on), ...dfToJoin.groupBy(on),
-        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
     }
 
     outerJoin(dfToJoin, on) {
@@ -191,7 +194,7 @@ export default class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined'
             ),
-        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
     }
 
     leftJoin(dfToJoin, on) {
@@ -203,7 +206,7 @@ export default class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
     }
 
     rightJoin(dfToJoin, on) {
@@ -215,6 +218,6 @@ export default class DataFrame {
             ...actualGroupedDFs.filter(
                 groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.setColumns(newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
     }
 }
