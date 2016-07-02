@@ -3,13 +3,14 @@
 
 ## Presentation
 
-dataframe-js provides another way to work with data by using DataFrame, a powerfull and immutable data structure already used in some languages (Spark, Python, R, ...).
-The DataFrame uses 2 main concepts in its structure:
-- Rows containing data and providing tools to manipulate these in a unit level (Row).
-- Columns (labels) providing ways to select and manipulate data on a larger level (DataFrame).
+dataframe-js provides another way to work with data by using DataFrame, a powerfull data structure already used in some languages (Spark, Python, R, ...).
+
+A DataFrame is simply built on two concepts:
+- **Columns** providing ways to select, filter your data and reorganize them.
+- **Rows** providing ways to modify your data.
 
 ````javascript
-
+// DataFrame example
 | column1   | column2   | column3   | <--- Columns
 ------------------------------------
 | 3         | 3         | undefined | <--- Row
@@ -18,44 +19,65 @@ The DataFrame uses 2 main concepts in its structure:
 | undefined | 6         | undefined |
 ````
 
-This structure is a wonderful way to work with machine learning or complex data treatments.
+**DataFrame is immutable** (lazy, for performance purposes). Then, each modification on DataFrame will return a new DataFrame decreasing bug risks and making your data more secure.
 
-To resume:
--   dataframe-js provides a simple (and efficient) way to manipulate data in javascript (better in es6).
--   Moreover it's compatible with arrays and dictionnaries (hash, object) and you can switch from or to these structures when you want.
+**DataFrame is easy to use** with a simple API (closed to Spark or SQL) designed to manipulate data faster and easier than ever.
 
-Discover this flexible data structure and become a contributor in order to make it smarter, stronger and easier.
+**DataFrame is flexible** because you can switch from or to arrays and dictionnaries (hash, object) when you want.
+
+**DataFrame is modulable** because you can use additional modules (Stat and Matrix by default) or create your own.
 
 ## Installation
 
 `npm install git+http://93.15.96.71:10080/odin/dataframe-js.git#feature/begin`
 
-## Usage
+## Manual
 
-To use it, simply import the library and use DataFrame.
+dataframe-js contains a **principal core (DataFrame and Row)** and **two default modules (Stat and Matrix)**. Refer to this manual to use them.
+
+### Core
+
+#### Usage:
+
+To use dataframe-js, simply import the library. Then you can use DataFrame, Row or other Core components.
 
 ```javascript
 import { DataFrame } from 'dataframe-js';
 
-df = new DataFrame(myData, myColumns);
-
+const df = new DataFrame(myData, myColumns);
 ```
 
-## Modules
+#### Documentation:
+- **DataFrame and Row API:** [Core API](./doc/CORE_API.md)
 
-You can add modules on dataframe-js when creating DataFrame instance:
 
-`const df = new DataFrame(obj, ['column1', 'column2', 'column3'], fakeModule, anotherModule)`
+### Modules
 
-and you can call them by their name:
+#### Usage:
 
-`df.fakemodule.test(4)`
+dataframe-js is designed to easily create and add modules in order to extends DataFrame tools.
+
+When you start an instance of DataFrame you can also pass modules which be available by calling their names.
+
+```javascript
+// Here you add two modules on your DataFrame instance.
+const df = new DataFrame(obj, ['column1', 'column2', 'column3'], fakeModule, anotherModule)
+// You can call modules by their names
+df.fakemodule.test(4)
+```
+
+Modules will be also available for each DataFrame created from your first instance, avoiding to redeclare your modules each time you create a DataFrame.
+
+```javascript
+// You create a second DataFrame from the last one.
+const df2 = df.withColumn('column4', (row) => row.get('column2') * 2)
+// This second DataFrame will have acces to the same modules.
+df.fakemodule.test(8)
+```
 
 If you want to create your own module, look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
 
-## API
+#### Default modules documentation:
+- **Stat and Matrix modules API:** [Modules API](./doc/MODULES_API.md)
 
-The dataframe-js api provides some shortcuts to treat and manipulate data easily.
-You can see additional use cases in `./tests/`.
-
-[apiDoc](./doc/dataframe.md)
+## Contribution

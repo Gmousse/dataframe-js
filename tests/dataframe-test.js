@@ -174,8 +174,8 @@ test('DataFrame rows can be', (assert) => {
     }, ['column1', 'column2', 'column3']);
 
     assert.equal(df.count(), 4, 'counted');
-    assert.equal(df.count('4', 'column2'), 1, 'counted based on a specific value in a column');
-    assert.equal(df.count(9, 'column1'), 0, 'counted based on a specific value in a selected column');
+    assert.equal(df.countValue('4', 'column2'), 1, 'counted based on a specific value in a column');
+    assert.equal(df.countValue(9, 'column1'), 0, 'counted based on a specific value in a selected column');
     assert.deepEqual(
         df.filter((line) => line.get('column1') > 3).toArray(), [
             [6, '4', undefined],

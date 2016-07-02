@@ -1,13 +1,12 @@
 {
   "name": "dataframe-js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "main": "./lib",
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
     "compile": "NODE_ENV=production babel -d lib/ src/",
-    "benchmark": "NODE_ENV=production babel-node benchmark.js",
-    "try": "NODE_ENV=production babel-node test.js",
+    "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
     "lint": "eslint -c .eslintrc ./src"
   },
   "author": "Guillaume Mousnier",
@@ -23,10 +22,11 @@
     "babel-preset-stage-0": "^6.3.13",
     "babel-runtime": "^6.9.2",
     "babel-tape-runner": "^2.0.1",
-    "co": "^4.6.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
     "eslint-plugin-react": "^5.1.1",
+    "jsdoc": "^3.4.0",
+    "jsdoc-to-markdown": "^1.3.6",
     "tap-diff": "^0.1.1",
     "tape": "^4.5.1"
   },

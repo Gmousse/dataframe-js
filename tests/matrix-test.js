@@ -52,8 +52,5 @@ test('DataFrame matrix module can ', (assert) => {
             '1': [76, 13],
         }, 'realize a non-commutative matrix multiplication between 2 dataframes'
     );
-
-    df.matrix.dot(df2).show();
-
     assert.end();
 });
