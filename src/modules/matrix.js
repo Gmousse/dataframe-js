@@ -2,15 +2,15 @@ import { WrongMatrixStructureError } from '../errors.js';
 import { transpose, arrayEqual, iter } from '../reusables.js';
 
 /**
-* Matrix module for DataFrame, providing basics mathematical matrix computations.
+* Matrix module for DataFrame, providing basic mathematical matrix computations.
  */
 class Matrix {
     /**
      * Start the Matrix module.
-     * @param {DataFrame} dataframe An instance of DataFrame.
+     * @param {DataFrame} df An instance of DataFrame.
      */
-    constructor(dataframe) {
-        this.df = dataframe;
+    constructor(df) {
+        this.df = df;
         this.name = 'matrix';
     }
 

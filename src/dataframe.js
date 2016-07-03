@@ -17,21 +17,21 @@ class DataFrame {
     *      'column1': [3, 6, 8],  // Column Data
     *      'column2': [3, 4, 5, 6], // Column Data
      * }, ['column1', 'column2']); // Columns
-
+     *
      * // From Array of Arrays
      * const dfFromArrayOfArrays = new DataFrame([
     *      [1, 6, 9, 10, 12],  // Row Data
     *      [1, 2],             // Row Data
     *      [6, 6, 9, 8, 9, 12], // Row Data
      * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
-
+     *
      * // From Array of Objects -- THE BETTER WAY --
      * const dfFromArrayOfObjects = new DataFrame([
     *      {c1: 1, c2: 6, c3: 9, c4: 10, c5: 12},  // Row Data
     *      {c4: 1, c3: 2},                         // Row Data
     *      {c1: 6, c5: 6, c2: 9, c4: 8, c3: 9, c6: 12}, // Row Data
      * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
-
+     *
      * // From DataFrame
      * const dfFromDF = new DataFrame(dfFromArrayOfArrays);
      */
@@ -77,7 +77,7 @@ class DataFrame {
      * @returns {Object} The DataFrame converted into dict.
      * @example
      * df.toDict()
-
+     *
      * { c1: [ 1, undefined, 6 ], // one array by column
      *   c2: [ 6, undefined, 9 ],
      *   c3: [ 9, 2, 9 ],
@@ -96,7 +96,7 @@ class DataFrame {
      * @returns {Array} The DataFrame converted into dict.
      * @example
      * df.toArray()
-
+     *
      * [ [ 1, 6, 9, 10, 12, undefined ], // one array by row
      *   [ undefined, undefined, 2, 1, undefined, undefined ],
      *   [ 6, 9, 9, 8, 6, 12 ] ]
@@ -112,7 +112,7 @@ class DataFrame {
      * @returns {String} The DataFrame as String Table.
      * @example
      * df.show() // console.log the DataFrame with the first 10nth rows
-
+     *
      * | column1   | column2   | column3   |
      * ------------------------------------
      * | 3         | 3         | undefined |
@@ -153,7 +153,7 @@ class DataFrame {
      * @example
      * // Counting rows
      * df.count()
-
+     *
      * 4
      */
     count() {
@@ -168,12 +168,12 @@ class DataFrame {
      * @example
       * // Counting specific value in a column
       * df.countValue(5, 'column2')
-
+      *
       * 1
-
+      *
       * // Counting specific value in a selected column
       * df.select('column1').countValue(5)
-
+      *
       * 0
      */
     countValue(valueToCount, columnName = this.columns[0]) {
@@ -186,7 +186,7 @@ class DataFrame {
      * @returns {Array} An Array containing distinct values of the column.
      * @example
      * df.distinct('d2')
-
+     *
      * [3, 4, 15, 6]
      */
     distinct(columnName) {
@@ -199,7 +199,7 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame containing selected columns.
      * @example
      * df.select('column1', 'column3').show()
-
+     *
      * | column1   | column3   |
      * ------------------------
      * | 3         | undefined |
@@ -221,17 +221,17 @@ class DataFrame {
      * @example
      * // Add a new column
      * df.withColumn('column4', () => 2).show()
-
+     *
      * | column1   | column2   | column3   | column4   |
      * ------------------------------------------------
      * | 3         | 3         | undefined | 2         |
      * | 6         | 4         | undefined | 2         |
      * | 8         | 5         | undefined | 2         |
      * | undefined | 6         | undefined | 2         |
-
+     *
      * // Modify a column
      * df.withColumn('column2', (row) => row.get('column2') * 2).show()
-
+     *
      * | column1   | column2   | column3   |
      * ------------------------------------
      * | 3         | 6         | undefined |
@@ -253,12 +253,12 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
      * @example
      * df.columns
-
+     *
      * ['column1', 'column2', 'column3']
-
+     *
      * // Adding one empty column and removing one
      * df.restructure('column1', 'column3', 'column4')
-
+     *
      * | column1   | column3   | column4   |
      * ------------------------------------
      * | 3         | undefined | undefined |
@@ -276,11 +276,11 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
      * df.columns
-
+     *
      * ['column1', 'column2', 'column3']
-
+     *
      * df.rename('column1', 'column3', 'column4').columns
-
+     *
      * ['column1', 'column3', 'column4']
      */
     rename(...columnNames) {
@@ -293,7 +293,7 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame without the dropped column.
      * @example
      * df.drop('d2').show()
-
+     *
      * | column1   | column3   |
      * ------------------------
      * | 3         | undefined |
@@ -320,7 +320,7 @@ class DataFrame {
     *      line => line.set('column1', 3),  // Map sending modification
     *      line => line.get('column2') === '5' // Filter sending boolean. If true the row is send.
      * ).show();
-
+     *
      * | column1   | column2   | column3   |
      * ------------------------------------
      * | 3         | 5         | undefined |
@@ -356,7 +356,7 @@ class DataFrame {
      * @example
      * // Compute a value from rows, starting from value 0
      * df.reduce((p, n) => n.get('column1') + p, 0)
-
+     *
      * // Compute a row from rows
      * df2.reduce((p, n) => (
     *          n.set('column1', p.get('column1') + n.get('column1'))
@@ -386,22 +386,21 @@ class DataFrame {
      * @example
      * // Group By id and return an object containing group and dataframe
      * df.groupBy('id').map(dfByValue => ({group: dfByValue.group, df: dfByValue.toDict()}))
-
+     *
      * [ { group: 3, df: { id: [Object], value: [Object] } },
      *   { group: 6, df: { id: [Object], value: [Object] } },
      *   { group: 8, df: { id: [Object], value: [Object] } },
      *   { group: 1, df: { id: [Object], value: [Object] } } ]
-
+     *
      * // Get sum of value by id with a simple formating
      * df.groupBy('id').map(dfByValue => (
     *      {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
      * )
-
+     *
      * [ { group: 3, result: 3 },
      *   { group: 6, result: 0 },
      *   { group: 8, result: 5 },
      *   { group: 1, result: 2 } ]
-
      */
     groupBy(columnName) {
         return [...iter(
@@ -422,7 +421,7 @@ class DataFrame {
      * @example
      * // Sort DataFrame by id
      * df.sortBy('id').toArray()
-
+     *
      * [
     *      [1, 1],
     *      [1, 1],
@@ -432,10 +431,10 @@ class DataFrame {
     *      [8, 1],
     *      [8, 4],
      * ]
-
+     *
      * // Sort DataFrame by id and reverse
      * df.sortBy('id', true).toArray()
-
+     *
      * [
     *      [8, 4],
     *      [8, 1],
@@ -457,7 +456,7 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame resulting of the union.
      * @example
      * df.union(df2).toArray()
-
+     *
      * [
     *      [8, 4],
     *      [8, 1],
@@ -503,7 +502,7 @@ class DataFrame {
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df1.join(df2, 'id', 'inner')
-
+     *
      * | id        | value     | value2    |
      * ------------------------------------
      * | 3         | 1         | undefined |
@@ -534,7 +533,7 @@ class DataFrame {
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df1.join(df2, 'id', 'full')
-
+     *
      * | id        | value     | value2    |
      * ------------------------------------
      * | 3         | 1         | undefined |
@@ -560,7 +559,7 @@ class DataFrame {
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df1.join(df2, 'id', 'outer')
-
+     *
      * | id        | value     | value2    |
      * ------------------------------------
      * | 2         | undefined | 1         |
@@ -587,7 +586,7 @@ class DataFrame {
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df1.join(df2, 'id', 'left')
-
+     *
      * | id        | value     | value2    |
      * ------------------------------------
      * | 3         | 1         | undefined |
@@ -616,7 +615,7 @@ class DataFrame {
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df1.join(df2, 'id', 'right')
-
+     *
      * | id        | value     | value2    |
      * ------------------------------------
      * | 2         | undefined | 1         |

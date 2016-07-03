@@ -1,15 +1,15 @@
 import { isNumber } from '../reusables.js';
 
 /**
-* Stat module for DataFrame, providing basics statistical metrics for numeric columns.
+* Stat module for DataFrame, providing basic statistical metrics for numeric columns.
  */
 class Stat {
     /**
      * Start the Stat module.
-     * @param {DataFrame} dataframe An instance of DataFrame.
+     * @param {DataFrame} df An instance of DataFrame.
      */
-    constructor(dataframe) {
-        this.df = dataframe;
+    constructor(df) {
+        this.df = df;
         this.name = 'stat';
     }
 

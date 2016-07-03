@@ -396,3 +396,23 @@ test('DataFrame modules can be', (assert) => {
 
     assert.end();
 });
+
+test('DataFrame is immutable when', (assert) => {
+    const dfFromArrayOfArrays = new DataFrame([
+        [1, 6, 9, 10, 12],
+        [1, 2],
+        [6, 6, 9, 8, 9, 12],
+    ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
+
+
+    assert.equal(
+        Object.is(dfFromArrayOfArrays.map(row => row.set('c1', 18)), dfFromArrayOfArrays),
+        false, 'when modified'
+    );
+    assert.equal(
+        Object.is(dfFromArrayOfArrays.map(row => row), dfFromArrayOfArrays),
+        false, 'when modified, even if nothing have changed'
+    );
+    
+    assert.end();
+});
