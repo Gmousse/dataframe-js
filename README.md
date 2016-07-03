@@ -77,6 +77,49 @@ console.log(
 
 ```
 
+#### List of available methods:
+
+* [DataFrame](#DataFrame)
+    * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
+    * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
+    * [.toArray()](#DataFrame+toArray) ⇒ <code>Array</code>
+    * [.show([rows], [quiet])](#DataFrame+show) ⇒ <code>String</code>
+    * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
+    * [.count()](#DataFrame+count) ⇒ <code>Int</code>
+    * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.select(...columnNames)](#DataFrame+select) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.withColumn(columnName, [func])](#DataFrame+withColumn) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.restructure(...columnNames)](#DataFrame+restructure) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.rename(...columnNames)](#DataFrame+rename) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.drop(columnName)](#DataFrame+drop) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.chain(...funcs)](#DataFrame+chain) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.filter(func)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.reduce(func, [init])](#DataFrame+reduce) ⇒
+    * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
+    * [.groupBy(columnName)](#DataFrame+groupBy) ⇒ <code>Array</code>
+    * [.sortBy(columnName, [reverse])](#DataFrame+sortBy) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.union(dfToUnion)](#DataFrame+union) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.join(dfToJoin, on, [how])](#DataFrame+join) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.innerJoin(dfToJoin, on)](#DataFrame+innerJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.fullJoin(dfToJoin, on)](#DataFrame+fullJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.outerJoin(dfToJoin, on)](#DataFrame+outerJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.leftJoin(dfToJoin, on)](#DataFrame+leftJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.rightJoin(dfToJoin, on)](#DataFrame+rightJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+
+* [Row](#Row)
+    * [new Row(data, columns)](#new_Row_new)
+    * [.toDict()](#Row+toDict) ⇒ <code>Object</code>
+    * [.toArray()](#Row+toArray) ⇒ <code>Array</code>
+    * [.size()](#Row+size) ⇒ <code>Int</code>
+    * [.select(...columnNames)](#Row+select) ⇒ <code>[Row](#Row)</code>
+    * [.get(columnToGet)](#Row+get) ⇒
+    * [.set(columnToSet)](#Row+set) ⇒ <code>[Row](#Row)</code>
+    * [.delete(columnToDel)](#Row+delete) ⇒ <code>[Row](#Row)</code>
+
+
+
 ### Modules
 
 #### Stat and Matrix modules API documentation: [Modules API](./doc/MODULES_API.md)
@@ -119,5 +162,25 @@ class fakeModule {
     }
 }
 ```
+
+#### List of available modules
+
+* [Matrix](#Matrix)
+    * [new Matrix(dataframe)](#new_Matrix_new)
+    * [.hasSameStruct(df)](#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
+    * [.hasSameTransposedStruct(df)](#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
+    * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
+    * [.product(number)](#Matrix+product) ⇒ <code>DataFrame</code>
+    * [.dot(df)](#Matrix+dot) ⇒ <code>DataFrame</code>
+    * [.transpose()](#Matrix+transpose) ⇒ <code>ÐataFrame</code>
+
+* [Stat](#Stat)
+    * [new Stat(dataframe)](#new_Stat_new)
+    * [.max(columnName)](#Stat+max) ⇒ <code>Number</code>
+    * [.min(columnName)](#Stat+min) ⇒ <code>Number</code>
+    * [.mean(columnName)](#Stat+mean) ⇒ <code>Number</code>
+    * [.var(columnName, [population])](#Stat+var) ⇒ <code>Number</code>
+    * [.sd(columnName, [population])](#Stat+sd) ⇒ <code>Number</code>
+    * [.stats(columnName)](#Stat+stats) ⇒ <code>Object</code>
 
 ## Contribution
