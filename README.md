@@ -79,7 +79,7 @@ console.log(
 
 #### List of available methods:
 
-* [DataFrame](./doc/CORE_API.md#DataFrame)
+* [DataFrame](./doc/CORE_API.md./doc/CORE_API.md#DataFrame)
     * [new DataFrame(data, columns, [...modules])](./doc/CORE_API.md#new_DataFrame_new)
     * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
@@ -108,15 +108,15 @@ console.log(
     * [.leftJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+leftJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.rightJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+rightJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
 
-* [Row](#Row)
-    * [new Row(data, columns)](#new_Row_new)
-    * [.toDict()](#Row+toDict) ⇒ <code>Object</code>
-    * [.toArray()](#Row+toArray) ⇒ <code>Array</code>
-    * [.size()](#Row+size) ⇒ <code>Int</code>
-    * [.select(...columnNames)](#Row+select) ⇒ <code>[Row](#Row)</code>
-    * [.get(columnToGet)](#Row+get) ⇒
-    * [.set(columnToSet)](#Row+set) ⇒ <code>[Row](#Row)</code>
-    * [.delete(columnToDel)](#Row+delete) ⇒ <code>[Row](#Row)</code>
+* [Row](./doc/CORE_API.md./doc/MODULES_API.md#Row)
+    * [new Row(data, columns)](./doc/CORE_API.md#new_Row_new)
+    * [.toDict()](./doc/CORE_API.md#Row+toDict) ⇒ <code>Object</code>
+    * [.toArray()](./doc/CORE_API.md#Row+toArray) ⇒ <code>Array</code>
+    * [.size()](./doc/CORE_API.md#Row+size) ⇒ <code>Int</code>
+    * [.select(...columnNames)](./doc/CORE_API.md#Row+select) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
+    * [.get(columnToGet)](./doc/CORE_API.md#Row+get) ⇒
+    * [.set(columnToSet)](./doc/CORE_API.md#Row+set) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
+    * [.delete(columnToDel)](./doc/CORE_API.md#Row+delete) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
 
 
 
@@ -165,22 +165,22 @@ class fakeModule {
 
 #### List of available modules
 
-* [Matrix](#Matrix)
-    * [new Matrix(dataframe)](#new_Matrix_new)
-    * [.hasSameStruct(df)](#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
-    * [.hasSameTransposedStruct(df)](#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
-    * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
-    * [.product(number)](#Matrix+product) ⇒ <code>DataFrame</code>
-    * [.dot(df)](#Matrix+dot) ⇒ <code>DataFrame</code>
-    * [.transpose()](#Matrix+transpose) ⇒ <code>ÐataFrame</code>
+* [Matrix](./doc/MODULES_API.md#Matrix)
+    * [new Matrix(dataframe)](./doc/MODULES_API.md#new_Matrix_new)
+    * [.hasSameStruct(df)](./doc/MODULES_API.md#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
+    * [.hasSameTransposedStruct(df)](./doc/MODULES_API.md#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
+    * [.add(df)](./doc/MODULES_API.md#Matrix+add) ⇒ <code>DataFrame</code>
+    * [.product(number)](./doc/MODULES_API.md#Matrix+product) ⇒ <code>DataFrame</code>
+    * [.dot(df)](./doc/MODULES_API.md#Matrix+dot) ⇒ <code>DataFrame</code>
+    * [.transpose()](./doc/MODULES_API.md#Matrix+transpose) ⇒ <code>ÐataFrame</code>
 
-* [Stat](#Stat)
-    * [new Stat(dataframe)](#new_Stat_new)
-    * [.max(columnName)](#Stat+max) ⇒ <code>Number</code>
-    * [.min(columnName)](#Stat+min) ⇒ <code>Number</code>
-    * [.mean(columnName)](#Stat+mean) ⇒ <code>Number</code>
-    * [.var(columnName, [population])](#Stat+var) ⇒ <code>Number</code>
-    * [.sd(columnName, [population])](#Stat+sd) ⇒ <code>Number</code>
-    * [.stats(columnName)](#Stat+stats) ⇒ <code>Object</code>
+* [Stat](./doc/MODULES_API.md#Stat)
+    * [new Stat(dataframe)](./doc/MODULES_API.md#new_Stat_new)
+    * [.max(columnName)](./doc/MODULES_API.md#Stat+max) ⇒ <code>Number</code>
+    * [.min(columnName)](./doc/MODULES_API.md#Stat+min) ⇒ <code>Number</code>²
+    * [.mean(columnName)](./doc/MODULES_API.md#Stat+mean) ⇒ <code>Number</code>
+    * [.var(columnName, [population])](./doc/MODULES_API.md#Stat+var) ⇒ <code>Number</code>
+    * [.sd(columnName, [population])](./doc/MODULES_API.md#Stat+sd) ⇒ <code>Number</code>
+    * [.stats(columnName)](./doc/MODULES_API.md#Stat+stats) ⇒ <code>Object</code>
 
 ## Contribution
