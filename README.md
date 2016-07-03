@@ -79,34 +79,34 @@ console.log(
 
 #### List of available methods:
 
-* [DataFrame](#DataFrame)
-    * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
-    * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
-    * [.toArray()](#DataFrame+toArray) ⇒ <code>Array</code>
-    * [.show([rows], [quiet])](#DataFrame+show) ⇒ <code>String</code>
-    * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
-    * [.count()](#DataFrame+count) ⇒ <code>Int</code>
-    * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
-    * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
-    * [.select(...columnNames)](#DataFrame+select) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.withColumn(columnName, [func])](#DataFrame+withColumn) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.restructure(...columnNames)](#DataFrame+restructure) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.rename(...columnNames)](#DataFrame+rename) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.drop(columnName)](#DataFrame+drop) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.chain(...funcs)](#DataFrame+chain) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.filter(func)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.reduce(func, [init])](#DataFrame+reduce) ⇒
-    * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
-    * [.groupBy(columnName)](#DataFrame+groupBy) ⇒ <code>Array</code>
-    * [.sortBy(columnName, [reverse])](#DataFrame+sortBy) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.union(dfToUnion)](#DataFrame+union) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.join(dfToJoin, on, [how])](#DataFrame+join) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.innerJoin(dfToJoin, on)](#DataFrame+innerJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.fullJoin(dfToJoin, on)](#DataFrame+fullJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.outerJoin(dfToJoin, on)](#DataFrame+outerJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.leftJoin(dfToJoin, on)](#DataFrame+leftJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.rightJoin(dfToJoin, on)](#DataFrame+rightJoin) ⇒ <code>[DataFrame](#DataFrame)</code>
+* [DataFrame](./doc/CORE_API.md#DataFrame)
+    * [new DataFrame(data, columns, [...modules])](./doc/CORE_API.md#new_DataFrame_new)
+    * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
+    * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
+    * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
+    * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>
+    * [.count()](./doc/CORE_API.md#DataFrame+count) ⇒ <code>Int</code>
+    * [.countValue(valueToCount, [columnName])](./doc/CORE_API.md#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.distinct(columnName)](./doc/CORE_API.md#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.select(...columnNames)](./doc/CORE_API.md#DataFrame+select) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.withColumn(columnName, [func])](./doc/CORE_API.md#DataFrame+withColumn) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.restructure(...columnNames)](./doc/CORE_API.md#DataFrame+restructure) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.rename(...columnNames)](./doc/CORE_API.md#DataFrame+rename) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.drop(columnName)](./doc/CORE_API.md#DataFrame+drop) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.chain(...funcs)](./doc/CORE_API.md#DataFrame+chain) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.filter(func)](./doc/CORE_API.md#DataFrame+filter) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.map(func)](./doc/CORE_API.md#DataFrame+map) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.reduce(func, [init])](./doc/CORE_API.md#DataFrame+reduce) ⇒
+    * [.reduceRight(func, [init])](./doc/CORE_API.md#DataFrame+reduceRight) ⇒
+    * [.groupBy(columnName)](./doc/CORE_API.md#DataFrame+groupBy) ⇒ <code>Array</code>
+    * [.sortBy(columnName, [reverse])](./doc/CORE_API.md#DataFrame+sortBy) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.union(dfToUnion)](./doc/CORE_API.md#DataFrame+union) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.join(dfToJoin, on, [how])](./doc/CORE_API.md#DataFrame+join) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.innerJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+innerJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.fullJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+fullJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.outerJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+outerJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.leftJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+leftJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.rightJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+rightJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
 
 * [Row](#Row)
     * [new Row(data, columns)](#new_Row_new)
