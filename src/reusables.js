@@ -33,11 +33,9 @@ export function match(value, ...cases) {
     return checker(casesGen.next().value);
 }
 
-export function* iter(data, func, limit = Infinity) {
-    let token = limit;
+export function* iter(data, func, abort = () => false) {
     for (const iteration of data) {
-        if (token <= 0) return;
-        token --;
+        if (abort()) return;
         const modifiedRow = func(iteration);
         if (modifiedRow) {yield modifiedRow;}
     }

@@ -127,10 +127,11 @@ class DataFrame {
             ).join(' | ')} |`
         );
         const header = makeRow(this.columns);
+        let token = 0;
         const toShow = [
             header,
             Array(header.length).join('-'),
-            ...iter(this.__rows__, row => makeRow(row.toArray()), rows),
+            ...iter(this.__rows__, row => {token++; return makeRow(row.toArray());}, () => token >= rows),
         ].join('\n');
         if (!quiet) {console.log(toShow);}
         return toShow;
@@ -377,6 +378,49 @@ class DataFrame {
     reduceRight(func, init) {
         return typeof init === 'undefined' ? this.__rows__.reduceRight((p, n) => func(p, n)) :
          this.__rows__.reduceRight((p, n) => func(p, n), init);
+    }
+
+    /**
+     * Return a random sample of rows.
+     * @param {Number} percentage A percentage of the orignal DataFrame giving the sample size.
+     * @returns {DataFrame} A sample DataFrame
+     * @example
+     * df.sample(0.3) // Return a DataFrame with 30% of the original size.
+     */
+    sample(percentage) {
+        const nRows = this.count() * percentage;
+        let token = 0;
+        return this.__newInstance__([...iter(
+            this.__rows__, row => {
+                if (Math.random() > 0.5) {
+                    token++;
+                    return row;
+                }
+            }, () => token >= nRows
+        )], this.columns);
+    }
+
+    /**
+     * Randomly split a DataFrame into 2 DataFrames.
+     * @param {Number} percentage A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest.
+     * @returns {Array} An Array containing the two DataFrames.
+     * @example
+     * df.randomSplit(0.3) // Return a DataFrame with 30% of the original size and a second with the rest (70%).
+     */
+    randomSplit(percentage) {
+        const nRows = this.count() * percentage;
+        let token = 0;
+        const restRows = [];
+        return [this.__newInstance__([...iter(
+            this.__rows__, row => {
+                if (Math.random() > 0.5 && token < nRows) {
+                    token++;
+                    return row;
+                }
+                restRows.push(row);
+            }
+        )], this.columns),
+        this.__newInstance__(restRows, this.columns)];
     }
 
     /**

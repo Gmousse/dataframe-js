@@ -368,6 +368,17 @@ test('DataFrame rows can be', (assert) => {
         ], 'right joined'
     );
 
+    const dfToSample = new DataFrame([...Array(5000).keys()].map(row => [row]), ['c1']);
+    assert.equal(
+        dfToSample.sample(0.2).count(),
+        1000, 'be randomly sampled'
+    );
+
+    assert.deepEqual(
+        dfToSample.randomSplit(0.2).map(splittedDF => splittedDF.count()),
+        [1000, 4000], 'be randomly splitted into 2 DataFrames'
+    );
+
     assert.end();
 });
 
@@ -413,6 +424,6 @@ test('DataFrame is immutable when', (assert) => {
         Object.is(dfFromArrayOfArrays.map(row => row), dfFromArrayOfArrays),
         false, 'when modified, even if nothing have changed'
     );
-    
+
     assert.end();
 });
