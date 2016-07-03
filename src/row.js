@@ -11,7 +11,7 @@ class Row {
      * @param {Array} columns The DataFrame column names.
      */
     constructor(data, columns) {
-        this.columns = columns ? columns : Object.keys(data);
+        this.__columns__ = columns ? columns : Object.keys(data);
         this.__row__ = this._build(data);
     }
 
@@ -25,11 +25,11 @@ class Row {
     }
 
     _fromObject(object) {
-        return Object.assign({}, ...this.columns.map(column => ({[column]: object[column]})));
+        return Object.assign({}, ...this.__columns__.map(column => ({[column]: object[column]})));
     }
 
     _fromArray(array) {
-        return Object.assign({}, ...Object.entries(this.columns).map(column => ({[column[1]]: array[column[0]]})));
+        return Object.assign({}, ...Object.entries(this.__columns__).map(column => ({[column[1]]: array[column[0]]})));
     }
 
     /**
@@ -53,7 +53,7 @@ class Row {
      * @returns {Int} The Row length.
      */
     size() {
-        return this.columns.length;
+        return this.__columns__.length;
     }
 
     /**
@@ -63,7 +63,7 @@ class Row {
      */
     select(...columnNames) {
         return new Row(columnNames.map(column => {
-            if (!this.columns.includes(column)) {throw new NoSuchColumnError(column, columnNames);}
+            if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columnNames);}
             return this.__row__[column];
         }), columnNames);
     }
@@ -93,10 +93,10 @@ class Row {
      * @returns {Row} A new Row without the deleted value.
      */
     delete(columnToDel) {
-        if (!this.columns.includes(columnToDel)) {
-            throw new NoSuchColumnError(columnToDel, this.columns);
+        if (!this.__columns__.includes(columnToDel)) {
+            throw new NoSuchColumnError(columnToDel, this.__columns__);
         }
-        return this.select(...this.columns.filter(column => column !== columnToDel));
+        return this.select(...this.__columns__.filter(column => column !== columnToDel));
     }
 }
 

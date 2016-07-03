@@ -43,10 +43,10 @@ test('DataFrame can be created correctly', (assert) => {
 
     const dfFromDF = new DataFrame(dfFromArrayOfArrays);
 
-    assert.deepEqual([dfFromObjectOfArrays.count(), dfFromObjectOfArrays.columns.length], [4, 2], 'from Object of Arrays');
-    assert.deepEqual([dfFromArrayOfArrays.count(), dfFromArrayOfArrays.columns.length], [3, 6], 'from Array of Arrays');
-    assert.deepEqual([dfFromArrayOfObjects.count(), dfFromArrayOfObjects.columns.length], [3, 6], 'from Array of Objects');
-    assert.deepEqual([dfFromDF.count(), dfFromDF.columns.length], [3, 6], 'from an other Dataframe');
+    assert.deepEqual([dfFromObjectOfArrays.count(), dfFromObjectOfArrays.listColumns().length], [4, 2], 'from Object of Arrays');
+    assert.deepEqual([dfFromArrayOfArrays.count(), dfFromArrayOfArrays.listColumns().length], [3, 6], 'from Array of Arrays');
+    assert.deepEqual([dfFromArrayOfObjects.count(), dfFromArrayOfObjects.listColumns().length], [3, 6], 'from Array of Objects');
+    assert.deepEqual([dfFromDF.count(), dfFromDF.listColumns().length], [3, 6], 'from an other Dataframe');
 
     assert.end();
 });
@@ -112,7 +112,7 @@ test('DataFrame columns can be', (assert) => {
         [6, 6, 9, 8, 9, 12],
     ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 
-    assert.equal(df.columns.length, 6, 'counted');
+    assert.equal(df.listColumns().length, 6, 'counted');
     assert.deepEqual(
         df.select('c2').toArray(), [
             [6],
@@ -149,7 +149,7 @@ test('DataFrame columns can be', (assert) => {
         }, 'deleted'
     );
     assert.deepEqual(
-        df.select('c2', 'c3', 'c4').rename('c16', 'c17', 'c18').columns,
+        df.select('c2', 'c3', 'c4').rename('c16', 'c17', 'c18').listColumns(),
             ['c16', 'c17', 'c18'], 'renamed'
     );
     assert.deepEqual(

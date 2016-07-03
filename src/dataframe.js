@@ -36,7 +36,7 @@ class DataFrame {
      * const dfFromDF = new DataFrame(dfFromArrayOfArrays);
      */
     constructor(data, columns, ...modules) {
-        [this.__rows__, this.columns] = this._build(data, columns);
+        [this.__rows__, this.__columns__] = this._build(data, columns);
         this.modules = modules;
         if (modules.length > 0) {
             Object.assign(this, ...modules.map(Plugin => {
@@ -58,7 +58,7 @@ class DataFrame {
 
     _build(data, columns) {
         return match(data,
-                [(value) => (value instanceof DataFrame), () => [data.__rows__, data.columns]],
+                [(value) => (value instanceof DataFrame), () => [data.__rows__, data.__columns__]],
                 [(value) => (value instanceof Array), () => this._fromArray(data, columns)],
                 [(value) => (value instanceof Object), () => this._fromDict(data, columns)],
                 [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array']);}]);
@@ -88,7 +88,7 @@ class DataFrame {
     toDict() {
         return Object.assign({}, ...Object.entries(
             transpose([...this.__rows__].map(row => row.toArray()))
-        ).map(([index, column]) => ({[this.columns[index]]: column})));
+        ).map(([index, column]) => ({[this.__columns__[index]]: column})));
     }
 
     /**
@@ -126,7 +126,7 @@ class DataFrame {
                 column => String(column).substring(0, 10) + Array(10 - String(column).length).join(' ')
             ).join(' | ')} |`
         );
-        const header = makeRow(this.columns);
+        const header = makeRow(this.__columns__);
         let token = 0;
         const toShow = [
             header,
@@ -145,7 +145,7 @@ class DataFrame {
      * [4, 3] // [height, weight]
      */
     dim() {
-        return [this.count(), this.columns.length];
+        return [this.count(), this.__columns__.length];
     }
 
     /**
@@ -164,7 +164,7 @@ class DataFrame {
     /**
      * Get the count of a value into a column.
      * @param valueToCount The value to count into the selected column.
-     * @param {String} [columnName=this.columns[0]] The column where found the value.
+     * @param {String} [columnName=this.__columns__[0]] The column where found the value.
      * @returns {Int} The number of times the selected value appears.
      * @example
       * // Counting specific value in a column
@@ -177,7 +177,7 @@ class DataFrame {
       *
       * 0
      */
-    countValue(valueToCount, columnName = this.columns[0]) {
+    countValue(valueToCount, columnName = this.__columns__[0]) {
         return this.filter(row => row.get(columnName) === valueToCount).count();
     }
 
@@ -192,6 +192,18 @@ class DataFrame {
      */
     distinct(columnName) {
         return [...new Set(...transpose(this.select(columnName).toArray()))];
+    }
+
+    /**
+     * List DataFrame columns.
+     * @returns {Array} An Array containing DataFrame column Names.
+     * @example
+     * df.listColumns()
+     *
+     * ['c1', 'c2', 'c3', 'c4']
+     */
+    listColumns() {
+        return [...this.__columns__];
     }
 
     /**
@@ -245,7 +257,7 @@ class DataFrame {
             (row, index) => {
                 return row.set(columnName, func(row, index));
             }
-        ), this.columns.includes(columnName) ? this.columns : [...this.columns, columnName]);
+        ), this.__columns__.includes(columnName) ? this.__columns__ : [...this.__columns__, columnName]);
     }
 
     /**
@@ -253,7 +265,7 @@ class DataFrame {
      * @param {...String} columnNames The new columns of the DataFrame.
      * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
      * @example
-     * df.columns
+     * df.__columns__
      *
      * ['column1', 'column2', 'column3']
      *
@@ -276,11 +288,11 @@ class DataFrame {
      * @param {...String} columnNames The new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
-     * df.columns
+     * df.__columns__
      *
      * ['column1', 'column2', 'column3']
      *
-     * df.rename('column1', 'column3', 'column4').columns
+     * df.rename('column1', 'column3', 'column4').__columns__
      *
      * ['column1', 'column3', 'column4']
      */
@@ -305,7 +317,7 @@ class DataFrame {
     drop(columnName) {
         return this.__newInstance__(this.__rows__.map(
             (row) => row.delete(columnName)
-        ), this.columns.filter(column => column !== columnName));
+        ), this.__columns__.filter(column => column !== columnName));
     }
 
     /**
@@ -327,7 +339,7 @@ class DataFrame {
      * | 3         | 5         | undefined |
      */
     chain(...funcs) {
-        return this.__newInstance__([...chain(this.__rows__, ...funcs)], this.columns);
+        return this.__newInstance__([...chain(this.__rows__, ...funcs)], this.__columns__);
     }
 
     /**
@@ -337,7 +349,7 @@ class DataFrame {
      */
     filter(func) {
         const filteredRows = [...iter(this.__rows__, row => func(row) ? row : false)];
-        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.columns) : this.__newInstance__([], []);
+        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.__columns__) : this.__newInstance__([], []);
     }
 
     /**
@@ -346,7 +358,7 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame with modified rows.
      */
     map(func) {
-        return this.__newInstance__([...iter(this.__rows__, row => func(row))], this.columns);
+        return this.__newInstance__([...iter(this.__rows__, row => func(row))], this.__columns__);
     }
 
     /**
@@ -397,7 +409,7 @@ class DataFrame {
                     return row;
                 }
             }, () => token >= nRows
-        )], this.columns);
+        )], this.__columns__);
     }
 
     /**
@@ -419,8 +431,8 @@ class DataFrame {
                 }
                 restRows.push(row);
             }
-        )], this.columns),
-        this.__newInstance__(restRows, this.columns)];
+        )], this.__columns__),
+        this.__newInstance__(restRows, this.__columns__)];
     }
 
     /**
@@ -491,7 +503,7 @@ class DataFrame {
      */
     sortBy(columnName, reverse = false) {
         const sortedRows = this.__rows__.sort((p, n) => p.get(columnName) - n.get(columnName));
-        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this.columns);
+        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this.__columns__);
     }
 
     /**
@@ -515,10 +527,10 @@ class DataFrame {
      * ]
      */
     union(dfToUnion) {
-        if (!arrayEqual(this.columns, dfToUnion.columns)) {
-            throw new NotTheSameSchemaError(dfToUnion.columns, this.columns);
+        if (!arrayEqual(this.__columns__, dfToUnion.__columns__)) {
+            throw new NotTheSameSchemaError(dfToUnion.__columns__, this.__columns__);
         }
-        return this.__newInstance__([...this, ...dfToUnion], this.columns);
+        return this.__newInstance__([...this, ...dfToUnion], this.__columns__);
     }
 
     /**
@@ -557,7 +569,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     innerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -590,7 +602,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     fullJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         return [...iter([
             ...this.groupBy(on), ...dfToJoin.groupBy(on),
         ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
@@ -610,7 +622,7 @@ class DataFrame {
      * | 6         | undefined | 1         |
      */
     outerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -641,7 +653,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     leftJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -672,7 +684,7 @@ class DataFrame {
      * | 8         | 1         | undefined |
      */
     rightJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.columns, ...dfToJoin.columns])];
+        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([

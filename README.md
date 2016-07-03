@@ -55,14 +55,14 @@ Examples:
 ```javascript
 // When you change the DataFrame structure, the original DataFrame doesn't change.
 df.drop('column1'); // <--- Here you drop a column.
-console.log(df.columns);
+console.log(df.listColumns());
 // But nothing change in df.
 // You didn't mutated it. You just have created a new instance of DataFrame.
 // ['column1', 'column2', 'column3']
 
 // Here you declare a new variable (const) to save the modified df.
 const df2 = df.drop('column1');
-console.log(df2.columns);
+console.log(df2.listColumns());
 // ['column2', 'column3']
 
 console.log(Object.is(df2, df));

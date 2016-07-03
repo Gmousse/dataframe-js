@@ -49,7 +49,7 @@ class Matrix {
                 const b = df.__rows__[rowKey].toArray();
                 return columns.map(column => a[column] + b[column]);
             }
-        )], this.df.columns);
+        )], this.df.listColumns());
     }
 
     /**
