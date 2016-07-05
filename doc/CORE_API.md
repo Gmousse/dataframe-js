@@ -24,7 +24,9 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
     * [.count()](#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.replace(value, replacment, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.listColumns()](#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](#DataFrame+select) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.withColumn(columnName, [func])](#DataFrame+withColumn) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.restructure(...columnNames)](#DataFrame+restructure) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -35,6 +37,8 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.reduce(func, [init])](#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
+    * [.sample(percentage)](#DataFrame+sample) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.randomSplit(percentage)](#DataFrame+randomSplit) ⇒ <code>Array</code>
     * [.groupBy(columnName)](#DataFrame+groupBy) ⇒ <code>Array</code>
     * [.sortBy(columnName, [reverse])](#DataFrame+sortBy) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.union(dfToUnion)](#DataFrame+union) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -64,18 +68,21 @@ const dfFromObjectOfArrays = new DataFrame({
      'column1': [3, 6, 8],  // Column Data
      'column2': [3, 4, 5, 6], // Column Data
 }, ['column1', 'column2']); // Columns
+
 // From Array of Arrays
 const dfFromArrayOfArrays = new DataFrame([
      [1, 6, 9, 10, 12],  // Row Data
      [1, 2],             // Row Data
      [6, 6, 9, 8, 9, 12], // Row Data
 ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
+
 // From Array of Objects -- THE BETTER WAY --
 const dfFromArrayOfObjects = new DataFrame([
      {c1: 1, c2: 6, c3: 9, c4: 10, c5: 12},  // Row Data
      {c4: 1, c3: 2},                         // Row Data
      {c1: 6, c5: 6, c2: 9, c4: 8, c3: 9, c6: 12}, // Row Data
 ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
+
 // From DataFrame
 const dfFromDF = new DataFrame(dfFromArrayOfArrays);
 ```
@@ -89,6 +96,7 @@ Convert DataFrame into dict / hash / object.
 **Example**  
 ```js
 df.toDict()
+
 { c1: [ 1, undefined, 6 ], // one array by column
   c2: [ 6, undefined, 9 ],
   c3: [ 9, 2, 9 ],
@@ -106,6 +114,7 @@ Convert DataFrame into Array.
 **Example**  
 ```js
 df.toArray()
+
 [ [ 1, 6, 9, 10, 12, undefined ], // one array by row
   [ undefined, undefined, 2, 1, undefined, undefined ],
   [ 6, 9, 9, 8, 6, 12 ] ]
@@ -126,6 +135,7 @@ Display the DataFrame as String Table. Can only return a sring instead of displa
 **Example**  
 ```js
 df.show() // console.log the DataFrame with the first 10nth rows
+
 | column1   | column2   | column3   |
 ------------------------------------
 | 3         | 3         | undefined |
@@ -156,6 +166,7 @@ Get the rows number.
 ```js
 // Counting rows
 df.count()
+
 4
 ```
 <a name="DataFrame+countValue"></a>
@@ -169,17 +180,34 @@ Get the count of a value into a column.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | valueToCount |  |  | The value to count into the selected column. |
-| [columnName] | <code>String</code> | <code>this.columns[0]</code> | The column where found the value. |
+| [columnName] | <code>String</code> | <code>this.__columns__[0]</code> | The column where found the value. |
 
 **Example**  
 ```js
 // Counting specific value in a column
 df.countValue(5, 'column2')
+
 1
+
 // Counting specific value in a selected column
 df.select('column1').countValue(5)
+
 0
 ```
+<a name="DataFrame+replace"></a>
+
+### dataFrame.replace(value, replacment, [...columnNames]) ⇒ <code>[DataFrame](#DataFrame)</code>
+Replace a value by another in the DataFrame or in a column.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A new DataFrame with replaced values.  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| value |  |  | The value to replace. |
+| replacment |  |  | The new value. |
+| [...columnNames] | <code>String</code> | <code>this.__columns__</code> | The columns to apply the replacment. |
+
 <a name="DataFrame+distinct"></a>
 
 ### dataFrame.distinct(columnName) ⇒ <code>Array</code>
@@ -195,7 +223,21 @@ Compute unique values into a column.
 **Example**  
 ```js
 df.distinct('d2')
+
 [3, 4, 15, 6]
+```
+<a name="DataFrame+listColumns"></a>
+
+### dataFrame.listColumns() ⇒ <code>Array</code>
+List DataFrame columns.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>Array</code> - An Array containing DataFrame column Names.  
+**Example**  
+```js
+df.listColumns()
+
+['c1', 'c2', 'c3', 'c4']
 ```
 <a name="DataFrame+select"></a>
 
@@ -212,6 +254,7 @@ Select columns in the DataFrame.
 **Example**  
 ```js
 df.select('column1', 'column3').show()
+
 | column1   | column3   |
 ------------------------
 | 3         | undefined |
@@ -236,14 +279,17 @@ Add a new column or set an existing one.
 ```js
 // Add a new column
 df.withColumn('column4', () => 2).show()
+
 | column1   | column2   | column3   | column4   |
 ------------------------------------------------
 | 3         | 3         | undefined | 2         |
 | 6         | 4         | undefined | 2         |
 | 8         | 5         | undefined | 2         |
 | undefined | 6         | undefined | 2         |
+
 // Modify a column
 df.withColumn('column2', (row) => row.get('column2') * 2).show()
+
 | column1   | column2   | column3   |
 ------------------------------------
 | 3         | 6         | undefined |
@@ -265,10 +311,13 @@ Modify the structure of the DataFrame by changing columns order, creating new co
 
 **Example**  
 ```js
-df.columns
+df.__columns__
+
 ['column1', 'column2', 'column3']
+
 // Adding one empty column and removing one
 df.restructure('column1', 'column3', 'column4')
+
 | column1   | column3   | column4   |
 ------------------------------------
 | 3         | undefined | undefined |
@@ -290,9 +339,12 @@ Rename columns.
 
 **Example**  
 ```js
-df.columns
+df.__columns__
+
 ['column1', 'column2', 'column3']
-df.rename('column1', 'column3', 'column4').columns
+
+df.rename('column1', 'column3', 'column4').__columns__
+
 ['column1', 'column3', 'column4']
 ```
 <a name="DataFrame+drop"></a>
@@ -310,6 +362,7 @@ Remove a single column.
 **Example**  
 ```js
 df.drop('d2').show()
+
 | column1   | column3   |
 ------------------------
 | 3         | undefined |
@@ -339,6 +392,7 @@ df.chain(
      line => line.set('column1', 3),  // Map sending modification
      line => line.get('column2') === '5' // Filter sending boolean. If true the row is send.
 ).show();
+
 | column1   | column2   | column3   |
 ------------------------------------
 | 3         | 5         | undefined |
@@ -384,6 +438,7 @@ Reduce DataFrame into a value.
 ```js
 // Compute a value from rows, starting from value 0
 df.reduce((p, n) => n.get('column1') + p, 0)
+
 // Compute a row from rows
 df2.reduce((p, n) => (
          n.set('column1', p.get('column1') + n.get('column1'))
@@ -403,6 +458,38 @@ Reduce DataFrame into a value, starting from the last row (see .reduce()).
 | func | <code>function</code> | The reduce function taking 2 parameters, previous and next. |
 | [init] |  | The initial value of the reducer. |
 
+<a name="DataFrame+sample"></a>
+
+### dataFrame.sample(percentage) ⇒ <code>[DataFrame](#DataFrame)</code>
+Return a random sample of rows.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A sample DataFrame  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| percentage | <code>Number</code> | A percentage of the orignal DataFrame giving the sample size. |
+
+**Example**  
+```js
+df.sample(0.3) // Return a DataFrame with 30% of the original size.
+```
+<a name="DataFrame+randomSplit"></a>
+
+### dataFrame.randomSplit(percentage) ⇒ <code>Array</code>
+Randomly split a DataFrame into 2 DataFrames.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>Array</code> - An Array containing the two DataFrames.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| percentage | <code>Number</code> | A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest. |
+
+**Example**  
+```js
+df.randomSplit(0.3) // Return a DataFrame with 30% of the original size and a second with the rest (70%).
+```
 <a name="DataFrame+groupBy"></a>
 
 ### dataFrame.groupBy(columnName) ⇒ <code>Array</code>
@@ -419,14 +506,17 @@ Group DataFrame rows by a column values.
 ```js
 // Group By id and return an object containing group and dataframe
 df.groupBy('id').map(dfByValue => ({group: dfByValue.group, df: dfByValue.toDict()}))
+
 [ { group: 3, df: { id: [Object], value: [Object] } },
   { group: 6, df: { id: [Object], value: [Object] } },
   { group: 8, df: { id: [Object], value: [Object] } },
   { group: 1, df: { id: [Object], value: [Object] } } ]
+
 // Get sum of value by id with a simple formating
 df.groupBy('id').map(dfByValue => (
      {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
 )
+
 [ { group: 3, result: 3 },
   { group: 6, result: 0 },
   { group: 8, result: 5 },
@@ -449,6 +539,7 @@ Sort DataFrame rows based on a column values.
 ```js
 // Sort DataFrame by id
 df.sortBy('id').toArray()
+
 [
      [1, 1],
      [1, 1],
@@ -458,8 +549,10 @@ df.sortBy('id').toArray()
      [8, 1],
      [8, 4],
 ]
+
 // Sort DataFrame by id and reverse
 df.sortBy('id', true).toArray()
+
 [
      [8, 4],
      [8, 1],
@@ -485,6 +578,7 @@ Concat two DataFrames.
 **Example**  
 ```js
 df.union(df2).toArray()
+
 [
      [8, 4],
      [8, 1],
@@ -528,6 +622,7 @@ Join two DataFrames with inner mode.
 **Example**  
 ```js
 df1.join(df2, 'id', 'inner')
+
 | id        | value     | value2    |
 ------------------------------------
 | 3         | 1         | undefined |
@@ -553,6 +648,7 @@ Join two DataFrames with full mode.
 **Example**  
 ```js
 df1.join(df2, 'id', 'full')
+
 | id        | value     | value2    |
 ------------------------------------
 | 3         | 1         | undefined |
@@ -580,6 +676,7 @@ Join two DataFrames with outer mode.
 **Example**  
 ```js
 df1.join(df2, 'id', 'outer')
+
 | id        | value     | value2    |
 ------------------------------------
 | 2         | undefined | 1         |
@@ -601,6 +698,7 @@ Join two DataFrames with left mode.
 **Example**  
 ```js
 df1.join(df2, 'id', 'left')
+
 | id        | value     | value2    |
 ------------------------------------
 | 3         | 1         | undefined |
@@ -626,6 +724,7 @@ Join two DataFrames with right mode.
 **Example**  
 ```js
 df1.join(df2, 'id', 'right')
+
 | id        | value     | value2    |
 ------------------------------------
 | 2         | undefined | 1         |

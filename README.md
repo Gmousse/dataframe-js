@@ -79,7 +79,7 @@ console.log(
 
 #### List of available methods:
 
-* [DataFrame](./doc/CORE_API.md./doc/CORE_API.md#DataFrame)
+* [DataFrame](./doc/CORE_API.md#DataFrame)
     * [new DataFrame(data, columns, [...modules])](./doc/CORE_API.md#new_DataFrame_new)
     * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
@@ -87,7 +87,9 @@ console.log(
     * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>
     * [.count()](./doc/CORE_API.md#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](./doc/CORE_API.md#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.replace(value, replacment, [...columnNames])](./doc/CORE_API.md#DataFrame+replace) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.distinct(columnName)](./doc/CORE_API.md#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.listColumns()](./doc/CORE_API.md#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](./doc/CORE_API.md#DataFrame+select) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.withColumn(columnName, [func])](./doc/CORE_API.md#DataFrame+withColumn) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.restructure(...columnNames)](./doc/CORE_API.md#DataFrame+restructure) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
@@ -98,6 +100,8 @@ console.log(
     * [.map(func)](./doc/CORE_API.md#DataFrame+map) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.reduce(func, [init])](./doc/CORE_API.md#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](./doc/CORE_API.md#DataFrame+reduceRight) ⇒
+    * [.sample(percentage)](./doc/CORE_API.md#DataFrame+sample) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.randomSplit(percentage)](./doc/CORE_API.md#DataFrame+randomSplit) ⇒ <code>Array</code>
     * [.groupBy(columnName)](./doc/CORE_API.md#DataFrame+groupBy) ⇒ <code>Array</code>
     * [.sortBy(columnName, [reverse])](./doc/CORE_API.md#DataFrame+sortBy) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.union(dfToUnion)](./doc/CORE_API.md#DataFrame+union) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
@@ -107,6 +111,7 @@ console.log(
     * [.outerJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+outerJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.leftJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+leftJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.rightJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+rightJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+
 
 * [Row](./doc/CORE_API.md./doc/MODULES_API.md#Row)
     * [new Row(data, columns)](./doc/CORE_API.md#new_Row_new)

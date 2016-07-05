@@ -162,6 +162,20 @@ test('DataFrame columns can be', (assert) => {
     assert.deepEqual(
         df.distinct('c1'), [1, 6], 'distinct, giving an array of unique values'
     );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').replace(undefined, 0).toDict(), {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, 0, 8],
+        }, 'modified, replacing a value by another'
+    );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').replace(undefined, 0, 'c2', 'c3').toDict(), {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, undefined, 8],
+        }, 'modified, replacing a value by another in given column2'
+    );
 
     assert.end();
 });

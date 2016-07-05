@@ -2,22 +2,22 @@
 
 <dl>
 <dt><a href="#Matrix">Matrix</a></dt>
-<dd><p>Matrix module for DataFrame, providing basics mathematical matrix computations.</p>
+<dd><p>Matrix module for DataFrame, providing basic mathematical matrix computations.</p>
 </dd>
 <dt><a href="#Stat">Stat</a></dt>
-<dd><p>Stat module for DataFrame, providing basics statistical metrics for numeric columns.</p>
+<dd><p>Stat module for DataFrame, providing basic statistical metrics for numeric columns.</p>
 </dd>
 </dl>
 
 <a name="Matrix"></a>
 
 ## Matrix
-Matrix module for DataFrame, providing basics mathematical matrix computations.
+Matrix module for DataFrame, providing basic mathematical matrix computations.
 
 **Kind**: global class  
 
 * [Matrix](#Matrix)
-    * [new Matrix(dataframe)](#new_Matrix_new)
+    * [new Matrix(df)](#new_Matrix_new)
     * [.hasSameStruct(df)](#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
     * [.hasSameTransposedStruct(df)](#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
     * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
@@ -27,13 +27,13 @@ Matrix module for DataFrame, providing basics mathematical matrix computations.
 
 <a name="new_Matrix_new"></a>
 
-### new Matrix(dataframe)
+### new Matrix(df)
 Start the Matrix module.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| dataframe | <code>DataFrame</code> | An instance of DataFrame. |
+| df | <code>DataFrame</code> | An instance of DataFrame. |
 
 <a name="Matrix+hasSameStruct"></a>
 
@@ -105,12 +105,12 @@ Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
 <a name="Stat"></a>
 
 ## Stat
-Stat module for DataFrame, providing basics statistical metrics for numeric columns.
+Stat module for DataFrame, providing basic statistical metrics for numeric columns.
 
 **Kind**: global class  
 
 * [Stat](#Stat)
-    * [new Stat(dataframe)](#new_Stat_new)
+    * [new Stat(df)](#new_Stat_new)
     * [.max(columnName)](#Stat+max) ⇒ <code>Number</code>
     * [.min(columnName)](#Stat+min) ⇒ <code>Number</code>
     * [.mean(columnName)](#Stat+mean) ⇒ <code>Number</code>
@@ -120,13 +120,13 @@ Stat module for DataFrame, providing basics statistical metrics for numeric colu
 
 <a name="new_Stat_new"></a>
 
-### new Stat(dataframe)
+### new Stat(df)
 Start the Stat module.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| dataframe | <code>DataFrame</code> | An instance of DataFrame. |
+| df | <code>DataFrame</code> | An instance of DataFrame. |
 
 <a name="Stat+max"></a>
 
