@@ -58,7 +58,7 @@ class DataFrame {
 
     _build(data, columns) {
         return match(data,
-                [(value) => (value instanceof DataFrame), () => [data.__rows__, data.__columns__]],
+                [(value) => (value instanceof DataFrame), () => this._fromArray([...data.__rows__], columns ? columns : data.__columns__)],
                 [(value) => (value instanceof Array), () => this._fromArray(data, columns)],
                 [(value) => (value instanceof Object), () => this._fromDict(data, columns)],
                 [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array']);}]);
