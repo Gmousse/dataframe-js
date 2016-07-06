@@ -46,6 +46,14 @@ export class NotTheSameSchemaError extends Error {
     }
 }
 
+export class NotTheSameColumnsLengthError extends Error {
+    constructor(length, expected) {
+        super();
+        this.message = `NotTheSameColumnsLengthError: [${length}] while expecting [${expected}]`;
+        this.name = 'NotTheSameColumnsLengthError';
+    }
+}
+
 export class WrongMatrixStructureError extends Error {
     constructor(structure, expected) {
         super();

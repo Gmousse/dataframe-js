@@ -1,5 +1,5 @@
-import { match, transpose, chain, iter, arrayEqual } from './reusables.js';
-import { InputTypeError, NotTheSameSchemaError } from './errors.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
+import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnsLengthError } from './errors.js';
 import Row from './row.js';
 
 /**
@@ -103,6 +103,33 @@ class DataFrame {
      */
     toArray() {
         return [...this].map(row => row.toArray());
+    }
+
+    /**
+     * Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+     * @param {String} [sep=','] Column separator.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     */
+    toCSV(sep = ',', header = true, path = undefined) {
+        const csvContent = this.reduce(
+            (p, n) => `${p ? p + '\n' : ''}${n.toArray().join(sep)}`,
+            header ? this.__columns__.join(sep) : ''
+        );
+        if (path) {saveFile(path, csvContent);}
+        return csvContent;
+    }
+
+    /**
+     * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The json file in raw string.
+     */
+    toJSON(path = undefined) {
+        const jsonContent = JSON.stringify(this.toDict());
+        if (path) {saveFile(path, jsonContent);}
+        return jsonContent;
     }
 
     /**
@@ -275,7 +302,7 @@ class DataFrame {
 
     /**
      * Modify the structure of the DataFrame by changing columns order, creating new columns or removing some columns.
-     * @param {...String} columnNames The new columns of the DataFrame.
+     * @param {Array} newColumnNames The new columns of the DataFrame.
      * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
      * @example
      * df.__columns__
@@ -292,13 +319,13 @@ class DataFrame {
      * | 8         | undefined | undefined |
      * | undefined | undefined | undefined |
      */
-    restructure(...columnNames) {
-        return this.__newInstance__(this.__rows__, columnNames);
+    restructure(newColumnNames) {
+        return this.__newInstance__(this.__rows__, newColumnNames);
     }
 
     /**
      * Rename columns.
-     * @param {...String} columnNames The new column names of the DataFrame.
+     * @param {Array} newColumnNames The new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
      * df.__columns__
@@ -309,8 +336,11 @@ class DataFrame {
      *
      * ['column1', 'column3', 'column4']
      */
-    rename(...columnNames) {
-        return this.__newInstance__(this.__rows__.map(row => row.toArray()), columnNames);
+    rename(newColumnNames) {
+        if (newColumnNames.length !== this.__columns__.length) {
+            throw new NotTheSameColumnsLengthError(newColumnNames.length, this.__columns__.length);
+        }
+        return this.__newInstance__(this.__rows__.map(row => row.toArray()), newColumnNames);
     }
 
     /**
@@ -415,12 +445,12 @@ class DataFrame {
          return this.__newInstance__(
              this.reduce(
                  (p, n) => {
-                     const index = Math.floor(Math.random() * (p.length -  1) + 1);
-                     return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] : [p, n]
+                     const index = Math.floor(Math.random() * (p.length - 1) + 1);
+                     return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] : [p, n];
                  }
              )
              , this.__columns__
-         )
+         );
      }
 
     /**
@@ -434,11 +464,9 @@ class DataFrame {
         const nRows = this.count() * percentage;
         let token = 0;
         return this.__newInstance__([...iter(
-            this.__rows__, row => {
-                if (Math.random() > 0.5) {
-                    token++;
-                    return row;
-                }
+            this.shuffle().__rows__, row => {
+                token++;
+                return row;
             }, () => token >= nRows
         )], this.__columns__);
     }
@@ -455,8 +483,8 @@ class DataFrame {
         let token = 0;
         const restRows = [];
         return [this.__newInstance__([...iter(
-            this.__rows__, row => {
-                if (Math.random() > 0.5 && token < nRows) {
+            this.shuffle().__rows__, row => {
+                if (token < nRows) {
                     token++;
                     return row;
                 }
@@ -610,7 +638,7 @@ class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
     /**
@@ -636,7 +664,7 @@ class DataFrame {
         const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
         return [...iter([
             ...this.groupBy(on), ...dfToJoin.groupBy(on),
-        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
     /**
@@ -663,7 +691,7 @@ class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined'
             ),
-        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
     /**
@@ -692,7 +720,7 @@ class DataFrame {
             ...groupedDFsToJoin.filter(
                 groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
     /**
@@ -723,8 +751,9 @@ class DataFrame {
             ...actualGroupedDFs.filter(
                 groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
             ),
-        ], groupedDF => groupedDF.restructure(...newColumns))].reduce((p, n) => p.union(n));
+        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
+
 }
 
 export default DataFrame;

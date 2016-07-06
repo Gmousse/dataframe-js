@@ -22,6 +22,7 @@
     "babel-preset-stage-0": "^6.3.13",
     "babel-runtime": "^6.9.2",
     "babel-tape-runner": "^2.0.1",
+    "d3-request": "^1.0.0",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
     "eslint-plugin-react": "^5.1.1",

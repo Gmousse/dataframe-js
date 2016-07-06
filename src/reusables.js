@@ -52,3 +52,11 @@ export function chain(data, ...operations) {
             }, (x) => x)
         );
 }
+
+export function saveFile(path, content) {
+    require('fs').writeFile(path, content, (err) => {
+        if (err) {
+            throw new Error(err);
+        }
+    });
+}

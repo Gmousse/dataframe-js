@@ -1,7 +1,8 @@
 import tape from 'tape';
-const test = tape;
 
 import { DataFrame } from '../src/index.js';
+
+const test = tape;
 
 function tryCatch(callback) {
     try {
@@ -84,6 +85,16 @@ test('DataFrame can be', (assert) => {
             [6, 6, 9, 8, 9, 12],
         ],
         'converted into array');
+    assert.equal(
+        dfFromArrayOfArrays.toCSV(',', false), '1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
+        'converted into csv without header');
+    assert.equal(
+        dfFromArrayOfArrays.toCSV(), 'c1,c2,c3,c4,c5,c6\n1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
+        'converted into csv with header');
+    assert.equal(
+        dfFromArrayOfArrays.toJSON(),
+        '{"c1":[1,1,6],"c2":[6,2,6],"c3":[9,null,9],"c4":[10,null,8],"c5":[12,null,9],"c6":[null,null,12]}',
+        'converted into json');
 
     const dfFromDict = new DataFrame({
         column1: [3, 6, 8],
@@ -149,11 +160,11 @@ test('DataFrame columns can be', (assert) => {
         }, 'deleted'
     );
     assert.deepEqual(
-        df.select('c2', 'c3', 'c4').rename('c16', 'c17', 'c18').listColumns(),
+        df.select('c2', 'c3', 'c4').rename(['c16', 'c17', 'c18']).listColumns(),
             ['c16', 'c17', 'c18'], 'renamed'
     );
     assert.deepEqual(
-        df.restructure('c2', 'c3', 'c36').toDict(), {
+        df.restructure(['c2', 'c3', 'c36']).toDict(), {
             c2: [6, 2, 6],
             c3: [9, undefined, 9],
             c36: [undefined, undefined, undefined],

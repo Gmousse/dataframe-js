@@ -20,6 +20,8 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
     * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](#DataFrame+toArray) ⇒ <code>Array</code>
+    * [.toCSV([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
+    * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
     * [.count()](#DataFrame+count) ⇒ <code>Int</code>
@@ -29,14 +31,15 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.listColumns()](#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](#DataFrame+select) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.withColumn(columnName, [func])](#DataFrame+withColumn) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.restructure(...columnNames)](#DataFrame+restructure) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.rename(...columnNames)](#DataFrame+rename) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.restructure(newColumnNames)](#DataFrame+restructure) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.rename(newColumnNames)](#DataFrame+rename) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.drop(columnName)](#DataFrame+drop) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.chain(...funcs)](#DataFrame+chain) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.filter(func)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.reduce(func, [init])](#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
+    * [.shuffle()](#DataFrame+shuffle) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.sample(percentage)](#DataFrame+sample) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.randomSplit(percentage)](#DataFrame+randomSplit) ⇒ <code>Array</code>
     * [.groupBy(columnName)](#DataFrame+groupBy) ⇒ <code>Array</code>
@@ -299,7 +302,7 @@ df.withColumn('column2', (row) => row.get('column2') * 2).show()
 ```
 <a name="DataFrame+restructure"></a>
 
-### dataFrame.restructure(...columnNames) ⇒ <code>[DataFrame](#DataFrame)</code>
+### dataFrame.restructure(newColumnNames) ⇒ <code>[DataFrame](#DataFrame)</code>
 Modify the structure of the DataFrame by changing columns order, creating new columns or removing some columns.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -307,7 +310,7 @@ Modify the structure of the DataFrame by changing columns order, creating new co
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ...columnNames | <code>String</code> | The new columns of the DataFrame. |
+| newColumnNames | <code>Array</code> | The new columns of the DataFrame. |
 
 **Example**  
 ```js
@@ -327,7 +330,7 @@ df.restructure('column1', 'column3', 'column4')
 ```
 <a name="DataFrame+rename"></a>
 
-### dataFrame.rename(...columnNames) ⇒ <code>[DataFrame](#DataFrame)</code>
+### dataFrame.rename(newColumnNames) ⇒ <code>[DataFrame](#DataFrame)</code>
 Rename columns.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -335,7 +338,7 @@ Rename columns.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| ...columnNames | <code>String</code> | The new column names of the DataFrame. |
+| newColumnNames | <code>Array</code> | The new column names of the DataFrame. |
 
 **Example**  
 ```js
@@ -458,6 +461,17 @@ Reduce DataFrame into a value, starting from the last row (see .reduce()).
 | func | <code>function</code> | The reduce function taking 2 parameters, previous and next. |
 | [init] |  | The initial value of the reducer. |
 
+<a name="DataFrame+shuffle"></a>
+
+### dataFrame.shuffle() ⇒ <code>[DataFrame](#DataFrame)</code>
+Return a shuffled DataFrame rows.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A shuffled DataFrame  
+**Example**  
+```js
+df.shuffle() // Return a DataFrame with shuffled rows.
+```
 <a name="DataFrame+sample"></a>
 
 ### dataFrame.sample(percentage) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -736,6 +750,32 @@ df1.join(df2, 'id', 'right')
 | 1         | 0         | undefined |
 | 8         | 1         | undefined |
 ```
+<a name="DataFrame+toCSV"></a>
+
+### dataFrame.toCSV([sep], [header], [path]) ⇒ <code>String</code>
+Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>String</code> - The csv file in raw string.  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [sep] | <code>String</code> | <code>&#x27;,&#x27;</code> | Column separator. |
+| [header] | <code>Boolean</code> | <code>true</code> | Writing the header in the first line. If false, there will be no header. |
+| [path] | <code>String</code> |  | The path to save the file. /!\ Works only on node.js, not into the browser. |
+
+<a name="DataFrame+toJSON"></a>
+
+### dataFrame.toJSON([path]) ⇒ <code>String</code>
+Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>String</code> - The json file in raw string.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [path] | <code>String</code> | The path to save the file. /!\ Works only on node.js, not into the browser. |
+
 <a name="Row"></a>
 
 ## Row
@@ -832,4 +872,3 @@ Delete a Row value by its column.
 | Param | Type | Description |
 | --- | --- | --- |
 | columnToDel | <code>String</code> | The column value to delete. |
-

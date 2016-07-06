@@ -83,6 +83,8 @@ console.log(
     * [new DataFrame(data, columns, [...modules])](./doc/CORE_API.md#new_DataFrame_new)
     * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
+    * [.toCSV([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
+    * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>
     * [.count()](./doc/CORE_API.md#DataFrame+count) ⇒ <code>Int</code>
@@ -92,14 +94,15 @@ console.log(
     * [.listColumns()](./doc/CORE_API.md#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](./doc/CORE_API.md#DataFrame+select) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.withColumn(columnName, [func])](./doc/CORE_API.md#DataFrame+withColumn) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
-    * [.restructure(...columnNames)](./doc/CORE_API.md#DataFrame+restructure) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
-    * [.rename(...columnNames)](./doc/CORE_API.md#DataFrame+rename) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.restructure(newColumnNames)](./doc/CORE_API.md#DataFrame+restructure) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.rename(newColumnNames)](./doc/CORE_API.md#DataFrame+rename) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.drop(columnName)](./doc/CORE_API.md#DataFrame+drop) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.chain(...funcs)](./doc/CORE_API.md#DataFrame+chain) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.filter(func)](./doc/CORE_API.md#DataFrame+filter) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.map(func)](./doc/CORE_API.md#DataFrame+map) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.reduce(func, [init])](./doc/CORE_API.md#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](./doc/CORE_API.md#DataFrame+reduceRight) ⇒
+    * [.shuffle()](./doc/CORE_API.md#DataFrame+shuffle) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.sample(percentage)](./doc/CORE_API.md#DataFrame+sample) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.randomSplit(percentage)](./doc/CORE_API.md#DataFrame+randomSplit) ⇒ <code>Array</code>
     * [.groupBy(columnName)](./doc/CORE_API.md#DataFrame+groupBy) ⇒ <code>Array</code>
@@ -113,7 +116,7 @@ console.log(
     * [.rightJoin(dfToJoin, on)](./doc/CORE_API.md#DataFrame+rightJoin) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
 
 
-* [Row](./doc/CORE_API.md./doc/MODULES_API.md#Row)
+* [Row](./doc/CORE_API.md#Row)
     * [new Row(data, columns)](./doc/CORE_API.md#new_Row_new)
     * [.toDict()](./doc/CORE_API.md#Row+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#Row+toArray) ⇒ <code>Array</code>
