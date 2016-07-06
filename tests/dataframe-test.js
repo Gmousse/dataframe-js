@@ -383,6 +383,18 @@ test('DataFrame rows can be', (assert) => {
     );
 
     const dfToSample = new DataFrame([...Array(5000).keys()].map(row => [row]), ['c1']);
+    const dfToShuffle = new DataFrame([...Array(20).keys()].map(row => [row]), ['c1']);
+
+    assert.isNotDeepEqual(
+        dfToShuffle.shuffle().toArray(),
+        dfToShuffle.toArray(), 'be randomly shuffled'
+    );
+
+    assert.equal(
+        dfToShuffle.shuffle().count(),
+        dfToShuffle.count(), 'be randomly shuffled and get the same length'
+    );
+
     assert.equal(
         dfToSample.sample(0.2).count(),
         1000, 'be randomly sampled'

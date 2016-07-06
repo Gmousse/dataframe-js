@@ -406,6 +406,24 @@ class DataFrame {
     }
 
     /**
+     * Return a shuffled DataFrame rows.
+     * @returns {DataFrame} A shuffled DataFrame
+     * @example
+     * df.shuffle() // Return a DataFrame with shuffled rows.
+     */
+     shuffle() {
+         return this.__newInstance__(
+             this.reduce(
+                 (p, n) => {
+                     const index = Math.floor(Math.random() * (p.length -  1) + 1);
+                     return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] : [p, n]
+                 }
+             )
+             , this.__columns__
+         )
+     }
+
+    /**
      * Return a random sample of rows.
      * @param {Number} percentage A percentage of the orignal DataFrame giving the sample size.
      * @returns {DataFrame} A sample DataFrame
