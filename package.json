@@ -7,7 +7,8 @@
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
     "compile": "NODE_ENV=production babel -d lib/ src/",
     "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
-    "lint": "eslint -c .eslintrc ./src"
+    "lint": "eslint -c .eslintrc ./src",
+    "bench": "babel-node test.js"
   },
   "author": "Guillaume Mousnier",
   "license": "MIT",

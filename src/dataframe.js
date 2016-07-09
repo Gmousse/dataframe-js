@@ -52,8 +52,13 @@ class DataFrame {
         }
     }
 
-    __newInstance__(data, columns) {
-        return new DataFrame(data, columns, ...this.modules);
+    __newInstance__(data, columns, forced = false) {
+        if (columns !== this.__columns__ || forced) {
+            return new DataFrame(data, columns, ...this.modules);
+        }
+        return Object.assign(
+            Object.create(Object.getPrototypeOf(this)), this, {__rows__: [...data], __columns__: [...columns]}
+        );
     }
 
     _build(data, columns) {
@@ -320,7 +325,7 @@ class DataFrame {
      * | undefined | undefined | undefined |
      */
     restructure(newColumnNames) {
-        return this.__newInstance__(this.__rows__, newColumnNames);
+        return this.__newInstance__(this.__rows__, newColumnNames, true);
     }
 
     /**
