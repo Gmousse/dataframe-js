@@ -15,6 +15,10 @@ class Row {
         this.__row__ = this._build(data);
     }
 
+    __newInstance__(data, columns) {
+        return new Row(data, columns);
+    }
+
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
@@ -62,7 +66,7 @@ class Row {
      * @returns {Row} A new Row containing only the selected columns.
      */
     select(...columnNames) {
-        return new Row(columnNames.map(column => {
+        return this.__newInstance__(columnNames.map(column => {
             if (!this.__columns__.includes(column)) {throw new NoSuchColumnError(column, columnNames);}
             return this.__row__[column];
         }), columnNames);
@@ -84,7 +88,7 @@ class Row {
      */
     set(columnToSet, value) {
         const newRow = Object.assign({}, this.__row__, {[columnToSet]: value});
-        return new Row(newRow, Object.keys(newRow));
+        return this.__newInstance__(newRow, Object.keys(newRow));
     }
 
     /**
