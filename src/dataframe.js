@@ -38,12 +38,7 @@ class DataFrame {
     constructor(data, columns, ...modules) {
         [this.__rows__, this.__columns__] = this._build(data, columns);
         this.modules = modules;
-        if (modules.length > 0) {
-            Object.assign(this, ...modules.map(Plugin => {
-                const pluginInstance = new Plugin(this);
-                return {[pluginInstance.name]: pluginInstance};
-            }));
-        }
+        Object.assign(this, ...this.__instanciateModules__(modules));
     }
 
     * [Symbol.iterator]() {
@@ -52,13 +47,21 @@ class DataFrame {
         }
     }
 
-    __newInstance__(data, columns, forced = false) {
-        if (columns !== this.__columns__ || forced) {
+    __newInstance__(data, columns) {
+        if (!arrayEqual(columns, this.__columns__) || !(data[0] instanceof Row)) {
             return new DataFrame(data, columns, ...this.modules);
         }
-        return Object.assign(
-            Object.create(Object.getPrototypeOf(this)), this, {__rows__: [...data], __columns__: [...columns]}
+        const newInstance = Object.assign(
+            Object.create(Object.getPrototypeOf(this)), this, {__rows__: [...data], __columns__: [...columns]},
         );
+        return Object.assign(newInstance, ...this.__instanciateModules__(this.modules, newInstance));
+    }
+
+    __instanciateModules__(modules, df = undefined) {
+        return modules.map(Plugin => {
+            const pluginInstance = new Plugin(df ? df : this);
+            return {[pluginInstance.name]: pluginInstance};
+        });
     }
 
     _build(data, columns) {
@@ -325,7 +328,7 @@ class DataFrame {
      * | undefined | undefined | undefined |
      */
     restructure(newColumnNames) {
-        return this.__newInstance__(this.__rows__, newColumnNames, true);
+        return this.__newInstance__(this.__rows__, newColumnNames);
     }
 
     /**
