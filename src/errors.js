@@ -46,11 +46,11 @@ export class NotTheSameSchemaError extends Error {
     }
 }
 
-export class NotTheSameColumnsLengthError extends Error {
+export class NotTheSameColumnLengthsError extends Error {
     constructor(length, expected) {
         super();
-        this.message = `NotTheSameColumnsLengthError: [${length}] while expecting [${expected}]`;
-        this.name = 'NotTheSameColumnsLengthError';
+        this.message = `NotTheSameColumnLengthsError: [${length}] while expecting [${expected}]`;
+        this.name = 'NotTheSameColumnLengthsError';
     }
 }
 

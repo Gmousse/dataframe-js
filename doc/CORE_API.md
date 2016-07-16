@@ -20,10 +20,11 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
     * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](#DataFrame+toArray) ⇒ <code>Array</code>
-    * [.toCSV([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
-    * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
+    * [.toCSV([sep], [header], [path])](#DataFrame+toCSV) ⇒ <code>String</code>
+    * [.toJSON([path])](#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
+    * [.transpose()](#DataFrame+transpose) ⇒ <code>ÐataFrame</code>
     * [.count()](#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
     * [.replace(value, replacment, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -122,6 +123,32 @@ df.toArray()
   [ undefined, undefined, 2, 1, undefined, undefined ],
   [ 6, 9, 9, 8, 6, 12 ] ]
 ```
+<a name="DataFrame+toCSV"></a>
+
+### dataFrame.toCSV([sep], [header], [path]) ⇒ <code>String</code>
+Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>String</code> - The csv file in raw string.  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [sep] | <code>String</code> | <code>&#x27;,&#x27;</code> | Column separator. |
+| [header] | <code>Boolean</code> | <code>true</code> | Writing the header in the first line. If false, there will be no header. |
+| [path] | <code>String</code> |  | The path to save the file. /!\ Works only on node.js, not into the browser. |
+
+<a name="DataFrame+toJSON"></a>
+
+### dataFrame.toJSON([path]) ⇒ <code>String</code>
+Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>String</code> - The json file in raw string.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [path] | <code>String</code> | The path to save the file. /!\ Works only on node.js, not into the browser. |
+
 <a name="DataFrame+show"></a>
 
 ### dataFrame.show([rows], [quiet]) ⇒ <code>String</code>
@@ -158,6 +185,13 @@ Get the DataFrame dimensions.
 df.dim()
 [4, 3] // [height, weight]
 ```
+<a name="DataFrame+transpose"></a>
+
+### dataFrame.transpose() ⇒ <code>ÐataFrame</code>
+Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>ÐataFrame</code> - A new transpoded DataFrame.  
 <a name="DataFrame+count"></a>
 
 ### dataFrame.count() ⇒ <code>Int</code>
@@ -183,7 +217,7 @@ Get the count of a value into a column.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | valueToCount |  |  | The value to count into the selected column. |
-| [columnName] | <code>String</code> | <code>this.__columns__[0]</code> | The column where found the value. |
+| [columnName] | <code>String</code> | <code>this[__columns__][0]</code> | The column where found the value. |
 
 **Example**  
 ```js
@@ -209,7 +243,7 @@ Replace a value by another in the DataFrame or in a column.
 | --- | --- | --- | --- |
 | value |  |  | The value to replace. |
 | replacment |  |  | The new value. |
-| [...columnNames] | <code>String</code> | <code>this.__columns__</code> | The columns to apply the replacment. |
+| [...columnNames] | <code>String</code> | <code>this[__columns__]</code> | The columns to apply the replacment. |
 
 <a name="DataFrame+distinct"></a>
 
@@ -314,7 +348,7 @@ Modify the structure of the DataFrame by changing columns order, creating new co
 
 **Example**  
 ```js
-df.__columns__
+df[__columns__]
 
 ['column1', 'column2', 'column3']
 
@@ -342,11 +376,11 @@ Rename columns.
 
 **Example**  
 ```js
-df.__columns__
+df[__columns__]
 
 ['column1', 'column2', 'column3']
 
-df.rename('column1', 'column3', 'column4').__columns__
+df.rename('column1', 'column3', 'column4')[__columns__]
 
 ['column1', 'column3', 'column4']
 ```
@@ -750,32 +784,6 @@ df1.join(df2, 'id', 'right')
 | 1         | 0         | undefined |
 | 8         | 1         | undefined |
 ```
-<a name="DataFrame+toCSV"></a>
-
-### dataFrame.toCSV([sep], [header], [path]) ⇒ <code>String</code>
-Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
-
-**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
-**Returns**: <code>String</code> - The csv file in raw string.  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| [sep] | <code>String</code> | <code>&#x27;,&#x27;</code> | Column separator. |
-| [header] | <code>Boolean</code> | <code>true</code> | Writing the header in the first line. If false, there will be no header. |
-| [path] | <code>String</code> |  | The path to save the file. /!\ Works only on node.js, not into the browser. |
-
-<a name="DataFrame+toJSON"></a>
-
-### dataFrame.toJSON([path]) ⇒ <code>String</code>
-Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
-
-**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
-**Returns**: <code>String</code> - The json file in raw string.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [path] | <code>String</code> | The path to save the file. /!\ Works only on node.js, not into the browser. |
-
 <a name="Row"></a>
 
 ## Row
@@ -788,6 +796,7 @@ Row data structure used into the dataframe-js.
     * [.toDict()](#Row+toDict) ⇒ <code>Object</code>
     * [.toArray()](#Row+toArray) ⇒ <code>Array</code>
     * [.size()](#Row+size) ⇒ <code>Int</code>
+    * [.has(columnName)](#Row+has) ⇒ <code>Boolean</code>
     * [.select(...columnNames)](#Row+select) ⇒ <code>[Row](#Row)</code>
     * [.get(columnToGet)](#Row+get) ⇒
     * [.set(columnToSet)](#Row+set) ⇒ <code>[Row](#Row)</code>
@@ -825,6 +834,18 @@ Get the Row size.
 
 **Kind**: instance method of <code>[Row](#Row)</code>  
 **Returns**: <code>Int</code> - The Row length.  
+<a name="Row+has"></a>
+
+### row.has(columnName) ⇒ <code>Boolean</code>
+Check if row contains a column.
+
+**Kind**: instance method of <code>[Row](#Row)</code>  
+**Returns**: <code>Boolean</code> - The presence or not of the column.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| columnName | <code>String</code> | The column to check. |
+
 <a name="Row+select"></a>
 
 ### row.select(...columnNames) ⇒ <code>[Row](#Row)</code>
@@ -872,3 +893,4 @@ Delete a Row value by its column.
 | Param | Type | Description |
 | --- | --- | --- |
 | columnToDel | <code>String</code> | The column value to delete. |
+

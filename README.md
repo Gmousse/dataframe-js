@@ -80,13 +80,14 @@ console.log(
 #### List of available methods:
 
 * [DataFrame](./doc/CORE_API.md#DataFrame)
-    * [new DataFrame(data, columns, [...modules])](./doc/CORE_API.md#new_DataFrame_new)
+    * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
     * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
     * [.toCSV([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
     * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>
+    * [.transpose()](./doc/CORE_API.md#DataFrame+transpose) ⇒ <code>ÐataFrame</code>
     * [.count()](./doc/CORE_API.md#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](./doc/CORE_API.md#DataFrame+countValue) ⇒ <code>Int</code>
     * [.replace(value, replacment, [...columnNames])](./doc/CORE_API.md#DataFrame+replace) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
@@ -117,10 +118,11 @@ console.log(
 
 
 * [Row](./doc/CORE_API.md#Row)
-    * [new Row(data, columns)](./doc/CORE_API.md#new_Row_new)
+    * [new Row(data, columns)](#new_Row_new)
     * [.toDict()](./doc/CORE_API.md#Row+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#Row+toArray) ⇒ <code>Array</code>
     * [.size()](./doc/CORE_API.md#Row+size) ⇒ <code>Int</code>
+    * [.has(columnName)](./doc/CORE_API.md#Row+has) ⇒ <code>Boolean</code>
     * [.select(...columnNames)](./doc/CORE_API.md#Row+select) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
     * [.get(columnToGet)](./doc/CORE_API.md#Row+get) ⇒
     * [.set(columnToSet)](./doc/CORE_API.md#Row+set) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
@@ -180,7 +182,6 @@ class fakeModule {
     * [.add(df)](./doc/MODULES_API.md#Matrix+add) ⇒ <code>DataFrame</code>
     * [.product(number)](./doc/MODULES_API.md#Matrix+product) ⇒ <code>DataFrame</code>
     * [.dot(df)](./doc/MODULES_API.md#Matrix+dot) ⇒ <code>DataFrame</code>
-    * [.transpose()](./doc/MODULES_API.md#Matrix+transpose) ⇒ <code>ÐataFrame</code>
 
 * [Stat](./doc/MODULES_API.md#Stat)
     * [new Stat(dataframe)](./doc/MODULES_API.md#new_Stat_new)

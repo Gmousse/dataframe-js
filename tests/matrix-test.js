@@ -26,13 +26,6 @@ test('DataFrame matrix module can ', (assert) => {
         df.matrix.hasSameStruct(df2), true, 'check if two dataframes have the same structure'
     );
     assert.deepEqual(
-        df.matrix.transpose().toDict(), {
-            '0': [3, 3, 0],
-            '1': [6, 4, 0],
-            '2': [8, 9, 0],
-        }, 'transpose dataframe'
-    );
-    assert.deepEqual(
         df.matrix.add(df2).toDict(), {
             column1: [4, 6, 16],
             column2: [5, 5, 21],

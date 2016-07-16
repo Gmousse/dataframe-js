@@ -1,5 +1,5 @@
 import { WrongMatrixStructureError } from '../errors.js';
-import { transpose, arrayEqual, iter } from '../reusables.js';
+import { arrayEqual, iter } from '../reusables.js';
 
 /**
 * Matrix module for DataFrame, providing basic mathematical matrix computations.
@@ -43,10 +43,10 @@ class Matrix {
         }
         const columns = [...Array(this.df.dim()[1]).keys()];
         return this.df.__newInstance__([...iter(
-            Object.keys(this.df.__rows__),
+            Object.keys([...this.df]),
             rowKey => {
-                const a = this.df.__rows__[rowKey].toArray();
-                const b = df.__rows__[rowKey].toArray();
+                const a = [...this.df][rowKey].toArray();
+                const b = [...df][rowKey].toArray();
                 return columns.map(column => a[column] + b[column]);
             }
         )], this.df.listColumns());
@@ -70,30 +70,21 @@ class Matrix {
         if (!this.hasSameTransposedStruct(df)) {
             throw new WrongMatrixStructureError(this.df.dim(), df.dim().reverse());
         }
-        const transposedDF = df.matrix.transpose();
+        const transposedDF = df.transpose();
         const columns = [...Array(this.df.dim()[0]).keys()];
         return this.df.__newInstance__([...iter(
-            Object.keys(this.df.__rows__),
+            Object.keys([...this.df]),
             rowKey => {
-                const a = this.df.__rows__[rowKey].toArray();
+                const a = [...this.df][rowKey].toArray();
                 return [...iter(
                     columns,
                     column => {
-                        const b = transposedDF.__rows__[column].toArray();
+                        const b = [...transposedDF][column].toArray();
                         return Object.keys(b).reduce((p, n) => p + b[n] * a[n], 0);
                     }
                 )];
             }
         )], columns);
-    }
-
-    /**
-     * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
-     * @returns {ÐataFrame} A new transpoded DataFrame.
-     */
-    transpose() {
-        const newColumns = [...Array(this.df.count()).keys()];
-        return this.df.__newInstance__(transpose(transpose(Object.values(this.df.toDict()))), newColumns);
     }
 }
 

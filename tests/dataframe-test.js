@@ -113,6 +113,20 @@ test('DataFrame can be', (assert) => {
 
     assert.equal(dfFromDict.show(10, true), expectedShow, 'showed as string table');
 
+    const df = new DataFrame({
+        column1: [3, 6, 8],
+        column2: [3, 4, 9],
+        column3: [0, 0, 0],
+    }, ['column1', 'column2', 'column3']);
+
+    assert.deepEqual(
+        df.transpose().toDict(), {
+            '0': [3, 3, 0],
+            '1': [6, 4, 0],
+            '2': [8, 9, 0],
+        }, 'transposed'
+    );
+
     assert.end();
 });
 

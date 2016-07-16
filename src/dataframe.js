@@ -1,6 +1,9 @@
 import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
-import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnsLengthError } from './errors.js';
+import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnLengthsError } from './errors.js';
 import Row from './row.js';
+
+const __columns__ = Symbol('columns');
+const __rows__ = Symbol('rows');
 
 /**
  * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
@@ -36,23 +39,23 @@ class DataFrame {
      * const dfFromDF = new DataFrame(dfFromArrayOfArrays);
      */
     constructor(data, columns, ...modules) {
-        [this.__rows__, this.__columns__] = this._build(data, columns);
+        [this[__rows__], this[__columns__]] = this._build(data, columns);
         this.modules = modules;
         Object.assign(this, ...this.__instanciateModules__(modules));
     }
 
     * [Symbol.iterator]() {
-        for (const row of this.__rows__) {
+        for (const row of this[__rows__]) {
             yield row;
         }
     }
 
     __newInstance__(data, columns) {
-        if (!arrayEqual(columns, this.__columns__) || !(data[0] instanceof Row)) {
+        if (!arrayEqual(columns, this[__columns__]) || !(data[0] instanceof Row)) {
             return new DataFrame(data, columns, ...this.modules);
         }
         const newInstance = Object.assign(
-            Object.create(Object.getPrototypeOf(this)), this, {__rows__: [...data], __columns__: [...columns]},
+            Object.create(Object.getPrototypeOf(this)), this, {[__rows__]: [...data], [__columns__]: [...columns]}
         );
         return Object.assign(newInstance, ...this.__instanciateModules__(this.modules, newInstance));
     }
@@ -66,7 +69,7 @@ class DataFrame {
 
     _build(data, columns) {
         return match(data,
-                [(value) => (value instanceof DataFrame), () => this._fromArray([...data.__rows__], columns ? columns : data.__columns__)],
+                [(value) => (value instanceof DataFrame), () => this._fromArray([...data[__rows__]], columns ? columns : data[__columns__])],
                 [(value) => (value instanceof Array), () => this._fromArray(data, columns)],
                 [(value) => (value instanceof Object), () => this._fromDict(data, columns)],
                 [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array']);}]);
@@ -95,8 +98,8 @@ class DataFrame {
      */
     toDict() {
         return Object.assign({}, ...Object.entries(
-            transpose([...this.__rows__].map(row => row.toArray()))
-        ).map(([index, column]) => ({[this.__columns__[index]]: column})));
+            this.transpose().toArray()
+        ).map(([index, column]) => ({[this[__columns__][index]]: column})));
     }
 
     /**
@@ -123,7 +126,7 @@ class DataFrame {
     toCSV(sep = ',', header = true, path = undefined) {
         const csvContent = this.reduce(
             (p, n) => `${p ? p + '\n' : ''}${n.toArray().join(sep)}`,
-            header ? this.__columns__.join(sep) : ''
+            header ? this[__columns__].join(sep) : ''
         );
         if (path) {saveFile(path, csvContent);}
         return csvContent;
@@ -161,12 +164,12 @@ class DataFrame {
                 column => String(column).substring(0, 10) + Array(10 - String(column).length).join(' ')
             ).join(' | ')} |`
         );
-        const header = makeRow(this.__columns__);
+        const header = makeRow(this[__columns__]);
         let token = 0;
         const toShow = [
             header,
             Array(header.length).join('-'),
-            ...iter(this.__rows__, row => {token++; return makeRow(row.toArray());}, () => token >= rows),
+            ...iter(this[__rows__], row => {token++; return makeRow(row.toArray());}, () => token >= rows),
         ].join('\n');
         if (!quiet) {console.log(toShow);}
         return toShow;
@@ -180,7 +183,16 @@ class DataFrame {
      * [4, 3] // [height, weight]
      */
     dim() {
-        return [this.count(), this.__columns__.length];
+        return [this.count(), this[__columns__].length];
+    }
+
+    /**
+     * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
+     * @returns {ÐataFrame} A new transpoded DataFrame.
+     */
+    transpose() {
+        const newColumns = [...Array(this.count()).keys()];
+        return this.__newInstance__(transpose(this.toArray()), newColumns);
     }
 
     /**
@@ -199,7 +211,7 @@ class DataFrame {
     /**
      * Get the count of a value into a column.
      * @param valueToCount The value to count into the selected column.
-     * @param {String} [columnName=this.__columns__[0]] The column where found the value.
+     * @param {String} [columnName=this[__columns__][0]] The column where found the value.
      * @returns {Int} The number of times the selected value appears.
      * @example
       * // Counting specific value in a column
@@ -212,7 +224,7 @@ class DataFrame {
       *
       * 0
      */
-    countValue(valueToCount, columnName = this.__columns__[0]) {
+    countValue(valueToCount, columnName = this[__columns__][0]) {
         return this.filter(row => row.get(columnName) === valueToCount).count();
     }
 
@@ -220,11 +232,11 @@ class DataFrame {
      * Replace a value by another in the DataFrame or in a column.
      * @param value The value to replace.
      * @param replacment The new value.
-     * @param {...String} [columnNames=this.__columns__] The columns to apply the replacment.
+     * @param {...String} [columnNames=this[__columns__]] The columns to apply the replacment.
      * @returns {DataFrame} A new DataFrame with replaced values.
      */
     replace(value, replacment, ...columnNames) {
-        return this.map(row => (columnNames.length > 0 ? columnNames : this.__columns__).reduce(
+        return this.map(row => (columnNames.length > 0 ? columnNames : this[__columns__]).reduce(
                 (p, n) => p.get(n) === value ? p.set(n, replacment) : p, row
             ));
     }
@@ -239,7 +251,7 @@ class DataFrame {
      * [3, 4, 15, 6]
      */
     distinct(columnName) {
-        return [...new Set(...transpose(this.select(columnName).toArray()))];
+        return [...new Set(...this.select(columnName).transpose().toArray())];
     }
 
     /**
@@ -251,7 +263,7 @@ class DataFrame {
      * ['c1', 'c2', 'c3', 'c4']
      */
     listColumns() {
-        return [...this.__columns__];
+        return [...this[__columns__]];
     }
 
     /**
@@ -269,7 +281,7 @@ class DataFrame {
      * | undefined | undefined |
      */
     select(...columnNames) {
-        return this.__newInstance__(this.__rows__.map(
+        return this.__newInstance__(this[__rows__].map(
             row => row.select(...columnNames)
         ), columnNames);
     }
@@ -301,11 +313,11 @@ class DataFrame {
      * | undefined | 12        | undefined |
      */
     withColumn(columnName, func = () => undefined) {
-        return this.__newInstance__(this.__rows__.map(
+        return this.__newInstance__(this[__rows__].map(
             (row, index) => {
                 return row.set(columnName, func(row, index));
             }
-        ), this.__columns__.includes(columnName) ? this.__columns__ : [...this.__columns__, columnName]);
+        ), this[__columns__].includes(columnName) ? this[__columns__] : [...this[__columns__], columnName]);
     }
 
     /**
@@ -313,7 +325,7 @@ class DataFrame {
      * @param {Array} newColumnNames The new columns of the DataFrame.
      * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
      * @example
-     * df.__columns__
+     * df[__columns__]
      *
      * ['column1', 'column2', 'column3']
      *
@@ -328,7 +340,7 @@ class DataFrame {
      * | undefined | undefined | undefined |
      */
     restructure(newColumnNames) {
-        return this.__newInstance__(this.__rows__, newColumnNames);
+        return this.__newInstance__(this[__rows__], newColumnNames);
     }
 
     /**
@@ -336,19 +348,19 @@ class DataFrame {
      * @param {Array} newColumnNames The new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
-     * df.__columns__
+     * df[__columns__]
      *
      * ['column1', 'column2', 'column3']
      *
-     * df.rename('column1', 'column3', 'column4').__columns__
+     * df.rename('column1', 'column3', 'column4')[__columns__]
      *
      * ['column1', 'column3', 'column4']
      */
     rename(newColumnNames) {
-        if (newColumnNames.length !== this.__columns__.length) {
-            throw new NotTheSameColumnsLengthError(newColumnNames.length, this.__columns__.length);
+        if (newColumnNames.length !== this[__columns__].length) {
+            throw new NotTheSameColumnLengthsError(newColumnNames.length, this[__columns__].length);
         }
-        return this.__newInstance__(this.__rows__.map(row => row.toArray()), newColumnNames);
+        return this.__newInstance__(this[__rows__].map(row => row.toArray()), newColumnNames);
     }
 
     /**
@@ -366,9 +378,9 @@ class DataFrame {
      * | undefined | undefined |
      */
     drop(columnName) {
-        return this.__newInstance__(this.__rows__.map(
+        return this.__newInstance__(this[__rows__].map(
             (row) => row.delete(columnName)
-        ), this.__columns__.filter(column => column !== columnName));
+        ), this[__columns__].filter(column => column !== columnName));
     }
 
     /**
@@ -390,7 +402,7 @@ class DataFrame {
      * | 3         | 5         | undefined |
      */
     chain(...funcs) {
-        return this.__newInstance__([...chain(this.__rows__, ...funcs)], this.__columns__);
+        return this.__newInstance__([...chain(this[__rows__], ...funcs)], this[__columns__]);
     }
 
     /**
@@ -399,8 +411,8 @@ class DataFrame {
      * @returns {DataFrame} A new filtered DataFrame.
      */
     filter(func) {
-        const filteredRows = [...iter(this.__rows__, row => func(row) ? row : false)];
-        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this.__columns__) : this.__newInstance__([], []);
+        const filteredRows = [...iter(this[__rows__], row => func(row) ? row : false)];
+        return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
     }
 
     /**
@@ -409,7 +421,7 @@ class DataFrame {
      * @returns {DataFrame} A new DataFrame with modified rows.
      */
     map(func) {
-        return this.__newInstance__([...iter(this.__rows__, row => func(row))], this.__columns__);
+        return this.__newInstance__([...iter(this[__rows__], row => func(row))], this[__columns__]);
     }
 
     /**
@@ -428,8 +440,8 @@ class DataFrame {
      * ))
      */
     reduce(func, init) {
-        return typeof init === 'undefined' ? this.__rows__.reduce((p, n) => func(p, n)) :
-         this.__rows__.reduce((p, n) => func(p, n), init);
+        return typeof init === 'undefined' ? this[__rows__].reduce((p, n) => func(p, n)) :
+         this[__rows__].reduce((p, n) => func(p, n), init);
     }
 
     /**
@@ -439,8 +451,8 @@ class DataFrame {
      * @returns A reduced value.
      */
     reduceRight(func, init) {
-        return typeof init === 'undefined' ? this.__rows__.reduceRight((p, n) => func(p, n)) :
-         this.__rows__.reduceRight((p, n) => func(p, n), init);
+        return typeof init === 'undefined' ? this[__rows__].reduceRight((p, n) => func(p, n)) :
+         this[__rows__].reduceRight((p, n) => func(p, n), init);
     }
 
     /**
@@ -457,7 +469,7 @@ class DataFrame {
                      return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] : [p, n];
                  }
              )
-             , this.__columns__
+             , this[__columns__]
          );
      }
 
@@ -472,11 +484,11 @@ class DataFrame {
         const nRows = this.count() * percentage;
         let token = 0;
         return this.__newInstance__([...iter(
-            this.shuffle().__rows__, row => {
+            this.shuffle()[__rows__], row => {
                 token++;
                 return row;
             }, () => token >= nRows
-        )], this.__columns__);
+        )], this[__columns__]);
     }
 
     /**
@@ -491,15 +503,15 @@ class DataFrame {
         let token = 0;
         const restRows = [];
         return [this.__newInstance__([...iter(
-            this.shuffle().__rows__, row => {
+            this.shuffle()[__rows__], row => {
                 if (token < nRows) {
                     token++;
                     return row;
                 }
                 restRows.push(row);
             }
-        )], this.__columns__),
-        this.__newInstance__(restRows, this.__columns__)];
+        )], this[__columns__]),
+        this.__newInstance__(restRows, this[__columns__])];
     }
 
     /**
@@ -569,8 +581,8 @@ class DataFrame {
      * ]
      */
     sortBy(columnName, reverse = false) {
-        const sortedRows = this.__rows__.sort((p, n) => p.get(columnName) - n.get(columnName));
-        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this.__columns__);
+        const sortedRows = this[__rows__].sort((p, n) => p.get(columnName) - n.get(columnName));
+        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this[__columns__]);
     }
 
     /**
@@ -594,10 +606,10 @@ class DataFrame {
      * ]
      */
     union(dfToUnion) {
-        if (!arrayEqual(this.__columns__, dfToUnion.__columns__)) {
-            throw new NotTheSameSchemaError(dfToUnion.__columns__, this.__columns__);
+        if (!arrayEqual(this[__columns__], dfToUnion[__columns__])) {
+            throw new NotTheSameSchemaError(dfToUnion[__columns__], this[__columns__]);
         }
-        return this.__newInstance__([...this, ...dfToUnion], this.__columns__);
+        return this.__newInstance__([...this, ...dfToUnion], this[__columns__]);
     }
 
     /**
@@ -636,7 +648,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     innerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
+        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -669,7 +681,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     fullJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
+        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
         return [...iter([
             ...this.groupBy(on), ...dfToJoin.groupBy(on),
         ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
@@ -689,7 +701,7 @@ class DataFrame {
      * | 6         | undefined | 1         |
      */
     outerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
+        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -720,7 +732,7 @@ class DataFrame {
      * | 3         | undefined | 6         |
      */
     leftJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
+        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([
@@ -751,7 +763,7 @@ class DataFrame {
      * | 8         | 1         | undefined |
      */
     rightJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this.__columns__, ...dfToJoin.__columns__])];
+        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
         const actualGroupedDFs = this.groupBy(on);
         const groupedDFsToJoin = dfToJoin.groupBy(on);
         return [...iter([

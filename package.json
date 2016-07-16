@@ -8,7 +8,7 @@
     "compile": "NODE_ENV=production babel -d lib/ src/",
     "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
     "lint": "eslint -c .eslintrc ./src",
-    "bench": "babel-node test.js"
+    "bench": "babel-node dataframe-benchmark.js"
   },
   "author": "Guillaume Mousnier",
   "license": "MIT",

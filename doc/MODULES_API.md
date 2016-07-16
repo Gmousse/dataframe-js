@@ -23,7 +23,6 @@ Matrix module for DataFrame, providing basic mathematical matrix computations.
     * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
     * [.product(number)](#Matrix+product) ⇒ <code>DataFrame</code>
     * [.dot(df)](#Matrix+dot) ⇒ <code>DataFrame</code>
-    * [.transpose()](#Matrix+transpose) ⇒ <code>ÐataFrame</code>
 
 <a name="new_Matrix_new"></a>
 
@@ -95,13 +94,6 @@ Multiply one DataFrame n x p and a second p x n. See .hasSameTransposedStruct().
 | --- | --- | --- |
 | df | <code>DataFrame</code> | The second DataFrame to multiply. |
 
-<a name="Matrix+transpose"></a>
-
-### matrix.transpose() ⇒ <code>ÐataFrame</code>
-Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
-
-**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
-**Returns**: <code>ÐataFrame</code> - A new transpoded DataFrame.  
 <a name="Stat"></a>
 
 ## Stat
