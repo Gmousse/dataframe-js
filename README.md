@@ -92,6 +92,7 @@ console.log(
     * [.countValue(valueToCount, [columnName])](./doc/CORE_API.md#DataFrame+countValue) ⇒ <code>Int</code>
     * [.replace(value, replacment, [...columnNames])](./doc/CORE_API.md#DataFrame+replace) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.distinct(columnName)](./doc/CORE_API.md#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.unique(columnName)](./doc/CORE_API.md#DataFrame+unique) ⇒ <code>Array</code>
     * [.listColumns()](./doc/CORE_API.md#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](./doc/CORE_API.md#DataFrame+select) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.withColumn(columnName, [func])](./doc/CORE_API.md#DataFrame+withColumn) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
@@ -100,6 +101,7 @@ console.log(
     * [.drop(columnName)](./doc/CORE_API.md#DataFrame+drop) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.chain(...funcs)](./doc/CORE_API.md#DataFrame+chain) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.filter(func)](./doc/CORE_API.md#DataFrame+filter) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.where(func)](./doc/CORE_API.md#DataFrame+where) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.map(func)](./doc/CORE_API.md#DataFrame+map) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.reduce(func, [init])](./doc/CORE_API.md#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](./doc/CORE_API.md#DataFrame+reduceRight) ⇒

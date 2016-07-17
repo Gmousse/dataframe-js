@@ -255,6 +255,20 @@ class DataFrame {
     }
 
     /**
+     * Compute unique values into a column.
+     * Alias from .distinct()
+     * @param {String} columnName The column to distinct.
+     * @returns {Array} An Array containing distinct values of the column.
+     * @example
+     * df.unique('d2')
+     *
+     * [3, 4, 15, 6]
+     */
+    unique(columnName) {
+        return this.distinct(columnName);
+    }
+
+    /**
      * List DataFrame columns.
      * @returns {Array} An Array containing DataFrame column Names.
      * @example
@@ -416,6 +430,16 @@ class DataFrame {
     }
 
     /**
+     * Filter DataFrame rows. /!\ Prefer to use .chain().
+     * Alias of .filter()
+     * @param {Function} func A function sending a boolean taking the row as parameter.
+     * @returns {DataFrame} A new filtered DataFrame.
+     */
+    where(func) {
+        this.filter(func);
+    }
+
+    /**
      * Map on DataFrame rows. /!\ Prefer to use .chain().
      * @param {Function} func A function to apply on each row taking the row as parameter.
      * @returns {DataFrame} A new DataFrame with modified rows.
@@ -549,7 +573,7 @@ class DataFrame {
     }
 
     /**
-     * Sort DataFrame rows based on a column values.
+     * Sort DataFrame rows based on a column values. The row should contains only one type. (numerical or string).
      * @param {String} columnName The column giving order.
      * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
      * @returns {DataFrame} An ordered DataFrame.

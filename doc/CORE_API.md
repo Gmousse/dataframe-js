@@ -29,6 +29,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
     * [.replace(value, replacment, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
+    * [.unique(columnName)](#DataFrame+unique) ⇒ <code>Array</code>
     * [.listColumns()](#DataFrame+listColumns) ⇒ <code>Array</code>
     * [.select(...columnNames)](#DataFrame+select) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.withColumn(columnName, [func])](#DataFrame+withColumn) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -37,6 +38,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.drop(columnName)](#DataFrame+drop) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.chain(...funcs)](#DataFrame+chain) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.filter(func)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.where(func)](#DataFrame+where) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.reduce(func, [init])](#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
@@ -263,6 +265,25 @@ df.distinct('d2')
 
 [3, 4, 15, 6]
 ```
+<a name="DataFrame+unique"></a>
+
+### dataFrame.unique(columnName) ⇒ <code>Array</code>
+Compute unique values into a column.
+Alias from .distinct()
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>Array</code> - An Array containing distinct values of the column.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| columnName | <code>String</code> | The column to distinct. |
+
+**Example**  
+```js
+df.unique('d2')
+
+[3, 4, 15, 6]
+```
 <a name="DataFrame+listColumns"></a>
 
 ### dataFrame.listColumns() ⇒ <code>Array</code>
@@ -446,6 +467,19 @@ Filter DataFrame rows. /!\ Prefer to use .chain().
 | --- | --- | --- |
 | func | <code>function</code> | A function sending a boolean taking the row as parameter. |
 
+<a name="DataFrame+where"></a>
+
+### dataFrame.where(func) ⇒ <code>[DataFrame](#DataFrame)</code>
+Filter DataFrame rows. /!\ Prefer to use .chain().
+Alias of .filter()
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A new filtered DataFrame.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| func | <code>function</code> | A function sending a boolean taking the row as parameter. |
+
 <a name="DataFrame+map"></a>
 
 ### dataFrame.map(func) ⇒ <code>[DataFrame](#DataFrame)</code>
@@ -573,7 +607,7 @@ df.groupBy('id').map(dfByValue => (
 <a name="DataFrame+sortBy"></a>
 
 ### dataFrame.sortBy(columnName, [reverse]) ⇒ <code>[DataFrame](#DataFrame)</code>
-Sort DataFrame rows based on a column values.
+Sort DataFrame rows based on a column values. The row should contains only one type. (numerical or string).
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
 **Returns**: <code>[DataFrame](#DataFrame)</code> - An ordered DataFrame.  
