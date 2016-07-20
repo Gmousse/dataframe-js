@@ -1,4 +1,4 @@
-export function returnArray(x) {
+export function asArray(x) {
     return Array.isArray(x) ? x : [x];
 }
 

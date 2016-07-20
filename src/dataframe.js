@@ -1,4 +1,4 @@
-import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, asArray } from './reusables.js';
 import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnLengthsError } from './errors.js';
 import Row from './row.js';
 
@@ -9,6 +9,11 @@ const __rows__ = Symbol('rows');
  * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
  */
 class DataFrame {
+
+    static setDefaultModules(...modules) {
+        DataFrame.defaultModules = modules;
+    }
+
     /**
      * Create a new DataFrame.
      * @param {Array | Object | DataFrame} data The data of the DataFrame.
@@ -40,8 +45,8 @@ class DataFrame {
      */
     constructor(data, columns, ...modules) {
         [this[__rows__], this[__columns__]] = this._build(data, columns);
-        this.modules = modules;
-        Object.assign(this, ...this.__instanciateModules__(modules));
+        this.modules = DataFrame.defaultModules ? [...DataFrame.defaultModules, ...modules] : modules;
+        Object.assign(this, ...this.__instanciateModules__(this.modules));
     }
 
     * [Symbol.iterator]() {
@@ -69,10 +74,24 @@ class DataFrame {
 
     _build(data, columns) {
         return match(data,
-                [(value) => (value instanceof DataFrame), () => this._fromArray([...data[__rows__]], columns ? columns : data[__columns__])],
-                [(value) => (value instanceof Array), () => this._fromArray(data, columns)],
-                [(value) => (value instanceof Object), () => this._fromDict(data, columns)],
-                [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array']);}]);
+            [
+                (value) => (value instanceof DataFrame),
+                () => this._fromArray([...data[__rows__]], columns ? columns : data[__columns__]),
+            ],
+            [
+                (value) => (value instanceof Array),
+                () => this._fromArray(data, columns ? columns : Object.keys(
+                    asArray(data.reduce((p, n) => asArray(p).length > asArray(n).length ? p : n)))
+                ),
+            ],
+            [
+                (value) => (value instanceof Object),
+                () => this._fromDict(data, columns ? columns : Object.keys(data)),
+            ],
+            [
+                () => true,
+                () => {throw new InputTypeError(typeof data, ['Object', 'Array']);},
+            ]);
     }
 
     _fromDict(dict, columns) {
@@ -117,19 +136,29 @@ class DataFrame {
     }
 
     /**
-     * Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
-     * @param {String} [sep=','] Column separator.
+     * Convert the DataFrame into a text string. You can also save the file if you are using nodejs.
+     * @param {String} [sep=' '] Column separator.
      * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The csv file in raw string.
+     * @returns {String} The text file in raw string.
      */
-    toCSV(sep = ',', header = true, path = undefined) {
+    toText(sep = ';', header = true, path = undefined) {
         const csvContent = this.reduce(
             (p, n) => `${p ? p + '\n' : ''}${n.toArray().join(sep)}`,
             header ? this[__columns__].join(sep) : ''
         );
         if (path) {saveFile(path, csvContent);}
         return csvContent;
+    }
+
+    /**
+     * Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     */
+    toCSV(header = true, path = undefined) {
+        return this.toText(',', header, path);
     }
 
     /**

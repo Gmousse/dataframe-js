@@ -20,7 +20,8 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
     * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](#DataFrame+toArray) ⇒ <code>Array</code>
-    * [.toCSV([sep], [header], [path])](#DataFrame+toCSV) ⇒ <code>String</code>
+    * [.toText([sep], [header], [path])](#DataFrame+toText) ⇒ <code>String</code>
+    * [.toCSV([header], [path])](#DataFrame+toCSV) ⇒ <code>String</code>
     * [.toJSON([path])](#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](#DataFrame+dim) ⇒ <code>Array</code>
@@ -125,9 +126,23 @@ df.toArray()
   [ undefined, undefined, 2, 1, undefined, undefined ],
   [ 6, 9, 9, 8, 6, 12 ] ]
 ```
+<a name="DataFrame+toText"></a>
+
+### dataFrame.toText([sep], [header], [path]) ⇒ <code>String</code>
+Convert the DataFrame into a text string. You can also save the file if you are using nodejs.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>String</code> - The text file in raw string.  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [sep] | <code>String</code> | <code>&#x27; &#x27;</code> | Column separator. |
+| [header] | <code>Boolean</code> | <code>true</code> | Writing the header in the first line. If false, there will be no header. |
+| [path] | <code>String</code> |  | The path to save the file. /!\ Works only on node.js, not into the browser. |
+
 <a name="DataFrame+toCSV"></a>
 
-### dataFrame.toCSV([sep], [header], [path]) ⇒ <code>String</code>
+### dataFrame.toCSV([header], [path]) ⇒ <code>String</code>
 Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -135,7 +150,6 @@ Convert the DataFrame into a csv string. You can also save the file if you are u
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [sep] | <code>String</code> | <code>&#x27;,&#x27;</code> | Column separator. |
 | [header] | <code>Boolean</code> | <code>true</code> | Writing the header in the first line. If false, there will be no header. |
 | [path] | <code>String</code> |  | The path to save the file. /!\ Works only on node.js, not into the browser. |
 

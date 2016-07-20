@@ -83,7 +83,8 @@ console.log(
     * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
     * [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
     * [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
-    * [.toCSV([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
+    * [.toText([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toText) ⇒ <code>String</code>
+    * [.toCSV([header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
     * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
     * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
     * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>

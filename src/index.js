@@ -4,6 +4,6 @@ import Stat from './modules/stat.js';
 import Matrix from './modules/matrix.js';
 import Benchmark from './extras/benchmark.js';
 
-const DataFrameWithDefaultModules = (data, columns, ...modules) => new DataFrame(data, columns, Stat, Matrix, ...modules);
+DataFrame.setDefaultModules(Stat, Matrix);
 
-export { DataFrameWithDefaultModules as DataFrame, Row, Benchmark };
+export { DataFrame, Row, Benchmark };

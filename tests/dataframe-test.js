@@ -86,7 +86,13 @@ test('DataFrame can be', (assert) => {
         ],
         'converted into array');
     assert.equal(
-        dfFromArrayOfArrays.toCSV(',', false), '1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
+        dfFromArrayOfArrays.toText(), 'c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',
+        'converted into text with header');
+    assert.equal(
+        dfFromArrayOfArrays.toText(';', false), '1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',
+        'converted into text without header');
+    assert.equal(
+        dfFromArrayOfArrays.toCSV(false), '1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
         'converted into csv without header');
     assert.equal(
         dfFromArrayOfArrays.toCSV(), 'c1,c2,c3,c4,c5,c6\n1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
