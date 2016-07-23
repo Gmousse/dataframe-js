@@ -16,29 +16,20 @@ class Matrix {
 
     /**
      * Check if two DataFrames are commutative, if both have the same dimensions.
-     * @param {DataFrame} df The second DataFrame to check.
+     * @param {Array} dfDim The second DataFrame dim to check.
      * @returns {Boolean} True if they are commutative, else false.
      */
-    hasSameStruct(df) {
-        return arrayEqual(this.df.dim(), df.dim(), true);
+    isCommutative(dfDim) {
+        return arrayEqual(this.df.dim(), dfDim, true);
     }
 
     /**
-     * Check if two DataFrames have the same dimensions while the second is transposed. Required for dot().
-     * @param {DataFrame} df The second DataFrame to check.
-     * @returns {Boolean} True if they can be multiplied, else false.
-     */
-    hasSameTransposedStruct(df) {
-        return arrayEqual(this.df.dim(), df.dim().reverse(), true);
-    }
-
-    /**
-     * Provide an elements pairwise addition of two DataFrames having the same dimensions. See .hasSameStruct().
+     * Provide an elements pairwise addition of two DataFrames having the same dimensions.
      * @param {DataFrame} df The second DataFrame to add.
      * @returns {DataFrame} A new DataFrame resulting to the addition two DataFrames.
      */
     add(df) {
-        if (!this.hasSameStruct(df)) {
+        if (!this.isCommutative(df.dim())) {
             throw new WrongMatrixStructureError(this.df.dim(), df.dim());
         }
         const columns = [...Array(this.df.dim()[1]).keys()];
@@ -62,12 +53,12 @@ class Matrix {
     }
 
     /**
-     * Multiply one DataFrame n x p and a second p x n. See .hasSameTransposedStruct().
+     * Multiply one DataFrame n x p and a second p x n.
      * @param {DataFrame} df The second DataFrame to multiply.
      * @returns {DataFrame} A new n x n DataFrame resulting to the product of two DataFrame.
      */
     dot(df) {
-        if (!this.hasSameTransposedStruct(df)) {
+        if (!this.isCommutative(df.dim().reverse())) {
             throw new WrongMatrixStructureError(this.df.dim(), df.dim().reverse());
         }
         const transposedDF = df.transpose();
