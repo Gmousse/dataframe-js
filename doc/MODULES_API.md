@@ -18,8 +18,7 @@ Matrix module for DataFrame, providing basic mathematical matrix computations.
 
 * [Matrix](#Matrix)
     * [new Matrix(df)](#new_Matrix_new)
-    * [.hasSameStruct(df)](#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
-    * [.hasSameTransposedStruct(df)](#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
+    * [.isCommutative(dfDim)](#Matrix+isCommutative) ⇒ <code>Boolean</code>
     * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
     * [.product(number)](#Matrix+product) ⇒ <code>DataFrame</code>
     * [.dot(df)](#Matrix+dot) ⇒ <code>DataFrame</code>
@@ -34,9 +33,9 @@ Start the Matrix module.
 | --- | --- | --- |
 | df | <code>DataFrame</code> | An instance of DataFrame. |
 
-<a name="Matrix+hasSameStruct"></a>
+<a name="Matrix+isCommutative"></a>
 
-### matrix.hasSameStruct(df) ⇒ <code>Boolean</code>
+### matrix.isCommutative(dfDim) ⇒ <code>Boolean</code>
 Check if two DataFrames are commutative, if both have the same dimensions.
 
 **Kind**: instance method of <code>[Matrix](#Matrix)</code>  
@@ -44,24 +43,12 @@ Check if two DataFrames are commutative, if both have the same dimensions.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| df | <code>DataFrame</code> | The second DataFrame to check. |
-
-<a name="Matrix+hasSameTransposedStruct"></a>
-
-### matrix.hasSameTransposedStruct(df) ⇒ <code>Boolean</code>
-Check if two DataFrames have the same dimensions while the second is transposed. Required for dot().
-
-**Kind**: instance method of <code>[Matrix](#Matrix)</code>  
-**Returns**: <code>Boolean</code> - True if they can be multiplied, else false.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| df | <code>DataFrame</code> | The second DataFrame to check. |
+| dfDim | <code>Array</code> | The second DataFrame dim to check. |
 
 <a name="Matrix+add"></a>
 
 ### matrix.add(df) ⇒ <code>DataFrame</code>
-Provide an elements pairwise addition of two DataFrames having the same dimensions. See .hasSameStruct().
+Provide an elements pairwise addition of two DataFrames having the same dimensions.
 
 **Kind**: instance method of <code>[Matrix](#Matrix)</code>  
 **Returns**: <code>DataFrame</code> - A new DataFrame resulting to the addition two DataFrames.  
@@ -85,7 +72,7 @@ Provide a scalar product between a number and a DataFrame.
 <a name="Matrix+dot"></a>
 
 ### matrix.dot(df) ⇒ <code>DataFrame</code>
-Multiply one DataFrame n x p and a second p x n. See .hasSameTransposedStruct().
+Multiply one DataFrame n x p and a second p x n.
 
 **Kind**: instance method of <code>[Matrix](#Matrix)</code>  
 **Returns**: <code>DataFrame</code> - A new n x n DataFrame resulting to the product of two DataFrame.  
