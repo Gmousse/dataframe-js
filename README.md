@@ -233,6 +233,12 @@ const df2 = df.withColumn('column4', (row) => row.get('column2') * 2)
 df.fakemodule.test(8)
 ```
 
+If you want to change default modules (modules enabled in each DataFrame instance, such as Matrix and Stat) you can define them by a static method:
+
+```javascript
+DataFrame.setDefaultModules(fakeModule, Matrix);
+```
+
 If you want to create your own module, take a look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
 
 A simple example of a module structure:
@@ -254,8 +260,7 @@ class fakeModule {
 
 * [Matrix](./doc/MODULES_API.md#Matrix)
     * [new Matrix(dataframe)](./doc/MODULES_API.md#new_Matrix_new)
-    * [.hasSameStruct(df)](./doc/MODULES_API.md#Matrix+hasSameStruct) ⇒ <code>Boolean</code>
-    * [.hasSameTransposedStruct(df)](./doc/MODULES_API.md#Matrix+hasSameTransposedStruct) ⇒ <code>Boolean</code>
+    * [.isCommutative(dfDim)](./doc/MODULES_API.md#Matrix+isCommutative) ⇒ <code>Boolean</code>
     * [.add(df)](./doc/MODULES_API.md#Matrix+add) ⇒ <code>DataFrame</code>
     * [.product(number)](./doc/MODULES_API.md#Matrix+product) ⇒ <code>DataFrame</code>
     * [.dot(df)](./doc/MODULES_API.md#Matrix+dot) ⇒ <code>DataFrame</code>
