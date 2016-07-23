@@ -128,19 +128,27 @@ const df2 = df.drop('column1');
 console.log(df2.listColumns());
 // ['column2', 'column3']
 
-console.log(Object.is(df2, df));
-// false. df2 is no longer an instance of df.
+console.log(Object.is(df2.dim(), df.dim()));
+// false, they didn't have the same dimensions. df2 is no longer an instance of df.
 console.log(
     Object.is(
-        df.map(row => row.set('colum2', row.get('column2') + 8)),
+        df2.map(row => row),
         df2
     )
 );
-// false. a modification of df2 send another instance of DataFrame
+// false. a modification of df2 send another instance of DataFrame, even if nothing change.
+
+// if we create a new column
+df2.withColumn('anewcolumn', row => row.get('column2') + 8);
+console.log(
+    df2.select('anewcolumn')
+);
+// NoSuchColumnError
+// df2 wasn't mutated
 
 ```
 
-For more informations you can find the API below.
+For more informations about all DataFrame manipulations you can find the API below.
 
 #### List of available methods and their examples:
 
