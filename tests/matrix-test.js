@@ -23,7 +23,7 @@ test('DataFrame matrix module can ', (assert) => {
     }, ['column1', 'column2', 'column3']);
 
     assert.equal(
-        df.matrix.hasSameStruct(df2), true, 'check if two dataframes have the same structure'
+        df.matrix.isCommutative(df2.dim()), true, 'check if two dataframes have the same structure'
     );
     assert.deepEqual(
         df.matrix.add(df2).toDict(), {
