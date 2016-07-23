@@ -49,7 +49,7 @@ To use dataframe-js, simply import the library. Then you can use DataFrame, Row 
 import { DataFrame, Row } from 'dataframe-js';
 ```
 
-To create a DataFrame, you have to passe your data and your column names. You can use different data structures as below:
+To create a DataFrame, you have to pass your data and your column names. You can use different data structures as below:
 
 ```javascript
 const df = new DataFrame(myData, myColumns);
@@ -112,9 +112,8 @@ Of course, you can do the reverse by exporting your DataFrame in another format 
 or you can debug by using:
 * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
 
-When you realize some operations on a DataFrame (or on a Row), it is never mutated. Indeed, when you modify a DataFrame (even if nothing change) you create a new instance of DataFrame. It's a bit slower but you avoid side effects.
+When you realize some operations on a DataFrame (or on a Row), it is never mutated. Indeed, when you modify a DataFrame (even if nothing change) you create a new instance of DataFrame. It's a bit slower but you avoid side effects:
 
-Examples:
 ```javascript
 // When you change the DataFrame structure, the original DataFrame doesn't change.
 df.drop('column1'); // <--- Here you drop a column.
