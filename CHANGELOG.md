@@ -2,6 +2,17 @@
 
 ---
 
+## v0.2.0
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Feature
+
+**Changes**:
+- First functional version
+
+---
+
 ## v0.1.0
 
 **Author**: Guillaume Mousnier.

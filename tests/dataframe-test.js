@@ -13,18 +13,18 @@ function tryCatch(callback) {
 }
 
 test('DataFrame can be created correctly', (assert) => {
-    const dfFromObjectOfArrays = new DataFrame({
+    const ObjectOfArrays = {
         column1: [3, 6, 8],
         column2: [3, 4, 5, 6],
-    }, ['column1', 'column2']);
+    };
 
-    const dfFromArrayOfArrays = new DataFrame([
+    const ArrayOfArrays = [
         [1, 6, 9, 10, 12],
         [1, 2],
         [6, 6, 9, 8, 9, 12],
-    ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
+    ];
 
-    const dfFromArrayOfObjects = new DataFrame([{
+    const ArrayOfObjects = [{
         c1: 1,
         c2: 6,
         c3: 9,
@@ -40,14 +40,43 @@ test('DataFrame can be created correctly', (assert) => {
         c4: 8,
         c3: 9,
         c6: 12,
-    }], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
+    }];
 
-    const dfFromDF = new DataFrame(dfFromArrayOfArrays);
-
-    assert.deepEqual([dfFromObjectOfArrays.count(), dfFromObjectOfArrays.listColumns().length], [4, 2], 'from Object of Arrays');
-    assert.deepEqual([dfFromArrayOfArrays.count(), dfFromArrayOfArrays.listColumns().length], [3, 6], 'from Array of Arrays');
-    assert.deepEqual([dfFromArrayOfObjects.count(), dfFromArrayOfObjects.listColumns().length], [3, 6], 'from Array of Objects');
-    assert.deepEqual([dfFromDF.count(), dfFromDF.listColumns().length], [3, 6], 'from an other Dataframe');
+    assert.deepEqual(
+        new DataFrame(ObjectOfArrays, ['column1', 'column2']).dim(),
+        [4, 2],
+        'from Object of Arrays'
+    );
+    assert.deepEqual(
+        new DataFrame(ObjectOfArrays).dim(),
+        [4, 2],
+        'from Object of Arrays by infering columns'
+    );
+    assert.deepEqual(
+        new DataFrame(ArrayOfArrays, ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']).dim(),
+        [3, 6],
+        'from Array of Arrays'
+    );
+    assert.deepEqual(
+        new DataFrame(ArrayOfArrays).dim(),
+        [3, 6],
+        'from Array of Arrays by infering columns'
+    );
+    assert.deepEqual(
+        new DataFrame(ArrayOfObjects, ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']).dim(),
+        [3, 6],
+        'from Array of Objects'
+    );
+    assert.deepEqual(
+        new DataFrame(ArrayOfObjects).dim(),
+        [3, 6],
+        'from Array of Objects by infering columns'
+    );
+    assert.deepEqual(
+        new DataFrame(ArrayOfArrays).dim(),
+        [3, 6],
+        'from another DataFrame'
+    );
 
     assert.end();
 });
@@ -56,7 +85,6 @@ test('DataFrame can\'t be created', (assert) => {
     assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, throwing InputTypeError');
     assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, throwing InputTypeError');
     assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, throwing InputTypeError');
-
     assert.end();
 });
 
@@ -222,10 +250,27 @@ test('DataFrame rows can be', (assert) => {
     assert.equal(df.countValue('4', 'column2'), 1, 'counted based on a specific value in a column');
     assert.equal(df.countValue(9, 'column1'), 0, 'counted based on a specific value in a selected column');
     assert.deepEqual(
+        df.push([1, 9, 6]).toArray(), [
+            [3, '3', undefined],
+            [6, '4', undefined],
+            [8, '5', undefined],
+            [undefined, '6', undefined],
+            [1, 9, 6],
+        ], 'added to an existing DataFrame'
+    );
+    assert.deepEqual(
         df.filter((line) => line.get('column1') > 3).toArray(), [
             [6, '4', undefined],
             [8, '5', undefined],
         ], 'filtered'
+    );
+    assert.deepEqual(
+        df.filter({column1: 6}).toArray(), [
+            [6, '4', undefined],
+        ], 'filtered by passing a column/value object'
+    );
+    assert.deepEqual(
+        df.find({column1: 6}).toArray(), [6, '4', undefined], 'found and returned'
     );
     assert.deepEqual(
         df.map((line) => line.set('column1', 3)).toArray(), [

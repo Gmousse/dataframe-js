@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.1.0**
+**v0.2.0**
 
 ## Presentation
 
@@ -10,6 +10,8 @@ A DataFrame is simply built on two concepts:
 - **Rows** providing ways to modify or filter your data.
 
 ````javascript
+const df = new DataFrame(rawData, columns)
+df.show()
 // DataFrame example
 | column1   | column2   | column3   | <--- Columns
 ------------------------------------
@@ -19,11 +21,11 @@ A DataFrame is simply built on two concepts:
 | undefined | 6         | undefined |
 ````
 
-**DataFrame is immutable** (lazy, for performance purposes). Then, each modification on DataFrame will return a new DataFrame decreasing bug risks and making your data more secure.
+**DataFrame is immutable** (lazy, for performance purposes). Then, each modification on DataFrame will return a new DataFrame decreasing side effects and making your data more secure.
 
 **DataFrame is easy to use** with a simple API (closed to Spark or SQL) designed to manipulate data faster and easier than ever.
 
-**DataFrame is flexible** because you can switch from or to arrays and dictionnaries (hash, object) when you want.
+**DataFrame is flexible** because you can create DataFrames from multiple data format (array, object) and you can export your DataFrames into these (array, object, csv, json...).
 
 **DataFrame is modulable** because you can use additional modules (Stat and Matrix by default) or create your own.
 
@@ -44,10 +46,71 @@ dataframe-js contains a **principal core (DataFrame and Row)** and **two default
 To use dataframe-js, simply import the library. Then you can use DataFrame, Row or other Core components.
 
 ```javascript
-import { DataFrame } from 'dataframe-js';
-
-const df = new DataFrame(myData, myColumns);
+import { DataFrame, Row } from 'dataframe-js';
 ```
+
+To create a DataFrame, you have to passe your data and your column names. You can use different data structures as below:
+
+```javascript
+const df = new DataFrame(myData, myColumns);
+
+const dfFromObjectOfArrays = new DataFrame({
+    column1: [3, 6, 8], //<------ A column
+    column2: [3, 4, 5, 6],
+}, ['column1', 'column2']);
+
+const dfFromArrayOfArrays = new DataFrame([
+    [1, 6, 9, 10, 12], // <------- A row
+    [1, 2],
+    [6, 6, 9, 8, 9, 12],
+], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
+
+const dfFromArrayOfObjects = new DataFrame([
+    {c1: 1, c2: 6}, // <--- A row
+    {c4: 1, c3: 2}
+], ['c1', 'c2', 'c3', 'c4']);
+```
+
+If you don't pass column names, they will be infered from your data but **it's slower**:
+
+```javascript
+// here you don't pass column names
+const dfFromObjectOfArrays = new DataFrame({
+    column1: [3, 6, 8], //<------ A column
+    column2: [3, 4, 5, 6],
+});
+
+console.log(dfFromObjectOfArrays.listColumns())
+// ['column1', 'column2']
+
+const dfFromArrayOfArrays = new DataFrame([
+    [1, 6, 9, 10, 12], // <------- A row
+    [1, 2],
+    [6, 6, 9, 8, 9, 12],
+]);
+
+console.log(dfFromArrayOfArrays.listColumns())
+// ['0', '1', '2', '3', '4', '5']
+
+
+const dfFromArrayOfObjects = new DataFrame([
+    {c1: 1, c2: 6}, // <--- A row
+    {c4: 1, c3: 2}
+]);
+
+console.log(dfFromArrayOfObjects.listColumns())
+// ['c1', 'c2', 'c3', 'c4']
+```
+
+Of course, you can do the reverse by exporting your DataFrame in another format by using:
+* [.toDict()](./doc/CORE_API.md#DataFrame+toDict) ⇒ <code>Object</code>
+* [.toArray()](./doc/CORE_API.md#DataFrame+toArray) ⇒ <code>Array</code>
+* [.toText([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toText) ⇒ <code>String</code>
+* [.toCSV([header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
+* [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
+
+or you can debug by using:
+* [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
 
 When you realize some operations on a DataFrame (or on a Row), it is never mutated. Indeed, when you modify a DataFrame (even if nothing change) you create a new instance of DataFrame. It's a bit slower but you avoid side effects.
 
@@ -77,7 +140,9 @@ console.log(
 
 ```
 
-#### List of available methods:
+For more informations you can find the API below.
+
+#### List of available methods and their examples:
 
 * [DataFrame](./doc/CORE_API.md#DataFrame)
     * [new DataFrame(data, columns, [...modules])](#new_DataFrame_new)
@@ -86,11 +151,12 @@ console.log(
     * [.toText([sep], [header], [path])](./doc/CORE_API.md#DataFrame+toText) ⇒ <code>String</code>
     * [.toCSV([header], [path])](./doc/CORE_API.md#DataFrame+toCSV) ⇒ <code>String</code>
     * [.toJSON([path])](./doc/CORE_API.md#DataFrame+toJSON) ⇒ <code>String</code>
-    * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
+    * [.push(...rows)](#DataFrame+push) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.dim()](./doc/CORE_API.md#DataFrame+dim) ⇒ <code>Array</code>
     * [.transpose()](./doc/CORE_API.md#DataFrame+transpose) ⇒ <code>ÐataFrame</code>
     * [.count()](./doc/CORE_API.md#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](./doc/CORE_API.md#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.show([rows], [quiet])](./doc/CORE_API.md#DataFrame+show) ⇒ <code>String</code>
     * [.replace(value, replacment, [...columnNames])](./doc/CORE_API.md#DataFrame+replace) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.distinct(columnName)](./doc/CORE_API.md#DataFrame+distinct) ⇒ <code>Array</code>
     * [.unique(columnName)](./doc/CORE_API.md#DataFrame+unique) ⇒ <code>Array</code>
@@ -103,6 +169,7 @@ console.log(
     * [.chain(...funcs)](./doc/CORE_API.md#DataFrame+chain) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.filter(func)](./doc/CORE_API.md#DataFrame+filter) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.where(func)](./doc/CORE_API.md#DataFrame+where) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
+    * [.find(condition)](./doc/CORE_API.md#DataFrame+find) ⇒ <code>[Row](./doc/CORE_API.md#Row)</code>
     * [.map(func)](./doc/CORE_API.md#DataFrame+map) ⇒ <code>[DataFrame](./doc/CORE_API.md#DataFrame)</code>
     * [.reduce(func, [init])](./doc/CORE_API.md#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](./doc/CORE_API.md#DataFrame+reduceRight) ⇒
@@ -159,7 +226,7 @@ const df2 = df.withColumn('column4', (row) => row.get('column2') * 2)
 df.fakemodule.test(8)
 ```
 
-If you want to create your own module, look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
+If you want to create your own module, take a look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
 
 A simple example of a module structure:
 
@@ -196,3 +263,5 @@ class fakeModule {
     * [.stats(columnName)](./doc/MODULES_API.md#Stat+stats) ⇒ <code>Object</code>
 
 ## Contribution
+
+[How to contribute ?](./CONTRIBUTING.md)

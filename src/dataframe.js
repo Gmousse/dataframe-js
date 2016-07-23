@@ -1,4 +1,4 @@
-import { match, transpose, chain, iter, arrayEqual, saveFile, asArray } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
 import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnLengthsError } from './errors.js';
 import Row from './row.js';
 
@@ -80,8 +80,8 @@ class DataFrame {
             ],
             [
                 (value) => (value instanceof Array),
-                () => this._fromArray(data, columns ? columns : Object.keys(
-                    asArray(data.reduce((p, n) => asArray(p).length > asArray(n).length ? p : n)))
+                () => this._fromArray(data, columns ? columns :
+                     [...new Set(data.map(row => Object.keys(row)).reduce((p, n) => [...p, ...n]))]
                 ),
             ],
             [
@@ -255,6 +255,17 @@ class DataFrame {
      */
     countValue(valueToCount, columnName = this[__columns__][0]) {
         return this.filter(row => row.get(columnName) === valueToCount).count();
+    }
+
+    /**
+     * Push new rows into the DataFrame.
+     * @param {Array | Row} rows The rows to add.
+     * @returns {DataFrame} A new DataFrame with the new rows.
+     * @example
+      * df.push([1,2,3], [1,4,9])
+     */
+    push(...rows) {
+        return this.union(new DataFrame(rows, this[__columns__]));
     }
 
     /**
@@ -449,23 +460,74 @@ class DataFrame {
     }
 
     /**
-     * Filter DataFrame rows. /!\ Prefer to use .chain().
-     * @param {Function} func A function sending a boolean taking the row as parameter.
+     * Filter DataFrame rows.
+     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object.
      * @returns {DataFrame} A new filtered DataFrame.
+     * @example
+     * df.filter(
+    *      line => line.get('column1') >= 3
+     * ).show();
+     *
+     * | column1   | column2   | column3   |
+     * ------------------------------------
+     * | 3         | 5         | undefined |
+     *
+     * df.filter(
+    *      {'column2': 5, 'column1': 3}
+     * ).show();
+     *
+     * | column1   | column2   | column3   |
+     * ------------------------------------
+     * | 3         | 5         | undefined |
      */
-    filter(func) {
+    filter(condition) {
+        const func = typeof condition === 'object' ?
+            row => Object.entries(condition).map(([column, value]) => Object.is(row.get(column), value)).reduce((p, n) => p && n)
+        : condition;
         const filteredRows = [...iter(this[__rows__], row => func(row) ? row : false)];
         return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
     }
 
     /**
-     * Filter DataFrame rows. /!\ Prefer to use .chain().
-     * Alias of .filter()
-     * @param {Function} func A function sending a boolean taking the row as parameter.
-     * @returns {DataFrame} A new filtered DataFrame.
+     * Find a row (the first met) based on a condition.
+     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object..
+     * @returns {Row} The targeted Row.
+     * @example
+     * df.find(
+    *      line => line.get('column1') == 3
+     * );
+     * df.find(
+    *      {'id': 958998}
+     * );
      */
-    where(func) {
-        this.filter(func);
+    find(condition) {
+        return this.filter(condition)[__rows__][0];
+    }
+
+    /**
+     * Filter DataFrame rows.
+     * Alias of .filter()
+     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object.
+     * @returns {DataFrame} A new filtered DataFrame.
+     * @example
+     * df.filter(
+    *      line => line.get('column1') >= 3
+     * ).show();
+     *
+     * | column1   | column2   | column3   |
+     * ------------------------------------
+     * | 3         | 5         | undefined |
+     *
+     * df.filter(
+    *      {'column2': 5, 'column1': 3}
+     * ).show();
+     *
+     * | column1   | column2   | column3   |
+     * ------------------------------------
+     * | 3         | 5         | undefined |
+     */
+    where(condition) {
+        return this.filter(condition);
     }
 
     /**

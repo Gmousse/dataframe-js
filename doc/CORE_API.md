@@ -28,6 +28,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.transpose()](#DataFrame+transpose) ⇒ <code>ÐataFrame</code>
     * [.count()](#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
+    * [.push(...rows)](#DataFrame+push) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.replace(value, replacment, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
     * [.unique(columnName)](#DataFrame+unique) ⇒ <code>Array</code>
@@ -38,8 +39,9 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.rename(newColumnNames)](#DataFrame+rename) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.drop(columnName)](#DataFrame+drop) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.chain(...funcs)](#DataFrame+chain) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.filter(func)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.where(func)](#DataFrame+where) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.filter(condition)](#DataFrame+filter) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.find(condition)](#DataFrame+find) ⇒ <code>[Row](#Row)</code>
+    * [.where(condition)](#DataFrame+where) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.map(func)](#DataFrame+map) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.reduce(func, [init])](#DataFrame+reduce) ⇒
     * [.reduceRight(func, [init])](#DataFrame+reduceRight) ⇒
@@ -246,6 +248,22 @@ df.countValue(5, 'column2')
 df.select('column1').countValue(5)
 
 0
+```
+<a name="DataFrame+push"></a>
+
+### dataFrame.push(...rows) ⇒ <code>[DataFrame](#DataFrame)</code>
+Push new rows into the DataFrame.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A new DataFrame with the new rows.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| ...rows | <code>Array</code> &#124; <code>[Row](#Row)</code> | The rows to add. |
+
+**Example**  
+```js
+df.push([1,2,3], [1,4,9])
 ```
 <a name="DataFrame+replace"></a>
 
@@ -471,20 +489,59 @@ df.chain(
 ```
 <a name="DataFrame+filter"></a>
 
-### dataFrame.filter(func) ⇒ <code>[DataFrame](#DataFrame)</code>
-Filter DataFrame rows. /!\ Prefer to use .chain().
+### dataFrame.filter(condition) ⇒ <code>[DataFrame](#DataFrame)</code>
+Filter DataFrame rows.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
 **Returns**: <code>[DataFrame](#DataFrame)</code> - A new filtered DataFrame.  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | A function sending a boolean taking the row as parameter. |
+| condition | <code>function</code> | A function sending a boolean taking the row as parameter or a column/value object. |
 
+**Example**  
+```js
+df.filter(
+     line => line.get('column1') >= 3
+).show();
+
+| column1   | column2   | column3   |
+------------------------------------
+| 3         | 5         | undefined |
+
+df.filter(
+     {'column2': 5, 'column1': 3}
+).show();
+
+| column1   | column2   | column3   |
+------------------------------------
+| 3         | 5         | undefined |
+```
+<a name="DataFrame+find"></a>
+
+### dataFrame.find(condition) ⇒ <code>[Row](#Row)</code>
+Find a row (the first met) based on a condition.
+
+**Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
+**Returns**: <code>[Row](#Row)</code> - The targeted Row.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| condition | <code>function</code> | A function sending a boolean taking the row as parameter or a column/value object.. |
+
+**Example**  
+```js
+df.find(
+     line => line.get('column1') == 3
+);
+df.find(
+     {'id': 958998}
+);
+```
 <a name="DataFrame+where"></a>
 
-### dataFrame.where(func) ⇒ <code>[DataFrame](#DataFrame)</code>
-Filter DataFrame rows. /!\ Prefer to use .chain().
+### dataFrame.where(condition) ⇒ <code>[DataFrame](#DataFrame)</code>
+Filter DataFrame rows.
 Alias of .filter()
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -492,8 +549,26 @@ Alias of .filter()
 
 | Param | Type | Description |
 | --- | --- | --- |
-| func | <code>function</code> | A function sending a boolean taking the row as parameter. |
+| condition | <code>function</code> | A function sending a boolean taking the row as parameter or a column/value object. |
 
+**Example**  
+```js
+df.filter(
+     line => line.get('column1') >= 3
+).show();
+
+| column1   | column2   | column3   |
+------------------------------------
+| 3         | 5         | undefined |
+
+df.filter(
+     {'column2': 5, 'column1': 3}
+).show();
+
+| column1   | column2   | column3   |
+------------------------------------
+| 3         | 5         | undefined |
+```
 <a name="DataFrame+map"></a>
 
 ### dataFrame.map(func) ⇒ <code>[DataFrame](#DataFrame)</code>
