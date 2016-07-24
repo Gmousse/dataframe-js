@@ -29,7 +29,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * [.count()](#DataFrame+count) ⇒ <code>Int</code>
     * [.countValue(valueToCount, [columnName])](#DataFrame+countValue) ⇒ <code>Int</code>
     * [.push(...rows)](#DataFrame+push) ⇒ <code>[DataFrame](#DataFrame)</code>
-    * [.replace(value, replacment, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
+    * [.replace(value, replacement, [...columnNames])](#DataFrame+replace) ⇒ <code>[DataFrame](#DataFrame)</code>
     * [.distinct(columnName)](#DataFrame+distinct) ⇒ <code>Array</code>
     * [.unique(columnName)](#DataFrame+unique) ⇒ <code>Array</code>
     * [.listColumns()](#DataFrame+listColumns) ⇒ <code>Array</code>
@@ -267,7 +267,7 @@ df.push([1,2,3], [1,4,9])
 ```
 <a name="DataFrame+replace"></a>
 
-### dataFrame.replace(value, replacment, [...columnNames]) ⇒ <code>[DataFrame](#DataFrame)</code>
+### dataFrame.replace(value, replacement, [...columnNames]) ⇒ <code>[DataFrame](#DataFrame)</code>
 Replace a value by another in the DataFrame or in a column.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -276,8 +276,8 @@ Replace a value by another in the DataFrame or in a column.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | value |  |  | The value to replace. |
-| replacment |  |  | The new value. |
-| [...columnNames] | <code>String</code> | <code>this[__columns__]</code> | The columns to apply the replacment. |
+| replacement |  |  | The new value. |
+| [...columnNames] | <code>String</code> | <code>this[__columns__]</code> | The columns to apply the replacement. |
 
 <a name="DataFrame+distinct"></a>
 
