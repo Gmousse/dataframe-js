@@ -3,7 +3,7 @@
 
 ## Presentation
 
-dataframe-js provides another way to work with data by using DataFrame, a powerfull data structure already used in some languages (Spark, Python, R, ...).
+dataframe-js provides another way to work with data in javascript (browser or nodejs) by using DataFrame, a powerfull data structure already used in some languages (Spark, Python, R, ...).
 
 A DataFrame is simply built on two concepts:
 - **Columns** providing ways to select your data and reorganize them.
