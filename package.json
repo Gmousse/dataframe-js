@@ -1,14 +1,19 @@
 {
   "name": "dataframe-js",
-  "version": "0.2.0",
-  "description": "dataframe-js is a library providing another way to work with data with DataFrame, a modern data structure.",
-  "description": ["DataFrame", "data", "immutable", "sql", "structured", "wrangling"],
+  "version": "0.2.1",
+  "description": [
+    "DataFrame",
+    "data",
+    "immutable",
+    "sql",
+    "structured",
+    "wrangling"
+  ],
   "homepage": "https://github.com/Gmousse/dataframe-js",
   "bugs": "https://github.com/Gmousse/dataframe-js/issues",
-  "repository" :
-  {
-    "type" : "git",
-    "url" : "https://github.com/Gmousse/dataframe-js.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gmousse/dataframe-js.git"
   },
   "main": "./lib",
   "scripts": {
@@ -19,9 +24,9 @@
     "prepublish": "npm run build"
   },
   "author": {
-      "name": "Guillaume Mousnier",
-      "email": "mousnier.guillaume@gmail.com",
-      "url": "https://twitter.com/DatMousse"
+    "name": "Guillaume Mousnier",
+    "email": "mousnier.guillaume@gmail.com",
+    "url": "https://twitter.com/DatMousse"
   },
   "license": "MIT",
   "devDependencies": {
