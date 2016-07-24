@@ -10,10 +10,6 @@ const __rows__ = Symbol('rows');
  */
 class DataFrame {
 
-    static setDefaultModules(...modules) {
-        DataFrame.defaultModules = modules;
-    }
-
     /**
      * Create a new DataFrame.
      * @param {Array | Object | DataFrame} data The data of the DataFrame.
@@ -888,7 +884,6 @@ class DataFrame {
             ),
         ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
-
 }
 
 export default DataFrame;
