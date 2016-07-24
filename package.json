@@ -1,7 +1,15 @@
 {
   "name": "dataframe-js",
   "version": "0.2.0",
-  "description": "",
+  "description": "dataframe-js is a library providing another way to work with data with DataFrame, a modern data structure.",
+  "description": ["DataFrame", "data", "immutable", "sql", "structured", "wrangling"],
+  "homepage": "https://github.com/Gmousse/dataframe-js",
+  "bugs": "https://github.com/Gmousse/dataframe-js/issues",
+  "repository" :
+  {
+    "type" : "git",
+    "url" : "https://github.com/Gmousse/dataframe-js.git"
+  },
   "main": "./lib",
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
@@ -10,7 +18,11 @@
     "lint": "eslint -c .eslintrc ./src",
     "prepublish": "npm run build"
   },
-  "author": "Guillaume Mousnier",
+  "author": {
+      "name": "Guillaume Mousnier",
+      "email": "mousnier.guillaume@gmail.com",
+      "url": "https://twitter.com/DatMousse"
+  },
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.3.15",
