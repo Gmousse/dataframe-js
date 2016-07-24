@@ -271,13 +271,13 @@ class DataFrame {
     /**
      * Replace a value by another in the DataFrame or in a column.
      * @param value The value to replace.
-     * @param replacment The new value.
-     * @param {...String} [columnNames=this[__columns__]] The columns to apply the replacment.
+     * @param replacement The new value.
+     * @param {...String} [columnNames=this[__columns__]] The columns to apply the replacement.
      * @returns {DataFrame} A new DataFrame with replaced values.
      */
-    replace(value, replacment, ...columnNames) {
+    replace(value, replacement, ...columnNames) {
         return this.map(row => (columnNames.length > 0 ? columnNames : this[__columns__]).reduce(
-                (p, n) => p.get(n) === value ? p.set(n, replacment) : p, row
+                (p, n) => p.get(n) === value ? p.set(n, replacement) : p, row
             ));
     }
 
