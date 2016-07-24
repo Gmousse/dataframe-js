@@ -2,6 +2,17 @@
 
 ---
 
+## v0.2.2
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Removing jquery in dependencies
+
+---
+
 ## v0.2.1
 
 **Author**: Guillaume Mousnier.
