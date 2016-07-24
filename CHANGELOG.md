@@ -2,6 +2,18 @@
 
 ---
 
+## v0.2.4
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Correcting (maybe more an alternative) for babel related static method error.
+- Adding webpack to compile browser version.
+
+---
+
 ## v0.2.3
 
 **Author**: Guillaume Mousnier.
