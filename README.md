@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.2.3**
+**v0.2.4**
 
 ## Presentation
 
@@ -236,10 +236,10 @@ const df2 = df.withColumn('column4', (row) => row.get('column2') * 2)
 df.fakemodule.test(8)
 ```
 
-If you want to change default modules (modules enabled in each DataFrame instance, such as Matrix and Stat) you can define them by a static method:
+If you want to change default modules (modules enabled in each DataFrame instance, such as Matrix and Stat) you can define them by a static property:
 
 ```javascript
-DataFrame.setDefaultModules(fakeModule, Matrix);
+DataFrame.defaultModules = [fakeModule, Matrix];
 ```
 
 If you want to create your own module, take a look at the Statisticical module (integrated by default) `./src/modules/stat.js` as example.
