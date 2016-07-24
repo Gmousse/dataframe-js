@@ -2,6 +2,18 @@
 
 ---
 
+## v0.2.3
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Adding minify version of the compiled code.
+- PR from GuillaumeAmat: https://github.com/Gmousse/dataframe-js/pull/1
+
+---
+
 ## v0.2.2
 
 **Author**: Guillaume Mousnier.
