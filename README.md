@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.2.5**
+**v0.2.6**
 
 ## Presentation
 
@@ -52,6 +52,8 @@ To use dataframe-js, simply import the library. Then you can use DataFrame, Row 
 ```javascript
 import { DataFrame, Row } from 'dataframe-js';
 ```
+
+**In browser:** you can use directly DataFrame or row with: `dfjs.DataFrame` or `dfjs.Row`. 
 
 To create a DataFrame, you have to pass your data and your column names. You can use different data structures as below:
 
