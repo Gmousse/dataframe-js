@@ -270,7 +270,10 @@ test('DataFrame rows can be', (assert) => {
         ], 'filtered by passing a column/value object'
     );
     assert.deepEqual(
-        df.find({column1: 6}).toArray(), [6, '4', undefined], 'found and returned'
+        df.find({column1: 6}).toArray(), [6, '4', undefined], 'found a row and returned it'
+    );
+    assert.deepEqual(
+        df.find({column1: 12}), undefined, 'found nothing and returned undefined'
     );
     assert.deepEqual(
         df.map((line) => line.set('column1', 3)).toArray(), [
