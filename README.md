@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.2.4**
+**v0.2.5**
 
 ## Presentation
 
@@ -30,11 +30,12 @@ df.show()
 **DataFrame is modulable** because you can use additional modules (Stat and Matrix by default) or create your own.
 
 ## Installation
-via git:
-`npm install git+https://github.com/Gmousse/dataframe-js.git`
+via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 
-via npm:
-`npm install dataframe-js`
+via npm: `npm install dataframe-js`
+
+in brower: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
+with minified: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
 
 ## Manual
 
