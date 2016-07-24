@@ -2,6 +2,18 @@
 
 ---
 
+## v0.2.6
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Just some docs.
+
+
+---
+
 ## v0.2.5
 
 **Author**: Guillaume Mousnier.
