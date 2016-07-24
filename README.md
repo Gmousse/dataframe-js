@@ -30,8 +30,11 @@ df.show()
 **DataFrame is modulable** because you can use additional modules (Stat and Matrix by default) or create your own.
 
 ## Installation
+via git:
+`npm install git+https://github.com/Gmousse/dataframe-js.git`
 
-`npm install git+http://93.15.96.71:10080/odin/dataframe-js.git#feature/begin`
+via npm:
+`npm install dataframe-js`
 
 ## Manual
 
