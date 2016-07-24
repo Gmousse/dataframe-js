@@ -2,6 +2,17 @@
 
 ---
 
+## v0.2.5
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Correcting commonjs lib.
+
+---
+
 ## v0.2.4
 
 **Author**: Guillaume Mousnier.

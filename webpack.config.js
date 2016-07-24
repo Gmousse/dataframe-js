@@ -2,7 +2,8 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: __dirname,
-        filename: './lib/dataframe.js',
+        filename: './lib/browser/dataframe.js',
+        library: 'dfjs',
     },
     node: {
         fs: 'empty',
