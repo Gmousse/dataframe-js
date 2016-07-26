@@ -2,6 +2,19 @@
 
 ---
 
+## v0.2.7
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Updating keywords and presentation.
+
+
+
+---
+
 ## v0.2.6
 
 **Author**: Guillaume Mousnier.

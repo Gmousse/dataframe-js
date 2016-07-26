@@ -1,13 +1,15 @@
 {
   "name": "dataframe-js",
-  "version": "0.2.6",
-  "description": [
+  "version": "0.2.7",
+  "description": "Immutable and sql-like data structure",
+  "keywords": [
     "DataFrame",
     "data",
     "immutable",
     "sql",
     "structured",
-    "wrangling"
+    "wrangling",
+    "datascience"
   ],
   "homepage": "https://github.com/Gmousse/dataframe-js",
   "bugs": "https://github.com/Gmousse/dataframe-js/issues",
