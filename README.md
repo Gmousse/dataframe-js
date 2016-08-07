@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.2.7**
+**v0.2.8**
 
 ## Presentation
 
@@ -34,8 +34,9 @@ via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 
 via npm: `npm install dataframe-js`
 
-in brower: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
-with minified: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
+in browser: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
+
+in browser with minified version: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
 
 ## Manual
 
