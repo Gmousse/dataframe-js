@@ -10,6 +10,8 @@ const __rows__ = Symbol('rows');
  */
 class DataFrame {
 
+    static defaultModules = [];
+
     /**
      * Create a new DataFrame.
      * @param {Array | Object | DataFrame} data The data of the DataFrame.
