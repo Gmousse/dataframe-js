@@ -7,26 +7,40 @@ const REPLACMENTS = [
 ];
 
 const OPERATORS_HANDLER = {
-    '=': (a, b) => a === b,
-    '>': (a, b) => a > b,
-    '<': (a, b) => a < b,
+    'IN': (a, b) => b.includes(a),
+    'LIKE': (a, b) => b.includes(a) || a.includes(b),
     '>=': (a, b) => a >= b,
     '<=': (a, b) => a <= b,
     '!=': (a, b) => a !== b,
-    'BETWEEN': (a, b, c) => a >= b && a <= c,
-    'LIKE': (a, b) => b.includes(a) || a.includes(b),
-    'IN': (a, b) => b.includes(a),
+    '<': (a, b) => a < b,
+    '>': (a, b) => a > b,
+    '=': (a, b) => a === b,
     'AND': (a, b) => a && b,
     'OR': (a, b) => a || b,
 };
 
+function xSplit(stringToSplit, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.map(str => str.split(next)).reduce((p, n) => [...p, ...n], []),
+        [stringToSplit]
+    );
+}
+
+function xContains(stringWhereFind, ...patterns) {
+    return patterns.filter(pattern => stringWhereFind.includes(pattern));
+}
+
 const OPERATIONS_HANDLER = {
     'WHERE': (operation) => {
-        return (df) => df.filter((row) => operation.forEach((word, index) => {
-            if (OPERATORS_HANDLER[word.toUpperCase()]) {
-                OPERATORS_HANDLER[word.toUpperCase()](row.get(operation[index - 1]), operation[index + 1])
-            }
-        }));
+        const operationalTerms = xSplit(operation.join(' '), ' AND ', ' OR ');
+        return df => df.filter(row => {
+            const conditionalOperators = operation.filter(term => ['AND', 'OR'].includes(term.toUpperCase()));
+            return operationalTerms.map(operationalTerm => {
+                const operatorToApply = xContains(operationalTerm, ...Object.keys(OPERATORS_HANDLER))[0];
+                const terms = operationalTerm.replace(' ', '').split(operatorToApply);
+                return OPERATORS_HANDLER[operatorToApply](row.get(terms[0]), terms[1]);
+            }).reduce((prev, next) => OPERATORS_HANDLER[conditionalOperators.shift()](prev, next));
+        });
     },
     'JOIN': (operation) => {},
     'INNERJOIN': (operation) => {},
@@ -50,14 +64,14 @@ function sqlSplitter(query) {
     const splittedQuery = replaceTermsInQuery(query).split(' ');
     const fromLoc = splittedQuery.findIndex(word => word.toUpperCase() === 'FROM');
     return {
-        select: splittedQuery.slice(0, fromLoc),
+        selections: splittedQuery.slice(0, fromLoc),
         table: splittedQuery[fromLoc + 1],
         operations: splittedQuery.slice(fromLoc + 2, splittedQuery.length),
     };
 }
 
 function sqlParser(query, tables) {
-    const {select, table, operations} = sqlSplitter(query);
+    const {selections, table, operations} = sqlSplitter(query);
     const operationTypes = Object.keys(OPERATIONS_HANDLER);
     const operationsLoc = operations.map(
         (word, index) => operationTypes.includes(word.toUpperCase()) ? index : undefined
@@ -71,11 +85,9 @@ function sqlParser(query, tables) {
         }
     );
 
-    console.log(splittedOperations.toString());
 
-    const applyOperations = (x) => x;
+    const applyOperations = splittedOperations.reduce((prev, next) => (df) => next(prev(df)), (df) => df)
     const applySelections = (x) => x;
-
     return applySelections(applyOperations(tables[table]));
 }
 
