@@ -21,10 +21,11 @@ test('DataFrame sql module can ', (assert) => {
 
     df2.sql.register('tmp2');
 
-
     console.log(DataFrame.sql.listTables());
 
-    console.log(DataFrame.sql.request('SELECT * FROM tmp2 WHERE test >= 2 AND truc != 4'));
+    DataFrame.sql.request('SELECT * FROM tmp2').show();
+    DataFrame.sql.request('SELECT * FROM tmp2 WHERE column2 >= 2 AND column3 != 1').show();
+
 
 
     assert.end();
