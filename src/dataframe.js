@@ -732,7 +732,7 @@ class DataFrame {
      * @param {String} [how='full'] The join mode. Can be: full, inner, outer, left, right.
      * @returns {DataFrame} The joined DataFrame.
      */
-    join(dfToJoin, on, how = 'full') {
+    join(dfToJoin, on, how = 'inner') {
         const joinMethods = {
             inner: () => this.innerJoin(dfToJoin, on),
             full: () => this.fullJoin(dfToJoin, on),

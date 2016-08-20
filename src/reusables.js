@@ -60,3 +60,21 @@ export function saveFile(path, content) {
         }
     });
 }
+
+export function xSplit(stringToSplit, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.map(str => str.split(next)).reduce((p, n) => [...p, ...n], []),
+        [stringToSplit]
+    );
+}
+
+export function xReplace(stringToReplace, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.replace(next[0], next[1]),
+        [stringToReplace]
+    );
+}
+
+export function xContains(stringWhereFind, ...patterns) {
+    return patterns.filter(pattern => stringWhereFind.includes(pattern));
+}

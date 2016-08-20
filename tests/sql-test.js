@@ -5,16 +5,16 @@ import { DataFrame } from '../src/index.js';
 
 test('DataFrame sql module can ', (assert) => {
     const df = new DataFrame({
-        column1: [3, 6, 8],
-        column2: [3, 4, 9],
-        column3: [0, 0, 0],
-    }, ['column1', 'column2', 'column3']);
+        id: [3, 6, 8],
+        column1: [3, 4, 9],
+        column2: [0, 0, 0],
+    }, ['id', 'column1', 'column2']);
 
     const df2 = new DataFrame({
-        column1: [1, 0, 8],
-        column2: [2, 1, 12],
-        column3: [6, 1, -1],
-    }, ['column1', 'column2', 'column3']);
+        id: [1, 0, 8],
+        column3: [2, 1, 12],
+        column4: [6, 1, -1],
+    }, ['id', 'column3', 'column3']);
 
 
     df.sql.register('tmp');
@@ -23,9 +23,12 @@ test('DataFrame sql module can ', (assert) => {
 
     console.log(DataFrame.sql.listTables());
 
-    DataFrame.sql.request('SELECT * FROM tmp2').show();
-    DataFrame.sql.request('SELECT * FROM tmp2 WHERE column2 >= 2 AND column3 != 1').show();
-    DataFrame.sql.request('SELECT column1, column2 FROM tmp2 WHERE column2 >= 2 AND column3 != 1').show();
+    DataFrame.sql.request('SELECT * FROM tmp').show();
+    DataFrame.sql.request('SELECT * FROM tmp WHERE column1 >= 2 AND column2 != 1').show();
+    DataFrame.sql.request('SELECT column1, column2 FROM tmp WHERE column1 >= 2 AND column2 != 1').show();
+    DataFrame.sql.request('SELECT * FROM tmp').show();
+    DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id').show();
+    DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id WHERE column1 != undefined').show();
 
     assert.end();
 });
