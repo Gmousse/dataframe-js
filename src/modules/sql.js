@@ -1,3 +1,5 @@
+import { xContains, xSplit } from '../reusables.js';
+
 
 const REPLACMENTS = [
     ['INNER JOIN', 'INNERJOIN'],
@@ -19,24 +21,6 @@ const OPERATORS_HANDLER = {
     'OR': (a, b) => a || b,
 };
 
-function xSplit(stringToSplit, ...patterns) {
-    return patterns.reduce(
-        (prev, next) => prev.map(str => str.split(next)).reduce((p, n) => [...p, ...n], []),
-        [stringToSplit]
-    );
-}
-
-function xReplace(stringToReplace, ...patterns) {
-    return patterns.reduce(
-        (prev, next) => prev.replace(next[0], next[1]),
-        [stringToReplace]
-    );
-}
-
-function xContains(stringWhereFind, ...patterns) {
-    return patterns.filter(pattern => stringWhereFind.includes(pattern));
-}
-
 const OPERATIONS_HANDLER = {
     'WHERE': (operation) => {
         const operationalTerms = xSplit(operation.join(' '), ' AND ', ' OR ');
@@ -45,15 +29,17 @@ const OPERATIONS_HANDLER = {
             return operationalTerms.map(operationalTerm => {
                 const operatorToApply = xContains(operationalTerm, ...Object.keys(OPERATORS_HANDLER))[0];
                 const terms = operationalTerm.replace(' ', '').split(operatorToApply);
-                return OPERATORS_HANDLER[operatorToApply](row.get(terms[0]), terms[1]);
+                return OPERATORS_HANDLER[operatorToApply](row.get(terms[0]), eval(terms[1]));
             }).reduce((prev, next) => OPERATORS_HANDLER[conditionalOperators.shift()](prev, next));
         });
     },
-    'JOIN': (operation) => {},
-    'INNERJOIN': (operation) => {},
-    'LEFTJOIN': (operation) => {},
-    'RIGHTJOIN': (operation) => {},
-    'FULLJOIN': (operation) => {},
+    'JOIN': (operation, tables) => df => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1]
+    ),
+    'INNERJOIN': (operation, tables) => {},
+    'LEFTJOIN': (operation, tables) => {},
+    'RIGHTJOIN': (operation, tables) => {},
+    'FULLJOIN': (operation, tables) => {},
     'UNION': (operation) => {},
 };
 
@@ -77,7 +63,7 @@ function sqlSplitter(query) {
     };
 }
 
-function parseOperations(operations) {
+function parseOperations(operations, tables) {
     const operationTypes = Object.keys(OPERATIONS_HANDLER);
     const operationsLoc = operations.map(
         (word, index) => operationTypes.includes(word.toUpperCase()) ? index : undefined
@@ -86,7 +72,8 @@ function parseOperations(operations) {
     const splittedOperations = operationsLoc.map(
         (loc, index) => {
             return OPERATIONS_HANDLER[operations[loc].toUpperCase()](
-                operations.slice(loc + 1, operationsLoc[index + 1] ? operationsLoc[index + 1] : operations.length)
+                operations.slice(loc + 1, operationsLoc[index + 1] ? operationsLoc[index + 1] : operations.length),
+                tables
             );
         }
     );
@@ -105,8 +92,7 @@ function parseSelections(selections) {
 
 function sqlParser(query, tables) {
     const {selections, table, operations} = sqlSplitter(query);
-
-    const applyOperations = parseOperations(operations);
+    const applyOperations = parseOperations(operations, tables);
     const applySelections = parseSelections(selections);
     return applySelections(applyOperations(tables[table]));
 }
