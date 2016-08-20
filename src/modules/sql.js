@@ -26,6 +26,13 @@ function xSplit(stringToSplit, ...patterns) {
     );
 }
 
+function xReplace(stringToReplace, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.replace(next[0], next[1]),
+        [stringToReplace]
+    );
+}
+
 function xContains(stringWhereFind, ...patterns) {
     return patterns.filter(pattern => stringWhereFind.includes(pattern));
 }
@@ -70,8 +77,7 @@ function sqlSplitter(query) {
     };
 }
 
-function sqlParser(query, tables) {
-    const {selections, table, operations} = sqlSplitter(query);
+function parseOperations(operations) {
     const operationTypes = Object.keys(OPERATIONS_HANDLER);
     const operationsLoc = operations.map(
         (word, index) => operationTypes.includes(word.toUpperCase()) ? index : undefined
@@ -85,9 +91,23 @@ function sqlParser(query, tables) {
         }
     );
 
+    return splittedOperations.reduce((prev, next) => (df) => next(prev(df)), (df) => df);
+}
 
-    const applyOperations = splittedOperations.reduce((prev, next) => (df) => next(prev(df)), (df) => df)
-    const applySelections = (x) => x;
+function parseSelections(selections) {
+    if (selections[0].toUpperCase() !== 'SELECT') {
+        throw new Error('YOUR QUERY SHOULD BEGIN WITH SELECT KEYWORD');
+    }
+    selections.shift();
+    const columnsToSelect = selections.join(' ').replace(' ', '').split(',');
+    return columnsToSelect.includes('*') ? df => df : df => df.select(...columnsToSelect);
+}
+
+function sqlParser(query, tables) {
+    const {selections, table, operations} = sqlSplitter(query);
+
+    const applyOperations = parseOperations(operations);
+    const applySelections = parseSelections(selections);
     return applySelections(applyOperations(tables[table]));
 }
 

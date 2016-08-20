@@ -25,8 +25,7 @@ test('DataFrame sql module can ', (assert) => {
 
     DataFrame.sql.request('SELECT * FROM tmp2').show();
     DataFrame.sql.request('SELECT * FROM tmp2 WHERE column2 >= 2 AND column3 != 1').show();
-
-
+    DataFrame.sql.request('SELECT column1, column2 FROM tmp2 WHERE column2 >= 2 AND column3 != 1').show();
 
     assert.end();
 });
