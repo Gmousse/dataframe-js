@@ -36,11 +36,21 @@ const OPERATIONS_HANDLER = {
     'JOIN': (operation, tables) => df => df.join(
         tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1]
     ),
-    'INNERJOIN': (operation, tables) => {},
-    'LEFTJOIN': (operation, tables) => {},
-    'RIGHTJOIN': (operation, tables) => {},
-    'FULLJOIN': (operation, tables) => {},
-    'UNION': (operation) => {},
+    'INNERJOIN': (operation, tables) => df => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'inner'
+    ),
+    'LEFTJOIN': (operation, tables) => df => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'left'
+    ),
+    'RIGHTJOIN': (operation, tables) => df => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'right'
+    ),
+    'FULLJOIN': (operation, tables) => df => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'full'
+    ),
+    'UNION': (operation, tables) => df => df.union(
+        operation[0].toUpperCase().includes('SELECT') ? sqlParser(operation.join(' '), tables) : tables[operation[0]]
+    ),
 };
 
 function replaceTermsInQuery(query) {
@@ -86,11 +96,15 @@ function parseSelections(selections) {
         throw new Error('YOUR QUERY SHOULD BEGIN WITH SELECT KEYWORD');
     }
     selections.shift();
-    const columnsToSelect = selections.join(' ').replace(' ', '').split(',');
-    return columnsToSelect.includes('*') ? df => df : df => df.select(...columnsToSelect);
+    const columnsToSelect = selections.join(' ').split(',');
+    const selectionsToApply = columnsToSelect.includes('*') ? df => df : df => df.select(...columnsToSelect.map(column => column.split(' AS ')[0].replace(' ', '')));
+    return columnsToSelect.find(column => column.includes('AS')) ? df => selectionsToApply(df).rename(
+        columnsToSelect.map(column => column.includes('AS') ? column.split('AS')[1] : column)
+    ) : selectionsToApply;
 }
 
 function sqlParser(query, tables) {
+    console.log(query);
     const {selections, table, operations} = sqlSplitter(query);
     const applyOperations = parseOperations(operations, tables);
     const applySelections = parseSelections(selections);
