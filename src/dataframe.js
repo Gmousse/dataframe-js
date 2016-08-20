@@ -42,7 +42,7 @@ class DataFrame {
      * const dfFromDF = new DataFrame(dfFromArrayOfArrays);
      */
     constructor(data, columns, ...modules) {
-        [this[__rows__], this[__columns__]] = this._build(data, columns);
+        [this[__rows__], this[__columns__]] = this._build(data, this._dropSpacesInColumnNames(columns));
         this.modules = DataFrame.defaultModules ? [...DataFrame.defaultModules, ...modules] : modules;
         Object.assign(this, ...this.__instanciateModules__(this.modules));
     }
@@ -55,10 +55,12 @@ class DataFrame {
 
     __newInstance__(data, columns) {
         if (!arrayEqual(columns, this[__columns__]) || !(data[0] instanceof Row)) {
-            return new DataFrame(data, columns, ...this.modules);
+            return new DataFrame(data, this._dropSpacesInColumnNames(columns), ...this.modules);
         }
         const newInstance = Object.assign(
-            Object.create(Object.getPrototypeOf(this)), this, {[__rows__]: [...data], [__columns__]: [...columns]}
+            Object.create(
+                Object.getPrototypeOf(this)
+            ), this, {[__rows__]: [...data], [__columns__]: [...this._dropSpacesInColumnNames(columns)]}
         );
         return Object.assign(newInstance, ...this.__instanciateModules__(this.modules, newInstance));
     }
@@ -68,6 +70,10 @@ class DataFrame {
             const pluginInstance = new Plugin(df ? df : this);
             return {[pluginInstance.name]: pluginInstance};
         });
+    }
+
+    _dropSpacesInColumnNames(columns) {
+        return columns ? columns.map(column => String(column).replace(' ', '')) : columns;
     }
 
     _build(data, columns) {
@@ -188,7 +194,11 @@ class DataFrame {
     show(rows = 10, quiet = false) {
         const makeRow = (row) => (
             `| ${row.map(
-                column => String(column).substring(0, 10) + Array(10 - String(column).length).join(' ')
+                column => {
+                    const columnAsString = String(column);
+                    return columnAsString.length > 9 ? columnAsString.substring(0, 6) + '...' :
+                        columnAsString + Array(10 - columnAsString.length).join(' ');
+                }
             ).join(' | ')} |`
         );
         const header = makeRow(this[__columns__]);
