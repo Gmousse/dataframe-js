@@ -61,3 +61,11 @@ export class WrongMatrixStructureError extends Error {
         this.name = 'WrongMatrixStructureError';
     }
 }
+
+export class SQLParseError extends Error {
+    constructor(message) {
+        super();
+        this.message = `SQLParseError: ${message}`;
+        this.name = 'SQLParseError';
+    }
+}

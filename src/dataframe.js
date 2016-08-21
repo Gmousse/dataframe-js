@@ -421,11 +421,30 @@ class DataFrame {
      *
      * ['column1', 'column3', 'column4']
      */
-    rename(newColumnNames) {
+    renameAll(newColumnNames) {
         if (newColumnNames.length !== this[__columns__].length) {
             throw new NotTheSameColumnLengthsError(newColumnNames.length, this[__columns__].length);
         }
         return this.__newInstance__(this[__rows__].map(row => row.toArray()), newColumnNames);
+    }
+
+    /**
+     * Rename a column.
+     * @param {String} columnName The column to rename.
+     * @param {String} alias The new name for the column.
+     * @returns {DataFrame} A new DataFrame with the new column name.
+     * @example
+     * df.listColumns()
+     *
+     * ['column1', 'column2', 'column3']
+     *
+     * df.rename('column1', 'columnRenamed').listColumns()
+     *
+     * ['columnRenamed', 'column3', 'column4']
+     */
+    rename(columnName, alias) {
+        const newColumnNames = this.listColumns().map(column => column === columnName ? alias : column);
+        return this.renameAll(newColumnNames);
     }
 
     /**
