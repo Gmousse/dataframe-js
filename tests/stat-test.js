@@ -11,10 +11,16 @@ test('DataFrame stat module can ', (assert) => {
     }, ['column1', 'column2', 'column3']);
 
     assert.equal(
+        df.stat.sum('column1'), 17, 'compute the sum of a column.'
+    );
+    assert.equal(
+        df.stat.sum('column2'), 18, 'compute the sum a column ignoring non-numerical value.'
+    );
+    assert.equal(
         df.stat.max('column1'), 8, 'compute the maximal numeric value of a column.'
     );
     assert.equal(
-        df.stat.max('column2'), 6, 'compute the maximal value of a column ignoring non-numeric value.'
+        df.stat.max('column2'), 6, 'compute the maximal value of a column ignoring non-numerical value.'
     );
     assert.equal(
         df.stat.min('column1'), 3, 'compute the minimal numeric value of a column.'

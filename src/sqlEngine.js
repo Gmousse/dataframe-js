@@ -1,4 +1,5 @@
-import { xContains, xSplit, xReplace } from './reusables.js';
+import { match, xContains, xSplit, xReplace } from './reusables.js';
+import { SQLParseError } from './errors.js';
 
 const REPLACMENTS = [
     ['INNER JOIN', 'INNERJOIN'],
@@ -21,7 +22,18 @@ const WHERE_OPERATORS = {
 };
 
 const SELECT_FUNCTIONS = {
+    'COUNT': (df) => df.count(),
+    'SUM': (df, column) => df.stat.sum(column),
+    'MAX': (df, column) => df.stat.max(column),
+    'MIN': (df, column) => df.stat.min(column),
+    'AVG': (df, column) => df.stat.mean(column),
 };
+
+function joinHandler(operation, tables, type) {
+    return (df) => df.join(
+        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], type
+    );
+}
 
 const OPERATIONS_HANDLER = {
     'WHERE': (operation) => {
@@ -35,21 +47,11 @@ const OPERATIONS_HANDLER = {
             }).reduce((prev, next) => WHERE_OPERATORS[conditionalOperators.shift()](prev, next));
         });
     },
-    'JOIN': (operation, tables) => df => df.join(
-        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1]
-    ),
-    'INNERJOIN': (operation, tables) => df => df.join(
-        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'inner'
-    ),
-    'LEFTJOIN': (operation, tables) => df => df.join(
-        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'left'
-    ),
-    'RIGHTJOIN': (operation, tables) => df => df.join(
-        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'right'
-    ),
-    'FULLJOIN': (operation, tables) => df => df.join(
-        tables[operation[0]], operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1], 'full'
-    ),
+    'JOIN': (operation, tables) => joinHandler(operation, tables, 'inner'),
+    'INNERJOIN': (operation, tables) => joinHandler(operation, tables, 'inner'),
+    'LEFTJOIN': (operation, tables) => joinHandler(operation, tables, 'left'),
+    'RIGHTJOIN': (operation, tables) => joinHandler(operation, tables, 'right'),
+    'FULLJOIN': (operation, tables) => joinHandler(operation, tables, 'full'),
     'UNION': (operation, tables) => df => df.union(
         operation[0].toUpperCase().includes('SELECT') ? sqlParser(operation.join(' '), tables) : tables[operation[0]]
     ),
@@ -76,43 +78,56 @@ function sqlSplitter(query) {
 }
 
 function parseOperations(operations, tables) {
-    const operationTypes = Object.keys(OPERATIONS_HANDLER);
     const operationsLoc = operations.map(
-        (word, index) => operationTypes.includes(word.toUpperCase()) ? index : undefined
+        (word, index) => Object.keys(OPERATIONS_HANDLER).includes(word.toUpperCase()) ? index : undefined
     ).filter(loc => loc !== undefined);
 
-    const splittedOperations = operationsLoc.map(
-        (loc, index) => {
-            return OPERATIONS_HANDLER[operations[loc].toUpperCase()](
+    return operationsLoc.map(
+        (loc, index) => OPERATIONS_HANDLER[operations[loc].toUpperCase()](
                 operations.slice(loc + 1, operationsLoc[index + 1] ? operationsLoc[index + 1] : operations.length),
                 tables
-            );
-        }
-    );
-
-    return splittedOperations.reduce((prev, next) => (df) => next(prev(df)), (df) => df);
+        )
+    ).reduce((prev, next) => (df) => next(prev(df)), (df) => df);
 }
 
 function parseSelections(selections) {
     if (selections[0].toUpperCase() !== 'SELECT') {
-        throw new Error('Your query should begin with SELECT keyword.');
+        throw new SQLParseError('Your query should begin with SELECT keyword.');
     }
     selections.shift();
-    const columnsToSelect = selections.join(' ').split(',');
-
-    if (columnsToSelect[0].replace(' ', '') === '*') {
-        return df => df;
-    } else if (columnsToSelect[0].toUpperCase().includes('DISTINCT')) {
-        return df => df.distinct(xReplace(columnsToSelect[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', ''])).rename(
-            columnsToSelect[0].includes('AS') ? [columnsToSelect[0].split('AS')[1]] : [xReplace(columnsToSelect[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', ''])]
-        );
-    }
-    return df => (
-        df.select(
-            ...columnsToSelect.map(column => column.split(' AS ')[0].replace(' ', ''))
-        ).rename(
-            columnsToSelect.map(column => column.includes('AS') ? column.split('AS')[1] : column)
-        )
+    return match(selections.join(' ').split(','),
+        [
+            (value) => value[0].replace(' ', '') === '*',
+            () => (df) => df,
+        ],
+        [
+            (value) => value[0].toUpperCase().includes('DISTINCT'),
+            (value) => {
+                const columnName = xReplace(value[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', '']);
+                return (df) => df.distinct(columnName).rename(
+                    columnName, value[0].includes('AS') ? value[0].split('AS')[1] : columnName
+                );
+            },
+        ],
+        [
+            (value) => xContains(value[0].toUpperCase(), ...Object.keys(SELECT_FUNCTIONS))[0],
+            (value) => (df) => {
+                const functionToApply = Object.keys(SELECT_FUNCTIONS).find(
+                    (func) => value[0].toUpperCase().includes(func)
+                );
+                return SELECT_FUNCTIONS[functionToApply](
+                    df, xReplace(value[0],
+                        [`${functionToApply.toLowerCase()}(`, ''], [`${functionToApply}(`, ''], ['(', ''], [')', '']
+                    )
+                );
+            },
+        ],
+        [
+            () => true,
+            (value) => (df) => df.select(...value.map(column => column.split(' AS ')[0].replace(' ', ''))).renameAll(
+                value.map(column => column.includes('AS') ? column.split('AS')[1] : column)
+            ),
+        ]
     );
 }
 

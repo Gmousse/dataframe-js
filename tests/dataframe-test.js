@@ -208,8 +208,12 @@ test('DataFrame columns can be', (assert) => {
         }, 'deleted.'
     );
     assert.deepEqual(
-        df.select('c2', 'c3', 'c4').rename(['c16', 'c17', 'c18']).listColumns(),
+        df.select('c2', 'c3', 'c4').renameAll(['c16', 'c17', 'c18']).listColumns(),
             ['c16', 'c17', 'c18'], 'renamed.'
+    );
+    assert.deepEqual(
+        df.select('c2', 'c3', 'c4').rename('c2', 'cRenamed').listColumns(),
+            ['cRenamed', 'c3', 'c4'], 'renamed individually.'
     );
     assert.deepEqual(
         df.restructure(['c2', 'c3', 'c36']).toDict(), {
