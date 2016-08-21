@@ -126,8 +126,9 @@ class DataFrame {
     }
 
     /**
-     * Convert DataFrame into Array.
-     * @returns {Array} The DataFrame converted into dict.
+     * Convert DataFrame into Array. You can also extract only one column as Array.
+     * @param {String} [columnName = undefined] Column Name to extract. By default, all columns are transformed.
+     * @returns {Array} The DataFrame (or the column) converted into dict.
      * @example
      * df.toArray()
      *
@@ -135,8 +136,8 @@ class DataFrame {
      *   [ undefined, undefined, 2, 1, undefined, undefined ],
      *   [ 6, 9, 9, 8, 6, 12 ] ]
      */
-    toArray() {
-        return [...this].map(row => row.toArray());
+    toArray(columnName = undefined) {
+        return columnName ? this.toDict()[columnName] : [...this].map(row => row.toArray());
     }
 
     /**
@@ -242,7 +243,7 @@ class DataFrame {
      * 4
      */
     count() {
-        return [...this].length;
+        return this[__rows__].length;
     }
 
     /**
@@ -299,7 +300,9 @@ class DataFrame {
      * [3, 4, 15, 6]
      */
     distinct(columnName) {
-        return [...new Set(...this.select(columnName).transpose().toArray())];
+        return this.__newInstance__(
+            {[columnName]: [...new Set(this.toDict()[columnName])]}, [columnName]
+        );
     }
 
     /**
@@ -392,7 +395,7 @@ class DataFrame {
      * ['column1', 'column2', 'column3']
      *
      * // Adding one empty column and removing one
-     * df.restructure('column1', 'column3', 'column4')
+     * df.restructure(['column1', 'column3', 'column4'])
      *
      * | column1   | column3   | column4   |
      * ------------------------------------
@@ -589,7 +592,8 @@ class DataFrame {
              this.reduce(
                  (p, n) => {
                      const index = Math.floor(Math.random() * (p.length - 1) + 1);
-                     return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] : [p, n];
+                     return Array.isArray(p) ? [...p.slice(index, p.length + 1), n, ...p.slice(0, index)] :
+                        [p, n];
                  }
              )
              , this[__columns__]
@@ -662,7 +666,7 @@ class DataFrame {
      */
     groupBy(columnName) {
         return [...iter(
-            this.distinct(columnName),
+            this.distinct(columnName).toArray(columnName),
             (value) => {
                 const groupedDF = this.filter(row => row.get(columnName) === value);
                 groupedDF.group = value;

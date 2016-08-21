@@ -219,7 +219,7 @@ test('DataFrame columns can be', (assert) => {
         }, 'restructured.'
     );
     assert.deepEqual(
-        df.distinct('c1'), [1, 6], 'distinct, giving an array of unique values.'
+        df.distinct('c1').toArray('c1'), [1, 6], 'distinct, giving an array of unique values.'
     );
     assert.deepEqual(
         df.select('c2', 'c3', 'c4').replace(undefined, 0).toDict(), {

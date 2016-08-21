@@ -6,7 +6,7 @@ import { DataFrame } from '../src/index.js';
 test('DataFrame sql module can ', (assert) => {
     const df = new DataFrame({
         id: [3, 6, 8],
-        column1: [3, 4, 9],
+        column1: [3, 9, 9],
         column2: ['car', 'on the road again again', 'the fly was crashing'],
     }, ['id', 'column1', 'column2']);
 
@@ -63,6 +63,12 @@ test('DataFrame sql module can ', (assert) => {
             'SELECT * FROM tmp UNION SELECT id, column3 AS column1, column4 AS column2 FROM tmp2').toDict(),
         df.union(df2.rename(['id', 'column1', 'column2'])).toDict(),
         'select everything from an union between 2 queries.'
+    );
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT DISTINCT column1 AS distinctC1 FROM tmp').toDict(),
+        df.distinct('column1').rename(['distinctC1']).toDict(),
+        'select column with distinct values and rename it.'
     );
 
     assert.end();

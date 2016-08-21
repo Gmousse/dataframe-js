@@ -1,4 +1,4 @@
-import { xContains, xSplit } from './reusables.js';
+import { xContains, xSplit, xReplace } from './reusables.js';
 
 const REPLACMENTS = [
     ['INNER JOIN', 'INNERJOIN'],
@@ -7,7 +7,7 @@ const REPLACMENTS = [
     ['FULL JOIN', 'FULLJOIN'],
 ];
 
-const OPERATORS_HANDLER = {
+const WHERE_OPERATORS = {
     'IN': (a, b) => b.includes(a),
     'LIKE': (a, b) => b.includes(a) || a.includes(b),
     '>=': (a, b) => a >= b,
@@ -20,16 +20,19 @@ const OPERATORS_HANDLER = {
     'OR': (a, b) => a || b,
 };
 
+const SELECT_FUNCTIONS = {
+};
+
 const OPERATIONS_HANDLER = {
     'WHERE': (operation) => {
         const operationalTerms = xSplit(operation.join(' '), ' AND ', ' OR ');
         return df => df.filter(row => {
             const conditionalOperators = operation.filter(term => ['AND', 'OR'].includes(term.toUpperCase()));
             return operationalTerms.map(operationalTerm => {
-                const operatorToApply = xContains(operationalTerm, ...Object.keys(OPERATORS_HANDLER))[0];
+                const operatorToApply = xContains(operationalTerm, ...Object.keys(WHERE_OPERATORS))[0];
                 const terms = operationalTerm.replace(' ', '').split(operatorToApply);
-                return OPERATORS_HANDLER[operatorToApply](row.get(terms[0]), eval(terms[1]));
-            }).reduce((prev, next) => OPERATORS_HANDLER[conditionalOperators.shift()](prev, next));
+                return WHERE_OPERATORS[operatorToApply](row.get(terms[0]), eval(terms[1]));
+            }).reduce((prev, next) => WHERE_OPERATORS[conditionalOperators.shift()](prev, next));
         });
     },
     'JOIN': (operation, tables) => df => df.join(
@@ -92,15 +95,25 @@ function parseOperations(operations, tables) {
 
 function parseSelections(selections) {
     if (selections[0].toUpperCase() !== 'SELECT') {
-        throw new Error('YOUR QUERY SHOULD BEGIN WITH SELECT KEYWORD');
+        throw new Error('Your query should begin with SELECT keyword.');
     }
     selections.shift();
     const columnsToSelect = selections.join(' ').split(',');
-    const selectionsToApply = columnsToSelect.includes('*') ?
-        df => df : df => df.select(...columnsToSelect.map(column => column.split(' AS ')[0].replace(' ', '')));
-    return columnsToSelect.find(column => column.includes('AS')) ? df => selectionsToApply(df).rename(
-        columnsToSelect.map(column => column.includes('AS') ? column.split('AS')[1] : column)
-    ) : selectionsToApply;
+
+    if (columnsToSelect[0].replace(' ', '') === '*') {
+        return df => df;
+    } else if (columnsToSelect[0].toUpperCase().includes('DISTINCT')) {
+        return df => df.distinct(xReplace(columnsToSelect[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', ''])).rename(
+            columnsToSelect[0].includes('AS') ? [columnsToSelect[0].split('AS')[1]] : [xReplace(columnsToSelect[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', ''])]
+        );
+    }
+    return df => (
+        df.select(
+            ...columnsToSelect.map(column => column.split(' AS ')[0].replace(' ', ''))
+        ).rename(
+            columnsToSelect.map(column => column.includes('AS') ? column.split('AS')[1] : column)
+        )
+    );
 }
 
 export default function sqlParser(query, tables) {
