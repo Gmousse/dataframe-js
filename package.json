@@ -55,5 +55,6 @@
     "uglifyjs": "^2.4.10",
     "webpack": "^1.13.1"
   },
-  "dependencies": {}
-}
+  "dependencies": {
+      "babel-polyfill": "^6.13.0"
+  }
