@@ -42,6 +42,7 @@ test('DataFrame stat module can ', (assert) => {
     );
     assert.deepEqual(
         df.stat.stats('column1'), {
+            sum: 17,
             mean: 5.666666666666667,
             min: 3,
             max: 8,

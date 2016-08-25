@@ -14,6 +14,17 @@ class Stat {
     }
 
     /**
+    * Compute the sum of a numeric column.
+    * @param {String} columnName The column to evaluate, containing Numbers.
+    * @returns {Number} The sum of the column.
+    */
+    sum(columnName) {
+        return Number(this.df.reduce(
+            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
+        ));
+    }
+
+    /**
      * Compute the maximal value into a numeric column.
      * @param {String} columnName The column to evaluate, containing Numbers.
      * @returns {Number} The maximal value into the column.
@@ -21,17 +32,6 @@ class Stat {
     max(columnName) {
         return Number(this.df.reduce(
             (p, n) => isNumber(n.get(columnName)) && n.get(columnName) > p ? n.get(columnName) : p, 0
-        ));
-    }
-
-    /**
-     * Compute the sum of a numeric column.
-     * @param {String} columnName The column to evaluate, containing Numbers.
-     * @returns {Number} The sum of the column.
-     */
-    sum(columnName) {
-        return Number(this.df.reduce(
-            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
         ));
     }
 
@@ -54,7 +54,7 @@ class Stat {
     mean(columnName) {
         const numericDF = this.df.filter(row => isNumber(row.get(columnName)));
         return Number(numericDF.reduce(
-            (p, n) => p + n.get(columnName), 0
+            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
         )) / numericDF.count();
     }
 
@@ -99,6 +99,7 @@ class Stat {
      */
     stats(columnName) {
         return {
+            sum: this.sum(columnName),
             mean: this.mean(columnName),
             min: this.min(columnName),
             max: this.max(columnName),
