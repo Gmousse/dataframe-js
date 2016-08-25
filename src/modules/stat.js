@@ -36,6 +36,17 @@ class Stat {
     }
 
     /**
+     * Compute the sum of a numeric column.
+     * @param {String} columnName The column to evaluate, containing Numbers.
+     * @returns {Number} The sum of the column.
+     */
+    sum(columnName) {
+        return Number(this.df.reduce(
+            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
+        ));
+    }
+
+    /**
      * Compute the minimal value into a numeric column.
      * @param {String} columnName The column to evalue, containing Numbers.
      * @returns {Number} The minimal value into the column.
