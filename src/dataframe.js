@@ -1,6 +1,7 @@
 import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
 import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnLengthsError } from './errors.js';
 import Row from './row.js';
+import GroupedDataFrame from './groupedDataframe.js';
 
 const __columns__ = Symbol('columns');
 const __rows__ = Symbol('rows');
@@ -11,6 +12,15 @@ const __rows__ = Symbol('rows');
 class DataFrame {
 
     static defaultModules = [];
+
+    /**
+     * Static methods checking if an object is a DataFrame.
+     * @param {DataFrame} df The object to test.
+     * @returns {Boolean} true if it's a DataFrame or false if it isn't.
+     */
+    static isDataFrame(obj) {
+        return obj instanceof DataFrame;
+    }
 
     /**
      * Create a new DataFrame.
@@ -104,6 +114,30 @@ class DataFrame {
 
     _fromArray(array, columns) {
         return [array.map(row => new Row(row, columns)), columns];
+    }
+
+    _joinByType(gdf1, gdf2, type) {
+        if (type === 'out' || type === 'in') {
+            const gdf2Groups = gdf2.listGroups();
+            return Object.values(
+                gdf1.aggregate((group, groupName) => {
+                    const isContained = gdf2Groups.includes(groupName);
+                    const filterCondition = (bool) => bool ? group : false;
+                    return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
+                })
+            ).filter(group => group);
+        }
+        return [...gdf1].map(([group]) => group);
+    }
+
+    _join(dfToJoin, on, types) {
+        const newColumns = [...new Set([...this.listColumns(), ...dfToJoin.listColumns()])];
+        const gdf = this.groupBy(on);
+        const gdfToJoin = dfToJoin.groupBy(on);
+        return [...iter([
+            ...this._joinByType(gdf, gdfToJoin, types[0]),
+            ...this._joinByType(gdfToJoin, gdf, types[1]),
+        ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
     /**
@@ -321,7 +355,7 @@ class DataFrame {
 
     /**
      * List DataFrame columns.
-     * @returns {Array} An Array containing DataFrame column Names.
+     * @returns {Array} An Array containing DataFrame columnNames.
      * @example
      * df.listColumns()
      *
@@ -663,35 +697,11 @@ class DataFrame {
     /**
      * Group DataFrame rows by a column values.
      * @param {String} columnName The column giving groups (distinct values).
-     * @returns {Array} An Array containing a DataFrame by group. The group value can be accessed via df.group.
+     * @returns {GroupedDataFrame} A GroupedDataFrame object.
      * @example
-     * // Group By id and return an object containing group and dataframe
-     * df.groupBy('id').map(dfByValue => ({group: dfByValue.group, df: dfByValue.toDict()}))
-     *
-     * [ { group: 3, df: { id: [Object], value: [Object] } },
-     *   { group: 6, df: { id: [Object], value: [Object] } },
-     *   { group: 8, df: { id: [Object], value: [Object] } },
-     *   { group: 1, df: { id: [Object], value: [Object] } } ]
-     *
-     * // Get sum of value by id with a simple formating
-     * df.groupBy('id').map(dfByValue => (
-    *      {group: dfByValue.group, result: dfByValue.reduce((p, n) => p + n.get('value'), 0)})
-     * )
-     *
-     * [ { group: 3, result: 3 },
-     *   { group: 6, result: 0 },
-     *   { group: 8, result: 5 },
-     *   { group: 1, result: 2 } ]
      */
     groupBy(columnName) {
-        return [...iter(
-            this.distinct(columnName).toArray(columnName),
-            (value) => {
-                const groupedDF = this.filter(row => row.get(columnName) === value);
-                groupedDF.group = value;
-                return groupedDF;
-            }
-        )];
+        return new GroupedDataFrame(this, columnName);
     }
 
     /**
@@ -786,25 +796,15 @@ class DataFrame {
      *
      * | id        | value     | value2    |
      * ------------------------------------
-     * | 3         | 1         | undefined |
      * | 1         | 0         | undefined |
+     * | 3         | 1         | undefined |
      * | 8         | 1         | undefined |
      * | 1         | undefined | 0         |
-     * | 8         | undefined | 2         |
      * | 3         | undefined | 6         |
+     * | 8         | undefined | 2         |
      */
     innerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
-        const actualGroupedDFs = this.groupBy(on);
-        const groupedDFsToJoin = dfToJoin.groupBy(on);
-        return [...iter([
-            ...actualGroupedDFs.filter(
-                groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
-            ),
-            ...groupedDFsToJoin.filter(
-                groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
-            ),
-        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
+        return this._join(dfToJoin, on, ['in', 'in']);
     }
 
     /**
@@ -817,20 +817,17 @@ class DataFrame {
      *
      * | id        | value     | value2    |
      * ------------------------------------
-     * | 3         | 1         | undefined |
      * | 1         | 0         | undefined |
+     * | 3         | 1         | undefined |
      * | 8         | 1         | undefined |
-     * | 2         | undefined | 1         |
      * | 1         | undefined | 0         |
+     * | 2         | undefined | 1         |
+     * | 3         | undefined | 6         |
      * | 6         | undefined | 1         |
      * | 8         | undefined | 2         |
-     * | 3         | undefined | 6         |
      */
     fullJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
-        return [...iter([
-            ...this.groupBy(on), ...dfToJoin.groupBy(on),
-        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
+        return this._join(dfToJoin, on, ['', '']);
     }
 
     /**
@@ -847,17 +844,7 @@ class DataFrame {
      * | 6         | undefined | 1         |
      */
     outerJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
-        const actualGroupedDFs = this.groupBy(on);
-        const groupedDFsToJoin = dfToJoin.groupBy(on);
-        return [...iter([
-            ...actualGroupedDFs.filter(
-                groupedDF => typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined'
-            ),
-            ...groupedDFsToJoin.filter(
-                groupedDF => typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined'
-            ),
-        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
+        return this._join(dfToJoin, on, ['out', 'out']);
     }
 
     /**
@@ -870,23 +857,15 @@ class DataFrame {
      *
      * | id        | value     | value2    |
      * ------------------------------------
-     * | 3         | 1         | undefined |
      * | 1         | 0         | undefined |
+     * | 3         | 1         | undefined |
      * | 8         | 1         | undefined |
      * | 1         | undefined | 0         |
-     * | 8         | undefined | 2         |
      * | 3         | undefined | 6         |
+     * | 8         | undefined | 2         |
      */
     leftJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
-        const actualGroupedDFs = this.groupBy(on);
-        const groupedDFsToJoin = dfToJoin.groupBy(on);
-        return [...iter([
-            ...actualGroupedDFs,
-            ...groupedDFsToJoin.filter(
-                groupedDF => !(typeof actualGroupedDFs.find(df => df.group === groupedDF.group) === 'undefined')
-            ),
-        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
+        return this._join(dfToJoin, on, ['', 'in']);
     }
 
     /**
@@ -899,25 +878,17 @@ class DataFrame {
      *
      * | id        | value     | value2    |
      * ------------------------------------
-     * | 2         | undefined | 1         |
+     * | 1         | 0         | undefined |
+     * | 3         | 1         | undefined |
+     * | 8         | 1         | undefined |
      * | 1         | undefined | 0         |
+     * | 2         | undefined | 1         |
+     * | 3         | undefined | 6         |
      * | 6         | undefined | 1         |
      * | 8         | undefined | 2         |
-     * | 3         | undefined | 6         |
-     * | 3         | 1         | undefined |
-     * | 1         | 0         | undefined |
-     * | 8         | 1         | undefined |
      */
     rightJoin(dfToJoin, on) {
-        const newColumns = [...new Set([...this[__columns__], ...dfToJoin[__columns__]])];
-        const actualGroupedDFs = this.groupBy(on);
-        const groupedDFsToJoin = dfToJoin.groupBy(on);
-        return [...iter([
-            ...groupedDFsToJoin,
-            ...actualGroupedDFs.filter(
-                groupedDF => !(typeof groupedDFsToJoin.find(df => df.group === groupedDF.group) === 'undefined')
-            ),
-        ], groupedDF => groupedDF.restructure(newColumns))].reduce((p, n) => p.union(n));
+        return this._join(dfToJoin, on, ['in', '']);
     }
 }
 

@@ -1,5 +1,5 @@
 export class InputTypeError extends Error {
-    constructor(type, supportedTypes) {
+    constructor(data, supportedTypes) {
         super();
         this.message = `InputTypeError: ${typeof data} while only suppporting ${supportedTypes.join(', ')}`;
         this.name = 'InputTypeError';

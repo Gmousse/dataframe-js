@@ -1,4 +1,29 @@
-# changelog
+# Changelog
+
+---
+
+## v0.3.0
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Feature
+
+**Changes**:
+- Adding the sql module.
+- Adding a GroupedDataFrame object (obtained when group by) with aggregates.
+- Adding sum() in the stat module.
+
+---
+
+## v0.2.9
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Fixing issue [#2](https://github.com/Gmousse/dataframe-js/issues/2)
+- Defined as first real stable version
 
 ---
 
@@ -11,8 +36,6 @@
 **Changes**:
 - Updating keywords and presentation.
 
-
-
 ---
 
 ## v0.2.6
@@ -23,7 +46,6 @@
 
 **Changes**:
 - Just some docs.
-
 
 ---
 

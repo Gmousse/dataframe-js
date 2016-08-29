@@ -1,4 +1,5 @@
 import sqlParser from '../sqlEngine.js';
+import DataFrame from '../dataframe.js';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
@@ -18,6 +19,23 @@ class SQL {
     }
 
     /**
+     * Drop or remove all registered tables.
+     * @example DataFrame.dropTables();
+     */
+    static dropTables() {
+        SQL.tables = {};
+    }
+
+    /**
+     * Drop or remove a registered table.
+     * @param {String} tableName The registered table to drop.
+     * @example DataFrame.dropTables();
+     */
+    static dropTable(tableName) {
+        delete SQL.tables[tableName];
+    }
+
+    /**
      * List all registered tables.
      * @returns {Array} A list of the registered tables.
      * @example DataFrame.listTables();
@@ -32,7 +50,12 @@ class SQL {
      * @param {DataFrame} df The DataFrame to register.
      * @example DataFrame.addTable('tmp', df);
      */
-    static addTable(tableName, df) {
+    static addTable(df, tableName) {
+        if (!DataFrame.isDataFrame(df) || !(typeof tableName === 'string')) {
+            throw new TypeError(
+                'df must be a DataFrame and tableName a string'
+            );
+        }
         SQL.tables[tableName] = df;
     }
 
@@ -51,7 +74,7 @@ class SQL {
      * @example df.sql.register('tmp');
      */
     register(tableName) {
-        SQL.addTable(tableName, this.df);
+        SQL.addTable(this.df, tableName);
         return this.df;
     }
 

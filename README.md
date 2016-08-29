@@ -1,5 +1,5 @@
 # dataframe-js
-**v0.2.8**
+**v0.3.0**
 
 ## Presentation
 
