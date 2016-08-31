@@ -11,7 +11,14 @@
 **Changes**:
 - Adding the sql module.
 - Adding a GroupedDataFrame object (obtained when group by) with aggregates.
-- Adding sum() in the stat module.
+- DataFrame.groupBy aggregates now returns a DataFrame with an aggregation column.
+- DataFrame.groupBy can be used on multiple columns. ex: df.groupBy('col1', 'col2').
+- Adding DataFrame.renameAll() to rename each columns of the DataFrame (current .rename()).
+- Changing DataFrame.rename() which now renames only one column (see .renameAll()).
+- Adding an optional parameter for DataFrame.toArray(), columnName allowing to return only one column as Array.
+- Adding DataFrame.stat.sum() in the stat module.
+- Debbugging DataFrame.show().
+- Refactoring join methods.
 
 ---
 

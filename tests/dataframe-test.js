@@ -367,21 +367,34 @@ test('DataFrame rows can be', (assert) => {
         value: [1, 0, 1, 1, 1, 2, 4],
     }, ['id', 'value']);
 
+    const df3bis = new DataFrame({
+        id: [3, 6, 8, 1, 1, 3, 8, 3],
+        id2: ['a', 'a', 'b', 'c', 'b', 'b', 'b', 'a'],
+        value: [1, 0, 1, 1, 1, 2, 4, 6],
+    }, ['id', 'id2', 'value']);
+
     assert.deepEqual(
-        df3.groupBy('id').aggregate(group => group.toDict()), {
-            '1': {id: [1, 1], value: [1, 1]},
-            '3': {id: [3, 3], value: [1, 2]},
-            '6': {id: [6], value: [0]},
-            '8': {id: [8, 8], value: [1, 4]},
-        }, 'groupBy a column value.'
+        df3.groupBy('id').toCollection().map(({groupKey, group}) => ({groupKey, group: group.toDict()})), [
+            { groupKey: {id: 3}, group: {id: [3, 3], value: [1, 2]}},
+            { groupKey: {id: 6}, group: {id: [6], value: [0]}},
+            { groupKey: {id: 8}, group: {id: [8, 8], value: [1, 4]}},
+            { groupKey: {id: 1}, group: {id: [1, 1], value: [1, 1]}},
+        ], 'groupBy on a column.'
     );
+
     assert.deepEqual(
-        df3.groupBy('id').aggregate(group => group.count()), {
-            '1': 2,
-            '3': 2,
-            '6': 1,
-            '8': 2,
+        df3.groupBy('id').aggregate(group => group.count()).toDict(), {
+            id: [3, 6, 8, 1],
+            aggregation: [2, 1, 2, 2],
         }, 'groupBy and compute the count by group.'
+    );
+
+    assert.deepEqual(
+        df3bis.groupBy('id', 'id2').aggregate(group => group.count()).toDict(), {
+            id: [3, 3, 6, 8, 1, 1],
+            id2: ['a', 'b', 'a', 'b', 'b', 'c'],
+            aggregation: [2, 1, 1, 2, 1, 1],
+        }, 'groupBy on multiple columns.'
     );
 
     assert.deepEqual(
@@ -434,55 +447,55 @@ test('DataFrame rows can be', (assert) => {
     }, ['id', 'value2']);
 
     assert.deepEqual(
-        df4.join(df5, 'id', 'inner').toArray(), [
+        df4.join(df5, 'id', 'inner').sortBy('id').toArray(), [
             [1, 0, undefined],
-            [3, 1, undefined],
-            [8, 1, undefined],
             [1, undefined, 0],
+            [3, 1, undefined],
             [3, undefined, 6],
+            [8, 1, undefined],
             [8, undefined, 2],
         ], 'inner joined.'
     );
 
     assert.deepEqual(
-        df4.join(df5, 'id', 'full').toArray(), [
+        df4.join(df5, 'id', 'full').sortBy('id').toArray(), [
             [1, 0, undefined],
-            [3, 1, undefined],
-            [8, 1, undefined],
             [1, undefined, 0],
             [2, undefined, 1],
+            [3, 1, undefined],
             [3, undefined, 6],
             [6, undefined, 1],
+            [8, 1, undefined],
             [8, undefined, 2],
         ], 'full joined.'
     );
     assert.deepEqual(
-        df4.join(df5, 'id', 'outer').toArray(), [
+        df4.join(df5, 'id', 'outer').sortBy('id').toArray(), [
             [2, undefined, 1],
             [6, undefined, 1],
         ], 'outer joined.'
     );
 
     assert.deepEqual(
-        df4.join(df5, 'id', 'left').toArray(), [
+        df4.join(df5, 'id', 'left').sortBy('id').toArray(), [
             [1, 0, undefined],
-            [3, 1, undefined],
-            [8, 1, undefined],
             [1, undefined, 0],
+            [3, 1, undefined],
             [3, undefined, 6],
+            [8, 1, undefined],
             [8, undefined, 2],
         ], 'left joined.'
     );
 
     assert.deepEqual(
-        df4.join(df5, 'id', 'right').toArray(), [
+        df4.join(df5, 'id', 'right').sortBy('id').toArray(), [
             [1, 0, undefined],
-            [3, 1, undefined],
-            [8, 1, undefined],
             [1, undefined, 0],
             [2, undefined, 1],
+            [3, 1, undefined],
             [3, undefined, 6],
             [6, undefined, 1],
+            [8, 1, undefined],
             [8, undefined, 2],
         ], 'right joined.'
     );

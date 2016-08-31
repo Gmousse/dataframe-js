@@ -1,3 +1,5 @@
+import { combine } from './reusables.js';
+
 const __groups__ = Symbol('groups');
 
 /**
@@ -14,41 +16,39 @@ export default class GroupedDataFrame {
      * //or
      * new GroupedDataFrame(df, 'column1');
      */
-    constructor(df, columnName) {
-        this[__groups__] = Object.assign(
-            {},
-            ...df.distinct(columnName).map(
-                groupName => {
-                    const group = groupName.get(columnName);
-                    return groupName.set(columnName, {[group]: df.filter(row => row.get(columnName) === group)});
-                }
-            ).toArray(columnName)
-        );
+    constructor(df, ...columnNames) {
+        this.df = df;
+        this.on = columnNames;
+        this[__groups__] = this._groupBy(df, columnNames);
     }
 
     * [Symbol.iterator]() {
-        for (const [groupName, group] of Object.entries(this[__groups__])) {
-            yield [group, groupName];
+        for (const group of this[__groups__]) {
+            yield group;
         }
     }
 
-    /**
-     * Convert GroupedDataFrame into dict / hash / object.
-     * @returns {Object} A dict / hash containing each group as key / value pair.
-     * @example
-     * groupedDF.toDict();
-     */
-    toDict() {
-        return Object.assign({}, this[__groups__]);
+    _groupBy(df, columnNames) {
+        return combine(columnNames.map((column) => df.distinct(column).toArray(column))).map(
+            combination => {
+                const groupKey = Object.assign({}, ...combination.map((column, i) => ({[columnNames[i]]: column})));
+                return ({
+                    groupKey,
+                    group: df.filter(
+                        (row) => Object.entries(groupKey).reduce((p, n) => p && row.get(n[0]) === n[1], true)
+                    ),
+                });
+            }
+        ).filter(({group}) => group.count() > 0);
     }
 
     /**
-     * Convert GroupedDataFrame into array.
-     * @returns {Array} An array containing each group.
+     * Convert GroupedDataFrame into collection (Array) of dictionnaries (Object).
+     * @returns {Array} An Array containing group: {groupKey, group}.
      * @example
-     * groupedDf.toArray()
+     * groupedDF.toCollection();
      */
-    toArray() {
+    toCollection() {
         return [...this];
     }
 
@@ -60,8 +60,8 @@ export default class GroupedDataFrame {
      * groupedDf.show()
      */
     show(quiet = false) {
-        return this.aggregate((group, groupName) => {
-            const groupLog = `--\n[${groupName}]\n--`;
+        return this.aggregate((group, groupKey) => {
+            const groupLog = `--\n[${JSON.stringify(groupKey)}]\n--`;
             if (!quiet) {
                 console.log(groupLog);
             }
@@ -76,17 +76,20 @@ export default class GroupedDataFrame {
      * gdf.listGroups()
      */
     listGroups() {
-        return Object.keys(this[__groups__]);
+        return this.toCollection().map(({groupKey}) => groupKey);
     }
 
     /**
      * Create an aggregation from a custom function.
      * @param {Function} func The aggregation function.
-     * @returns {Object} The result of the aggregation with the group as key and the aggregate as value.
+     * @returns {DataFrame} A new DataFrame with a column aggregation containing the result.
      * @example
      * groupedDF.aggregate(group => group.sql.sum('column1'));
      */
     aggregate(func) {
-        return Object.assign({}, ...[...this].map(([group, groupName]) => ({[groupName]: func(group, groupName)})));
+        return this.df.__newInstance__(
+            this.toCollection().map(({group, groupKey}) => ({...groupKey, aggregation: func(group, groupKey)})),
+            [...this.on, 'aggregation']
+        );
     }
 }

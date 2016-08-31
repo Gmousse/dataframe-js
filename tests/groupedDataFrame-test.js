@@ -14,7 +14,9 @@ test('GroupedDataFrame can ', (assert) => {
 
     const gdf = new GroupedDataFrame(df, 'column3');
 
-    console.log(gdf.aggregate((group) => group.stat.sum('column1')));
+    console.log(gdf);
+    console.log(gdf.listGroups());
     gdf.show();
+
     assert.end();
 });

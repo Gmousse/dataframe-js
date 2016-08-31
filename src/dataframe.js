@@ -118,16 +118,14 @@ class DataFrame {
 
     _joinByType(gdf1, gdf2, type) {
         if (type === 'out' || type === 'in') {
-            const gdf2Groups = gdf2.listGroups();
-            return Object.values(
-                gdf1.aggregate((group, groupName) => {
-                    const isContained = gdf2Groups.includes(groupName);
-                    const filterCondition = (bool) => bool ? group : false;
-                    return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
-                })
-            ).filter(group => group);
+            const gdf2Groups = gdf2.listGroups().map(groupKey => Object.values(groupKey)[0]);
+            return gdf1.toCollection().map(({group, groupKey}) => {
+                const isContained = gdf2Groups.includes(Object.values(groupKey)[0]);
+                const filterCondition = (bool) => bool ? group : false;
+                return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
+            }).filter(group => group);
         }
-        return [...gdf1].map(([group]) => group);
+        return gdf1.toCollection().map(({group}) => group);
     }
 
     _join(dfToJoin, on, types) {
@@ -695,13 +693,13 @@ class DataFrame {
     }
 
     /**
-     * Group DataFrame rows by a column values.
-     * @param {String} columnName The column giving groups (distinct values).
+     * Group DataFrame rows by columns.
+     * @param {...String} columnNames The columns used for the groupBy.
      * @returns {GroupedDataFrame} A GroupedDataFrame object.
      * @example
      */
-    groupBy(columnName) {
-        return new GroupedDataFrame(this, columnName);
+    groupBy(...columnNames) {
+        return new GroupedDataFrame(this, ...columnNames);
     }
 
     /**
