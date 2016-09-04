@@ -77,7 +77,7 @@ export default class GroupedDataFrame {
      * gdf.listGroups()
      */
     listGroups() {
-        return this.toCollection().map(({groupKey}) => groupKey);
+        return [...this].map(({groupKey}) => groupKey);
     }
 
     /**
@@ -89,7 +89,7 @@ export default class GroupedDataFrame {
      */
     aggregate(func) {
         return this.df.__newInstance__(
-            this.toCollection().map(({group, groupKey}) => ({...groupKey, aggregation: func(group, groupKey)})),
+            [...this].map(({group, groupKey}) => ({...groupKey, aggregation: func(group, groupKey)})),
             [...this.on, 'aggregation']
         );
     }

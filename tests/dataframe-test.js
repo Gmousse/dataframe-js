@@ -525,8 +525,8 @@ test('DataFrame rows can be', (assert) => {
     );
 
     assert.deepEqual(
-        dfToSample.randomSplit(0.2).map(splittedDF => splittedDF.count()),
-        [1000, 4000], 'be randomly splitted into 2 DataFrames.'
+        dfToSample.bisect(0.2).map(splittedDF => splittedDF.count()),
+        [1000, 4000], 'bisected by percentage into 2 DataFrames.'
     );
 
     assert.end();
@@ -559,7 +559,7 @@ test('DataFrame modules can be', (assert) => {
 });
 
 test('DataFrame is immutable', (assert) => {
-    const dfFromArrayOfArrays = new DataFrame([
+    const df = new DataFrame([
         [1, 6, 9, 10, 12],
         [1, 2],
         [6, 6, 9, 8, 9, 12],
@@ -567,11 +567,11 @@ test('DataFrame is immutable', (assert) => {
 
 
     assert.equal(
-        Object.is(dfFromArrayOfArrays.map(row => row.set('c1', 18)), dfFromArrayOfArrays),
+        Object.is(df.map(row => row.set('c1', 18)), df),
         false, 'when modified.'
     );
     assert.equal(
-        Object.is(dfFromArrayOfArrays.map(row => row), dfFromArrayOfArrays),
+        Object.is(df.map(row => row), df),
         false, 'when modified, even if nothing have changed.'
     );
 

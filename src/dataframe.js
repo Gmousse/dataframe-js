@@ -14,42 +14,29 @@ class DataFrame {
     static defaultModules = [];
 
     /**
-     * Static methods checking if an object is a DataFrame.
-     * @param {DataFrame} df The object to test.
-     * @returns {Boolean} true if it's a DataFrame or false if it isn't.
-     */
-    static isDataFrame(obj) {
-        return obj instanceof DataFrame;
-    }
-
-    /**
      * Create a new DataFrame.
      * @param {Array | Object | DataFrame} data The data of the DataFrame.
      * @param {Array} columns The DataFrame column names.
      * @param {...Object} [modules] Additional modules.
      * @example
-     * // From Object
-     * const dfFromObjectOfArrays = new DataFrame({
-    *      'column1': [3, 6, 8],  // Column Data
-    *      'column2': [3, 4, 5, 6], // Column Data
-     * }, ['column1', 'column2']); // Columns
+     * new DataFrame({
+     *      'column1': [3, 6, 8],
+     *      'column2': [3, 4, 5, 6],
+     * }, ['column1', 'column2'])
      *
-     * // From Array of Arrays
-     * const dfFromArrayOfArrays = new Data Frame([
-    *      [1, 6, 9, 10, 12],  // Row Data
-    *      [1, 2],             // Row Data
-    *      [6, 6, 9, 8, 9, 12], // Row Data
-     * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
+     * new Data Frame([
+     *      [1, 6, 9, 10, 12],
+     *      [1, 2],
+     *      [6, 6, 9, 8, 9, 12],
+     * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
      *
-     * // From Array of Objects -- THE BETTER WAY --
-     * const dfFromArrayOfObjects = new DataFrame([
-    *      {c1: 1, c2: 6, c3: 9, c4: 10, c5: 12},  // Row Data
-    *      {c4: 1, c3: 2},                         // Row Data
-    *      {c1: 6, c5: 6, c2: 9, c4: 8, c3: 9, c6: 12}, // Row Data
-     * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']); // Columns
+     * new DataFrame([
+     *      {c1: 1, c2: 6, c3: 9, c4: 10, c5: 12},
+     *      {c4: 1, c3: 2},
+     *      {c1: 6, c5: 6, c2: 9, c4: 8, c3: 9, c6: 12},
+     * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
      *
-     * // From DataFrame
-     * const dfFromDF = new DataFrame(dfFromArrayOfArrays);
+     * new DataFrame(df);
      */
     constructor(data, columns, ...modules) {
         [this[__rows__], this[__columns__]] = this._build(data, this._dropSpacesInColumnNames(columns));
@@ -143,13 +130,6 @@ class DataFrame {
      * @returns {Object} The DataFrame converted into dict.
      * @example
      * df.toDict()
-     *
-     * { c1: [ 1, undefined, 6 ], // one array by column
-     *   c2: [ 6, undefined, 9 ],
-     *   c3: [ 9, 2, 9 ],
-     *   c4: [ 10, 1, 8 ],
-     *   c5: [ 12, undefined, 6 ],
-     *   c6: [ undefined, undefined, 12 ] }
      */
     toDict() {
         return Object.assign({}, ...Object.entries(
@@ -162,21 +142,17 @@ class DataFrame {
      * @param {String} [columnName = undefined] Column Name to extract. By default, all columns are transformed.
      * @returns {Array} The DataFrame (or the column) converted into Array.
      * @example
-     * df.toArray();
-     *
-     * [ [ 1, 6, 9, 10, 12, undefined ], // one array by row
-     *   [ undefined, undefined, 2, 1, undefined, undefined ],
-     *   [ 6, 9, 9, 8, 6, 12 ] ]
+     * df.toArray()
      */
     toArray(columnName = undefined) {
-        return columnName ? this.toDict()[columnName] : [...this].map(row => row.toArray());
+        return columnName ? [...this].map(row => row.get(columnName)) : [...this].map(row => row.toArray());
     }
 
     /**
      * Convert DataFrame into Array of dictionnaries (Objects).
      * @returns {Array} The DataFrame converted into Array of dictionnaries (Objects).
      * @example
-     * df.toCollection();
+     * df.toCollection()
      */
     toCollection() {
         return [...this].map(row => row.toDict());
@@ -188,6 +164,11 @@ class DataFrame {
      * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The text file in raw string.
+     * @example
+     * df.toText()
+     * df.toText(';')
+     * df.toText(';', true)
+     * df.toText(';', true, '~/dataframe.txt')
      */
     toText(sep = ';', header = true, path = undefined) {
         const csvContent = this.reduce(
@@ -203,6 +184,10 @@ class DataFrame {
      * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The csv file in raw string.
+     * @example
+     * df.toCSV()
+     * df.toCSV(true)
+     * df.toCSV(true, '~/dataframe.csv')
      */
     toCSV(header = true, path = undefined) {
         return this.toText(',', header, path);
@@ -212,6 +197,9 @@ class DataFrame {
      * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The json file in raw string.
+     * @example
+     * df.toJSON()
+     * df.toJSON('~/dataframe.json')
      */
     toJSON(path = undefined) {
         const jsonContent = JSON.stringify(this.toDict());
@@ -225,14 +213,9 @@ class DataFrame {
      * @param {Boolean} [quiet=false] Quiet mode. If true, only returns a string instead of console.log().
      * @returns {String} The DataFrame as String Table.
      * @example
-     * df.show() // console.log the DataFrame with the first 10nth rows
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 3         | undefined |
-     * | 6         | 4         | undefined |
-     * | 8         | 5         | undefined |
-     * | undefined | 6         | undefined |
+     * df.show()
+     * df.show(10)
+     * const stringDF = df.show(10, true)
      */
     show(rows = 10, quiet = false) {
         const makeRow = (row) => (
@@ -259,8 +242,7 @@ class DataFrame {
      * Get the DataFrame dimensions.
      * @returns {Array} The DataFrame dimensions. [height, weight]
      * @example
-     * df.dim()
-     * [4, 3] // [height, weight]
+     * const [height, weight] = df.dim()
      */
     dim() {
         return [this.count(), this[__columns__].length];
@@ -269,6 +251,8 @@ class DataFrame {
     /**
      * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
      * @returns {ÐataFrame} A new transpoded DataFrame.
+     * @example
+     * df.transpose()
      */
     transpose() {
         const newColumns = [...Array(this.count()).keys()];
@@ -279,10 +263,7 @@ class DataFrame {
      * Get the rows number.
      * @returns {Int} The number of DataFrame rows.
      * @example
-     * // Counting rows
      * df.count()
-     *
-     * 4
      */
     count() {
         return this[__rows__].length;
@@ -291,18 +272,11 @@ class DataFrame {
     /**
      * Get the count of a value into a column.
      * @param valueToCount The value to count into the selected column.
-     * @param {String} [columnName=this[__columns__][0]] The column where found the value.
+     * @param {String} [columnName=this.listColumns()[0]] The column where found the value.
      * @returns {Int} The number of times the selected value appears.
      * @example
-      * // Counting specific value in a column
       * df.countValue(5, 'column2')
-      *
-      * 1
-      *
-      * // Counting specific value in a selected column
       * df.select('column1').countValue(5)
-      *
-      * 0
      */
     countValue(valueToCount, columnName = this[__columns__][0]) {
         return this.filter(row => row.get(columnName) === valueToCount).count();
@@ -323,8 +297,10 @@ class DataFrame {
      * Replace a value by another in the DataFrame or in a column.
      * @param value The value to replace.
      * @param replacement The new value.
-     * @param {...String} [columnNames=this[__columns__]] The columns to apply the replacement.
+     * @param {...String} [columnNames=this.listColumns()] The columns where to apply the replacement.
      * @returns {DataFrame} A new DataFrame with replaced values.
+     * @example
+     * df.replace(undefined, 0, 'column1', 'column2')
      */
     replace(value, replacement, ...columnNames) {
         return this.map(row => (columnNames.length > 0 ? columnNames : this[__columns__]).reduce(
@@ -337,13 +313,11 @@ class DataFrame {
      * @param {String} columnName The column to distinct.
      * @returns {Array} An Array containing distinct values of the column.
      * @example
-     * df.distinct('d2')
-     *
-     * [3, 4, 15, 6]
+     * df.distinct('column1')
      */
     distinct(columnName) {
         return this.__newInstance__(
-            {[columnName]: [...new Set(this.toDict()[columnName])]}, [columnName]
+            {[columnName]: [...new Set(this.toArray(columnName))]}, [columnName]
         );
     }
 
@@ -353,9 +327,7 @@ class DataFrame {
      * @param {String} columnName The column to distinct.
      * @returns {Array} An Array containing distinct values of the column.
      * @example
-     * df.unique('d2')
-     *
-     * [3, 4, 15, 6]
+     * df.unique('column1')
      */
     unique(columnName) {
         return this.distinct(columnName);
@@ -366,8 +338,6 @@ class DataFrame {
      * @returns {Array} An Array containing DataFrame columnNames.
      * @example
      * df.listColumns()
-     *
-     * ['c1', 'c2', 'c3', 'c4']
      */
     listColumns() {
         return [...this[__columns__]];
@@ -378,14 +348,7 @@ class DataFrame {
      * @param {...String} columnNames The columns to select.
      * @returns {DataFrame} A new DataFrame containing selected columns.
      * @example
-     * df.select('column1', 'column3').show()
-     *
-     * | column1   | column3   |
-     * ------------------------
-     * | 3         | undefined |
-     * | 6         | undefined |
-     * | 8         | undefined |
-     * | undefined | undefined |
+     * df.select('column1', 'column3')
      */
     select(...columnNames) {
         return this.__newInstance__(this[__rows__].map(
@@ -399,25 +362,8 @@ class DataFrame {
      * @param {Function} [func=(row, index) => undefined] The function to create the column.
      * @returns {DataFrame} A new DataFrame containing the new or modified column.
      * @example
-     * // Add a new column
-     * df.withColumn('column4', () => 2).show()
-     *
-     * | column1   | column2   | column3   | column4   |
-     * ------------------------------------------------
-     * | 3         | 3         | undefined | 2         |
-     * | 6         | 4         | undefined | 2         |
-     * | 8         | 5         | undefined | 2         |
-     * | undefined | 6         | undefined | 2         |
-     *
-     * // Modify a column
-     * df.withColumn('column2', (row) => row.get('column2') * 2).show()
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 6         | undefined |
-     * | 6         | 8         | undefined |
-     * | 8         | 10        | undefined |
-     * | undefined | 12        | undefined |
+     * df.withColumn('column4', () => 2)
+     * df.withColumn('column2', (row) => row.get('column2') * 2)
      */
     withColumn(columnName, func = () => undefined) {
         return this.__newInstance__(this[__rows__].map(
@@ -432,19 +378,9 @@ class DataFrame {
      * @param {Array} newColumnNames The new columns of the DataFrame.
      * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
      * @example
-     * df[__columns__]
-     *
-     * ['column1', 'column2', 'column3']
-     *
-     * // Adding one empty column and removing one
-     * df.restructure(['column1', 'column3', 'column4'])
-     *
-     * | column1   | column3   | column4   |
-     * ------------------------------------
-     * | 3         | undefined | undefined |
-     * | 6         | undefined | undefined |
-     * | 8         | undefined | undefined |
-     * | undefined | undefined | undefined |
+     * df.restructure(['column1', 'column4', 'column2', 'column3'])
+     * df.restructure(['column1', 'column4'])
+     * df.restructure(['column1', 'newColumn', 'column4'])
      */
     restructure(newColumnNames) {
         return this.__newInstance__(this[__rows__], newColumnNames);
@@ -455,13 +391,7 @@ class DataFrame {
      * @param {Array} newColumnNames The new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
-     * df[__columns__]
-     *
-     * ['column1', 'column2', 'column3']
-     *
-     * df.rename('column1', 'column3', 'column4')[__columns__]
-     *
-     * ['column1', 'column3', 'column4']
+     * df.renameAll(['column1', 'column3', 'column4'])
      */
     renameAll(newColumnNames) {
         if (newColumnNames.length !== this[__columns__].length) {
@@ -473,19 +403,13 @@ class DataFrame {
     /**
      * Rename a column.
      * @param {String} columnName The column to rename.
-     * @param {String} alias The new name for the column.
+     * @param {String} replacement The new name for the column.
      * @returns {DataFrame} A new DataFrame with the new column name.
      * @example
-     * df.listColumns()
-     *
-     * ['column1', 'column2', 'column3']
-     *
-     * df.rename('column1', 'columnRenamed').listColumns()
-     *
-     * ['columnRenamed', 'column3', 'column4']
+     * df.rename('column1', 'columnRenamed')
      */
-    rename(columnName, alias) {
-        const newColumnNames = this.listColumns().map(column => column === columnName ? alias : column);
+    rename(columnName, replacement) {
+        const newColumnNames = this[__columns__].map(column => column === columnName ? replacement : column);
         return this.renameAll(newColumnNames);
     }
 
@@ -494,14 +418,7 @@ class DataFrame {
      * @param {String} columnName The column to drop.
      * @returns {DataFrame} A new DataFrame without the dropped column.
      * @example
-     * df.drop('d2').show()
-     *
-     * | column1   | column3   |
-     * ------------------------
-     * | 3         | undefined |
-     * | 6         | undefined |
-     * | 8         | undefined |
-     * | undefined | undefined |
+     * df.drop('column2')
      */
     drop(columnName) {
         return this.__newInstance__(this[__rows__].map(
@@ -510,22 +427,17 @@ class DataFrame {
     }
 
     /**
-     * Chain multiple functions on DataFrame (filters, maps) and optimized their executions.
+     * Chain maps and filters functions on DataFrame by optimizing their executions.
      * If a function returns boolean, it's a filter. Else it's a map.
      * It can be 10 - 100 x faster than standard chains of .map() and .filter().
      * @param {...Function} funcs Functions to apply on the DataFrame rows taking the row as parameter.
      * @returns {DataFrame} A new DataFrame with modified rows.
      * @example
-     * // 1 filter ==> 1 map ==> 1 filter
      * df.chain(
-    *      line => line.get('column1') > 3, // Filter sending boolean. If true the chain continue. Else it breaks and the row is not send.
-    *      line => line.set('column1', 3),  // Map sending modification
-    *      line => line.get('column2') === '5' // Filter sending boolean. If true the row is send.
-     * ).show();
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 5         | undefined |
+     *      row => row.get('column1') > 3, // filter
+     *      row => row.set('column1', 3),  // map
+     *      row => row.get('column2') === '5' // filter
+     * )
      */
     chain(...funcs) {
         return this.__newInstance__([...chain(this[__rows__], ...funcs)], this[__columns__]);
@@ -533,24 +445,11 @@ class DataFrame {
 
     /**
      * Filter DataFrame rows.
-     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object.
+     * @param {Function | Object} condition A filter function or a column/value object.
      * @returns {DataFrame} A new filtered DataFrame.
      * @example
-     * df.filter(
-    *      line => line.get('column1') >= 3
-     * ).show();
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 5         | undefined |
-     *
-     * df.filter(
-    *      {'column2': 5, 'column1': 3}
-     * ).show();
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 5         | undefined |
+     * df.filter(row => row.get('column1') >= 3)
+     * df.filter({'column2': 5, 'column1': 3}))
      */
     filter(condition) {
         const func = typeof condition === 'object' ?
@@ -562,15 +461,11 @@ class DataFrame {
 
     /**
      * Find a row (the first met) based on a condition.
-     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object..
+     * @param {Function | Object} condition A filter function or a column/value object.
      * @returns {Row} The targeted Row.
      * @example
-     * df.find(
-    *      line => line.get('column1') == 3
-     * );
-     * df.find(
-    *      {'id': 958998}
-     * );
+     * df.find(row => row.get('column1') === 3)
+     * df.find({'column1': 3})
      */
     find(condition) {
         return this.filter(condition)[__rows__][0];
@@ -579,24 +474,11 @@ class DataFrame {
     /**
      * Filter DataFrame rows.
      * Alias of .filter()
-     * @param {Function} condition A function sending a boolean taking the row as parameter or a column/value object.
+     * @param {Function | Object} condition A filter function or a column/value object.
      * @returns {DataFrame} A new filtered DataFrame.
      * @example
-     * df.filter(
-    *      line => line.get('column1') >= 3
-     * ).show();
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 5         | undefined |
-     *
-     * df.filter(
-    *      {'column2': 5, 'column1': 3}
-     * ).show();
-     *
-     * | column1   | column2   | column3   |
-     * ------------------------------------
-     * | 3         | 5         | undefined |
+     * df.where(row => row.get('column1') >= 3)
+     * df.where({'column2': 5, 'column1': 3}))
      */
     where(condition) {
         return this.filter(condition);
@@ -606,6 +488,8 @@ class DataFrame {
      * Map on DataFrame rows. /!\ Prefer to use .chain().
      * @param {Function} func A function to apply on each row taking the row as parameter.
      * @returns {DataFrame} A new DataFrame with modified rows.
+     * @example
+     * df.map(row => row.set('column1', row.get('column1') * 2))
      */
     map(func) {
         return this.__newInstance__([...iter(this[__rows__], row => func(row))], this[__columns__]);
@@ -617,13 +501,10 @@ class DataFrame {
      * @param [init] The initial value of the reducer.
      * @returns A reduced value.
      * @example
-     * // Compute a value from rows, starting from value 0
      * df.reduce((p, n) => n.get('column1') + p, 0)
-     *
-     * // Compute a row from rows
      * df2.reduce((p, n) => (
-    *          n.set('column1', p.get('column1') + n.get('column1'))
-    *           .set('column2', p.get('column2') + n.get('column2'))
+     *          n.set('column1', p.get('column1') + n.get('column1'))
+     *           .set('column2', p.get('column2') + n.get('column2'))
      * ))
      */
     reduce(func, init) {
@@ -636,6 +517,8 @@ class DataFrame {
      * @param {Function} func The reduce function taking 2 parameters, previous and next.
      * @param [init] The initial value of the reducer.
      * @returns A reduced value.
+     * @example
+     * df.reduceRight((p, n) => p > n ? p : n, 0)
      */
     reduceRight(func, init) {
         return typeof init === 'undefined' ? this[__rows__].reduceRight((p, n) => func(p, n)) :
@@ -646,7 +529,7 @@ class DataFrame {
      * Return a shuffled DataFrame rows.
      * @returns {DataFrame} A shuffled DataFrame
      * @example
-     * df.shuffle() // Return a DataFrame with shuffled rows.
+     * df.shuffle()
      */
      shuffle() {
          return this.__newInstance__(
@@ -666,7 +549,7 @@ class DataFrame {
      * @param {Number} percentage A percentage of the orignal DataFrame giving the sample size.
      * @returns {DataFrame} A sample DataFrame
      * @example
-     * df.sample(0.3) // Return a DataFrame with 30% of the original size.
+     * df.sample(0.3)
      */
     sample(percentage) {
         const nRows = this.count() * percentage;
@@ -682,11 +565,11 @@ class DataFrame {
     /**
      * Randomly split a DataFrame into 2 DataFrames.
      * @param {Number} percentage A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest.
-     * @returns {Array} An Array containing the two DataFrames.
+     * @returns {Array} An Array containing the two DataFrames. First, the X% DataFrame then the rest DataFrame.
      * @example
-     * df.randomSplit(0.3) // Return a DataFrame with 30% of the original size and a second with the rest (70%).
+     * const [30DF, 70DF] = df.bisect(0.3)
      */
-    randomSplit(percentage) {
+    bisect(percentage) {
         const nRows = this.count() * percentage;
         let token = 0;
         const restRows = [];
@@ -703,10 +586,15 @@ class DataFrame {
     }
 
     /**
-     * Group DataFrame rows by columns.
+     * Group DataFrame rows by columns giving a GroupedDataFrame object. See its doc for more examples.
      * @param {...String} columnNames The columns used for the groupBy.
      * @returns {GroupedDataFrame} A GroupedDataFrame object.
      * @example
+     * df.groupBy('column1')
+     * df.groupBy('column1', 'column2')
+     * df.groupBy('column1', 'column2').listGroups()
+     * df.groupBy('column1', 'column2').show()
+     * df.groupBy('column1', 'column2').aggregate((group) => group.count())
      */
     groupBy(...columnNames) {
         return new GroupedDataFrame(this, ...columnNames);
@@ -718,31 +606,7 @@ class DataFrame {
      * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
      * @returns {DataFrame} An ordered DataFrame.
      * @example
-     * // Sort DataFrame by id
-     * df.sortBy('id').toArray()
-     *
-     * [
-    *      [1, 1],
-    *      [1, 1],
-    *      [3, 1],
-    *      [3, 2],
-    *      [6, 0],
-    *      [8, 1],
-    *      [8, 4],
-     * ]
-     *
-     * // Sort DataFrame by id and reverse
-     * df.sortBy('id', true).toArray()
-     *
-     * [
-    *      [8, 4],
-    *      [8, 1],
-    *      [6, 0],
-    *      [3, 2],
-    *      [3, 1],
-    *      [1, 1],
-    *      [1, 1],
-     * ]
+     * df.sortBy('id')
      */
     sortBy(columnName, reverse = false) {
         const sortedRows = this[__rows__].sort((p, n) => p.get(columnName) - n.get(columnName));
@@ -752,22 +616,9 @@ class DataFrame {
     /**
      * Concat two DataFrames.
      * @param {DataFrame} dfToUnion The DataFrame to concat.
-     * @returns {DataFrame} A new DataFrame resulting of the union.
+     * @returns {DataFrame} A new concatenated DataFrame resulting of the union.
      * @example
-     * df.union(df2).toArray()
-     *
-     * [
-    *      [8, 4],
-    *      [8, 1],
-    *      [6, 0],
-    *      [3, 2],
-    *      [3, 1],
-    *      [1, 1],
-    *      [1, 1],
-    *      [3, 1],
-    *      [1, 0],
-    *      [8, 1],
-     * ]
+     * df.union(df2)
      */
     union(dfToUnion) {
         if (!arrayEqual(this[__columns__], dfToUnion[__columns__])) {
@@ -782,6 +633,8 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @param {String} [how='full'] The join mode. Can be: full, inner, outer, left, right.
      * @returns {DataFrame} The joined DataFrame.
+     * @example
+     * df.join(df2, 'column1', 'full')
      */
     join(dfToJoin, on, how = 'inner') {
         const joinMethods = {
@@ -800,16 +653,9 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df1.join(df2, 'id', 'inner')
-     *
-     * | id        | value     | value2    |
-     * ------------------------------------
-     * | 1         | 0         | undefined |
-     * | 3         | 1         | undefined |
-     * | 8         | 1         | undefined |
-     * | 1         | undefined | 0         |
-     * | 3         | undefined | 6         |
-     * | 8         | undefined | 2         |
+     * df.innerJoin(df2, 'id')
+     * df.join(df2, 'id')
+     * df.join(df2, 'id', 'inner')
      */
     innerJoin(dfToJoin, on) {
         return this._join(dfToJoin, on, ['in', 'in']);
@@ -821,18 +667,8 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df1.join(df2, 'id', 'full')
-     *
-     * | id        | value     | value2    |
-     * ------------------------------------
-     * | 1         | 0         | undefined |
-     * | 3         | 1         | undefined |
-     * | 8         | 1         | undefined |
-     * | 1         | undefined | 0         |
-     * | 2         | undefined | 1         |
-     * | 3         | undefined | 6         |
-     * | 6         | undefined | 1         |
-     * | 8         | undefined | 2         |
+     * df.fullJoin(df2, 'id')
+     * df.join(df2, 'id', 'full')
      */
     fullJoin(dfToJoin, on) {
         return this._join(dfToJoin, on, ['', '']);
@@ -844,12 +680,8 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df1.join(df2, 'id', 'outer')
-     *
-     * | id        | value     | value2    |
-     * ------------------------------------
-     * | 2         | undefined | 1         |
-     * | 6         | undefined | 1         |
+     * df2.rightJoin(df2, 'id')
+     * df2.join(df2, 'id', 'outer')
      */
     outerJoin(dfToJoin, on) {
         return this._join(dfToJoin, on, ['out', 'out']);
@@ -861,16 +693,8 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df1.join(df2, 'id', 'left')
-     *
-     * | id        | value     | value2    |
-     * ------------------------------------
-     * | 1         | 0         | undefined |
-     * | 3         | 1         | undefined |
-     * | 8         | 1         | undefined |
-     * | 1         | undefined | 0         |
-     * | 3         | undefined | 6         |
-     * | 8         | undefined | 2         |
+     * df.leftJoin(df2, 'id')
+     * df.join(df2, 'id', 'left')
      */
     leftJoin(dfToJoin, on) {
         return this._join(dfToJoin, on, ['', 'in']);
@@ -882,18 +706,8 @@ class DataFrame {
      * @param {String} on The selected column for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df1.join(df2, 'id', 'right')
-     *
-     * | id        | value     | value2    |
-     * ------------------------------------
-     * | 1         | 0         | undefined |
-     * | 3         | 1         | undefined |
-     * | 8         | 1         | undefined |
-     * | 1         | undefined | 0         |
-     * | 2         | undefined | 1         |
-     * | 3         | undefined | 6         |
-     * | 6         | undefined | 1         |
-     * | 8         | undefined | 2         |
+     * df.rightJoin(df2, 'id')
+     * df.join(df2, 'id', 'right')
      */
     rightJoin(dfToJoin, on) {
         return this._join(dfToJoin, on, ['in', '']);

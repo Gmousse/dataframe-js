@@ -1,5 +1,4 @@
 import sqlParser from '../sqlEngine.js';
-import DataFrame from '../dataframe.js';
 import { TableAlreadyExistsError } from '../errors.js';
 
 /**
@@ -68,7 +67,7 @@ class SQL {
      * @example DataFrame.registerTable('tmp', df);
      */
     static registerTable(df, tableName, overwrite = false) {
-        if (!DataFrame.isDataFrame(df) || !(typeof tableName === 'string')) {
+        if (!(typeof tableName === 'string')) {
             throw new TypeError(
                 'df must be a DataFrame and tableName a string'
             );
