@@ -121,8 +121,14 @@ test('DataFrame can be', (assert) => {
             [1, 6, 9, 10, 12, undefined],
             [1, 2, undefined, undefined, undefined, undefined],
             [6, 6, 9, 8, 9, 12],
-        ],
-        'converted into array.');
+        ], 'converted into array.');
+
+    assert.deepEqual(
+        dfFromArrayOfArrays.toCollection(), [
+            { c1: 1, c2: 6, c3: 9, c4: 10, c5: 12, c6: undefined },
+            { c1: 1, c2: 2, c3: undefined, c4: undefined, c5: undefined, c6: undefined },
+            { c1: 6, c2: 6, c3: 9, c4: 8, c5: 9, c6: 12 },
+        ], 'converted into collection of object.');
 
     assert.equal(
         dfFromArrayOfArrays.toText(), 'c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',

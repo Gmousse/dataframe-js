@@ -17,6 +17,7 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
+        // Gérer l'absence de columnNames
         this.df = df;
         this.on = columnNames;
         this[__groups__] = this._groupBy(df, columnNames);
@@ -35,7 +36,7 @@ export default class GroupedDataFrame {
                 return ({
                     groupKey,
                     group: df.filter(
-                        (row) => Object.entries(groupKey).reduce((p, n) => p && row.get(n[0]) === n[1], true)
+                        (row) => Object.entries(groupKey).reduce((p, n) => p && Object.is(row.get(n[0]), n[1]), true)
                     ),
                 });
             }
@@ -60,13 +61,13 @@ export default class GroupedDataFrame {
      * groupedDf.show()
      */
     show(quiet = false) {
-        return this.aggregate((group, groupKey) => {
+        return [...this].map(({group, groupKey}) => {
             const groupLog = `--\n[${JSON.stringify(groupKey)}]\n--`;
             if (!quiet) {
                 console.log(groupLog);
             }
-            return groupLog + group.show(10, quiet);
-        });
+            return groupLog + '\n' + group.show(10, quiet);
+        }).reduce((p, n) => p + '\n' + n);
     }
 
     /**

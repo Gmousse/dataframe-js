@@ -35,7 +35,7 @@ class DataFrame {
      * }, ['column1', 'column2']); // Columns
      *
      * // From Array of Arrays
-     * const dfFromArrayOfArrays = new DataFrame([
+     * const dfFromArrayOfArrays = new Data Frame([
     *      [1, 6, 9, 10, 12],  // Row Data
     *      [1, 2],             // Row Data
     *      [6, 6, 9, 8, 9, 12], // Row Data
@@ -158,11 +158,11 @@ class DataFrame {
     }
 
     /**
-     * Convert DataFrame into Array. You can also extract only one column as Array.
+     * Convert DataFrame into Array of Arrays. You can also extract only one column as Array.
      * @param {String} [columnName = undefined] Column Name to extract. By default, all columns are transformed.
-     * @returns {Array} The DataFrame (or the column) converted into dict.
+     * @returns {Array} The DataFrame (or the column) converted into Array.
      * @example
-     * df.toArray()
+     * df.toArray();
      *
      * [ [ 1, 6, 9, 10, 12, undefined ], // one array by row
      *   [ undefined, undefined, 2, 1, undefined, undefined ],
@@ -170,6 +170,16 @@ class DataFrame {
      */
     toArray(columnName = undefined) {
         return columnName ? this.toDict()[columnName] : [...this].map(row => row.toArray());
+    }
+
+    /**
+     * Convert DataFrame into Array of dictionnaries (Objects).
+     * @returns {Array} The DataFrame converted into Array of dictionnaries (Objects).
+     * @example
+     * df.toCollection();
+     */
+    toCollection() {
+        return [...this].map(row => row.toDict());
     }
 
     /**
