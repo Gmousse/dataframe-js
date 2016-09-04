@@ -69,3 +69,11 @@ export class SQLParseError extends Error {
         this.name = 'SQLParseError';
     }
 }
+
+export class TableAlreadyExistsError extends Error {
+    constructor(tableName) {
+        super();
+        this.message = `TableAlreadyExistsError: The SQL temporary table ${tableName} already exits. Use overwrite = true to overwrite it`;
+        this.name = 'TableAlreadyExistsError';
+    }
+}

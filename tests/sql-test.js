@@ -24,7 +24,7 @@ test('DataFrame sql module can ', (assert) => {
         DataFrame.sql.listTables(), ['tmp', 'tmp2'], 'list registered tables.'
     );
 
-    DataFrame.sql.addTable(df, 'tmp3');
+    DataFrame.sql.registerTable(df, 'tmp3');
     assert.deepEqual(
         DataFrame.sql.listTables(), ['tmp', 'tmp2', 'tmp3'], 'register a table.'
     );
@@ -111,6 +111,24 @@ test('DataFrame sql module can ', (assert) => {
         DataFrame.sql.request('SELECT AVG(column1) FROM tmp'),
         df.stat.mean('column1'),
         'count column mean.'
+    );
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM tmp GROUP BY column1').listGroups(),
+        df.groupBy('column1').listGroups(),
+        'groupBy which returns a GroupedDataFrame'
+    );
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT AVG(column1) FROM tmp GROUP BY column1').toDict(),
+        df.groupBy('column1').aggregate((group) => group.stat.mean('column1')).toDict(),
+        'groupBy on a column and compute an aggregation.'
+    );
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT COUNT(column1) FROM tmp GROUP BY column1, column2').toDict(),
+        df.groupBy('column1', 'column2').aggregate((group) => group.count()).toDict(),
+        'groupBy on multiple columns and compute an aggregation.'
     );
 
     assert.end();

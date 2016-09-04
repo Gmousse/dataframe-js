@@ -81,7 +81,7 @@ export default class GroupedDataFrame {
     }
 
     /**
-     * Create an aggregation from a custom function.
+     * Create an aggregation from a function.
      * @param {Function} func The aggregation function.
      * @returns {DataFrame} A new DataFrame with a column aggregation containing the result.
      * @example

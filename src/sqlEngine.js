@@ -6,6 +6,7 @@ const REPLACMENTS = [
     ['LEFT JOIN', 'LEFTJOIN'],
     ['RIGHT JOIN', 'RIGHTJOIN'],
     ['FULL JOIN', 'FULLJOIN'],
+    ['GROUP BY', 'GROUPBY'],
 ];
 
 const WHERE_OPERATORS = {
@@ -56,6 +57,9 @@ const OPERATIONS_HANDLER = {
     'UNION': (operation, tables) => df => df.union(
         operation[0].toUpperCase().includes('SELECT') ? sqlParser(operation.join(' '), tables) : tables[operation[0]]
     ),
+    'GROUPBY': (operation) => {
+        return df => df.groupBy(...operation.join(' ', '').replace(' ', '').split(','));
+    },
 };
 
 function replaceTermsInQuery(query) {
@@ -116,11 +120,12 @@ function parseSelections(selections) {
                 const functionToApply = Object.keys(SELECT_FUNCTIONS).find(
                     (func) => value[0].toUpperCase().includes(func)
                 );
-                return SELECT_FUNCTIONS[functionToApply](
-                    df, xReplace(value[0],
+                const applyFunction = (dfToImpact) => SELECT_FUNCTIONS[functionToApply](
+                    dfToImpact, xReplace(value[0],
                         [`${functionToApply.toLowerCase()}(`, ''], [`${functionToApply}(`, ''], ['(', ''], [')', '']
                     )
                 );
+                return df.on && df.df ? df.aggregate(applyFunction) : applyFunction(df);
             },
         ],
         [

@@ -1,5 +1,6 @@
 import sqlParser from '../sqlEngine.js';
 import DataFrame from '../dataframe.js';
+import { TableAlreadyExistsError } from '../errors.js';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
@@ -29,10 +30,25 @@ class SQL {
     /**
      * Drop or remove a registered table.
      * @param {String} tableName The registered table to drop.
-     * @example DataFrame.dropTables();
+     * @example DataFrame.dropTable('tmp1');
      */
     static dropTable(tableName) {
         delete SQL.tables[tableName];
+    }
+
+    /**
+     * Rename a registered table.
+     * @param {String} tableName The registered table to rename.
+     * @param {String} replacement The new table name.
+     * @param {Boolean} [overwrite=false] Overwrite if the table already exists.
+     * @example DataFrame.renameTable('tmp1', 'notTmp1');
+     */
+    static renameTable(tableName, replacement, overwrite = false) {
+        if (SQL.listTables().includes(replacement) && !overwrite) {
+            throw new TableAlreadyExistsError(replacement);
+        }
+        SQL.addTable(SQL.tables[tableName], replacement);
+        SQL.dropTable(tableName);
     }
 
     /**
@@ -45,16 +61,20 @@ class SQL {
     }
 
     /**
-     * Register a DataFrame as temporary table.
-     * @param {String} tableName The temporary table name.
+     * Register a DataFrame as a temporary table.
      * @param {DataFrame} df The DataFrame to register.
-     * @example DataFrame.addTable('tmp', df);
+     * @param {String} tableName The temporary table name.
+     * @param {Boolean} [overwrite=false] Overwrite if the table already exists.
+     * @example DataFrame.registerTable('tmp', df);
      */
-    static addTable(df, tableName) {
+    static registerTable(df, tableName, overwrite = false) {
         if (!DataFrame.isDataFrame(df) || !(typeof tableName === 'string')) {
             throw new TypeError(
                 'df must be a DataFrame and tableName a string'
             );
+        }
+        if (SQL.listTables().includes(tableName) && !overwrite) {
+            throw new TableAlreadyExistsError(tableName);
         }
         SQL.tables[tableName] = df;
     }
@@ -74,7 +94,7 @@ class SQL {
      * @example df.sql.register('tmp');
      */
     register(tableName) {
-        SQL.addTable(this.df, tableName);
+        SQL.registerTable(this.df, tableName);
         return this.df;
     }
 
