@@ -40,12 +40,12 @@ test('Row can\'t be created', (assert) => {
 
     assert.equal(
         tryCatch(() => new Row(1, ['c1', 'c2', 'c3'])).name,
-        'InputTypeError', 'from a wrong type, throwing InputTypeError.'
+        'TypeError', 'from a wrong type, throwing TypeError.'
     );
 
     assert.equal(
         tryCatch(() => new Row(null, ['c1', 'c2', 'c3'])).name,
-        'InputTypeError', 'from a wrong type (2), throwing InputTypeError.'
+        'TypeError', 'from a wrong type (2), throwing TypeError.'
     );
 
     assert.end();

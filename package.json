@@ -1,6 +1,6 @@
 {
   "name": "dataframe-js",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Immutable and sql-like data structure",
   "keywords": [
     "DataFrame",
@@ -25,7 +25,9 @@
     "build": "NODE_ENV=production babel src/ -d lib/ && npm run buildCommonJS",
     "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
     "lint": "eslint -c .eslintrc ./src",
-    "prepublish": "npm run build"
+    "check": "npm run  lint && npm run test && npm run build && npm run doc",
+    "push": "npm run check && git push",
+    "prepublish": "npm run check"
   },
   "author": {
     "name": "Guillaume Mousnier",

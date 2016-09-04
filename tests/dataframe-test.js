@@ -88,11 +88,11 @@ test('DataFrame can be created correctly', (assert) => {
 });
 
 test('DataFrame can\'t be created', (assert) => {
-    assert.equal(tryCatch(() => new DataFrame('')).name, 'InputTypeError', 'from string, throwing InputTypeError.');
+    assert.equal(tryCatch(() => new DataFrame('')).name, 'TypeError', 'from string, throwing TypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame()).name, 'InputTypeError', 'from nothing, throwing InputTypeError.');
+    assert.equal(tryCatch(() => new DataFrame()).name, 'TypeError', 'from nothing, throwing TypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame(445)).name, 'InputTypeError', 'from number, throwing InputTypeError.');
+    assert.equal(tryCatch(() => new DataFrame(445)).name, 'TypeError', 'from number, throwing TypeError.');
     assert.end();
 });
 

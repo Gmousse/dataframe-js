@@ -20,9 +20,10 @@
 - Adding DataFrame.stat.sum() in the stat module. Related to issue [#10](https://github.com/Gmousse/dataframe-js/issues/10).
 - DataFrame.randomSplit() is renamed in DataFrame.bisect(). /!\ Incompatible with older versions.
 - Debbugging DataFrame.show(). Related to the issue [#7](https://github.com/Gmousse/dataframe-js/issues/7).
-- DataFrame.distinct() now throw correctly NoSuchColumnErro when passing an incorrect columnName.
+- DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Refactoring join methods.
 - Adding unit tests to cover more cases.
+- Clarifying error messages.
 
 ---
 

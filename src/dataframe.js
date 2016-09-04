@@ -11,7 +11,15 @@ const __rows__ = Symbol('rows');
  */
 class DataFrame {
 
-    static defaultModules = [];
+    /**
+     * Set the default modules used in DataFrame instances.
+     * @param {...Object} defaultModules DataFrame modules used by default.
+     * @example
+     * DataFrame.setDefaultModules(SQL, Stat)
+     */
+    static setDefaultModules(...defaultModules) {
+        DataFrame.defaultModules = defaultModules;
+    }
 
     /**
      * Create a new DataFrame.
@@ -91,7 +99,7 @@ class DataFrame {
             ],
             [
                 () => true,
-                () => {throw new InputTypeError(typeof data, ['Object', 'Array']);},
+                () => {throw new InputTypeError('data', ['Object', 'Array', 'DataFrame'], typeof data);},
             ]);
     }
 

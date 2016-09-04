@@ -1,15 +1,14 @@
-export class InputTypeError extends Error {
-    constructor(data, supportedTypes) {
+export class InputTypeError extends TypeError {
+    constructor(inputName, supportedTypes, inputType) {
         super();
-        this.message = `InputTypeError: ${typeof data} while only suppporting ${supportedTypes.join(', ')}`;
-        this.name = 'InputTypeError';
+        this.message = `${inputName} must be one of [${supportedTypes.join(',')}], not a ${inputType}.`;
     }
 }
 
 export class EmptyInputError extends Error {
     constructor(input) {
         super();
-        this.message = `EmptyInputError: ${input} is empty`;
+        this.message = `${input} is empty`;
         this.name = 'EmptyInputError';
     }
 }
@@ -17,7 +16,7 @@ export class EmptyInputError extends Error {
 export class SchemaError extends Error {
     constructor(schema) {
         super();
-        this.message = `ShemaError: ${schema} found while expecting [[String, Object]]`;
+        this.message = `${schema} found while expecting [[String, Object]]`;
         this.name = 'SchemaError';
     }
 }
@@ -25,7 +24,7 @@ export class SchemaError extends Error {
 export class SchemaTypeError extends Error {
     constructor(type) {
         super();
-        this.message = `SchemaTypeError: ${type} while only supporting Array as Schema`;
+        this.message = `${type} while only supporting Array as Schema`;
         this.name = 'SchemaTypeError';
     }
 }
@@ -33,7 +32,7 @@ export class SchemaTypeError extends Error {
 export class NoSuchColumnError extends Error {
     constructor(column, columns) {
         super();
-        this.message = `NoSuchColumnError: ${column} not found in [${columns.join(', ')}]`;
+        this.message = `${column} not found in [${columns.join(', ')}]`;
         this.name = 'NoSuchColumnError';
     }
 }
@@ -41,7 +40,7 @@ export class NoSuchColumnError extends Error {
 export class NotTheSameSchemaError extends Error {
     constructor(columns, expected) {
         super();
-        this.message = `NotTheSameSchemaError: [${columns.join(', ')}] while expecting [${expected.join(', ')}]`;
+        this.message = `[${columns.join(', ')}] while expecting [${expected.join(', ')}]`;
         this.name = 'NotTheSameSchemaError';
     }
 }
@@ -49,7 +48,7 @@ export class NotTheSameSchemaError extends Error {
 export class NotTheSameColumnLengthsError extends Error {
     constructor(length, expected) {
         super();
-        this.message = `NotTheSameColumnLengthsError: [${length}] while expecting [${expected}]`;
+        this.message = `[${length}] while expecting [${expected}]`;
         this.name = 'NotTheSameColumnLengthsError';
     }
 }
@@ -57,7 +56,7 @@ export class NotTheSameColumnLengthsError extends Error {
 export class WrongMatrixStructureError extends Error {
     constructor(structure, expected) {
         super();
-        this.message = `WrongMatrixStructureError: [${structure.join(', ')}] while expecting [${expected.join(', ')}]`;
+        this.message = `[${structure.join(', ')}] while expecting [${expected.join(', ')}]`;
         this.name = 'WrongMatrixStructureError';
     }
 }
@@ -65,7 +64,7 @@ export class WrongMatrixStructureError extends Error {
 export class SQLParseError extends Error {
     constructor(message) {
         super();
-        this.message = `SQLParseError: ${message}`;
+        this.message = `${message}`;
         this.name = 'SQLParseError';
     }
 }
@@ -73,7 +72,7 @@ export class SQLParseError extends Error {
 export class TableAlreadyExistsError extends Error {
     constructor(tableName) {
         super();
-        this.message = `TableAlreadyExistsError: The SQL temporary table ${tableName} already exits. Use overwrite = true to overwrite it`;
+        this.message = `The SQL temporary table ${tableName} already exits. Use overwrite = true to overwrite it`;
         this.name = 'TableAlreadyExistsError';
     }
 }

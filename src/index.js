@@ -7,7 +7,7 @@ import Matrix from './modules/matrix.js';
 import SQL from './modules/sql.js';
 import Benchmark from './extras/benchmark.js';
 
-DataFrame.defaultModules = [Stat, Matrix, SQL];
+DataFrame.setDefaultModules(Stat, Matrix, SQL);
 DataFrame.sql = SQL;
 
 export { DataFrame, Row, Benchmark };

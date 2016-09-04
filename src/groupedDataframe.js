@@ -3,12 +3,12 @@ import { combine } from './reusables.js';
 const __groups__ = Symbol('groups');
 
 /**
- * Grouped DataFrame structure grouping DataFrames by column value.
+ * Grouped DataFrame structure grouping DataFrame rows by column value.
  */
 export default class GroupedDataFrame {
 
     /**
-     * Create a GroupedDataFrame. Used in df.groupBy('columnName').
+     * Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
      * @param {DataFrame} df The DataFrame to group by.
      * @param {String} columnName The column used for the group by.
      * @example
@@ -17,7 +17,6 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
-        // Gérer l'absence de columnNames
         this.df = df;
         this.on = columnNames;
         this[__groups__] = this._groupBy(df, columnNames);
@@ -58,8 +57,8 @@ export default class GroupedDataFrame {
     * @param {Boolean} [quiet=false] Quiet mode. If true, it doesn't trigger console.log().
     * @returns {String} The GroupedDataFrame as String Table.
     * @example
-     * groupedDf.show()
-     */
+    * groupedDf.show()
+    */
     show(quiet = false) {
         return [...this].map(({group, groupKey}) => {
             const groupLog = `--\n[${JSON.stringify(groupKey)}]\n--`;
