@@ -26,7 +26,7 @@
     "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
     "lint": "eslint -c .eslintrc ./src",
     "check": "npm run  lint && npm run test && npm run build && npm run doc",
-    "push": "npm run check && git push",
+    "push": "npm run check && git add . && git commit && git push",
     "prepublish": "npm run check"
   },
   "author": {
