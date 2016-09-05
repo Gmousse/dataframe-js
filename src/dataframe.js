@@ -147,23 +147,24 @@ class DataFrame {
 
     /**
      * Convert DataFrame into Array of Arrays. You can also extract only one column as Array.
-     * @param {String} [columnName = undefined] Column Name to extract. By default, all columns are transformed.
+     * @param {String} [columnName] Column Name to extract. By default, all columns are transformed.
      * @returns {Array} The DataFrame (or the column) converted into Array.
      * @example
      * df.toArray()
      */
-    toArray(columnName = undefined) {
+    toArray(columnName) {
         return columnName ? [...this].map(row => row.get(columnName)) : [...this].map(row => row.toArray());
     }
 
     /**
-     * Convert DataFrame into Array of dictionnaries (Objects).
-     * @returns {Array} The DataFrame converted into Array of dictionnaries (Objects).
+     * Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
+     * @param {Boolean} [asRows] Return a collection of Rows instead of dictionnaries.
+     * @returns {Array} The DataFrame converted into Array of dictionnaries (or Rows).
      * @example
      * df.toCollection()
      */
-    toCollection() {
-        return [...this].map(row => row.toDict());
+    toCollection(asRows) {
+        return asRows ? [...this] : [...this].map(row => row.toDict());
     }
 
     /**

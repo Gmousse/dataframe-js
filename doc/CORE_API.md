@@ -38,7 +38,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * _instance_
         * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
         * [.toArray([columnName])](#DataFrame+toArray) ⇒ <code>Array</code>
-        * [.toCollection()](#DataFrame+toCollection) ⇒ <code>Array</code>
+        * [.toCollection([asRows])](#DataFrame+toCollection) ⇒ <code>Array</code>
         * [.toText([sep], [header], [path])](#DataFrame+toText) ⇒ <code>String</code>
         * [.toCSV([header], [path])](#DataFrame+toCSV) ⇒ <code>String</code>
         * [.toJSON([path])](#DataFrame+toJSON) ⇒ <code>String</code>
@@ -142,11 +142,16 @@ df.toArray()
 ```
 <a name="DataFrame+toCollection"></a>
 
-### dataFrame.toCollection() ⇒ <code>Array</code>
-Convert DataFrame into Array of dictionnaries (Objects).
+### dataFrame.toCollection([asRows]) ⇒ <code>Array</code>
+Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
-**Returns**: <code>Array</code> - The DataFrame converted into Array of dictionnaries (Objects).  
+**Returns**: <code>Array</code> - The DataFrame converted into Array of dictionnaries (or Rows).  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [asRows] | <code>Boolean</code> | Return a collection of Rows instead of dictionnaries. |
+
 **Example**  
 ```js
 df.toCollection()
