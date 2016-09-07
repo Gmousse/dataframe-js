@@ -12,6 +12,15 @@ class Row {
      * Create a new Row.
      * @param {Array | Object | Row} data The data of the Row.
      * @param {Array} columns The DataFrame column names.
+     * @example
+     * new Row({
+     *      'column1': 3,
+     *      'column2': 6,
+     * })
+     *
+     * new Row([3, 6], ['column1', 'column2'])
+     *
+     * new Row(Row, ['column1', 'column3'])
      */
     constructor(data, columns) {
         this[__columns__] = columns ? columns : Object.keys(data);
@@ -73,6 +82,8 @@ class Row {
     /**
      * Get the Row size.
      * @returns {Int} The Row length.
+     * @example
+     * row.size()
      */
     size() {
         return this[__columns__].length;

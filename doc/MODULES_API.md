@@ -21,7 +21,7 @@ Matrix module for DataFrame, providing basic mathematical matrix computations.
 
 * [Matrix](#Matrix)
     * [new Matrix(df)](#new_Matrix_new)
-    * [.isCommutative(dfDim)](#Matrix+isCommutative) ⇒ <code>Boolean</code>
+    * [.isCommutative(df, [reverse])](#Matrix+isCommutative) ⇒ <code>Boolean</code>
     * [.add(df)](#Matrix+add) ⇒ <code>DataFrame</code>
     * [.product(number)](#Matrix+product) ⇒ <code>DataFrame</code>
     * [.dot(df)](#Matrix+dot) ⇒ <code>DataFrame</code>
@@ -38,16 +38,21 @@ Start the Matrix module.
 
 <a name="Matrix+isCommutative"></a>
 
-### matrix.isCommutative(dfDim) ⇒ <code>Boolean</code>
+### matrix.isCommutative(df, [reverse]) ⇒ <code>Boolean</code>
 Check if two DataFrames are commutative, if both have the same dimensions.
 
 **Kind**: instance method of <code>[Matrix](#Matrix)</code>  
 **Returns**: <code>Boolean</code> - True if they are commutative, else false.  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| dfDim | <code>Array</code> | The second DataFrame dim to check. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| df | <code>DataFrame</code> |  | The second DataFrame to check. |
+| [reverse] | <code>Boolean</code> | <code>false</code> | Revert the second DataFrame before the comparison. |
 
+**Example**  
+```js
+df.matrix.isCommutative(df2)
+```
 <a name="Matrix+add"></a>
 
 ### matrix.add(df) ⇒ <code>DataFrame</code>
@@ -60,6 +65,10 @@ Provide an elements pairwise addition of two DataFrames having the same dimensio
 | --- | --- | --- |
 | df | <code>DataFrame</code> | The second DataFrame to add. |
 
+**Example**  
+```js
+df.matrix.add(df2)
+```
 <a name="Matrix+product"></a>
 
 ### matrix.product(number) ⇒ <code>DataFrame</code>
@@ -72,6 +81,10 @@ Provide a scalar product between a number and a DataFrame.
 | --- | --- | --- |
 | number | <code>Number</code> | The number to multiply. |
 
+**Example**  
+```js
+df.matrix.product(6)
+```
 <a name="Matrix+dot"></a>
 
 ### matrix.dot(df) ⇒ <code>DataFrame</code>
@@ -84,6 +97,10 @@ Multiply one DataFrame n x p and a second p x n.
 | --- | --- | --- |
 | df | <code>DataFrame</code> | The second DataFrame to multiply. |
 
+**Example**  
+```js
+df.matrix.dot(df)
+```
 <a name="SQL"></a>
 
 ## SQL
@@ -94,7 +111,7 @@ SQL module for DataFrame, providing SQL-like syntax for data exploration in Data
 * [SQL](#SQL)
     * [new SQL(df)](#new_SQL_new)
     * _instance_
-        * [.register(tableName)](#SQL+register)
+        * [.register(tableName, [overwrite])](#SQL+register)
     * _static_
         * [.request(query)](#SQL.request) ⇒
         * [.dropTables()](#SQL.dropTables)
@@ -115,14 +132,15 @@ Start the SQL module.
 
 <a name="SQL+register"></a>
 
-### sqL.register(tableName)
+### sqL.register(tableName, [overwrite])
 Register the DataFrame as temporary table.
 
 **Kind**: instance method of <code>[SQL](#SQL)</code>  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| tableName | <code>String</code> | The name of the table. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| tableName | <code>String</code> |  | The name of the table. |
+| [overwrite] | <code>Boolean</code> | <code>false</code> | Overwrite if the table already exists. |
 
 **Example**  
 ```js
@@ -225,7 +243,6 @@ Stat module for DataFrame, providing basic statistical metrics for numeric colum
     * [new Stat(df)](#new_Stat_new)
     * [.sum(columnName)](#Stat+sum) ⇒ <code>Number</code>
     * [.max(columnName)](#Stat+max) ⇒ <code>Number</code>
-    * [.sum(columnName)](#Stat+sum) ⇒ <code>Number</code>
     * [.min(columnName)](#Stat+min) ⇒ <code>Number</code>
     * [.mean(columnName)](#Stat+mean) ⇒ <code>Number</code>
     * [.average(columnName)](#Stat+average) ⇒ <code>Number</code>
@@ -255,6 +272,10 @@ Compute the sum of a numeric column.
 | --- | --- | --- |
 | columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
+**Example**  
+```js
+df.stat.sum('column1')
+```
 <a name="Stat+max"></a>
 
 ### stat.max(columnName) ⇒ <code>Number</code>
@@ -267,18 +288,10 @@ Compute the maximal value into a numeric column.
 | --- | --- | --- |
 | columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
-<a name="Stat+sum"></a>
-
-### stat.sum(columnName) ⇒ <code>Number</code>
-Compute the sum of a numeric column.
-
-**Kind**: instance method of <code>[Stat](#Stat)</code>  
-**Returns**: <code>Number</code> - The sum of the column.  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| columnName | <code>String</code> | The column to evaluate, containing Numbers. |
-
+**Example**  
+```js
+df.stat.max('column1')
+```
 <a name="Stat+min"></a>
 
 ### stat.min(columnName) ⇒ <code>Number</code>
@@ -289,8 +302,12 @@ Compute the minimal value into a numeric column.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| columnName | <code>String</code> | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
+**Example**  
+```js
+df.stat.min('column1')
+```
 <a name="Stat+mean"></a>
 
 ### stat.mean(columnName) ⇒ <code>Number</code>
@@ -301,8 +318,12 @@ Compute the mean value into a numeric column.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| columnName | <code>String</code> | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
+**Example**  
+```js
+df.stat.mean('column1')
+```
 <a name="Stat+average"></a>
 
 ### stat.average(columnName) ⇒ <code>Number</code>
@@ -314,8 +335,12 @@ Alias from mean.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| columnName | <code>String</code> | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
+**Example**  
+```js
+df.stat.min('column1')
+```
 <a name="Stat+var"></a>
 
 ### stat.var(columnName, [population]) ⇒ <code>Number</code>
@@ -326,9 +351,13 @@ Compute the variance into a numeric column.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| columnName | <code>String</code> |  | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> |  | The column to evaluate, containing Numbers. |
 | [population] | <code>Boolean</code> | <code>false</code> | Population mode. If true, provide the population variance, not the sample one. |
 
+**Example**  
+```js
+df.stat.var('column1')
+```
 <a name="Stat+sd"></a>
 
 ### stat.sd(columnName, [population]) ⇒ <code>Number</code>
@@ -339,9 +368,13 @@ Compute the standard deviation into a numeric column.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| columnName | <code>String</code> |  | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> |  | The column to evaluate, containing Numbers. |
 | [population] | <code>Boolean</code> | <code>false</code> | Population mode. If true, provide the population standard deviation, not the sample one. |
 
+**Example**  
+```js
+df.stat.sd('column1')
+```
 <a name="Stat+stats"></a>
 
 ### stat.stats(columnName) ⇒ <code>Object</code>
@@ -352,5 +385,9 @@ Compute all the stats available with the Stat module on a numeric column.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| columnName | <code>String</code> | The column to evalue, containing Numbers. |
+| columnName | <code>String</code> | The column to evaluate, containing Numbers. |
 
+**Example**  
+```js
+df.stat.stats('column1')
+```

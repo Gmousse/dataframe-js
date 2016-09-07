@@ -1,7 +1,8 @@
 import tape from 'tape';
-const test = tape;
 
 import { DataFrame } from '../src/index.js';
+
+const test = tape;
 
 test('DataFrame stat module can ', (assert) => {
     const df = new DataFrame({
@@ -19,7 +20,7 @@ test('DataFrame stat module can ', (assert) => {
     );
 
     assert.equal(
-        df.stat.max('column1'), 8, 'compute the maximal numeric value of a column.'
+        df.stat.max('column1'), 8, 'compute the maximal numerical value of a column.'
     );
 
     assert.equal(
@@ -27,7 +28,7 @@ test('DataFrame stat module can ', (assert) => {
     );
 
     assert.equal(
-        df.stat.min('column1'), 3, 'compute the minimal numeric value of a column.'
+        df.stat.min('column1'), 3, 'compute the minimal numerical value of a column.'
     );
 
     assert.equal(

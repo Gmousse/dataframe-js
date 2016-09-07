@@ -1,5 +1,5 @@
 import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
-import { InputTypeError, NotTheSameSchemaError, NotTheSameColumnLengthsError } from './errors.js';
+import { InputTypeError, WrongSchemaError, MixedTypeError } from './errors.js';
 import Row from './row.js';
 import GroupedDataFrame from './groupedDataframe.js';
 
@@ -158,13 +158,13 @@ class DataFrame {
 
     /**
      * Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
-     * @param {Boolean} [asRows] Return a collection of Rows instead of dictionnaries.
+     * @param {Boolean} [ofRows] Return a collection of Rows instead of dictionnaries.
      * @returns {Array} The DataFrame converted into Array of dictionnaries (or Rows).
      * @example
      * df.toCollection()
      */
-    toCollection(asRows) {
-        return asRows ? [...this] : [...this].map(row => row.toDict());
+    toCollection(ofRows) {
+        return ofRows ? [...this] : [...this].map(row => row.toDict());
     }
 
     /**
@@ -404,7 +404,7 @@ class DataFrame {
      */
     renameAll(newColumnNames) {
         if (newColumnNames.length !== this[__columns__].length) {
-            throw new NotTheSameColumnLengthsError(newColumnNames.length, this[__columns__].length);
+            throw new WrongSchemaError(newColumnNames, this[__columns__]);
         }
         return this.__newInstance__(this[__rows__].map(row => row.toArray()), newColumnNames);
     }
@@ -610,7 +610,7 @@ class DataFrame {
     }
 
     /**
-     * Sort DataFrame rows based on a column values. The row should contains only one type. (numerical or string).
+     * Sort DataFrame rows based on a column values. The row should contains only one variable type.
      * @param {String} columnName The column giving order.
      * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
      * @returns {DataFrame} An ordered DataFrame.
@@ -618,7 +618,11 @@ class DataFrame {
      * df.sortBy('id')
      */
     sortBy(columnName, reverse = false) {
-        const sortedRows = this[__rows__].sort((p, n) => p.get(columnName) - n.get(columnName));
+        const sortedRows = this[__rows__].sort((p, n) => {
+            const [pValue, nValue] = [p.get(columnName), n.get(columnName)];
+            if (typeof pValue !== typeof nValue) { throw new MixedTypeError(); }
+            return pValue - nValue;
+        });
         return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this[__columns__]);
     }
 
@@ -631,7 +635,7 @@ class DataFrame {
      */
     union(dfToUnion) {
         if (!arrayEqual(this[__columns__], dfToUnion[__columns__])) {
-            throw new NotTheSameSchemaError(dfToUnion[__columns__], this[__columns__]);
+            throw new WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
         }
         return this.__newInstance__([...this, ...dfToUnion], this[__columns__]);
     }

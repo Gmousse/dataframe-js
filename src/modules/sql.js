@@ -46,10 +46,7 @@ class SQL {
      * DataFrame.renameTable('tmp1', 'notTmp1');
      */
     static renameTable(tableName, replacement, overwrite = false) {
-        if (SQL.listTables().includes(replacement) && !overwrite) {
-            throw new TableAlreadyExistsError(replacement);
-        }
-        SQL.addTable(SQL.tables[tableName], replacement);
+        SQL.registerTable(SQL.tables[tableName], replacement, overwrite);
         SQL.dropTable(tableName);
     }
 
@@ -91,11 +88,12 @@ class SQL {
     /**
      * Register the DataFrame as temporary table.
      * @param {String} tableName The name of the table.
+     * @param {Boolean} [overwrite=false] Overwrite if the table already exists.
      * @example
      * df.sql.register('tmp');
      */
-    register(tableName) {
-        SQL.registerTable(this.df, tableName);
+    register(tableName, overwrite = false) {
+        SQL.registerTable(this.df, tableName, overwrite);
         return this.df;
     }
 

@@ -1,4 +1,5 @@
 import { combine } from './reusables.js';
+import { InputTypeError } from './errors.js';
 
 const __groups__ = Symbol('groups');
 
@@ -29,6 +30,8 @@ export default class GroupedDataFrame {
     }
 
     _groupBy(df, columnNames) {
+        if (!(df.constructor.name === 'DataFrame')) {throw new InputTypeError('df', ['DataFrame'], df.constructor.name);}
+        if (!(columnNames)) {throw new InputTypeError('columnNames', ['...String'], columnNames);}
         return combine(columnNames.map((column) => df.distinct(column).toArray(column))).map(
             combination => {
                 const groupKey = Object.assign({}, ...combination.map((column, i) => ({[columnNames[i]]: column})));
@@ -71,7 +74,7 @@ export default class GroupedDataFrame {
 
     /**
      * List GroupedDataFrame groups.
-     * @returns {Array} An Array containing GroupedDataFrame groupNames.
+     * @returns {Array} An Array containing GroupedDataFrame group names.
      * @example
      * gdf.listGroups()
      */
@@ -82,7 +85,7 @@ export default class GroupedDataFrame {
     /**
      * Create an aggregation from a function.
      * @param {Function} func The aggregation function.
-     * @returns {DataFrame} A new DataFrame with a column aggregation containing the result.
+     * @returns {DataFrame} A new DataFrame with a column 'aggregation' containing the result.
      * @example
      * groupedDF.aggregate(group => group.sql.sum('column1'));
      */

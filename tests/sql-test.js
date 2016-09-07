@@ -1,10 +1,12 @@
 import tape from 'tape';
-const test = tape;
 
 import { DataFrame } from '../src/index.js';
+import { tryCatch } from './utils.js';
+
+const test = tape;
 
 test('DataFrame sql module can ', (assert) => {
-    const df = new DataFrame({
+    const df1 = new DataFrame({
         id: [3, 6, 8],
         column1: [3, 9, 9],
         column2: ['car', 'on the road again again', 'the fly was crashing'],
@@ -17,14 +19,14 @@ test('DataFrame sql module can ', (assert) => {
     }, ['id', 'column3', 'column4']);
 
 
-    df.sql.register('tmp');
+    df1.sql.register('tmp');
     df2.sql.register('tmp2');
 
     assert.deepEqual(
         DataFrame.sql.listTables(), ['tmp', 'tmp2'], 'list registered tables.'
     );
 
-    DataFrame.sql.registerTable(df, 'tmp3');
+    DataFrame.sql.registerTable(df1, 'tmp3');
     assert.deepEqual(
         DataFrame.sql.listTables(), ['tmp', 'tmp2', 'tmp3'], 'register a table.'
     );
@@ -34,15 +36,32 @@ test('DataFrame sql module can ', (assert) => {
         DataFrame.sql.listTables(), ['tmp', 'tmp2'], 'drop a table.'
     );
 
+    DataFrame.sql.registerTable(df1, 'tmp4');
+    DataFrame.sql.registerTable(df1, 'tmp5');
+    DataFrame.sql.renameTable('tmp4', 'tmp6');
+    assert.deepEqual(
+        DataFrame.sql.listTables(), ['tmp', 'tmp2', 'tmp5', 'tmp6'], 'rename a table.'
+    );
+
+    DataFrame.sql.renameTable('tmp5', 'tmp6', true);
+    assert.deepEqual(
+        DataFrame.sql.listTables(), ['tmp', 'tmp2', 'tmp6'], 'rename a table by using the an existing table name, overwriting it.'
+    );
+
     DataFrame.sql.dropTables();
     assert.deepEqual(
         DataFrame.sql.listTables(), [], 'drop all tables.'
     );
 
-    df.sql.register('tmp');
-    df2.sql.register('tmp2');
+    df1.sql.register('tmp');
     assert.deepEqual(
-        DataFrame.sql.request('SELECT * FROM tmp').toDict(), df.toDict(), 'select everything from a table.'
+        DataFrame.sql.request('SELECT * FROM tmp').toDict(), df1.toDict(), 'select everything from a table.'
+    );
+
+    df1.sql.register('tmp2');
+    df2.sql.register('tmp2', true);
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM tmp2').toDict(), df2.toDict(), 'overwrite an existing table.'
     );
 
     assert.deepEqual(
@@ -54,81 +73,109 @@ test('DataFrame sql module can ', (assert) => {
     assert.deepEqual(
         DataFrame.sql.request(
             'SELECT * FROM tmp WHERE column1 >= 2 AND column2 != "on the road again again"').toDict(),
-        df.filter(row => row.get('column1') >= 2 && row.get('column2') !== 'on the road again again').toDict(),
+        df1.filter(row => row.get('column1') >= 2 && row.get('column2') !== 'on the road again again').toDict(),
         'select everything from a table and filter rows based on multiple conditions.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id').toDict(),
-        df.join(df2, 'id').toDict(),
+        df1.join(df2, 'id').toDict(),
         'select everything from a join (inner) between 2 tables.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id WHERE column1 != undefined').toDict(),
-        df.join(df2, 'id').filter(row => row.get('column1') !== undefined).toDict(),
+        df1.join(df2, 'id').filter(row => row.get('column1') !== undefined).toDict(),
         'select everything from a join chained with a filter.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request(
             'SELECT * FROM tmp UNION SELECT id, column3 AS column1, column4 AS column2 FROM tmp2').toDict(),
-        df.union(df2.renameAll(['id', 'column1', 'column2'])).toDict(),
+        df1.union(df2.renameAll(['id', 'column1', 'column2'])).toDict(),
         'select everything from an union between 2 queries.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT DISTINCT column1 AS distinctC1 FROM tmp').toDict(),
-        df.distinct('column1').rename('column1', 'distinctC1').toDict(),
+        df1.distinct('column1').rename('column1', 'distinctC1').toDict(),
         'select column with distinct values and rename it.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT COUNT(column1) FROM tmp'),
-        df.select('column1').count(),
+        df1.select('column1').count(),
         'count column rows.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT SUM(column1) FROM tmp'),
-        df.stat.sum('column1'),
+        df1.stat.sum('column1'),
         'compute column sum.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT MAX(column1) FROM tmp'),
-        df.stat.max('column1'),
+        df1.stat.max('column1'),
         'compute column max.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT MIN(column1) FROM tmp'),
-        df.stat.min('column1'),
+        df1.stat.min('column1'),
         'compute column min.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT AVG(column1) FROM tmp'),
-        df.stat.mean('column1'),
+        df1.stat.mean('column1'),
         'count column mean.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp GROUP BY column1').listGroups(),
-        df.groupBy('column1').listGroups(),
+        df1.groupBy('column1').listGroups(),
         'groupBy which returns a GroupedDataFrame'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT AVG(column1) FROM tmp GROUP BY column1').toDict(),
-        df.groupBy('column1').aggregate((group) => group.stat.mean('column1')).toDict(),
+        df1.groupBy('column1').aggregate((group) => group.stat.mean('column1')).toDict(),
         'groupBy on a column and compute an aggregation.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT COUNT(column1) FROM tmp GROUP BY column1, column2').toDict(),
-        df.groupBy('column1', 'column2').aggregate((group) => group.count()).toDict(),
+        df1.groupBy('column1', 'column2').aggregate((group) => group.count()).toDict(),
         'groupBy on multiple columns and compute an aggregation.'
+    );
+
+    assert.end();
+});
+
+test('DataFrame sql module can\'t ', (assert) => {
+    assert.equal(
+        tryCatch(() => DataFrame.sql.registerTable([], 'tmp3')).name,
+        'TypeError',
+        'register a table which is not a DataFrame.'
+    );
+
+    assert.equal(
+        tryCatch(() => DataFrame.sql.request()).name,
+        'TypeError',
+        'execute a query which is not a String, throwing TypeError.'
+    );
+
+    assert.equal(
+        tryCatch(() => DataFrame.sql.registerTable(new DataFrame([{c1: 1}]), 'tmp')).name,
+        'TableAlreadyExistsError',
+        'register a table when the name already exists without using overwrite mode, throwing TableAlreadyExistsError.'
+    );
+
+    assert.equal(
+        tryCatch(() => DataFrame.sql.renameTable('tmp2', 'tmp')).name,
+        'TableAlreadyExistsError',
+        'rename a table by using a table name already used without using overwrite mode, throwing TableAlreadyExistsError.'
     );
 
     assert.end();

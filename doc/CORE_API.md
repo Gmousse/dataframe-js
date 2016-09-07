@@ -38,7 +38,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
     * _instance_
         * [.toDict()](#DataFrame+toDict) ⇒ <code>Object</code>
         * [.toArray([columnName])](#DataFrame+toArray) ⇒ <code>Array</code>
-        * [.toCollection([asRows])](#DataFrame+toCollection) ⇒ <code>Array</code>
+        * [.toCollection([ofRows])](#DataFrame+toCollection) ⇒ <code>Array</code>
         * [.toText([sep], [header], [path])](#DataFrame+toText) ⇒ <code>String</code>
         * [.toCSV([header], [path])](#DataFrame+toCSV) ⇒ <code>String</code>
         * [.toJSON([path])](#DataFrame+toJSON) ⇒ <code>String</code>
@@ -142,7 +142,7 @@ df.toArray()
 ```
 <a name="DataFrame+toCollection"></a>
 
-### dataFrame.toCollection([asRows]) ⇒ <code>Array</code>
+### dataFrame.toCollection([ofRows]) ⇒ <code>Array</code>
 Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
@@ -150,7 +150,7 @@ Convert DataFrame into Array of dictionnaries. You can also return Rows instead 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [asRows] | <code>Boolean</code> | Return a collection of Rows instead of dictionnaries. |
+| [ofRows] | <code>Boolean</code> | Return a collection of Rows instead of dictionnaries. |
 
 **Example**  
 ```js
@@ -656,7 +656,7 @@ df.groupBy('column1', 'column2').aggregate((group) => group.count())
 <a name="DataFrame+sortBy"></a>
 
 ### dataFrame.sortBy(columnName, [reverse]) ⇒ <code>[DataFrame](#DataFrame)</code>
-Sort DataFrame rows based on a column values. The row should contains only one type. (numerical or string).
+Sort DataFrame rows based on a column values. The row should contains only one variable type.
 
 **Kind**: instance method of <code>[DataFrame](#DataFrame)</code>  
 **Returns**: <code>[DataFrame](#DataFrame)</code> - An ordered DataFrame.  
@@ -839,6 +839,17 @@ Create a new Row.
 | data | <code>Array</code> &#124; <code>Object</code> &#124; <code>[Row](#Row)</code> | The data of the Row. |
 | columns | <code>Array</code> | The DataFrame column names. |
 
+**Example**  
+```js
+new Row({
+     'column1': 3,
+     'column2': 6,
+})
+
+new Row([3, 6], ['column1', 'column2'])
+
+new Row(Row, ['column1', 'column3'])
+```
 <a name="Row+toDict"></a>
 
 ### row.toDict() ⇒ <code>Object</code>
@@ -868,6 +879,10 @@ Get the Row size.
 
 **Kind**: instance method of <code>[Row](#Row)</code>  
 **Returns**: <code>Int</code> - The Row length.  
+**Example**  
+```js
+row.size()
+```
 <a name="Row+has"></a>
 
 ### row.has(columnName) ⇒ <code>Boolean</code>
@@ -981,7 +996,7 @@ groupedDf.show()
 List GroupedDataFrame groups.
 
 **Kind**: global function  
-**Returns**: <code>Array</code> - An Array containing GroupedDataFrame groupNames.  
+**Returns**: <code>Array</code> - An Array containing GroupedDataFrame group names.  
 **Example**  
 ```js
 gdf.listGroups()
@@ -992,7 +1007,7 @@ gdf.listGroups()
 Create an aggregation from a function.
 
 **Kind**: global function  
-**Returns**: <code>[DataFrame](#DataFrame)</code> - A new DataFrame with a column aggregation containing the result.  
+**Returns**: <code>[DataFrame](#DataFrame)</code> - A new DataFrame with a column 'aggregation' containing the result.  
 
 | Param | Type | Description |
 | --- | --- | --- |
