@@ -18,8 +18,10 @@
 - Adding an optional parameter for DataFrame.toArray(), columnName, allowing to return only one column as Array. Related to issue [#11](https://github.com/Gmousse/dataframe-js/issues/11).
 - Adding DataFrame.toCollection(), to return the DataFrame as a collection of dictionnaries (object). Related to issue [#9](https://github.com/Gmousse/dataframe-js/issues/9).
 - Adding DataFrame.stat.sum() in the stat module. Related to issue [#10](https://github.com/Gmousse/dataframe-js/issues/10).
+- Adding DataFrame.toCollection(). Related to issue [#9](https://github.com/Gmousse/dataframe-js/issues/9).
 - DataFrame.randomSplit() is renamed in DataFrame.bisect(). /!\ Incompatible with older versions.
 - Debbugging DataFrame.show(). Related to the issue [#7](https://github.com/Gmousse/dataframe-js/issues/7).
+- Debbugging DataFrame.sortBy(). Now, it returns an error when applied on a mixed type column. Related to the issues [#3](https://github.com/Gmousse/dataframe-js/issues/3) and [#6](https://github.com/Gmousse/dataframe-js/issues/6).
 - DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Refactoring join methods.
 - Adding unit tests to cover more cases.
