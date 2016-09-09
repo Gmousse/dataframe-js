@@ -21,13 +21,12 @@
   "main": "./lib/index.js",
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
+    "lint": "eslint -c .eslintrc ./src",
+    "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
     "buildCommonJS": "NODE_ENV=production webpack && uglifyjs lib/browser/dataframe.js > lib/browser/dataframe-min.js",
     "build": "NODE_ENV=production babel src/ -d lib/ && npm run buildCommonJS",
-    "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
-    "lint": "eslint -c .eslintrc ./src",
-    "check": "npm run  lint && npm run test && npm run build && npm run doc",
+    "check": "npm run lint && npm run build && npm run test && npm run doc",
     "commit": "npm run check && git add . && git commit",
-    "push": "npm run commit && git push",
     "prepublish": "npm run check"
   },
   "author": {

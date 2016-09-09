@@ -1,6 +1,6 @@
 import tape from 'tape';
 
-import { DataFrame } from '../src/index.js';
+import { DataFrame } from '../lib/index.js';
 import { tryCatch } from './utils.js';
 
 const test = tape;
@@ -176,6 +176,24 @@ test('DataFrame sql module can\'t ', (assert) => {
         tryCatch(() => DataFrame.sql.renameTable('tmp2', 'tmp')).name,
         'TableAlreadyExistsError',
         'rename a table by using a table name already used without using overwrite mode, throwing TableAlreadyExistsError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('COUNT(column1) FROM tmp')).name,
+        'SQLParseError',
+        'execute a query without SELECT, throwing SQLParseError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT COUNT(column1) tmp')).name,
+        'SQLParseError',
+        'execute a query without FROM, throwing SQLParseError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT COUNT(column1) FROM')).name,
+        'SQLParseError',
+        'execute a query without table name, throwing SQLParseError.'
     );
 
     assert.end();

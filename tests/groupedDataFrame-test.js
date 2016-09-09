@@ -1,7 +1,7 @@
 import tape from 'tape';
 
-import GroupedDataFrame from '../src/groupedDataframe.js';
-import DataFrame from '../src/dataframe.js';
+import GroupedDataFrame from '../lib/groupedDataframe.js';
+import DataFrame from '../lib/dataframe.js';
 import { tryCatch } from './utils.js';
 
 const test = tape;

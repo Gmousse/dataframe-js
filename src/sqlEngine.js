@@ -75,6 +75,9 @@ function replaceTermsInQuery(query) {
 function sqlSplitter(query) {
     const splittedQuery = replaceTermsInQuery(query).split(' ');
     const fromLoc = splittedQuery.findIndex(word => word.toUpperCase() === 'FROM');
+    if (fromLoc === -1) {
+        throw new SQLParseError('Your query should contains FROM keyword');
+    }
     return {
         selections: splittedQuery.slice(0, fromLoc),
         table: splittedQuery[fromLoc + 1],
@@ -97,7 +100,7 @@ function parseOperations(operations, tables) {
 
 function parseSelections(selections) {
     if (selections[0].toUpperCase() !== 'SELECT') {
-        throw new SQLParseError('Your query should begin with SELECT keyword.');
+        throw new SQLParseError('Your query should begin with SELECT keyword');
     }
     selections.shift();
     return match(selections.join(' ').split(','),
@@ -139,6 +142,9 @@ function parseSelections(selections) {
 
 export default function sqlParser(query, tables) {
     const {selections, table, operations} = sqlSplitter(query);
+    if (!table) {
+        throw new SQLParseError('Your query doesn\'t have a correct table name');
+    }
     const applyOperations = parseOperations(operations, tables);
     const applySelections = parseSelections(selections);
     return applySelections(applyOperations(tables[table]));

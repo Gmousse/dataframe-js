@@ -1,6 +1,6 @@
 import tape from 'tape';
 
-import { DataFrame } from '../src/index.js';
+import { DataFrame } from '../lib/index.js';
 
 const test = tape;
 
