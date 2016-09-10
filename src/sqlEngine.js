@@ -142,8 +142,8 @@ function parseSelections(selections) {
 
 export default function sqlParser(query, tables) {
     const {selections, table, operations} = sqlSplitter(query);
-    if (!table) {
-        throw new SQLParseError('Your query doesn\'t have a correct table name');
+    if (!table || !Object.keys(tables).includes(table)) {
+        throw new SQLParseError(`Wrong table name in your query: ${table}`);
     }
     const applyOperations = parseOperations(operations, tables);
     const applySelections = parseSelections(selections);

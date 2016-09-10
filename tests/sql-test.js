@@ -196,5 +196,23 @@ test('DataFrame sql module can\'t ', (assert) => {
         'execute a query without table name, throwing SQLParseError.'
     );
 
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT COUNT(column1) FROM tmp404')).name,
+        'SQLParseError',
+        'execute a query with a wrong table name, throwing SQLParseError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT FROM tmp2')).name,
+        'NoSuchColumnError',
+        'execute a query without a column name, throwing NoSuchColumnError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT column1 FROM tmp2')).name,
+        'NoSuchColumnError',
+        'execute a query with a wron column name, throwing NoSuchColumnError.'
+    );
+
     assert.end();
 });
