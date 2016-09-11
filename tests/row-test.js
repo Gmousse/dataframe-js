@@ -1,6 +1,6 @@
 import tape from 'tape';
 
-import { Row } from '../lib/index.js';
+import { Row } from '../src/index.js';
 import { tryCatch } from './utils.js';
 
 const test = tape;

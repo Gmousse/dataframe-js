@@ -1,11 +1,13 @@
 import sqlParser from '../sqlEngine.js';
-import { InputTypeError, TableAlreadyExistsError } from '../errors.js';
+import { TableAlreadyExistsError } from '../errors.js';
+import { checktypes } from '../checkTypes.js';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
  */
 class SQL {
 
+    @checktypes('String')
     /**
      * Request on a SQL query.
      * @param {String} query A SQL query to request.
@@ -14,7 +16,6 @@ class SQL {
      * DataFrame.request('SELECT * FROM tmp');
      */
     static request(query) {
-        if (!(typeof query === 'string')) {throw new InputTypeError('query', ['String'], typeof query);}
         return sqlParser(query, SQL.tables);
     }
 
@@ -60,6 +61,7 @@ class SQL {
         return Object.keys(SQL.tables);
     }
 
+    @checktypes('DataFrame', 'String')
     /**
      * Register a DataFrame as a temporary table.
      * @param {DataFrame} df The DataFrame to register.
@@ -69,7 +71,6 @@ class SQL {
      * DataFrame.registerTable('tmp', df);
      */
     static registerTable(df, tableName, overwrite = false) {
-        if (!(df.constructor.name === 'DataFrame')) {throw new InputTypeError('df', ['DataFrame'], df.constructor.name);}
         if (SQL.listTables().includes(tableName) && !overwrite) {
             throw new TableAlreadyExistsError(tableName);
         }
