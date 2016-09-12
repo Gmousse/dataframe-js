@@ -1,5 +1,7 @@
+import { checktypes } from 'es7-checktypes-decorator';
+
 import { match, arrayEqual } from './reusables.js';
-import { InputTypeError, NoSuchColumnError } from './errors.js';
+import { NoSuchColumnError } from './errors.js';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
@@ -42,12 +44,12 @@ class Row {
         );
     }
 
+    @checktypes(['Row', Array, Object])
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
                 [(value) => (value instanceof Row), () => this._fromObject(data[__values__])],
-                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)],
-                [() => true, () => {throw new InputTypeError('data', ['Object', 'Array', 'Row'], typeof data);}]
+                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)]
             );
     }
 

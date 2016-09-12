@@ -29,6 +29,8 @@
 - Adding unit tests to cover more cases.
 - Unit tests are now realized on es5 compiled version.
 - Clarifying error messages.
+- Adding `@checktypes` (see [es7-checktypes-decorator](https://github.com/Gmousse/es7-checktypes-decorator)) to handle wrong arguments types.
+- Removing InputTypeError, now replaced by `@checktypes`. /!\ Incompatible with older versions.
 
 ---
 

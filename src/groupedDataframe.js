@@ -1,5 +1,6 @@
+import { checktypes } from 'es7-checktypes-decorator';
+
 import { combine } from './reusables.js';
-import { InputTypeError } from './errors.js';
 
 const __groups__ = Symbol('groups');
 
@@ -29,9 +30,8 @@ export default class GroupedDataFrame {
         }
     }
 
+    @checktypes('DataFrame', Array)
     _groupBy(df, columnNames) {
-        if (!(df.constructor.name === 'DataFrame')) {throw new InputTypeError('df', ['DataFrame'], df.constructor.name);}
-        if (!(columnNames)) {throw new InputTypeError('columnNames', ['...String'], columnNames);}
         return combine(columnNames.map((column) => df.distinct(column).toArray(column))).map(
             combination => {
                 const groupKey = Object.assign({}, ...combination.map((column, i) => ({[columnNames[i]]: column})));
@@ -82,6 +82,7 @@ export default class GroupedDataFrame {
         return [...this].map(({groupKey}) => groupKey);
     }
 
+    @checktypes('Function')
     /**
      * Create an aggregation from a function.
      * @param {Function} func The aggregation function.

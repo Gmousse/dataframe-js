@@ -1,6 +1,7 @@
+import { checktypes } from 'es7-checktypes-decorator';
+
 import sqlParser from '../sqlEngine.js';
 import { TableAlreadyExistsError } from '../errors.js';
-import { checktypes } from '../checkTypes.js';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.

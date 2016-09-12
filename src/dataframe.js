@@ -1,5 +1,7 @@
+import { checktypes } from 'es7-checktypes-decorator';
+
 import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
-import { InputTypeError, WrongSchemaError, MixedTypeError } from './errors.js';
+import { WrongSchemaError, MixedTypeError } from './errors.js';
 import Row from './row.js';
 import GroupedDataFrame from './groupedDataframe.js';
 
@@ -81,6 +83,7 @@ class DataFrame {
         return columns ? columns.map(column => String(column).replace(' ', '')) : columns;
     }
 
+    @checktypes(['DataFrame', Array, Object])
     _build(data, columns) {
         return match(data,
             [
@@ -96,10 +99,6 @@ class DataFrame {
             [
                 (value) => (value instanceof Object),
                 () => this._fromDict(data, columns ? columns : Object.keys(data)),
-            ],
-            [
-                () => true,
-                () => {throw new InputTypeError('data', ['Object', 'Array', 'DataFrame'], typeof data);},
             ]);
     }
 
