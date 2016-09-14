@@ -1,9 +1,23 @@
 # dataframe-js
-**v0.3.0**
+**v1.0.0**
 
 ## Presentation
 
-dataframe-js provides another way to work with data in javascript (browser or nodejs) by using DataFrame, a powerfull data structure already used in some languages (Spark, Python, R, ...).
+dataframe-js provides another way to work with data in javascript (browser or server side) by using DataFrame, a data structure already used in some languages (Python, R, ...).
+
+dataframe-js provides some **immutable objects** (DataFrame, Row...) and an API closed to **functional** programming and **SQL syntax**.
+
+dataframe-js contains:
+  * A core:
+    * DataFrame: Main Object, similar to sql table providing methods to manipulate and transform data.
+    * Row: Object contained into a DataFrame, providing lower level manipulations.
+    * GroupedDataFrame: DataFrame grouped by columns.
+
+
+  * Some modules:
+    * Stat: Basic statistics computations on DataFrame columns.
+    * Matrix: Matrix computations (scalar products, ...).
+    * SQL: SQL requests on DataFrame.
 
 A DataFrame is simply built on two concepts:
 - **Columns** providing ways to select your data and reorganize them.
@@ -21,92 +35,61 @@ df.show()
 | undefined | 6         | undefined |
 ````
 
-**DataFrame is immutable** (lazy, for performance purposes). Then, each modification on DataFrame will return a new DataFrame decreasing side effects and making your data more secure.
-
-**DataFrame is easy to use** with a simple API (closed to Spark or SQL) designed to manipulate data faster and easier than ever.
-
-**DataFrame is flexible** because you can create DataFrames from multiple data format (array, object) and you can export your DataFrames into these (array, object, csv, json...).
-
-**DataFrame is modulable** because you can use additional modules (Stat and Matrix by default) or create your own.
+It is also compatible (import / export) with native JavaScript objects (Array, Hash...) and other formats (csv, json...).
 
 ## Installation
 via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 
 via npm: `npm install dataframe-js`
 
-in browser: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
+in the browser:
+  * not mifinied: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
 
-in browser with minified version: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
+  * minified: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
 
-## Manual
+## Usage
 
-dataframe-js contains a **principal core (DataFrame and Row)** and **two default modules (Stat and Matrix)**. Refer to this manual to use them. You can also directly read unit tests in `./tests/` or documented code in `./src/`.
+Complete API documentation:
+  * Core: DataFrame, Row, GroupedDataFrame
+  * Modules: Stat, Matrix, SQL
 
-### Core
+[.toDict()](./doc/CORE_API.md#DataFrame+toDict)
 
-#### DataFrame and Row API documentation: [Core API](./doc/CORE_API.md)
-
-#### Usage:
-
-To use dataframe-js, simply import the library. Then you can use DataFrame, Row or other Core components.
+### Import
 
 ```javascript
+// es6
 import { DataFrame, Row } from 'dataframe-js';
+// es5
+var DataFrame = require('dataframe-js').DataFrame;
+// Browser
+var DataFrame = dfjs.DataFrame;
 ```
 
-**In browser:** you can use directly DataFrame or row with: `dfjs.DataFrame` or `dfjs.Row`.
-
-To create a DataFrame, you have to pass your data and your column names. You can use different data structures as below:
+### DataFrame creation
 
 ```javascript
-const df = new DataFrame(myData, myColumns);
+const df = new DataFrame(data, columns);
 
-const dfFromObjectOfArrays = new DataFrame({
-    column1: [3, 6, 8], //<------ A column
-    column2: [3, 4, 5, 6],
-}, ['column1', 'column2']);
+// From a collection (easier)
+const df = new DataFrame([
+    {c1: 1, c2: 6}, // <------- A row
+    {c4: 1, c3: 2}
+], ['c1', 'c2', 'c3', 'c4']);
 
-const dfFromArrayOfArrays = new DataFrame([
+// From a table
+const df = new DataFrame([
     [1, 6, 9, 10, 12], // <------- A row
     [1, 2],
     [6, 6, 9, 8, 9, 12],
 ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 
-const dfFromArrayOfObjects = new DataFrame([
-    {c1: 1, c2: 6}, // <--- A row
-    {c4: 1, c3: 2}
-], ['c1', 'c2', 'c3', 'c4']);
-```
-
-If you don't pass column names, they will be infered from your data but **it's slower**:
-
-```javascript
-// here you don't pass column names
+// From a dictionnary (Hash)
 const dfFromObjectOfArrays = new DataFrame({
-    column1: [3, 6, 8], //<------ A column
+    column1: [3, 6, 8], // <------ A column
     column2: [3, 4, 5, 6],
-});
+}, ['column1', 'column2']);
 
-console.log(dfFromObjectOfArrays.listColumns())
-// ['column1', 'column2']
-
-const dfFromArrayOfArrays = new DataFrame([
-    [1, 6, 9, 10, 12], // <------- A row
-    [1, 2],
-    [6, 6, 9, 8, 9, 12],
-]);
-
-console.log(dfFromArrayOfArrays.listColumns())
-// ['0', '1', '2', '3', '4', '5']
-
-
-const dfFromArrayOfObjects = new DataFrame([
-    {c1: 1, c2: 6}, // <--- A row
-    {c4: 1, c3: 2}
-]);
-
-console.log(dfFromArrayOfObjects.listColumns())
-// ['c1', 'c2', 'c3', 'c4']
 ```
 
 Of course, you can do the reverse by exporting your DataFrame in another format by using:
