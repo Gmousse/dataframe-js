@@ -181,6 +181,18 @@
                       </a></li>
                       
                       <li><a
+                        href='#DataFrame#castAll'
+                        class='regular pre-open'>
+                        #castAll
+                      </a></li>
+                      
+                      <li><a
+                        href='#DataFrame#cast'
+                        class='regular pre-open'>
+                        #cast
+                      </a></li>
+                      
+                      <li><a
                         href='#DataFrame#drop'
                         class='regular pre-open'>
                         #drop
@@ -199,15 +211,15 @@
                       </a></li>
                       
                       <li><a
-                        href='#DataFrame#find'
-                        class='regular pre-open'>
-                        #find
-                      </a></li>
-                      
-                      <li><a
                         href='#DataFrame#where'
                         class='regular pre-open'>
                         #where
+                      </a></li>
+                      
+                      <li><a
+                        href='#DataFrame#find'
+                        class='regular pre-open'>
+                        #find
                       </a></li>
                       
                       <li><a
@@ -651,7 +663,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/dataframe.js#L14-L727'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/dataframe.js#L14-L756'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -2263,7 +2275,7 @@ df.restructure([<span class="hljs-string">'column1'</span>, <span class="hljs-st
 
   
 
-  <p>Rename columns.</p>
+  <p>Rename each column.</p>
 
 
   <div class='pre p1 fill-light mt0'>renameAll(newColumnNames: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="#dataframe">DataFrame</a></div>
@@ -2390,6 +2402,166 @@ df.restructure([<span class="hljs-string">'column1'</span>, <span class="hljs-st
     
       
       <pre class='p1 overflow-auto round fill-light'>df.rename(<span class="hljs-string">'column1'</span>, <span class="hljs-string">'columnRenamed'</span>)</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame#castAll'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>castAll(typeFunctions)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Cast each column into a given type.</p>
+
+
+  <div class='pre p1 fill-light mt0'>castAll(typeFunctions: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>): <a href="#dataframe">DataFrame</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typeFunctions</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)</code> The functions used to cast columns.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dataframe">DataFrame</a></code>:
+        A new DataFrame with the columns having new types.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>df.castAll([<span class="hljs-built_in">Number</span>, <span class="hljs-built_in">String</span>, (val) =&gt; <span class="hljs-keyword">new</span> CustomClass(val)])</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame#cast'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>cast(columnName, ObjectType, typeFunction)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Cast a column into a given type.</p>
+
+
+  <div class='pre p1 fill-light mt0'>cast(columnName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, ObjectType: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>, typeFunction: any): <a href="#dataframe">DataFrame</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>columnName</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The column to cast.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>ObjectType</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a>)</code> The function used to cast the column.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>typeFunction</span> <code class='quiet'>(any)</code> 
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dataframe">DataFrame</a></code>:
+        A new DataFrame with the column having a new type.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>df.cast(<span class="hljs-string">'column1'</span>, <span class="hljs-built_in">Number</span>)
+df.cast(<span class="hljs-string">'column1'</span>, (val) =&gt; <span class="hljs-keyword">new</span> MyCustomClass(val))</pre>
     
   
 
@@ -2626,79 +2798,6 @@ df.filter({<span class="hljs-string">'column2'</span>: <span class="hljs-number"
       </div>
     </div>
   
-    <div class='border-bottom' id='DataFrame#find'>
-      <div class="clearfix small pointer toggle-sibling">
-        <div class="py1 contain">
-            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>find(condition)</span>
-        </div>
-      </div>
-      <div class="clearfix display-none toggle-target">
-        <section class='p2 mb2 clearfix bg-white minishadow'>
-
-  
-
-  <p>Find a row (the first met) based on a condition.</p>
-
-
-  <div class='pre p1 fill-light mt0'>find(condition: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): <a href="#row">Row</a></div>
-
-  
-
-  
-  
-  
-  
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Parameters</div>
-    <div class='prose'>
-      
-        <div class='space-bottom0'>
-          <div>
-            <span class='code bold'>condition</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code> A filter function or a column/value object.
-
-          </div>
-          
-        </div>
-      
-    </div>
-  
-
-  
-
-  
-    
-      <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="#row">Row</a></code>:
-        The targeted Row.
-
-      
-    
-  
-
-  
-
-  
-    <div class='py1 quiet mt1 prose-big'>Example</div>
-    
-      
-      <pre class='p1 overflow-auto round fill-light'>df.find(row =&gt; row.get(<span class="hljs-string">'column1'</span>) === <span class="hljs-number">3</span>)
-df.find({<span class="hljs-string">'column1'</span>: <span class="hljs-number">3</span>})</pre>
-    
-  
-
-  
-
-  
-
-  
-</section>
-
-      </div>
-    </div>
-  
     <div class='border-bottom' id='DataFrame#where'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -2760,6 +2859,79 @@ Alias of .filter()</p>
       
       <pre class='p1 overflow-auto round fill-light'>df.where(row =&gt; row.get(<span class="hljs-string">'column1'</span>) &gt;= <span class="hljs-number">3</span>)
 df.where({<span class="hljs-string">'column2'</span>: <span class="hljs-number">5</span>, <span class="hljs-string">'column1'</span>: <span class="hljs-number">3</span>}))</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame#find'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>find(condition)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Find a row (the first met) based on a condition.</p>
+
+
+  <div class='pre p1 fill-light mt0'>find(condition: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>)): <a href="#row">Row</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>condition</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function">Function</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a>))</code> A filter function or a column/value object.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#row">Row</a></code>:
+        The targeted Row.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>df.find(row =&gt; row.get(<span class="hljs-string">'column1'</span>) === <span class="hljs-number">3</span>)
+df.find({<span class="hljs-string">'column1'</span>: <span class="hljs-number">3</span>})</pre>
     
   
 
@@ -3956,7 +4128,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/groupedDataframe.js#L10-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/groupedDataframe.js#L10-L99'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4355,7 +4527,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5064,7 +5236,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -5474,7 +5646,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6076,7 +6248,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3b3c978a70fddcef87d6fde127899c85c52cbc22/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/26f5ad2cf68971d9c9fb8562c63d21329f7ebb91/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     

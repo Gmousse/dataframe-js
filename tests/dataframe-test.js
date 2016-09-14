@@ -260,6 +260,24 @@ test('DataFrame columns can be', (assert) => {
         'renamed individually.'
     );
 
+    class CustomClass {
+        constructor(valueToConvert) {
+            this.value = String(Number(valueToConvert) * 10);
+        }
+    }
+
+    assert.deepEqual(
+        df.select('c1', 'c2', 'c3').castAll([String, Number, (val) => new CustomClass(val)]).toArray()[0],
+            ['1', 6, {value: '90'}],
+            'cast.'
+    );
+
+    assert.deepEqual(
+        df.select('c1', 'c2', 'c3').cast('c2', String).toArray()[0],
+        [1, '6', 9],
+        'cast individually.'
+    );
+
     assert.deepEqual(
         df.restructure(['c2', 'c3', 'c36']).toDict(), {
             c2: [6, 2, 6],

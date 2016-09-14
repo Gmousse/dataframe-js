@@ -22,7 +22,7 @@
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
     "lint": "eslint -c .eslintrc ./src",
-    "doc": "rm -rf doc/api & documentation build src/ --github --output doc/api --format 'html' & documentation build src/ --github --output doc/api.md --format 'md'",
+    "doc": "babel-node doc/doc.js",
     "buildCommonJS": "NODE_ENV=production webpack && uglifyjs lib/browser/dataframe.js > lib/browser/dataframe-min.js",
     "build": "NODE_ENV=production babel src/ -d lib/ && npm run buildCommonJS",
     "check": "npm run lint && npm run test",

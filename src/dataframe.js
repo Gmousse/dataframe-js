@@ -395,7 +395,7 @@ class DataFrame {
     }
 
     /**
-     * Rename columns.
+     * Rename each column.
      * @param {Array} newColumnNames The new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
@@ -405,7 +405,7 @@ class DataFrame {
         if (newColumnNames.length !== this[__columns__].length) {
             throw new WrongSchemaError(newColumnNames, this[__columns__]);
         }
-        return this.__newInstance__(this[__rows__].map(row => row.toArray()), newColumnNames);
+        return this.__newInstance__(this[__rows__], newColumnNames);
     }
 
     /**
@@ -419,6 +419,35 @@ class DataFrame {
     rename(columnName, replacement) {
         const newColumnNames = this[__columns__].map(column => column === columnName ? replacement : column);
         return this.renameAll(newColumnNames);
+    }
+
+    /**
+     * Cast each column into a given type.
+     * @param {Array} typeFunctions The functions used to cast columns.
+     * @returns {DataFrame} A new DataFrame with the columns having new types.
+     * @example
+     * df.castAll([Number, String, (val) => new CustomClass(val)])
+     */
+    castAll(typeFunctions) {
+        if (typeFunctions.length !== this[__columns__].length) {
+            throw new WrongSchemaError(typeFunctions, this[__columns__]);
+        }
+        return this.map((row) => new Row(row.toArray().map(
+            (column, index) => typeFunctions[index](column)), this[__columns__]
+        ));
+    }
+
+    /**
+     * Cast a column into a given type.
+     * @param {String} columnName The column to cast.
+     * @param {Function} ObjectType The function used to cast the column.
+     * @returns {DataFrame} A new DataFrame with the column having a new type.
+     * @example
+     * df.cast('column1', Number)
+     * df.cast('column1', (val) => new MyCustomClass(val))
+     */
+    cast(columnName, typeFunction) {
+        return this.withColumn(columnName, row => typeFunction(row.get(columnName)));
     }
 
     /**
@@ -468,18 +497,6 @@ class DataFrame {
     }
 
     /**
-     * Find a row (the first met) based on a condition.
-     * @param {Function | Object} condition A filter function or a column/value object.
-     * @returns {Row} The targeted Row.
-     * @example
-     * df.find(row => row.get('column1') === 3)
-     * df.find({'column1': 3})
-     */
-    find(condition) {
-        return this.filter(condition)[__rows__][0];
-    }
-
-    /**
      * Filter DataFrame rows.
      * Alias of .filter()
      * @param {Function | Object} condition A filter function or a column/value object.
@@ -490,6 +507,18 @@ class DataFrame {
      */
     where(condition) {
         return this.filter(condition);
+    }
+
+    /**
+     * Find a row (the first met) based on a condition.
+     * @param {Function | Object} condition A filter function or a column/value object.
+     * @returns {Row} The targeted Row.
+     * @example
+     * df.find(row => row.get('column1') === 3)
+     * df.find({'column1': 3})
+     */
+    find(condition) {
+        return this.filter(condition)[__rows__][0];
     }
 
     /**
