@@ -1,5 +1,6 @@
 import tape from 'tape';
 
+import path from 'path';
 import { DataFrame } from '../src/index.js';
 import { tryCatch } from './utils.js';
 
@@ -75,6 +76,57 @@ test('DataFrame can ', (assert) => {
         new DataFrame(new DataFrame(collection)).constructor.name,
         'DataFrame',
         'be created from another DataFrame.'
+    );
+
+    const currentPath = path.resolve(__dirname) + '/../example';
+    DataFrame.fromCSV(`file:///${currentPath}/Titanic.csv`, true).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'': '1', Age: 'Child', Class: '1st', Freq: '0', Sex: 'Male', Survived: 'No' },
+                'be created from a csv file wtih header.'
+            )
+        )
+    );
+
+    DataFrame.fromCSV(`file:///${currentPath}/Titanic_2.csv`, false).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
+                'be created from a csv file without header.'
+            )
+        )
+    );
+
+    DataFrame.fromText(`file:///${currentPath}/Titanic_2.csv`, '', false).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
+                'be created from a text file with a custom seprator.'
+            )
+        )
+    );
+
+    DataFrame.fromJSON(`file:///${currentPath}/Titanic.json`).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'': 1, Age: 'Child', Class: '1st', Freq: 0, Sex: 'Male', Survived: 'No' },
+                'be created from a JSON containing a column by key.'
+            )
+        )
+    );
+
+    DataFrame.fromJSON(`file:///${currentPath}/Titanic_2.json`).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'FIELD1': 1, Age: 'Child', Class: '1st', Freq: 0, Sex: 'Male', Survived: 'No' },
+                'be created from a JSON containing a collection of rows.'
+            )
+        )
     );
 
     const df1 = new DataFrame([

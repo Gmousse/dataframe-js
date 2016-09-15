@@ -44,9 +44,9 @@ via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 via npm: `npm install dataframe-js`
 
 in the browser:
-  * not mifinied: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
+  * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/feature/sql/lib/browser/dataframe.js"></script>`
 
-  * minified: `<script src="https://raw.githubusercontent.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
+  * minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/feature/sql/lib/browser/dataframe-min.js"></script>`
 
 ## Usage
 
@@ -90,65 +90,33 @@ const dfFromObjectOfArrays = new DataFrame({
     column1: [3, 6, 8], // <------ A column
     column2: [3, 4, 5, 6],
 }, ['column1', 'column2']);
+
+// From files
+DataFrame.fromText('file://my/absolue/path/myfile.txt').then(df => df)
+DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df)
+DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 ```
 
-#### Export
+#### API detail
 
-[.toDict()](./doc/md-api/dataframe.md#todict),
-[.toArray()](./doc/md-api/dataframe.md#toarray),
-[.toCollection()](./doc/md-api/dataframe.md#tocollection),
-[.toText()](./doc/md-api/dataframe.md#totext),
-[.toCSV()](./doc/md-api/dataframe.md#tocsv),
-[.toJSON()](./doc/md-api/dataframe.md#tojson)
+[Import](./doc/md-api/index.md#import)
 
-#### Working with all the DataFrame
+[Export](./doc/md-api/index.md#export)
 
-[.show()](./doc/md-api/dataframe.md#show),
-[.dim()](./doc/md-api/dataframe.md#dim),
-[.transpose()](./doc/md-api/dataframe.md#transpose)
+[Working with all the DataFrame](./doc/md-api/index.md#dataframe)
 
-#### Working with columns
+[Working with columns](./doc/md-api/index.md#columns)
 
-[.listColumns()](./doc/md-api/dataframe.md#listcolumns),
-[.select()](./doc/md-api/dataframe.md#select),
-[.withColumn()](./doc/md-api/dataframe.md#withcolumn),
-[.countValue()](./doc/md-api/dataframe.md#countvalue),
-[.distinct()](./doc/md-api/dataframe.md#distinct),
-[.unique()](./doc/md-api/dataframe.md#unique),
-[.restructure()](./doc/md-api/dataframe.md#restructure),
-[.rename()](./doc/md-api/dataframe.md#rename),
-[.renameAll()](./doc/md-api/dataframe.md#renameall),
-[.cast()](./doc/md-api/dataframe.md#cast),
-[.castAll()](./doc/md-api/dataframe.md#castall),
-[.drop()](./doc/md-api/dataframe.md#drop),
+[Working with Rows](./doc/md-api/index.md#rows)
 
 #### Working with Rows
 
-[.count()](./doc/md-api/dataframe.md#count),
-[.push()](./doc/md-api/dataframe.md#push),
-[.replace()](./doc/md-api/dataframe.md#replace),
-[.chain()](./doc/md-api/dataframe.md#chain),
-[.map()](./doc/md-api/dataframe.md#map),
-[.filter()](./doc/md-api/dataframe.md#filter),
-[.where()](./doc/md-api/dataframe.md#where),
-[.find()](./doc/md-api/dataframe.md#find),
-[.reduce()](./doc/md-api/dataframe.md#reduce),
-[.reduceRight()](./doc/md-api/dataframe.md#reducebight),
-[.shuffle()](./doc/md-api/dataframe.md#shuffle),
-[.sample()](./doc/md-api/dataframe.md#sample),
-[.groupBy()](./doc/md-api/dataframe.md#groupby),
-[.sortBy()](./doc/md-api/dataframe.md#sortby),
-[.union()](./doc/md-api/dataframe.md#union),
-[.join()](./doc/md-api/dataframe.md#join),
-[.innerJoin()](./doc/md-api/dataframe.md#innerjoin),
-[.outerJoin()](./doc/md-api/dataframe.md#outerjoin),
-[.fullJoin()](./doc/md-api/dataframe.md#fulljoin),
-[.leftJoin()](./doc/md-api/dataframe.md#leftjoin),
-[.rightJoin()](./doc/md-api/dataframe.md#rightjoin)
 
-#### Working with default modules
+### Modules Usage
 
-**Stat**
+#### Default modules
+
+**Stat** [api](./doc/md-api/index.md#stat)
 
 This module provides basic statistics computations on a DataFrame columns.
 
@@ -165,7 +133,7 @@ df.stat
 [.sd()](./doc/md-api/modules/sql.md#sd)
 [.stats()](./doc/md-api/modules/sql.md#stats)
 
-**Matrix**
+**Matrix** [api](./doc/md-api/index.md#matrix)
 
 This module provides matrix operations between DataFrames.
 
@@ -179,7 +147,7 @@ df.matrix
 [.add()](./doc/md-api/modules/matrix.md#add)
 
 
-**SQL**
+**SQL** [api](./doc/md-api/index.md#sql)
 
 This module allows you to register temporary tables and to request on these, by using SQL syntax.
 
@@ -202,8 +170,22 @@ DataFrame.sql.request('SELECT * FROM tmp2 WHERE column1 = 6')
 [DataFrame.dropTables()](./doc/md-api/modules/sql.md#droptables),
 [DataFrame.renameTable()](./doc/md-api/modules/sql.md#renametable)
 
+#### Modules creation
 
-### Modules Usage
+Each module is a class with a constructor taking dataframe as parameter, and having df and name properties:
+
+```javascript
+class FakeModule {
+    constructor(dataframe) {
+        this.df = dataframe;
+        this.name = 'fakemodule';
+    }
+
+    test(x) {
+        return this.df.withColumn('test', row => row.set('test', x * 2));
+    }
+}
+```
 
 #### Modules registration
 
@@ -228,22 +210,7 @@ console.log(df.modules);
 // [FakeModule, Matrix]
 ````
 
-#### Modules creation
 
-Each module is a class with a constructor taking dataframe as parameter, and having df and name properties:
-
-```javascript
-class FakeModule {
-    constructor(dataframe) {
-        this.df = dataframe;
-        this.name = 'fakemodule';
-    }
-
-    test(x) {
-        return this.df.withColumn('test', row => row.set('test', x * 2));
-    }
-}
-```
 
 ## Contribution
 

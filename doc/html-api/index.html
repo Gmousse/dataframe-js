@@ -42,6 +42,24 @@
                         .setDefaultModules
                       </a></li>
                     
+                      <li><a
+                        href='#DataFrame.fromText'
+                        class='regular pre-open'>
+                        .fromText
+                      </a></li>
+                    
+                      <li><a
+                        href='#DataFrame.fromCSV'
+                        class='regular pre-open'>
+                        .fromCSV
+                      </a></li>
+                    
+                      <li><a
+                        href='#DataFrame.fromJSON'
+                        class='regular pre-open'>
+                        .fromJSON
+                      </a></li>
+                    
                     </ul>
                   
                   
@@ -663,7 +681,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/dataframe.js#L14-L756'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/dataframe.js#L16-L820'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -748,6 +766,231 @@
     
       
       <pre class='p1 overflow-auto round fill-light'>DataFrame.setDefaultModules(SQL, Stat)</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame.fromText'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromText(path, [sep], [header])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a DataFrame from a Text file. It returns a Promise.</p>
+
+
+  <div class='pre p1 fill-light mt0'>fromText(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, sep: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>](default &#x27;;&#x27;), header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>sep</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>](default &#x27;;&#x27;))</code> The separator used to parse the file.
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>header</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>]
+            (default <code>true</code>)
+            )</code> A boolean indicating if the text has a header or not.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>DataFrame.fromText(<span class="hljs-string">'http://myurl/myfile.txt'</span>).then(df =&gt; df.show())
+DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'</span>).then(df =&gt; df.show())
+DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'</span>, <span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame.fromCSV'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromCSV(path, [header])</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a DataFrame from a CSV file. It returns a Promise.</p>
+
+
+  <div class='pre p1 fill-light mt0'>fromCSV(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+
+          </div>
+          
+        </div>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>header</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>]
+            (default <code>true</code>)
+            )</code> A boolean indicating if the csv has a header or not.
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>DataFrame.fromCSV(<span class="hljs-string">'http://myurl/myfile.csv'</span>).then(df =&gt; df.show())
+DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'</span>).then(df =&gt; df.show())
+DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
+    <div class='border-bottom' id='DataFrame.fromJSON'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>fromJSON(path)</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Create a DataFrame from a JSON file. It returns a Promise.</p>
+
+
+  <div class='pre p1 fill-light mt0'>fromJSON(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Parameters</div>
+    <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+
+          </div>
+          
+        </div>
+      
+    </div>
+  
+
+  
+
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>DataFrame.fromJSON(<span class="hljs-string">'http://myurl/myfile.json'</span>).then(df =&gt; df.show())
+DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.json'</span>).then(df =&gt; df.show())</pre>
     
   
 
@@ -4128,7 +4371,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/groupedDataframe.js#L10-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/groupedDataframe.js#L10-L99'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4527,7 +4770,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5236,7 +5479,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -5646,7 +5889,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6248,7 +6491,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/2b423f46bf53b26e1d09ebb10b169488305709c8/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     

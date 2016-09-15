@@ -1,4 +1,6 @@
 import { checktypes } from 'es7-checktypes-decorator';
+import { text, json } from 'd3-request';
+import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
 
 import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
 import { WrongSchemaError, MixedTypeError } from './errors.js';
@@ -21,6 +23,68 @@ class DataFrame {
      */
     static setDefaultModules(...defaultModules) {
         DataFrame.defaultModules = defaultModules;
+    }
+
+    /**
+     * Create a DataFrame from a Text file. It returns a Promise.
+     * @param {String} path A path to the file (url or local).
+     * @param {String} sep The separator used to parse the file.
+     * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
+     * @example
+     * DataFrame.fromText('http://myurl/myfile.txt').then(df => df.show())
+     * DataFrame.fromText('file://my/absolue/path/myfile.txt').then(df => df.show())
+     * DataFrame.fromText('file://my/absolue/path/myfile.txt', ';', true).then(df => df.show())
+     */
+    static fromText(path, sep = ';', header = true) {
+        return new Promise((resolve) => {
+            return text(
+                path,
+                response => {
+                    const parser = dsvFormat(sep);
+                    const data = header ? parser.parse(response) : parser.parseRows(response);
+                    resolve(new DataFrame(data, data.columns));
+                }
+            );
+        });
+    }
+
+    /**
+     * Create a DataFrame from a CSV file. It returns a Promise.
+     * @param {String} path A path to the file (url or local).
+     * @param {Boolean} [header=true] A boolean indicating if the csv has a header or not.
+     * @example
+     * DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df.show())
+     * DataFrame.fromCSV('file://my/absolue/path/myfile.csv').then(df => df.show())
+     * DataFrame.fromCSV('file://my/absolue/path/myfile.csv', true).then(df => df.show())
+     */
+    static fromCSV(path, header = true) {
+        return new Promise((resolve) => {
+            return text(
+                path,
+                response => {
+                    const data = header ? csvParse(response) : csvParseRows(response);
+                    resolve(new DataFrame(data, data.columns));
+                }
+            );
+        });
+    }
+
+    /**
+     * Create a DataFrame from a JSON file. It returns a Promise.
+     * @param {String} path A path to the file (url or local).
+     * @example
+     * DataFrame.fromJSON('http://myurl/myfile.json').then(df => df.show())
+     * DataFrame.fromCSV('file://my/absolue/path/myfile.json').then(df => df.show())
+     */
+    static fromJSON(path) {
+        return new Promise((resolve) => {
+            return json(
+                path,
+                response => {
+                    resolve(new DataFrame(response));
+                }
+            );
+        });
     }
 
     /**
