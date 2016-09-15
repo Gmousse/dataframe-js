@@ -78,7 +78,7 @@ test('DataFrame can ', (assert) => {
         'be created from another DataFrame.'
     );
 
-    const currentPath = path.resolve(__dirname) + '/../example';
+    const currentPath = path.resolve(__dirname) + '/data';
     DataFrame.fromCSV(`file:///${currentPath}/Titanic.csv`, true).then(
         (value) => (
             assert.deepEqual(

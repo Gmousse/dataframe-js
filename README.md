@@ -13,9 +13,9 @@ A DataFrame is simply built on two concepts:
 const df = new DataFrame(rawData, columns)
 df.show()
 // DataFrame example
-| column1   | column2   | column3   | <--- Columns
+| column1   | column2   | column3   | // <--- Columns
 ------------------------------------
-| 3         | 3         | undefined | <--- Row
+| 3         | 3         | undefined | // <--- Row
 | 6         | 4         | undefined |
 | 8         | 5         | undefined |
 | undefined | 6         | undefined |
@@ -54,6 +54,11 @@ Complete API documentation: [Index](./doc/md-api/index.md)
   * Core: [DataFrame](./doc/md-api/dataframe.md#DataFrame), [Row](./doc/md-api/row.md#Row), [GroupedDataFrame](./doc/md-api/groupedDataframe.md#GroupedDataFrame)
   * Modules: [Stat](./doc/md-api/modules/stat.md#Stat), [Matrix](./doc/md-api/modules/matrix.md#Matrix), [SQL](./doc/md-api/modules/sql.md#SQL)
 
+### Examples
+
+[A simple use of DataFrame into the browser](./examples/example.html)
+[Unit tests](./tests/)
+
 ### Import
 
 ```javascript
@@ -67,7 +72,9 @@ var DataFrame = dfjs.DataFrame;
 
 ### DataFrame usage
 
-#### Creation
+#### DataFrame Creation
+
+You can create a DataFrame by using different ways:
 
 ```javascript
 const df = new DataFrame(data, columns);
@@ -86,7 +93,7 @@ const df = new DataFrame([
 ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']);
 
 // From a dictionnary (Hash)
-const dfFromObjectOfArrays = new DataFrame({
+const df = new DataFrame({
     column1: [3, 6, 8], // <------ A column
     column2: [3, 4, 5, 6],
 }, ['column1', 'column2']);
@@ -97,9 +104,9 @@ DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df)
 DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 ```
 
-#### API detail
+#### DataFrame API detail
 
-[Import](./doc/index.md#import): You can create a DataFrame from files.
+[Creation](./doc/index.md#creation): You can create a DataFrame from files.
 
 [Export](./doc/index.md#export): Export a DataFrame in different files format or javascript objects.
 

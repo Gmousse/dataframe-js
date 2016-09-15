@@ -1,4 +1,4 @@
-#### Import
+#### Creation
 
 [DataFrame.fromText()](./md-api/dataframe.md#fromtext),
 [DataFrame.fromCSV()](./md-api/dataframe.md#fromcsv),
