@@ -67,7 +67,7 @@ var DataFrame = dfjs.DataFrame;
 
 ### DataFrame usage
 
-#### DataFrame creation
+#### Creation
 
 ```javascript
 const df = new DataFrame(data, columns);
@@ -92,22 +92,22 @@ const dfFromObjectOfArrays = new DataFrame({
 }, ['column1', 'column2']);
 ```
 
-#### DataFrame export
+#### Export
 
 [.toDict()](./doc/md-api/dataframe.md#todict),
 [.toArray()](./doc/md-api/dataframe.md#toarray),
 [.toCollection()](./doc/md-api/dataframe.md#tocollection),
 [.toText()](./doc/md-api/dataframe.md#totext),
-[.toCSV()](./doc/md-api/dataframe.md#tocsv)
+[.toCSV()](./doc/md-api/dataframe.md#tocsv),
 [.toJSON()](./doc/md-api/dataframe.md#tojson)
 
-#### DataFrame general
+#### Working with all the DataFrame
 
 [.show()](./doc/md-api/dataframe.md#show),
 [.dim()](./doc/md-api/dataframe.md#dim),
-[.transpose()](./doc/md-api/dataframe.md#transpose),
+[.transpose()](./doc/md-api/dataframe.md#transpose)
 
-#### DataFrame columns
+#### Working with columns
 
 [.listColumns()](./doc/md-api/dataframe.md#listcolumns),
 [.select()](./doc/md-api/dataframe.md#select),
@@ -117,12 +117,12 @@ const dfFromObjectOfArrays = new DataFrame({
 [.unique()](./doc/md-api/dataframe.md#unique),
 [.restructure()](./doc/md-api/dataframe.md#restructure),
 [.rename()](./doc/md-api/dataframe.md#rename),
-[.renameAll()](./doc/md-api/dataframe.md#renameall)
-[.cast()](./doc/md-api/dataframe.md#cast)
-[.castAll()](./doc/md-api/dataframe.md#castall)
-[.drop()](./doc/md-api/dataframe.md#drop)
+[.renameAll()](./doc/md-api/dataframe.md#renameall),
+[.cast()](./doc/md-api/dataframe.md#cast),
+[.castAll()](./doc/md-api/dataframe.md#castall),
+[.drop()](./doc/md-api/dataframe.md#drop),
 
-#### DataFrame rows
+#### Working with Rows
 
 [.count()](./doc/md-api/dataframe.md#count),
 [.push()](./doc/md-api/dataframe.md#push),
@@ -130,25 +130,27 @@ const dfFromObjectOfArrays = new DataFrame({
 [.chain()](./doc/md-api/dataframe.md#chain),
 [.map()](./doc/md-api/dataframe.md#map),
 [.filter()](./doc/md-api/dataframe.md#filter),
-[.where()](./doc/md-api/dataframe.md#where)
-[.find()](./doc/md-api/dataframe.md#find)
-[.reduce()](./doc/md-api/dataframe.md#reduce)
-[.reduceRight()](./doc/md-api/dataframe.md#reducebight)
-[.shuffle()](./doc/md-api/dataframe.md#shuffle)
-[.sample()](./doc/md-api/dataframe.md#sample)
-[.groupBy()](./doc/md-api/dataframe.md#groupby)
-[.sortBy()](./doc/md-api/dataframe.md#sortby)
-[.union()](./doc/md-api/dataframe.md#union)
-[.join()](./doc/md-api/dataframe.md#join)
-[.innerJoin()](./doc/md-api/dataframe.md#innerjoin)
-[.outerJoin()](./doc/md-api/dataframe.md#outerjoin)
-[.fullJoin()](./doc/md-api/dataframe.md#fulljoin)
-[.leftJoin()](./doc/md-api/dataframe.md#leftjoin)
+[.where()](./doc/md-api/dataframe.md#where),
+[.find()](./doc/md-api/dataframe.md#find),
+[.reduce()](./doc/md-api/dataframe.md#reduce),
+[.reduceRight()](./doc/md-api/dataframe.md#reducebight),
+[.shuffle()](./doc/md-api/dataframe.md#shuffle),
+[.sample()](./doc/md-api/dataframe.md#sample),
+[.groupBy()](./doc/md-api/dataframe.md#groupby),
+[.sortBy()](./doc/md-api/dataframe.md#sortby),
+[.union()](./doc/md-api/dataframe.md#union),
+[.join()](./doc/md-api/dataframe.md#join),
+[.innerJoin()](./doc/md-api/dataframe.md#innerjoin),
+[.outerJoin()](./doc/md-api/dataframe.md#outerjoin),
+[.fullJoin()](./doc/md-api/dataframe.md#fulljoin),
+[.leftJoin()](./doc/md-api/dataframe.md#leftjoin),
 [.rightJoin()](./doc/md-api/dataframe.md#rightjoin)
 
-#### DataFrame default modules
+#### Working with default modules
 
 **Stat**
+
+This module provides basic statistics computations on a DataFrame columns.
 
 ````js
 df.stat
@@ -165,6 +167,8 @@ df.stat
 
 **Matrix**
 
+This module provides matrix operations between DataFrames.
+
 ````js
 df.matrix
 ````
@@ -172,19 +176,32 @@ df.matrix
 [.isCommutative()](./doc/md-api/modules/matrix.md#iscommutative),
 [.product()](./doc/md-api/modules/matrix.md#product),
 [.dot()](./doc/md-api/modules/matrix.md#dot),
-[.add()](./doc/md-api/modules/matrix.md#add),
+[.add()](./doc/md-api/modules/matrix.md#add)
 
 
 **SQL**
 
+This module allows you to register temporary tables and to request on these, by using SQL syntax.
+
 ````js
 df.sql
+
+// Register a tmp table
+df.sql.register('tmp2')
+DataFrame.sql.registerTable(df, 'tmp2')
+
+// Request on Table
+DataFrame.sql.request('SELECT * FROM tmp2 WHERE column1 = 6')
 ````
 
 [.register()](./doc/md-api/modules/sql.md#register),
-[.product()](./doc/md-api/modules/sql.md#product),
-[.dot()](./doc/md-api/modules/sql.md#dot),
-[.add()](./doc/md-api/modules/sql.md#add),
+[DataFrame.registerTable()](./doc/md-api/modules/sql.md#registerTable),
+[DataFrame.request()](./doc/md-api/modules/sql.md#request),
+[DataFrame.listTables()](./doc/md-api/modules/sql.md#listtables),
+[DataFrame.dropTable()](./doc/md-api/modules/sql.md#droptable),
+[DataFrame.dropTables()](./doc/md-api/modules/sql.md#droptables),
+[DataFrame.renameTable()](./doc/md-api/modules/sql.md#renametable)
+
 
 ### Modules Usage
 
