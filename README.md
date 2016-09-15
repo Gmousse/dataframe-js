@@ -57,6 +57,7 @@ Complete API documentation: [Index](./doc/md-api/index.md)
 ### Examples
 
 [A simple use of DataFrame into the browser](./examples/example.html)
+
 [Unit tests](./tests/)
 
 ### Import
