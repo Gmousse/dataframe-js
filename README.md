@@ -65,7 +65,7 @@ var DataFrame = require('dataframe-js').DataFrame;
 var DataFrame = dfjs.DataFrame;
 ```
 
-### DataFrame basic usage
+### DataFrame usage
 
 #### DataFrame creation
 
@@ -146,9 +146,49 @@ const dfFromObjectOfArrays = new DataFrame({
 [.leftJoin()](./doc/md-api/dataframe.md#leftjoin)
 [.rightJoin()](./doc/md-api/dataframe.md#rightjoin)
 
-### Modules
+#### DataFrame default modules
 
-#### Module registration
+**Stat**
+
+````js
+df.stat
+````
+
+[.min()](./doc/md-api/modules/sql.md#min),
+[.max()](./doc/md-api/modules/sql.md#max),
+[.sum()](./doc/md-api/modules/sql.md#sum),
+[.mean()](./doc/md-api/modules/sql.md#mean),
+[.average()](./doc/md-api/modules/sql.md#average),
+[.var()](./doc/md-api/modules/sql.md#var),
+[.sd()](./doc/md-api/modules/sql.md#sd)
+[.stats()](./doc/md-api/modules/sql.md#stats)
+
+**Matrix**
+
+````js
+df.matrix
+````
+
+[.isCommutative()](./doc/md-api/modules/matrix.md#iscommutative),
+[.product()](./doc/md-api/modules/matrix.md#product),
+[.dot()](./doc/md-api/modules/matrix.md#dot),
+[.add()](./doc/md-api/modules/matrix.md#add),
+
+
+**SQL**
+
+````js
+df.sql
+````
+
+[.register()](./doc/md-api/modules/sql.md#register),
+[.product()](./doc/md-api/modules/sql.md#product),
+[.dot()](./doc/md-api/modules/sql.md#dot),
+[.add()](./doc/md-api/modules/sql.md#add),
+
+### Modules Usage
+
+#### Modules registration
 
 You can register modules when you instanciate a DataFrame:
 
@@ -171,7 +211,7 @@ console.log(df.modules);
 // [FakeModule, Matrix]
 ````
 
-#### Module creation
+#### Modules creation
 
 Each module is a class with a constructor taking dataframe as parameter, and having df and name properties:
 
