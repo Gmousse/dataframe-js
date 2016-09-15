@@ -267,14 +267,15 @@ class DataFrame {
 
     /**
      * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [asCollection=true] Writing the JSON as collection of Object.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The json file in raw string.
      * @example
      * df.toJSON()
      * df.toJSON('~/dataframe.json')
      */
-    toJSON(path = undefined) {
-        const jsonContent = JSON.stringify(this.toDict());
+    toJSON(asCollection = false, path = undefined) {
+        const jsonContent = JSON.stringify(asCollection ? this.toCollection() : this.toDict());
         if (path) {saveFile(path, jsonContent);}
         return jsonContent;
     }

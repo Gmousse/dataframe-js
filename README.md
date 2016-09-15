@@ -50,7 +50,7 @@ in the browser:
 
 ## Usage
 
-Complete API documentation:
+Complete API documentation: [Index](./doc/md-api/index.md)
   * Core: [DataFrame](./doc/md-api/dataframe.md#DataFrame), [Row](./doc/md-api/row.md#Row), [GroupedDataFrame](./doc/md-api/groupedDataframe.md#GroupedDataFrame)
   * Modules: [Stat](./doc/md-api/modules/stat.md#Stat), [Matrix](./doc/md-api/modules/matrix.md#Matrix), [SQL](./doc/md-api/modules/sql.md#SQL)
 
@@ -99,60 +99,48 @@ DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 
 #### API detail
 
-[Import](./doc/md-api/index.md#import)
+[Import](./doc/index.md#import): You can create a DataFrame from files.
 
-[Export](./doc/md-api/index.md#export)
+[Export](./doc/index.md#export): Export a DataFrame in different files format or javascript objects.
 
-[Working with all the DataFrame](./doc/md-api/index.md#dataframe)
+[Working with all the DataFrame](./doc/index.md#general): Display and manipulate your DataFrame.
 
-[Working with columns](./doc/md-api/index.md#columns)
+[Working with Columns](./doc/index.md#columns): Use Columns to format your DataFrame.
 
-[Working with Rows](./doc/md-api/index.md#rows)
+[Working with Rows](./doc/index.md#rows): Manipulate and transform rows of a DataFrame.
 
-#### Working with Rows
+[Working at Row level](./doc/index.md#row): Use the Row api to set or get some values on each Row when you map, filter or simply manipulate Rows...
+
+[Working with aggregates](./doc/index.md#groupeddataframe): Apply aggregations when you groupBy a DataFrame in order to resume your data.
+
 
 
 ### Modules Usage
 
-#### Default modules
+#### Default modules API detail
 
-**Stat** [api](./doc/md-api/index.md#stat)
+[Stat](./doc/md-api/index.md#stat)
 
 This module provides basic statistics computations on a DataFrame columns.
 
 ````js
-df.stat
+df.stat.*
 ````
 
-[.min()](./doc/md-api/modules/sql.md#min),
-[.max()](./doc/md-api/modules/sql.md#max),
-[.sum()](./doc/md-api/modules/sql.md#sum),
-[.mean()](./doc/md-api/modules/sql.md#mean),
-[.average()](./doc/md-api/modules/sql.md#average),
-[.var()](./doc/md-api/modules/sql.md#var),
-[.sd()](./doc/md-api/modules/sql.md#sd)
-[.stats()](./doc/md-api/modules/sql.md#stats)
-
-**Matrix** [api](./doc/md-api/index.md#matrix)
+[Matrix](./doc/md-api/index.md#matrix)
 
 This module provides matrix operations between DataFrames.
 
 ````js
-df.matrix
+df.matrix.*
 ````
 
-[.isCommutative()](./doc/md-api/modules/matrix.md#iscommutative),
-[.product()](./doc/md-api/modules/matrix.md#product),
-[.dot()](./doc/md-api/modules/matrix.md#dot),
-[.add()](./doc/md-api/modules/matrix.md#add)
-
-
-**SQL** [api](./doc/md-api/index.md#sql)
+[SQL](./doc/md-api/index.md#sql)
 
 This module allows you to register temporary tables and to request on these, by using SQL syntax.
 
 ````js
-df.sql
+df.sql.*
 
 // Register a tmp table
 df.sql.register('tmp2')
@@ -162,13 +150,6 @@ DataFrame.sql.registerTable(df, 'tmp2')
 DataFrame.sql.request('SELECT * FROM tmp2 WHERE column1 = 6')
 ````
 
-[.register()](./doc/md-api/modules/sql.md#register),
-[DataFrame.registerTable()](./doc/md-api/modules/sql.md#registerTable),
-[DataFrame.request()](./doc/md-api/modules/sql.md#request),
-[DataFrame.listTables()](./doc/md-api/modules/sql.md#listtables),
-[DataFrame.dropTable()](./doc/md-api/modules/sql.md#droptable),
-[DataFrame.dropTables()](./doc/md-api/modules/sql.md#droptables),
-[DataFrame.renameTable()](./doc/md-api/modules/sql.md#renametable)
 
 #### Modules creation
 

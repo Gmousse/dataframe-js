@@ -210,6 +210,12 @@ test('DataFrame can ', (assert) => {
         'converted into a json.'
     );
 
+    assert.equal(
+        df1.toJSON(true),
+        '[{"c1":1,"c2":6,"c3":9,"c4":10,"c5":12},{"c1":1,"c2":2},{"c1":6,"c2":6,"c3":9,"c4":8,"c5":9,"c6":12}]',
+        'converted into a json as a collection of Object.'
+    );
+
     const df2 = new DataFrame({
         column1: [3, 6, 8],
         column2: ['3', '4', '5', '6'],

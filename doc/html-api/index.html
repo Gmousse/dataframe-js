@@ -681,7 +681,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/dataframe.js#L16-L820'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/dataframe.js#L16-L821'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -1495,7 +1495,7 @@ df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'~/da
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>toJSON([path])</span>
+            <span class='code strong strong truncate'>toJSON([asCollection], [path])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -1506,7 +1506,7 @@ df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'~/da
   <p>Convert the DataFrame into a json string. You can also save the file if you are using nodejs.</p>
 
 
-  <div class='pre p1 fill-light mt0'>toJSON(path: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
+  <div class='pre p1 fill-light mt0'>toJSON(asCollection: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>], path: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></div>
 
   
 
@@ -1519,6 +1519,16 @@ df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'~/da
   
     <div class='py1 quiet mt1 prose-big'>Parameters</div>
     <div class='prose'>
+      
+        <div class='space-bottom0'>
+          <div>
+            <span class='code bold'>asCollection</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>]
+            (default <code>true</code>)
+            )</code> Writing the JSON as collection of Object.
+
+          </div>
+          
+        </div>
       
         <div class='space-bottom0'>
           <div>
@@ -4371,7 +4381,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/groupedDataframe.js#L10-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/groupedDataframe.js#L10-L99'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4770,7 +4780,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5479,7 +5489,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -5889,7 +5899,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6491,7 +6501,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/85c93a4ce34335bd8a5106af87cc2fabc7aba38c/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/73aad8d74a6895172c95139419561d38ab6a8b5e/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     
