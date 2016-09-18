@@ -42,6 +42,7 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // Ok, now we can see the repartition of passengers by class + age + sex.
         // But it could be easier to read if we rename the aggregation and sort rows by count.
         const sortCountByGroup = countByGroup.rename('aggregation', 'count');
+
         // And now show the result
         sortCountByGroup.show();
         // | class     | age       | sex       | survived  | aggreg... |
