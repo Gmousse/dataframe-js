@@ -40,22 +40,23 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // Ok now we will count the number of passengers by class + age + sex by using groupBy and aggregation.
         const countByGroup = cleanDF.groupBy('class', 'age', 'sex', 'survived').aggregate(group => group.count());
         // Ok, now we can see the repartition of passengers by class + age + sex.
-        // But it could be easier to read if we sort rows by count.
-        const sortCountByGroup = countByGroup.sortBy('aggregation', true).sortBy('survived', true);
+        // But it could be easier to read if we rename the aggregation and sort rows by count.
+        const sortCountByGroup = countByGroup.rename('aggregation', 'count');
+        // And now show the result
         sortCountByGroup.show();
+        // | class     | age       | sex       | survived  | aggreg... |
+        // ------------------------------------------------------------
+        // | 3rd class | adults    | man       | no        | 387       |
+        // | 2nd class | adults    | man       | no        | 154       |
+        // | 1st class | adults    | women     | yes       | 140       |
+        // | 1st class | adults    | man       | no        | 118       |
+        // | 3rd class | adults    | women     | no        | 89        |
+        // | 2nd class | adults    | women     | yes       | 80        |
+        // | 3rd class | adults    | women     | yes       | 76        |
+        // | 3rd class | adults    | man       | yes       | 75        |
+        // | 1st class | adults    | man       | yes       | 57        |
+        // | 3rd class | child     | man       | no        | 35        |
 
-        // | class     | age       | sex       | aggreg... |
-        // ------------------------------------------------
-        // | 3rd class | adults    | man       | 462       |
-        // | 1st class | adults    | man       | 175       |
-        // | 2nd class | adults    | man       | 168       |
-        // | 3rd class | adults    | women     | 165       |
-        // | 1st class | adults    | women     | 144       |
-        // | 2nd class | adults    | women     | 93        |
-        // | 3rd class | child     | man       | 48        |
-        // | 3rd class | child     | women     | 31        |
-        // | 2nd class | child     | women     | 13        |
-        // | 2nd class | child     | man       | 11        |
 
 
     }

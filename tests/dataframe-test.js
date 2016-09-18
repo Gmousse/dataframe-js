@@ -313,6 +313,12 @@ test('DataFrame columns can be', (assert) => {
     );
 
     assert.deepEqual(
+        df.select('c2', 'c3', 'c4').renameAll(['c16', 'c17', 'c18']).toArray()[0],
+            [6, 9, 10],
+            'renamed without altering data.'
+    );
+
+    assert.deepEqual(
         df.select('c2', 'c3', 'c4').rename('c2', 'cRenamed').listColumns(),
         ['cRenamed', 'c3', 'c4'],
         'renamed individually.'

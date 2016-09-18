@@ -470,7 +470,7 @@ class DataFrame {
         if (newColumnNames.length !== this[__columns__].length) {
             throw new WrongSchemaError(newColumnNames, this[__columns__]);
         }
-        return this.__newInstance__(this[__rows__], newColumnNames);
+        return this.__newInstance__(this.toArray(), newColumnNames);
     }
 
     /**
