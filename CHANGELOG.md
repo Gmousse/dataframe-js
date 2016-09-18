@@ -24,6 +24,7 @@
 - DataFrame.randomSplit() is renamed in DataFrame.bisect(). /!\ Incompatible with older versions.
 - Debbugging DataFrame.show(). Related to the issue [#7](https://github.com/Gmousse/dataframe-js/issues/7).
 - Debbugging DataFrame.sortBy(). Now, it returns an error when applied on a mixed type column. Related to the issues [#3](https://github.com/Gmousse/dataframe-js/issues/3) and [#6](https://github.com/Gmousse/dataframe-js/issues/6).
+- Debbugging DataFrame.sortBy() when used with string.
 - DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Adding Error messages on Row, DataFrame, GroupedDataFrame and modules...
 - Refactoring join methods.

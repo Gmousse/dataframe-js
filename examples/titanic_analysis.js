@@ -38,10 +38,10 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         console.log(cleanDF.filter(row => row.get('survived') === 'no').count()); // and 817 died passengers.
 
         // Ok now we will count the number of passengers by class + age + sex by using groupBy and aggregation.
-        const countByGroup = cleanDF.groupBy('class', 'age', 'sex').aggregate(group => group.count());
+        const countByGroup = cleanDF.groupBy('class', 'age', 'sex', 'survived').aggregate(group => group.count());
         // Ok, now we can see the repartition of passengers by class + age + sex.
         // But it could be easier to read if we sort rows by count.
-        const sortCountByGroup = countByGroup.sortBy('aggregation', true);
+        const sortCountByGroup = countByGroup.sortBy('aggregation', true).sortBy('survived', true);
         sortCountByGroup.show();
 
         // | class     | age       | sex       | aggreg... |

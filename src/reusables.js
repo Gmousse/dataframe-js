@@ -85,3 +85,12 @@ export function xReplace(stringToReplace, ...patterns) {
 export function xContains(stringWhereFind, ...patterns) {
     return patterns.filter(pattern => stringWhereFind.includes(pattern));
 }
+
+export function compare(firstElem, secondElem, reverse = false) {
+    if (firstElem > secondElem) {
+        return reverse ? -1 : 1;
+    } else if (firstElem < secondElem) {
+        return reverse ? 1 : -1;
+    }
+    return 0;
+}

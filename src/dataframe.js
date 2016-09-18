@@ -2,7 +2,7 @@ import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
 import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
 
-import { match, transpose, chain, iter, arrayEqual, saveFile } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, compare } from './reusables.js';
 import { WrongSchemaError, MixedTypeError } from './errors.js';
 import Row from './row.js';
 import GroupedDataFrame from './groupedDataframe.js';
@@ -714,9 +714,9 @@ class DataFrame {
         const sortedRows = this[__rows__].sort((p, n) => {
             const [pValue, nValue] = [p.get(columnName), n.get(columnName)];
             if (typeof pValue !== typeof nValue) { throw new MixedTypeError(); }
-            return pValue - nValue;
+            return compare(pValue, nValue, reverse);
         });
-        return this.__newInstance__(reverse ? sortedRows.reverse() : sortedRows, this[__columns__]);
+        return this.__newInstance__(sortedRows, this[__columns__]);
     }
 
     /**
