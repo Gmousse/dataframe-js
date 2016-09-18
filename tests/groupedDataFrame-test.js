@@ -33,12 +33,12 @@ test('GroupedDataFrame can be ', (assert) => {
     );
 
     assert.deepEqual(new GroupedDataFrame(df, 'column1').toCollection().map(x => Object.keys(x)),
-        [['groupKey', 'group'], ['groupKey', 'group'], ['groupKey', 'group']],
+        [['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group']],
         'converted into a collection of dictionnaries containing each group.'
     );
 
     assert.deepEqual([...new GroupedDataFrame(df, 'column1')].map(x => Object.keys(x)),
-        [['groupKey', 'group'], ['groupKey', 'group'], ['groupKey', 'group']],
+        [['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group']],
         'converted into a collection of dictionnaries containing each group when destructured.'
     );
 

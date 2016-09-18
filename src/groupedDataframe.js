@@ -1,6 +1,6 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import { combine } from './reusables.js';
+import { combine, hashCode } from './reusables.js';
 
 const __groups__ = Symbol('groups');
 
@@ -30,6 +30,10 @@ export default class GroupedDataFrame {
         }
     }
 
+    __hashKey__(groupKey) {
+        return hashCode(Object.entries(groupKey).reduce((p, n) => [...p, ...n]).join(''));
+    }
+
     @checktypes('DataFrame', Array)
     _groupBy(df, columnNames) {
         return combine(columnNames.map((column) => df.distinct(column).toArray(column))).map(
@@ -37,12 +41,17 @@ export default class GroupedDataFrame {
                 const groupKey = Object.assign({}, ...combination.map((column, i) => ({[columnNames[i]]: column})));
                 return ({
                     groupKey,
+                    hash: this.__hashKey__(groupKey),
                     group: df.filter(
                         (row) => Object.entries(groupKey).reduce((p, n) => p && Object.is(row.get(n[0]), n[1]), true)
                     ),
                 });
             }
         ).filter(({group}) => group.count() > 0);
+    }
+
+    get(hash) {
+        return this.toCollection().find(group => group.hash === hash);
     }
 
     /**
@@ -80,6 +89,16 @@ export default class GroupedDataFrame {
      */
     listGroups() {
         return [...this].map(({groupKey}) => groupKey);
+    }
+
+    /**
+     * List GroupedDataFrame groups as a hashCode.
+     * @returns {Array} An Array containing GroupedDataFrame hash codes.
+     * @example
+     * gdf.listHashCodes()
+     */
+    listHashs() {
+        return [...this].map(({hash}) => hash);
     }
 
     @checktypes('Function')

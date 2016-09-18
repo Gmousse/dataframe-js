@@ -27,7 +27,7 @@
 - Debbugging DataFrame.sortBy() when used with string.
 - DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Adding Error messages on Row, DataFrame, GroupedDataFrame and modules...
-- Refactoring join methods.
+- join methods are compeltely revisited, providing a result near from sql. Moreover you can join on multiple columns.
 - Adding unit tests to cover more cases.
 - Unit tests are now realized on es5 compiled version.
 - Clarifying error messages.

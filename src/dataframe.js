@@ -176,9 +176,10 @@ class DataFrame {
 
     _joinByType(gdf1, gdf2, type) {
         if (type === 'out' || type === 'in') {
-            const gdf2Groups = gdf2.listGroups().map(groupKey => Object.values(groupKey)[0]);
-            return gdf1.toCollection().map(({group, groupKey}) => {
-                const isContained = gdf2Groups.includes(Object.values(groupKey)[0]);
+            const gdf2Hashs = gdf2.listHashs();
+            return gdf1.toCollection().map(({group, hash}) => {
+                const isContained = gdf2Hashs.includes(hash);
+                console.log(gdf2.get(hash).group.listColumns());
                 const filterCondition = (bool) => bool ? group : false;
                 return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
             }).filter(group => group);
@@ -188,9 +189,9 @@ class DataFrame {
 
     _join(dfToJoin, on, types) {
         const newColumns = [...new Set([...this.listColumns(), ...dfToJoin.listColumns()])];
-        const gdf = this.groupBy(on);
-        const gdfToJoin = dfToJoin.groupBy(on);
-        return [...iter([
+        const gdf = this.groupBy(...on);
+        const gdfToJoin = dfToJoin.groupBy(...on);
+        return [this.__newInstance__([], newColumns), ...iter([
             ...this._joinByType(gdf, gdfToJoin, types[0]),
             ...this._joinByType(gdfToJoin, gdf, types[1]),
         ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
@@ -733,6 +734,7 @@ class DataFrame {
         return this.__newInstance__([...this, ...dfToUnion], this[__columns__]);
     }
 
+    @checktypes('String', 'DataFrame')
     /**
      * Join two DataFrames.
      * @param {DataFrame} dfToJoin The DataFrame to join.
@@ -742,13 +744,13 @@ class DataFrame {
      * @example
      * df.join(df2, 'column1', 'full')
      */
-    join(dfToJoin, on, how = 'inner') {
+    join(how, dfToJoin, ...on) {
         const joinMethods = {
-            inner: () => this.innerJoin(dfToJoin, on),
-            full: () => this.fullJoin(dfToJoin, on),
-            outer: () => this.outerJoin(dfToJoin, on),
-            left: () => this.leftJoin(dfToJoin, on),
-            right: () => this.rightJoin(dfToJoin, on),
+            inner: () => this.innerJoin(dfToJoin, ...on),
+            full: () => this.fullJoin(dfToJoin, ...on),
+            outer: () => this.outerJoin(dfToJoin, ...on),
+            left: () => this.leftJoin(dfToJoin, ...on),
+            right: () => this.rightJoin(dfToJoin, ...on),
         };
         return joinMethods[how]();
     }
@@ -763,7 +765,7 @@ class DataFrame {
      * df.join(df2, 'id')
      * df.join(df2, 'id', 'inner')
      */
-    innerJoin(dfToJoin, on) {
+    innerJoin(dfToJoin, ...on) {
         return this._join(dfToJoin, on, ['in', 'in']);
     }
 
@@ -776,7 +778,7 @@ class DataFrame {
      * df.fullJoin(df2, 'id')
      * df.join(df2, 'id', 'full')
      */
-    fullJoin(dfToJoin, on) {
+    fullJoin(dfToJoin, ...on) {
         return this._join(dfToJoin, on, ['', '']);
     }
 
@@ -789,7 +791,7 @@ class DataFrame {
      * df2.rightJoin(df2, 'id')
      * df2.join(df2, 'id', 'outer')
      */
-    outerJoin(dfToJoin, on) {
+    outerJoin(dfToJoin, ...on) {
         return this._join(dfToJoin, on, ['out', 'out']);
     }
 
@@ -802,7 +804,7 @@ class DataFrame {
      * df.leftJoin(df2, 'id')
      * df.join(df2, 'id', 'left')
      */
-    leftJoin(dfToJoin, on) {
+    leftJoin(dfToJoin, ...on) {
         return this._join(dfToJoin, on, ['', 'in']);
     }
 
@@ -815,7 +817,7 @@ class DataFrame {
      * df.rightJoin(df2, 'id')
      * df.join(df2, 'id', 'right')
      */
-    rightJoin(dfToJoin, on) {
+    rightJoin(dfToJoin, ...on) {
         return this._join(dfToJoin, on, ['in', '']);
     }
 }

@@ -79,13 +79,13 @@ test('DataFrame sql module can ', (assert) => {
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id').toDict(),
-        df1.join(df2, 'id').toDict(),
+        df1.innerJoin(df2, 'id').toDict(),
         'select everything from a join (inner) between 2 tables.'
     );
 
     assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id WHERE column1 != undefined').toDict(),
-        df1.join(df2, 'id').filter(row => row.get('column1') !== undefined).toDict(),
+        df1.innerJoin(df2, 'id').filter(row => row.get('column1') !== undefined).toDict(),
         'select everything from a join chained with a filter.'
     );
 

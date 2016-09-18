@@ -582,11 +582,11 @@ test('DataFrame rows can be ', (assert) => {
 
     const df6 = new DataFrame({
         id: [2, 1, 6, 8, 3],
-        value: [1, 0, 1, 2, 6],
+        value2: [1, 0, 1, 2, 6],
     }, ['id', 'value2']);
 
     assert.deepEqual(
-        df5.join(df6, 'id', 'inner').sortBy('id').toArray(), [
+        df5.innerJoin(df6, 'id').sortBy('id').toArray(), [
             [1, 0, undefined],
             [1, undefined, 0],
             [3, 1, undefined],
@@ -597,7 +597,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5.join(df6, 'id', 'full').sortBy('id').toArray(), [
+        df5.fullJoin(df6, 'id').sortBy('id').toArray(), [
             [1, 0, undefined],
             [1, undefined, 0],
             [2, undefined, 1],
@@ -609,14 +609,14 @@ test('DataFrame rows can be ', (assert) => {
         ], 'full joined.'
     );
     assert.deepEqual(
-        df5.join(df6, 'id', 'outer').sortBy('id').toArray(), [
+        df5.outerJoin(df6, 'id').sortBy('id').toArray(), [
             [2, undefined, 1],
             [6, undefined, 1],
         ], 'outer joined.'
     );
 
     assert.deepEqual(
-        df5.join(df6, 'id', 'left').sortBy('id').toArray(), [
+        df5.leftJoin(df6, 'id').sortBy('id').toArray(), [
             [1, 0, undefined],
             [1, undefined, 0],
             [3, 1, undefined],
@@ -627,7 +627,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5.join(df6, 'id', 'right').sortBy('id').toArray(), [
+        df5.rightJoin(df6, 'id').sortBy('id').toArray(), [
             [1, 0, undefined],
             [1, undefined, 0],
             [2, undefined, 1],
@@ -637,6 +637,19 @@ test('DataFrame rows can be ', (assert) => {
             [8, 1, undefined],
             [8, undefined, 2],
         ], 'right joined.'
+    );
+
+    assert.deepEqual(
+        df6.innerJoin(new DataFrame({
+            id: [2, 1, 6, 8, 3],
+            value2: [2, 0, 4, 3, 6],
+            value3: [1, 0, 1, 2, 6],
+        }, ['id', 'value2', 'value3']), 'id', 'value2').sortBy('id').toArray(), [
+            [1, 0, undefined],
+            [1, 0, 0],
+            [3, 6, undefined],
+            [3, 6, 6],
+        ], 'joined on multiple columns.'
     );
 
     const df7 = new DataFrame([...Array(20).keys()].map(row => [row]), ['c1']);
@@ -684,7 +697,7 @@ test('DataFrame rows can\'t be ', (assert) => {
     );
 
     assert.equal(
-        tryCatch(() => new DataFrame([{c1: 1, c2: 3}]).join([])).name,
+        tryCatch(() => new DataFrame([{c1: 1, c2: 3}]).innerJoin([])).name,
         'TypeError',
         'joined with not a DataFrame, throwing TypeError.'
     );
