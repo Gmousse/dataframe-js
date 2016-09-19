@@ -174,17 +174,24 @@ class DataFrame {
         return [array.map(row => new Row(row, columns)), columns];
     }
 
-    _joinByType(gdf1, gdf2, type) {
-        if (type === 'out' || type === 'in') {
-            const gdf2Hashs = gdf2.listHashs();
-            return gdf1.toCollection().map(({group, hash}) => {
-                const isContained = gdf2Hashs.includes(hash);
-                console.log(gdf2.get(hash).group.listColumns());
-                const filterCondition = (bool) => bool ? group : false;
-                return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
-            }).filter(group => group);
-        }
-        return gdf1.toCollection().map(({group}) => group);
+    _joinByType(gdf1, gdf2, type, newColumns) {
+        const gdf2Hashs = gdf2.listHashs();
+        return gdf1.toCollection().map(({group, hash}) => {
+            const isContained = gdf2Hashs.includes(hash);
+            if (gdf2.get(hash)) {
+                const gdf2Collection = gdf2.get(hash).group.toCollection();
+                const combinedGroup = group.toCollection().map(row => {
+                    return gdf2Collection.map(row2 => Object.assign({}, row2, row));
+                }).reduce((p, n) => [...p, ...n], []);
+                group = this.__newInstance__(
+                    combinedGroup,
+                    newColumns
+                );
+            }
+            const filterCondition = (bool) => bool ? group : false;
+            if (type !== 'out' && type !== 'in') return group;
+            return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
+        }).filter(group => group);
     }
 
     _join(dfToJoin, on, types) {
@@ -192,8 +199,8 @@ class DataFrame {
         const gdf = this.groupBy(...on);
         const gdfToJoin = dfToJoin.groupBy(...on);
         return [this.__newInstance__([], newColumns), ...iter([
-            ...this._joinByType(gdf, gdfToJoin, types[0]),
-            ...this._joinByType(gdfToJoin, gdf, types[1]),
+            ...this._joinByType(gdf, gdfToJoin, types[0], newColumns),
+            ...this._joinByType(gdfToJoin, gdf, types[1], newColumns),
         ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 

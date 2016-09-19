@@ -55,7 +55,7 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         const cleanCountByGroup = countByGroup.rename('aggregation', 'count').sortBy('count', true);
 
         // And now show the result
-        cleanCountByGroup.show(100);
+        cleanCountByGroup.show(300);
         // | class     | age       | sex       | survived  | count     |
         // ------------------------------------------------------------
         // | 3rd class | adults    | man       | no        | 387       |

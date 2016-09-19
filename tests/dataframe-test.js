@@ -587,27 +587,25 @@ test('DataFrame rows can be ', (assert) => {
 
     assert.deepEqual(
         df5.innerJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, undefined],
-            [1, undefined, 0],
-            [3, 1, undefined],
-            [3, undefined, 6],
-            [8, 1, undefined],
-            [8, undefined, 2],
+            [1, 0, 0],
+            [3, 1, 6],
+            [8, 1, 2],
         ], 'inner joined.'
     );
 
     assert.deepEqual(
         df5.fullJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, undefined],
-            [1, undefined, 0],
+            [1, 0, 0],
+            [1, 0, 0],
             [2, undefined, 1],
-            [3, 1, undefined],
-            [3, undefined, 6],
+            [3, 1, 6],
+            [3, 1, 6],
             [6, undefined, 1],
-            [8, 1, undefined],
-            [8, undefined, 2],
+            [8, 1, 2],
+            [8, 1, 2],
         ], 'full joined.'
     );
+
     assert.deepEqual(
         df5.outerJoin(df6, 'id').sortBy('id').toArray(), [
             [2, undefined, 1],
@@ -615,27 +613,27 @@ test('DataFrame rows can be ', (assert) => {
         ], 'outer joined.'
     );
 
+    df5.leftJoin(df6, 'id').sortBy('id').show()
+
     assert.deepEqual(
-        df5.leftJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, undefined],
-            [1, undefined, 0],
-            [3, 1, undefined],
-            [3, undefined, 6],
-            [8, 1, undefined],
-            [8, undefined, 2],
+        df6.leftJoin(df5, 'id').sortBy('id').toArray(), [
+            [1, 0, 0],
+            [2, undefined, 1],
+            [3, 1, 6],
+            [6, undefined, 1],
+            [8, 1, 2],
         ], 'left joined.'
     );
 
+    df5.rightJoin(df6, 'id').sortBy('id').show()
+
     assert.deepEqual(
         df5.rightJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, undefined],
-            [1, undefined, 0],
+            [1, 0, 0],
             [2, undefined, 1],
-            [3, 1, undefined],
-            [3, undefined, 6],
+            [3, 1, 6],
             [6, undefined, 1],
-            [8, 1, undefined],
-            [8, undefined, 2],
+            [8, 1, 2],
         ], 'right joined.'
     );
 
