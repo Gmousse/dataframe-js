@@ -2,7 +2,7 @@ import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
 import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
 
-import { match, transpose, chain, iter, arrayEqual, saveFile, compare } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray } from './reusables.js';
 import { WrongSchemaError, MixedTypeError } from './errors.js';
 import Row from './row.js';
 import GroupedDataFrame from './groupedDataframe.js';
@@ -178,29 +178,32 @@ class DataFrame {
         const gdf2Hashs = gdf2.listHashs();
         return gdf1.toCollection().map(({group, hash}) => {
             const isContained = gdf2Hashs.includes(hash);
+            let modifiedGroup = group;
             if (gdf2.get(hash)) {
                 const gdf2Collection = gdf2.get(hash).group.toCollection();
                 const combinedGroup = group.toCollection().map(row => {
                     return gdf2Collection.map(row2 => Object.assign({}, row2, row));
                 }).reduce((p, n) => [...p, ...n], []);
-                group = this.__newInstance__(
+                modifiedGroup = this.__newInstance__(
                     combinedGroup,
                     newColumns
                 );
             }
-            const filterCondition = (bool) => bool ? group : false;
-            if (type !== 'out' && type !== 'in') return group;
+            const filterCondition = (bool) => bool ? modifiedGroup : false;
+            if (type === 'full') return modifiedGroup;
             return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
         }).filter(group => group);
     }
 
-    _join(dfToJoin, on, types) {
+    @checktypes('DataFrame', ['Array', 'String'])
+    _join(dfToJoin, columnNames, types) {
         const newColumns = [...new Set([...this.listColumns(), ...dfToJoin.listColumns()])];
-        const gdf = this.groupBy(...on);
-        const gdfToJoin = dfToJoin.groupBy(...on);
+        const columns = Array.isArray(columnNames) ? columnNames : [columnNames];
+        const gdf = this.groupBy(...columns);
+        const gdfToJoin = dfToJoin.groupBy(...columns);
         return [this.__newInstance__([], newColumns), ...iter([
-            ...this._joinByType(gdf, gdfToJoin, types[0], newColumns),
-            ...this._joinByType(gdfToJoin, gdf, types[1], newColumns),
+            ...(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []),
+            ...(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : []),
         ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
@@ -378,13 +381,14 @@ class DataFrame {
      * Replace a value by another in the DataFrame or in a column.
      * @param value The value to replace.
      * @param replacement The new value.
-     * @param {...String} [columnNames=this.listColumns()] The columns where to apply the replacement.
+     * @param {String | Array} [columnNames=this.listColumns()] The columns where to apply the replacement.
      * @returns {DataFrame} A new DataFrame with replaced values.
      * @example
      * df.replace(undefined, 0, 'column1', 'column2')
      */
-    replace(value, replacement, ...columnNames) {
-        return this.map(row => (columnNames.length > 0 ? columnNames : this[__columns__]).reduce(
+    replace(value, replacement, columnNames) {
+        const columns = asArray(columnNames);
+        return this.map(row => (columns.length > 0 ? columns : this[__columns__]).reduce(
                 (p, n) => p.get(n) === value ? p.set(n, replacement) : p, row
             ));
     }
@@ -636,8 +640,18 @@ class DataFrame {
     }
 
     /**
+     * Return a DataFrame without duplicated columns.
+     * @returns {DataFrame} A DataFrame without duplicated rows.
+     * @example
+     * df.dropDuplicates()
+     */
+     dropDuplicates() {
+         return this.groupBy(...this[__columns__]).aggregate(() => {}).drop('aggregation');
+     }
+
+    /**
      * Return a shuffled DataFrame rows.
-     * @returns {DataFrame} A shuffled DataFrame
+     * @returns {DataFrame} A shuffled DataFrame.
      * @example
      * df.shuffle()
      */
@@ -741,23 +755,22 @@ class DataFrame {
         return this.__newInstance__([...this, ...dfToUnion], this[__columns__]);
     }
 
-    @checktypes('String', 'DataFrame')
     /**
      * Join two DataFrames.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
-     * @param {String} [how='full'] The join mode. Can be: full, inner, outer, left, right.
+     * @param {String | Array} columnNames The selected columns for the join.
+     * @param {String} [how='inner'] The join mode. Can be: full, inner, outer, left, right.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df.join(df2, 'column1', 'full')
      */
-    join(how, dfToJoin, ...on) {
+    join(dfToJoin, columnNames, how = 'inner') {
         const joinMethods = {
-            inner: () => this.innerJoin(dfToJoin, ...on),
-            full: () => this.fullJoin(dfToJoin, ...on),
-            outer: () => this.outerJoin(dfToJoin, ...on),
-            left: () => this.leftJoin(dfToJoin, ...on),
-            right: () => this.rightJoin(dfToJoin, ...on),
+            inner: () => this.innerJoin(dfToJoin, columnNames),
+            full: () => this.fullJoin(dfToJoin, columnNames),
+            outer: () => this.outerJoin(dfToJoin, columnNames),
+            left: () => this.leftJoin(dfToJoin, columnNames),
+            right: () => this.rightJoin(dfToJoin, columnNames),
         };
         return joinMethods[how]();
     }
@@ -765,67 +778,67 @@ class DataFrame {
     /**
      * Join two DataFrames with inner mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
+     * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df.innerJoin(df2, 'id')
      * df.join(df2, 'id')
      * df.join(df2, 'id', 'inner')
      */
-    innerJoin(dfToJoin, ...on) {
-        return this._join(dfToJoin, on, ['in', 'in']);
+    innerJoin(dfToJoin, columnNames) {
+        return this._join(dfToJoin, columnNames, ['in']);
     }
 
     /**
      * Join two DataFrames with full mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
+     * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df.fullJoin(df2, 'id')
      * df.join(df2, 'id', 'full')
      */
-    fullJoin(dfToJoin, ...on) {
-        return this._join(dfToJoin, on, ['', '']);
+    fullJoin(dfToJoin, columnNames) {
+        return this._join(dfToJoin, columnNames, ['full', 'full']);
     }
 
     /**
      * Join two DataFrames with outer mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
+     * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df2.rightJoin(df2, 'id')
      * df2.join(df2, 'id', 'outer')
      */
-    outerJoin(dfToJoin, ...on) {
-        return this._join(dfToJoin, on, ['out', 'out']);
+    outerJoin(dfToJoin, columnNames) {
+        return this._join(dfToJoin, columnNames, ['out', 'out']);
     }
 
     /**
      * Join two DataFrames with left mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
+     * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df.leftJoin(df2, 'id')
      * df.join(df2, 'id', 'left')
      */
-    leftJoin(dfToJoin, ...on) {
-        return this._join(dfToJoin, on, ['', 'in']);
+    leftJoin(dfToJoin, columnNames) {
+        return this._join(dfToJoin, columnNames, ['full', 'in']);
     }
 
     /**
      * Join two DataFrames with right mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
-     * @param {String} on The selected column for the join.
+     * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
      * df.rightJoin(df2, 'id')
      * df.join(df2, 'id', 'right')
      */
-    rightJoin(dfToJoin, ...on) {
-        return this._join(dfToJoin, on, ['in', '']);
+    rightJoin(dfToJoin, columnNames) {
+        return this._join(dfToJoin, columnNames, ['in', 'full']);
     }
 }
 

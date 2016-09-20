@@ -364,7 +364,7 @@ test('DataFrame columns can be', (assert) => {
     );
 
     assert.deepEqual(
-        df.select('c2', 'c3', 'c4').replace(undefined, 0, 'c2', 'c3').toDict(), {
+        df.select('c2', 'c3', 'c4').replace(undefined, 0, ['c2', 'c3']).toDict(), {
             c2: [6, 2, 6],
             c3: [9, 0, 9],
             c4: [10, undefined, 8],
@@ -580,74 +580,167 @@ test('DataFrame rows can be ', (assert) => {
         ], 'concatenated with another DataFrame.'
     );
 
+    const df5b = new DataFrame({
+        id: [3, 3, 1, 8],
+        id2: ['a', 'b', 'a', 'c'],
+        value: [1, 2, 0, 1],
+    }, ['id', 'id2', 'value']);
+
+
     const df6 = new DataFrame({
-        id: [2, 1, 6, 8, 3],
-        value2: [1, 0, 1, 2, 6],
-    }, ['id', 'value2']);
+        id: [2, 1, 6, 8, 3, 3],
+        id2: ['a', 'a', 'c', 'c', 'b', 'b'],
+        value2: [1, 0, 1, 2, 6, 5],
+    }, ['id', 'id2', 'value2']);
+
 
     assert.deepEqual(
-        df5.innerJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, 0],
-            [3, 1, 6],
-            [8, 1, 2],
+        df5b.innerJoin(df6, 'id').sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 3, id2: 'a', value: 1, value2: 6 },
+            { id: 3, id2: 'a', value: 1, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
         ], 'inner joined.'
     );
 
     assert.deepEqual(
-        df5.fullJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, 0],
-            [1, 0, 0],
-            [2, undefined, 1],
-            [3, 1, 6],
-            [3, 1, 6],
-            [6, undefined, 1],
-            [8, 1, 2],
-            [8, 1, 2],
+        df5b.innerJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
+        ], 'inner joined on multiple columns.'
+    );
+
+    assert.deepEqual(
+        df5b.fullJoin(df6, 'id').sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 2, id2: 'a', value: undefined, value2: 1 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 3, id2: 'a', value: 1, value2: 6 },
+            { id: 3, id2: 'b', value: 1, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'a', value: 1, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 1, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 6, id2: 'c', value: undefined, value2: 1 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
         ], 'full joined.'
     );
 
     assert.deepEqual(
-        df5.outerJoin(df6, 'id').sortBy('id').toArray(), [
-            [2, undefined, 1],
-            [6, undefined, 1],
+        df5b.fullJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 2, id2: 'a', value: undefined, value2: 1 },
+            { id: 3, id2: 'a', value: 1, value2: undefined },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 6, id2: 'c', value: undefined, value2: 1 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
+        ], 'full joined on multiple columns.'
+    );
+
+    assert.deepEqual(
+        df5b.outerJoin(df6, 'id').sortBy('id').toCollection(), [
+            { id: 2, id2: 'a', value: undefined, value2: 1 },
+            { id: 6, id2: 'c', value: undefined, value2: 1 },
         ], 'outer joined.'
     );
 
-    df5.leftJoin(df6, 'id').sortBy('id').show()
+    assert.deepEqual(
+        df5b.outerJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+            { id: 2, id2: 'a', value: undefined, value2: 1 },
+            { id: 3, id2: 'a', value: 1, value2: undefined },
+            { id: 6, id2: 'c', value: undefined, value2: 1 },
+        ], 'outer joined on multiple columns.'
+    );
 
     assert.deepEqual(
-        df6.leftJoin(df5, 'id').sortBy('id').toArray(), [
-            [1, 0, 0],
-            [2, undefined, 1],
-            [3, 1, 6],
-            [6, undefined, 1],
-            [8, 1, 2],
+        df6.leftJoin(df5b, 'id').sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 2, id2: 'a', value2: 1, value: undefined },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 3, id2: 'b', value2: 6, value: 1 },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 1 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 3, id2: 'a', value2: 6, value: 1 },
+            { id: 3, id2: 'a', value2: 5, value: 1 },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 6, id2: 'c', value2: 1, value: undefined },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
         ], 'left joined.'
     );
 
-    df5.rightJoin(df6, 'id').sortBy('id').show()
+    assert.deepEqual(
+        df6.leftJoin(df5b, ['id', 'id2']).sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 2, id2: 'a', value2: 1, value: undefined },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 6, id2: 'c', value2: 1, value: undefined },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+        ], 'left joined on multiple columns.'
+    );
 
     assert.deepEqual(
-        df5.rightJoin(df6, 'id').sortBy('id').toArray(), [
-            [1, 0, 0],
-            [2, undefined, 1],
-            [3, 1, 6],
-            [6, undefined, 1],
-            [8, 1, 2],
+        df5b.rightJoin(df6, 'id').sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 1, id2: 'a', value: 0, value2: 0 },
+            { id: 2, id2: 'a', value: undefined, value2: 1 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 3, id2: 'a', value: 1, value2: 6 },
+            { id: 3, id2: 'b', value: 1, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'a', value: 1, value2: 5 },
+            { id: 3, id2: 'b', value: 2, value2: 6 },
+            { id: 3, id2: 'b', value: 1, value2: 6 },
+            { id: 3, id2: 'b', value: 2, value2: 5 },
+            { id: 6, id2: 'c', value: undefined, value2: 1 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
+            { id: 8, id2: 'c', value: 1, value2: 2 },
         ], 'right joined.'
     );
 
     assert.deepEqual(
-        df6.innerJoin(new DataFrame({
-            id: [2, 1, 6, 8, 3],
-            value2: [2, 0, 4, 3, 6],
-            value3: [1, 0, 1, 2, 6],
-        }, ['id', 'value2', 'value3']), 'id', 'value2').sortBy('id').toArray(), [
-            [1, 0, undefined],
-            [1, 0, 0],
-            [3, 6, undefined],
-            [3, 6, 6],
-        ], 'joined on multiple columns.'
+        df5b.rightJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 2, id2: 'a', value2: 1, value: undefined },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 6, id2: 'c', value2: 1, value: undefined },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+        ], 'right joined on multiple columns.'
+    );
+
+    assert.deepEqual(
+        df5b.rightJoin(df6, ['id', 'id2']).sortBy('id').dropDuplicates().toCollection(), [
+            { id: 1, id2: 'a', value2: 0, value: 0 },
+            { id: 2, id2: 'a', value2: 1, value: undefined },
+            { id: 3, id2: 'b', value2: 6, value: 2 },
+            { id: 3, id2: 'b', value2: 5, value: 2 },
+            { id: 6, id2: 'c', value2: 1, value: undefined },
+            { id: 8, id2: 'c', value2: 2, value: 1 },
+        ], 'deduplicated.'
     );
 
     const df7 = new DataFrame([...Array(20).keys()].map(row => [row]), ['c1']);

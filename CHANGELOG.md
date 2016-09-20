@@ -21,6 +21,7 @@
 - Adding an optional parameter to DataFrame.toJSON(asCollection) to build a JSON object containing a collection of Object.
 - Adding DataFrame.stat.sum() in the stat module. Related to issue [#10](https://github.com/Gmousse/dataframe-js/issues/10).
 - Adding static DataFrame.fromCSV(), .fromText() and .fromJSON() method, allowing to create a DataFrame (via a Promise) from files (path or url).
+- Adding DataFrame.dropDuplicates() which removes duplicated rows.
 - DataFrame.randomSplit() is renamed in DataFrame.bisect(). /!\ Incompatible with older versions.
 - Debbugging DataFrame.show(). Related to the issue [#7](https://github.com/Gmousse/dataframe-js/issues/7).
 - Debbugging DataFrame.sortBy(). Now, it returns an error when applied on a mixed type column. Related to the issues [#3](https://github.com/Gmousse/dataframe-js/issues/3) and [#6](https://github.com/Gmousse/dataframe-js/issues/6).
@@ -28,6 +29,7 @@
 - DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Adding Error messages on Row, DataFrame, GroupedDataFrame and modules...
 - join methods are compeltely revisited, providing a result near from sql. Moreover you can join on multiple columns.
+- DataFrame.replace() columnNames arguments are now passed as String (for a single column) or in Array (for multiple ones).
 - Adding unit tests to cover more cases.
 - Unit tests are now realized on es5 compiled version.
 - Clarifying error messages.

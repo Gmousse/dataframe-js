@@ -32,9 +32,9 @@ const SELECT_FUNCTIONS = {
 
 function joinHandler(operation, tables, type) {
     return (df) => df.join(
-        type,
         tables[operation[0]],
-        operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1]
+        operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1],
+        type
     );
 }
 

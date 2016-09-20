@@ -259,6 +259,12 @@
                       </a></li>
                       
                       <li><a
+                        href='#DataFrame#dropDuplicates'
+                        class='regular pre-open'>
+                        #dropDuplicates
+                      </a></li>
+                      
+                      <li><a
                         href='#DataFrame#shuffle'
                         class='regular pre-open'>
                         #shuffle
@@ -373,6 +379,12 @@
                         href='#GroupedDataFrame#listGroups'
                         class='regular pre-open'>
                         #listGroups
+                      </a></li>
+                      
+                      <li><a
+                        href='#GroupedDataFrame#listHashs'
+                        class='regular pre-open'>
+                        #listHashs
                       </a></li>
                       
                       <li><a
@@ -681,7 +693,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/dataframe.js#L16-L821'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/dataframe.js#L16-L843'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -2008,7 +2020,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
   <p>Replace a value by another in the DataFrame or in a column.</p>
 
 
-  <div class='pre p1 fill-light mt0'>replace(value: any, replacement: any, columnNames: [...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>replace(value: any, replacement: any, columnNames: [(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -2040,7 +2052,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>columnNames</span> <code class='quiet'>([...<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]
+            <span class='code bold'>columnNames</span> <code class='quiet'>([(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]
             (default <code>this.listColumns()</code>)
             )</code> The columns where to apply the replacement.
 
@@ -3434,6 +3446,65 @@ df2.reduce((p, n) =&gt; (
       </div>
     </div>
   
+    <div class='border-bottom' id='DataFrame#dropDuplicates'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>dropDuplicates()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>Return a DataFrame without duplicated columns.</p>
+
+
+  <div class='pre p1 fill-light mt0'>dropDuplicates(): <a href="#dataframe">DataFrame</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="#dataframe">DataFrame</a></code>:
+        A DataFrame without duplicated rows.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>df.dropDuplicates()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='DataFrame#shuffle'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -3467,7 +3538,7 @@ df2.reduce((p, n) =&gt; (
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#dataframe">DataFrame</a></code>:
-        A shuffled DataFrame
+        A shuffled DataFrame.
 
       
     
@@ -3871,7 +3942,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>join(dfToJoin, on, [how])</span>
+            <span class='code strong strong truncate'>join(dfToJoin, columnNames, [how])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3882,7 +3953,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
   <p>Join two DataFrames.</p>
 
 
-  <div class='pre p1 fill-light mt0'>join(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, how: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>join(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>), how: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -3906,7 +3977,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -3915,7 +3986,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
         <div class='space-bottom0'>
           <div>
             <span class='code bold'>how</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]
-            (default <code>&#39;full&#39;</code>)
+            (default <code>&#39;inner&#39;</code>)
             )</code> The join mode. Can be: full, inner, outer, left, right.
 
           </div>
@@ -3961,7 +4032,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>innerJoin(dfToJoin, on)</span>
+            <span class='code strong strong truncate'>innerJoin(dfToJoin, columnNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -3972,7 +4043,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
   <p>Join two DataFrames with inner mode.</p>
 
 
-  <div class='pre p1 fill-light mt0'>innerJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>innerJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -3996,7 +4067,7 @@ df.groupBy(<span class="hljs-string">'column1'</span>, <span class="hljs-string"
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -4043,7 +4114,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'i
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fullJoin(dfToJoin, on)</span>
+            <span class='code strong strong truncate'>fullJoin(dfToJoin, columnNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4054,7 +4125,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'i
   <p>Join two DataFrames with full mode.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fullJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>fullJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -4078,7 +4149,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'i
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -4124,7 +4195,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'f
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>outerJoin(dfToJoin, on)</span>
+            <span class='code strong strong truncate'>outerJoin(dfToJoin, columnNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4135,7 +4206,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'f
   <p>Join two DataFrames with outer mode.</p>
 
 
-  <div class='pre p1 fill-light mt0'>outerJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>outerJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -4159,7 +4230,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'f
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -4205,7 +4276,7 @@ df2.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>leftJoin(dfToJoin, on)</span>
+            <span class='code strong strong truncate'>leftJoin(dfToJoin, columnNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4216,7 +4287,7 @@ df2.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'
   <p>Join two DataFrames with left mode.</p>
 
 
-  <div class='pre p1 fill-light mt0'>leftJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>leftJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -4240,7 +4311,7 @@ df2.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -4286,7 +4357,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'l
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>rightJoin(dfToJoin, on)</span>
+            <span class='code strong strong truncate'>rightJoin(dfToJoin, columnNames)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -4297,7 +4368,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'l
   <p>Join two DataFrames with right mode.</p>
 
 
-  <div class='pre p1 fill-light mt0'>rightJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, on: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
+  <div class='pre p1 fill-light mt0'>rightJoin(dfToJoin: <a href="#dataframe">DataFrame</a>, columnNames: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -4321,7 +4392,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'l
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>on</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> The selected column for the join.
+            <span class='code bold'>columnNames</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>))</code> The selected columns for the join.
 
           </div>
           
@@ -4381,7 +4452,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/groupedDataframe.js#L10-L99'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/groupedDataframe.js#L10-L118'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4690,6 +4761,65 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       </div>
     </div>
   
+    <div class='border-bottom' id='GroupedDataFrame#listHashs'>
+      <div class="clearfix small pointer toggle-sibling">
+        <div class="py1 contain">
+            <a class='icon pin-right py1 dark-link caret-right'>▸</a>
+            <span class='code strong strong truncate'>listHashs()</span>
+        </div>
+      </div>
+      <div class="clearfix display-none toggle-target">
+        <section class='p2 mb2 clearfix bg-white minishadow'>
+
+  
+
+  <p>List GroupedDataFrame groups as a hashCode.</p>
+
+
+  <div class='pre p1 fill-light mt0'>listHashs(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+
+  
+    
+      <div class='py1 quiet mt1 prose-big'>Returns</div>
+      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
+        An Array containing GroupedDataFrame hash codes.
+
+      
+    
+  
+
+  
+
+  
+    <div class='py1 quiet mt1 prose-big'>Example</div>
+    
+      
+      <pre class='p1 overflow-auto round fill-light'>gdf.listHashCodes()</pre>
+    
+  
+
+  
+
+  
+
+  
+</section>
+
+      </div>
+    </div>
+  
     <div class='border-bottom' id='GroupedDataFrame#aggregate'>
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
@@ -4780,7 +4910,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5489,7 +5619,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -5899,7 +6029,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6501,7 +6631,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/4a180f48b1e128a033841bce46245b0fdd598de0/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/cf7ebcff6a537f0fb0c56b5e722d66c4b1c3903f/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     
