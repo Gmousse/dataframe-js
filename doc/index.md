@@ -18,17 +18,17 @@
 
 ---
 
-#### General
+#### Informations
 
 [.show()](./md-api/dataframe.md#show),
 [.dim()](./md-api/dataframe.md#dim),
-[.transpose()](./md-api/dataframe.md#transpose)
+[.count()](./md-api/dataframe.md#count),
+[.listColumns()](./md-api/dataframe.md#listcolumns)
 
 ---
 
 #### Columns
 
-[.listColumns()](./md-api/dataframe.md#listcolumns),
 [.select()](./md-api/dataframe.md#select),
 [.withColumn()](./md-api/dataframe.md#withcolumn),
 [.countValue()](./md-api/dataframe.md#countvalue),
@@ -40,12 +40,12 @@
 [.cast()](./md-api/dataframe.md#cast),
 [.castAll()](./md-api/dataframe.md#castall),
 [.drop()](./md-api/dataframe.md#drop),
+[.transpose()](./md-api/dataframe.md#transpose)
 
 ---
 
 #### Rows
 
-[.count()](./md-api/dataframe.md#count),
 [.push()](./md-api/dataframe.md#push),
 [.replace()](./md-api/dataframe.md#replace),
 [.chain()](./md-api/dataframe.md#chain),
@@ -55,6 +55,7 @@
 [.find()](./md-api/dataframe.md#find),
 [.reduce()](./md-api/dataframe.md#reduce),
 [.reduceRight()](./md-api/dataframe.md#reducebight),
+[.dropDuplicates()](./md-api/dataframe.md#dropduplicates),
 [.shuffle()](./md-api/dataframe.md#shuffle),
 [.sample()](./md-api/dataframe.md#sample),
 [.groupBy()](./md-api/dataframe.md#groupby),

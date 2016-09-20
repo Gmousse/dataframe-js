@@ -21,7 +21,7 @@ df.show()
 | undefined | 6         | undefined |
 ````
 
-dataframe-js provides some **immutable objects** (DataFrame, Row...) and an API closed to **functional** programming and **SQL syntax**.
+dataframe-js provides some **immutable objects** (DataFrame, Row...) and an API closed to **functional** programming and **SQL syntax**. You can sort, groupBy, join, and do complex manipulations with a simple sintax.
 
 It is also compatible (import / export) with native JavaScript objects (Array, Hash...) and other formats (csv, json...).
 
@@ -111,13 +111,13 @@ DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 
 [Export](./doc/index.md#export): Export a DataFrame in different files format or javascript objects.
 
-[Working with all the DataFrame](./doc/index.md#general): Display and manipulate your DataFrame.
+[DataFrame informations](./doc/index.md#informations): Show some informations about your DataFrame.
 
-[Working with Columns](./doc/index.md#columns): Use Columns to format your DataFrame.
+[Working with Columns](./doc/index.md#columns): Use Columns to format or to restructure your DataFrame.
 
-[Working with Rows](./doc/index.md#rows): Manipulate and transform rows of a DataFrame.
+[Working with Rows](./doc/index.md#rows): Manipulate and transform rows of your DataFrame.
 
-[Working at Row level](./doc/index.md#row): Use the Row api to set or get some values on each Row when you map, filter or simply manipulate Rows...
+[Working at Row level](./doc/index.md#row): Use the Row api to set or get some values when you map, filter or other Rows manipulations...
 
 [Working with aggregates](./doc/index.md#groupeddataframe): Apply aggregations when you groupBy a DataFrame in order to resume your data.
 
