@@ -15,7 +15,7 @@ export function isNumber(x) {
 }
 
 export function arrayEqual(a, b, byOrder = false) {
-    return byOrder ? Object.keys(a).map(x => a[x] === b[x]).reduce((p, n) => p ? n : p) :
+    return byOrder ? Object.keys(a).map(x => a[x] === b[x]).reduce((p, n) => p ? n : p, true) :
      [...new Set(a.filter(x => !new Set(b).has(x)))].length === 0;
 }
 

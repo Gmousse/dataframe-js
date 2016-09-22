@@ -362,6 +362,14 @@ test('DataFrame columns can be', (assert) => {
     );
 
     assert.deepEqual(
+        df.restructure(['c2', 'c3', 'c1']).toCollection(), [
+            { c2: 6, c3: 9, c1: 1 },
+            { c2: 2, c3: undefined, c1: 1 },
+            { c2: 6, c3: 9, c1: 6 },
+        ], 'restructured to reorder existing columns.'
+    );
+
+    assert.deepEqual(
         df.distinct('c1').toArray('c1'), [1, 6], 'distinct, giving a column of unique values.'
     );
 

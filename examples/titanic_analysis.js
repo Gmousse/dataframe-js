@@ -144,11 +144,9 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         transposedAgeEffect.show();
         // Now we will use the previously removed age column as columnNames.
         // Then we reorganize columns order.
-        transposedAgeEffect
-            .renameAll([...ageEffect.toArray('age'), '']).restructure(['', 'child', 'adults', 'yahou']).show()
         const transposedAgeEffectWithColumnNames = transposedAgeEffect
             .renameAll([...ageEffect.toArray('age'), ''])
-            .select('', 'child', 'adults');
+            .restructure(['', 'child', 'adults']); // you can also .select('', 'child', 'adults');
         // Which gives:
         transposedAgeEffectWithColumnNames.show();
     }
