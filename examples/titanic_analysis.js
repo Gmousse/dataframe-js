@@ -129,7 +129,7 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // | child     | 0.2951... |
 
         // Ok that's better.
-        // Now, our boss want a csv export of the age effects, in an exotic format (excel, damn it):
+        // Now, our boss wants a csv export of the age effects, in an exotic format (excel, damn it):
         // |           | adults    | child     |
         // -------------------------------------
         // | mean    | 0.5       | 0.75      |
@@ -146,9 +146,12 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // Then we reorganize columns order.
         const transposedAgeEffectWithColumnNames = transposedAgeEffect
             .renameAll([...ageEffect.toArray('age'), ''])
-            .restructure(['', 'child', 'adults']); // you can also .select('', 'child', 'adults');
-        // Which gives:
+            .restructure(['', 'adults', 'child']); // you can also .select('', 'adults', 'child');
+        // Which gives the good table:
         transposedAgeEffectWithColumnNames.show();
+
+        // Now you have just to export it as a csv:
+        transposedAgeEffectWithColumnNames.toCSV(true, 'yourReport.csv');
     }
 ).catch(err => {
     console.log(err);
