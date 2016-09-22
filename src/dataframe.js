@@ -125,7 +125,7 @@ class DataFrame {
     }
 
     __newInstance__(data, columns) {
-        if (!arrayEqual(columns, this[__columns__]) || !(data[0] instanceof Row)) {
+        if (!arrayEqual(columns, this[__columns__], true) || !(data[0] instanceof Row)) {
             return new DataFrame(data, this._dropSpacesInColumnNames(columns), ...this.modules);
         }
         const newInstance = Object.assign(

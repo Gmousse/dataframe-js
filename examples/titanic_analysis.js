@@ -138,10 +138,19 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // First we join our results.
         const ageEffect = survivalMeanByAge.innerJoin(survivalSDByAge, 'age');
         ageEffect.show();
-        // We now transpose the table (with columnNames);
-        const transposedAgeEffect = ageEffect.tranpose(true).rename('rowNames', '');
+        // We now remove age column (you will understand why in few lines) and transpose the table (with columnNames);
+        const transposedAgeEffect = ageEffect.drop('age').transpose(true);
         // It's magical, and it looks like that:
         transposedAgeEffect.show();
+        // Now we will use the previously removed age column as columnNames.
+        // Then we reorganize columns order.
+        transposedAgeEffect
+            .renameAll([...ageEffect.toArray('age'), '']).restructure(['', 'child', 'adults', 'yahou']).show()
+        const transposedAgeEffectWithColumnNames = transposedAgeEffect
+            .renameAll([...ageEffect.toArray('age'), ''])
+            .select('', 'child', 'adults');
+        // Which gives:
+        transposedAgeEffectWithColumnNames.show();
     }
 ).catch(err => {
     console.log(err);

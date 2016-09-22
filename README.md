@@ -1,6 +1,8 @@
 # dataframe-js
 **v1.0.0**
 
+![](https://travis-ci.org/Gmousse/dataframe-js.svg?branch=feature%2Fsql)
+
 ## Presentation
 
 dataframe-js provides another way to work with data in javascript (browser or server side) by using DataFrame, a data structure already used in some languages (Python, R, ...).
