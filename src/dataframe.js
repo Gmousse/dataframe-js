@@ -334,13 +334,16 @@ class DataFrame {
 
     /**
      * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
+     * {Boolean} [transposeColumnNames=false] An option to transpose columnNames in a rowNames column.
      * @returns {ÐataFrame} A new transpoded DataFrame.
      * @example
      * df.transpose()
      */
-    transpose() {
-        const newColumns = [...Array(this.count()).keys()];
-        return this.__newInstance__(transpose(this.toArray()), newColumns);
+    transpose(tranposeColumnNames) {
+        const newColumns = [...(tranposeColumnNames ? ['rowNames'] : []), ...[...Array(this.count()).keys()].reverse()];
+        const transposedRows = transpose((tranposeColumnNames ? this.push(this[__columns__]) : this).toArray());
+        return this.__newInstance__(transposedRows, newColumns.reverse())
+            .restructure(newColumns);
     }
 
     /**

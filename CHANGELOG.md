@@ -28,8 +28,9 @@
 - Debbugging DataFrame.sortBy() when used with string.
 - DataFrame.distinct() now throw correctly NoSuchColumnError when passing an incorrect columnName.
 - Adding Error messages on Row, DataFrame, GroupedDataFrame and modules...
-- join methods are compeltely revisited, providing a result near from sql. Moreover you can join on multiple columns.
+- join methods are completely revisited, providing a result near from sql. Moreover you can join on multiple columns.
 - DataFrame.replace() columnNames arguments are now passed as String (for a single column) or in Array (for multiple ones).
+- DataFrame.transpose() has now an optional argument, transposeColumnNames which place columnNames as rowNames.
 - Adding unit tests to cover more cases.
 - Unit tests are now realized on es5 compiled version.
 - Clarifying error messages.

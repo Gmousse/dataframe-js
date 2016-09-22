@@ -30,10 +30,15 @@ const SELECT_FUNCTIONS = {
     'AVG': (df, column) => df.stat.mean(column),
 };
 
+function sqlArgsToArray(args) {
+    return args.join(' ', '').replace(' ', '').split(',');
+}
+
 function joinHandler(operation, tables, type) {
+    const ONKeywordLocation = operation.findIndex(word => word.toUpperCase() === 'ON') + 1;
     return (df) => df.join(
         tables[operation[0]],
-        operation[operation.findIndex(word => word.toUpperCase() === 'ON') + 1],
+        sqlArgsToArray(operation.filter((word, loc) => loc >= ONKeywordLocation)),
         type
     );
 }
@@ -59,7 +64,7 @@ const OPERATIONS_HANDLER = {
         operation[0].toUpperCase().includes('SELECT') ? sqlParser(operation.join(' '), tables) : tables[operation[0]]
     ),
     'GROUPBY': (operation) => {
-        return df => df.groupBy(...operation.join(' ', '').replace(' ', '').split(','));
+        return df => df.groupBy(...sqlArgsToArray(operation));
     },
 };
 

@@ -8,15 +8,17 @@ const test = tape;
 test('DataFrame sql module can ', (assert) => {
     const df1 = new DataFrame({
         id: [3, 6, 8],
+        id2: [3, 6, 8],
         column1: [3, 9, 9],
         column2: ['car', 'on the road again again', 'the fly was crashing'],
-    }, ['id', 'column1', 'column2']);
+    }, ['id', 'id2', 'column1', 'column2']);
 
     const df2 = new DataFrame({
         id: [1, 0, 8],
+        id2: [3, 6, 8],
         column3: [2, 1, 12],
         column4: ['bus', 'truck', 'train'],
-    }, ['id', 'column3', 'column4']);
+    }, ['id', 'id2', 'column3', 'column4']);
 
 
     df1.sql.register('tmp');
@@ -84,6 +86,12 @@ test('DataFrame sql module can ', (assert) => {
     );
 
     assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id, id2').toDict(),
+        df1.innerJoin(df2, ['id', 'id2']).toDict(),
+        'select everything from a join (inner on two columns) between 2 tables.'
+    );
+
+    assert.deepEqual(
         DataFrame.sql.request('SELECT * FROM tmp JOIN tmp2 ON id WHERE column1 != undefined').toDict(),
         df1.innerJoin(df2, 'id').filter(row => row.get('column1') !== undefined).toDict(),
         'select everything from a join chained with a filter.'
@@ -91,8 +99,8 @@ test('DataFrame sql module can ', (assert) => {
 
     assert.deepEqual(
         DataFrame.sql.request(
-            'SELECT * FROM tmp UNION SELECT id, column3 AS column1, column4 AS column2 FROM tmp2').toDict(),
-        df1.union(df2.renameAll(['id', 'column1', 'column2'])).toDict(),
+            'SELECT * FROM tmp UNION SELECT id, id2, column3 AS column1, column4 AS column2 FROM tmp2').toDict(),
+        df1.union(df2.renameAll(['id', 'id2', 'column1', 'column2'])).toDict(),
         'select everything from an union between 2 queries.'
     );
 

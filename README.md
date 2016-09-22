@@ -6,8 +6,8 @@
 dataframe-js provides another way to work with data in javascript (browser or server side) by using DataFrame, a data structure already used in some languages (Python, R, ...).
 
 A DataFrame is simply built on two concepts:
-- **Columns** providing ways to select your data and reorganize them.
-- **Rows** providing ways to modify or filter your data.
+- **Columns** provide ways to select your data and reorganize them.
+- **Rows** provide ways to modify or filter your data.
 
 ````javascript
 const df = new DataFrame(rawData, columns)
@@ -56,7 +56,7 @@ Complete API documentation: [Index](./doc/md-api/index.md)
 
 ### Examples
 
-[A simple use of DataFrame into the browser](./examples/example.html)
+[A simple use of DataFrame for data exploration tasks](./examples/titanic_analysis.js)
 
 [Unit tests](./tests/)
 
@@ -75,7 +75,7 @@ var DataFrame = dfjs.DataFrame;
 
 #### DataFrame Creation
 
-You can create a DataFrame by using different ways:
+You can create a DataFrame by using mutiple ways:
 
 ```javascript
 const df = new DataFrame(data, columns);
@@ -107,7 +107,7 @@ DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 
 #### DataFrame API detail
 
-[Creation](./doc/index.md#creation): You can create a DataFrame from files.
+[Creation](./doc/index.md#creation): Create a DataFrame from files or from JavaScript objects.
 
 [Export](./doc/index.md#export): Export a DataFrame in different files format or javascript objects.
 
@@ -117,7 +117,7 @@ DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 
 [Working with Rows](./doc/index.md#rows): Manipulate and transform rows of your DataFrame.
 
-[Working at Row level](./doc/index.md#row): Use the Row api to set or get some values when you map, filter or other Rows manipulations...
+[Working at Row level](./doc/index.md#row): Use the Row api to set or get some values when you map, filter or do other Rows manipulations...
 
 [Working with aggregates](./doc/index.md#groupeddataframe): Apply aggregations when you groupBy a DataFrame in order to resume your data.
 
@@ -125,11 +125,11 @@ DataFrame.fromJSON('http://myurl/myfile.json').then(df => df)
 
 ### Modules Usage
 
-#### Default modules API detail
+#### Default modules API details
 
 [Stat](./doc/md-api/index.md#stat)
 
-This module provides basic statistics computations on a DataFrame columns.
+This module provides basic statistical computations on a DataFrame columns.
 
 ````js
 df.stat.*
@@ -161,7 +161,7 @@ DataFrame.sql.request('SELECT * FROM tmp2 WHERE column1 = 6')
 
 #### Modules creation
 
-Each module is a class with a constructor taking dataframe as parameter, and having df and name properties:
+Each module is a class with a constructor taking dataframe as parameter, and having a df and a name properties:
 
 ```javascript
 class FakeModule {
@@ -178,7 +178,7 @@ class FakeModule {
 
 #### Modules registration
 
-You can register modules when you instanciate a DataFrame:
+You can register modules when you instantiate a DataFrame:
 
 ```javascript
 const df = new DataFrame(data, ['column1', 'column2', 'column3'], FakeModule, AnotherModule)

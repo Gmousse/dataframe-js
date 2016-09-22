@@ -242,6 +242,16 @@ test('DataFrame can ', (assert) => {
         }, 'transposed.'
     );
 
+    assert.deepEqual(
+        df2.transpose(true).toDict(), {
+            'rowNames': ['column1', 'column2', 'column3'],
+            '0': [3, '3', undefined],
+            '1': [6, '4', undefined],
+            '2': [8, '5', undefined],
+            '3': [undefined, '6', undefined],
+        }, 'transposed, keeping columnNames as rowNames.'
+    );
+
     assert.end();
 });
 
