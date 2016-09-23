@@ -1,4 +1,5 @@
 export function asArray(x) {
+    if (!x) return [];
     return Array.isArray(x) ? x : [x];
 }
 
@@ -14,13 +15,20 @@ export function isNumber(x) {
 }
 
 export function arrayEqual(a, b, byOrder = false) {
-    return byOrder ? Object.keys(a).map(x => a[x] === b[x]).reduce((p, n) => p ? n : p) :
+    return byOrder ? Object.keys(a).map(x => a[x] === b[x]).reduce((p, n) => p ? n : p, true) :
      [...new Set(a.filter(x => !new Set(b).has(x)))].length === 0;
 }
 
 export function transpose(table) {
     const tableSize = table.map(row => row.length).reduce((p, n) => Math.max(p, n), 0);
     return [...Array(tableSize).keys()].map((index) => table.map(row => row[index]));
+}
+
+export function combine(table, memory = []) {
+    if (table.length === 1) {
+        return table[0].map(elem => [...memory, elem]);
+    }
+    return table[0].map(elem => combine(table.slice(1, table.length), [...memory, elem])).reduce((p, n) => [...p, ...n]);
 }
 
 export function* makeGenerator(x) {
@@ -59,4 +67,43 @@ export function saveFile(path, content) {
             throw new Error(err);
         }
     });
+}
+
+export function xSplit(stringToSplit, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.map(str => str.split(next)).reduce((p, n) => [...p, ...n], []),
+        [stringToSplit]
+    );
+}
+
+export function xReplace(stringToReplace, ...patterns) {
+    return patterns.reduce(
+        (prev, next) => prev.replace(next[0], next[1]),
+        stringToReplace
+    );
+}
+
+export function xContains(stringWhereFind, ...patterns) {
+    return patterns.filter(pattern => stringWhereFind.includes(pattern));
+}
+
+export function compare(firstElem, secondElem, reverse = false) {
+    if (firstElem > secondElem) {
+        return reverse ? -1 : 1;
+    } else if (firstElem < secondElem) {
+        return reverse ? 1 : -1;
+    }
+    return 0;
+}
+
+export function hashCode(str) {
+    let hash = 0;
+    let char;
+    if (str.length === 0) return hash;
+    for (let i = 0; i < str.length; i++) {
+        char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash;
 }
