@@ -1,0 +1,261 @@
+[
+  {
+    "": 1,
+    "Class": "1st",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 2,
+    "Class": "2nd",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 3,
+    "Class": "3rd",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 35
+  },
+  {
+    "": 4,
+    "Class": "Crew",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 5,
+    "Class": "1st",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 6,
+    "Class": "2nd",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 7,
+    "Class": "3rd",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 17
+  },
+  {
+    "": 8,
+    "Class": "Crew",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "No",
+    "Freq": 0
+  },
+  {
+    "": 9,
+    "Class": "1st",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 118
+  },
+  {
+    "": 10,
+    "Class": "2nd",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 154
+  },
+  {
+    "": 11,
+    "Class": "3rd",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 387
+  },
+  {
+    "": 12,
+    "Class": "Crew",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 670
+  },
+  {
+    "": 13,
+    "Class": "1st",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 4
+  },
+  {
+    "": 14,
+    "Class": "2nd",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 13
+  },
+  {
+    "": 15,
+    "Class": "3rd",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 89
+  },
+  {
+    "": 16,
+    "Class": "Crew",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "No",
+    "Freq": 3
+  },
+  {
+    "": 17,
+    "Class": "1st",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 5
+  },
+  {
+    "": 18,
+    "Class": "2nd",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 11
+  },
+  {
+    "": 19,
+    "Class": "3rd",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 13
+  },
+  {
+    "": 20,
+    "Class": "Crew",
+    "Sex": "Male",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 0
+  },
+  {
+    "": 21,
+    "Class": "1st",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 1
+  },
+  {
+    "": 22,
+    "Class": "2nd",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 13
+  },
+  {
+    "": 23,
+    "Class": "3rd",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 14
+  },
+  {
+    "": 24,
+    "Class": "Crew",
+    "Sex": "Female",
+    "Age": "Child",
+    "Survived": "Yes",
+    "Freq": 0
+  },
+  {
+    "": 25,
+    "Class": "1st",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 57
+  },
+  {
+    "": 26,
+    "Class": "2nd",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 14
+  },
+  {
+    "": 27,
+    "Class": "3rd",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 75
+  },
+  {
+    "": 28,
+    "Class": "Crew",
+    "Sex": "Male",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 192
+  },
+  {
+    "": 29,
+    "Class": "1st",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 140
+  },
+  {
+    "": 30,
+    "Class": "2nd",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 80
+  },
+  {
+    "": 31,
+    "Class": "3rd",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 76
+  },
+  {
+    "": 32,
+    "Class": "Crew",
+    "Sex": "Female",
+    "Age": "Adult",
+    "Survived": "Yes",
+    "Freq": 20
+  },
+  {
+    "": ""
+  }
+]

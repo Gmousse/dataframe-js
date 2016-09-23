@@ -1,5 +1,7 @@
+import { checktypes } from 'es7-checktypes-decorator';
+
 import { match, arrayEqual } from './reusables.js';
-import { InputTypeError, NoSuchColumnError } from './errors.js';
+import { NoSuchColumnError } from './errors.js';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
@@ -12,6 +14,15 @@ class Row {
      * Create a new Row.
      * @param {Array | Object | Row} data The data of the Row.
      * @param {Array} columns The DataFrame column names.
+     * @example
+     * new Row({
+     *      'column1': 3,
+     *      'column2': 6,
+     * })
+     *
+     * new Row([3, 6], ['column1', 'column2'])
+     *
+     * new Row(Row, ['column1', 'column3'])
      */
     constructor(data, columns) {
         this[__columns__] = columns ? columns : Object.keys(data);
@@ -33,12 +44,12 @@ class Row {
         );
     }
 
+    @checktypes(['Row', Array, Object])
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
                 [(value) => (value instanceof Row), () => this._fromObject(data[__values__])],
-                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)],
-                [() => true, () => {throw new InputTypeError(typeof data, ['Object', 'Array', 'Row']);}]
+                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)]
             );
     }
 
@@ -53,6 +64,8 @@ class Row {
     /**
      * Convert Row into dict / hash / object.
      * @returns {Object} The Row converted into dict.
+     * @example
+     * row.toDict()
      */
     toDict() {
         return Object.assign({}, this[__values__]);
@@ -61,6 +74,8 @@ class Row {
     /**
      * Convert Row into Array, loosing column names.
      * @returns {Array} The Row values converted into Array.
+     * @example
+     * row.toArray()
      */
     toArray() {
         return [...this];
@@ -69,6 +84,8 @@ class Row {
     /**
      * Get the Row size.
      * @returns {Int} The Row length.
+     * @example
+     * row.size()
      */
     size() {
         return this[__columns__].length;
@@ -78,6 +95,8 @@ class Row {
      * Check if row contains a column.
      * @param {String} columnName The column to check.
      * @returns {Boolean} The presence or not of the column.
+     * @example
+     * row.has('column1')
      */
     has(columnName) {
         return this[__columns__].includes(columnName);
@@ -87,6 +106,8 @@ class Row {
      * Select columns into the Row.
      * @param {...String} columnNames The columns to select.
      * @returns {Row} A new Row containing only the selected columns.
+     * @example
+     * row.select('column1', 'column2')
      */
     select(...columnNames) {
         return this.__newInstance__(
@@ -100,6 +121,8 @@ class Row {
      * Get a Row value by its column.
      * @param {String} columnToGet The column value to get.
      * @returns The selected value.
+     * @example
+     * row.get('column1')
      */
     get(columnToGet) {
         if (!this.has(columnToGet)) {throw new NoSuchColumnError(columnToGet, this[__columns__]);}
@@ -110,6 +133,8 @@ class Row {
      * Set a Row value by its column, or create a new value if column doesn't exist.
      * @param {String} columnToSet The column value to set.
      * @returns {Row} A new Row with the modified / new value.
+     * @example
+     * row.set('column1', 6)
      */
     set(columnToSet, value) {
         const newRow = Object.assign({}, this[__values__], {[columnToSet]: value});
@@ -120,6 +145,8 @@ class Row {
      * Delete a Row value by its column.
      * @param {String} columnToDel The column value to delete.
      * @returns {Row} A new Row without the deleted value.
+     * @example
+     * row.delete('column1')
      */
     delete(columnToDel) {
         if (!this.has(columnToDel)) {throw new NoSuchColumnError(columnToDel, this[__columns__]);}

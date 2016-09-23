@@ -1,6 +1,6 @@
 {
   "name": "dataframe-js",
-  "version": "0.2.9",
+  "version": "1.0.0",
   "description": "Immutable and sql-like data structure",
   "keywords": [
     "DataFrame",
@@ -21,11 +21,14 @@
   "main": "./lib/index.js",
   "scripts": {
     "test": "NODE_ENV=production babel-tape-runner 'tests/*-test.js' | tap-diff",
+    "lint": "eslint -c .eslintrc ./src",
+    "doc": "babel-node doc/doc.js",
     "buildCommonJS": "NODE_ENV=production webpack && uglifyjs lib/browser/dataframe.js > lib/browser/dataframe-min.js",
     "build": "NODE_ENV=production babel src/ -d lib/ && npm run buildCommonJS",
-    "doc": "jsdoc2md src/* > doc/CORE_API.md && jsdoc2md src/modules/* > doc/MODULES_API.md",
-    "lint": "eslint -c .eslintrc ./src",
-    "prepublish": "npm run build"
+    "check": "npm run lint && npm run test",
+    "prepare": "npm run check && npm run build && npm run doc",
+    "git": "npm run prepare && git add . && git commit",
+    "prepublish": "npm run prepare"
   },
   "author": {
     "name": "Guillaume Mousnier",
@@ -38,24 +41,27 @@
     "babel-core": "^6.3.15",
     "babel-eslint": "^4.1.6",
     "babel-loader": "^6.2.0",
-    "babel-plugin-react-transform": "^2.0.0-beta1",
+    "babel-plugin-transform-decorators": "^6.13.0",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-minify": "0.0.0",
     "babel-preset-stage-0": "^6.3.13",
     "babel-runtime": "^6.9.2",
     "babel-tape-runner": "^2.0.1",
+    "documentation": "^4.0.0-beta10",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
     "eslint-plugin-react": "^5.1.1",
-    "jsdoc": "^3.4.0",
-    "jsdoc-to-markdown": "^1.3.6",
     "tap-diff": "^0.1.1",
     "tape": "^4.5.1",
     "uglifyjs": "^2.4.10",
     "webpack": "^1.13.1"
   },
   "dependencies": {
-      "babel-polyfill": "^6.13.0"
+    "babel-polyfill": "^6.13.0",
+    "es7-checktypes-decorator": "^0.1.3",
+    "d3-dsv": "^1.0.3",
+    "d3-request": "^1.0.2"
   }
 }
