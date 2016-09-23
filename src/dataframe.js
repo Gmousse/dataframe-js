@@ -114,7 +114,13 @@ class DataFrame {
      */
     constructor(data, columns, ...modules) {
         [this[__rows__], this[__columns__]] = this._build(data, this._dropSpacesInColumnNames(columns));
-        this.modules = DataFrame.defaultModules ? [...DataFrame.defaultModules, ...modules] : modules;
+        const defaultModulesNames = DataFrame.defaultModules ? DataFrame.defaultModules.map(
+            defaultModule => defaultModule.name
+        ) : [];
+        this.modules = [
+            ...(DataFrame.defaultModules ? DataFrame.defaultModules : []),
+            ...modules.filter(module => !defaultModulesNames.includes(module.name)),
+        ];
         Object.assign(this, ...this.__instanciateModules__(this.modules));
     }
 
@@ -207,6 +213,10 @@ class DataFrame {
         ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
     }
 
+    _cleanSavePath(path) {
+        return path.replace('file://', '/');
+    }
+
     /**
      * Convert DataFrame into dict / hash / object.
      * @returns {Object} The DataFrame converted into dict.
@@ -258,7 +268,7 @@ class DataFrame {
             (p, n) => `${p ? p + '\n' : ''}${n.toArray().join(sep)}`,
             header ? this[__columns__].join(sep) : ''
         );
-        if (path) {saveFile(path, csvContent);}
+        if (path) {saveFile(this._cleanSavePath(path), csvContent);}
         return csvContent;
     }
 
@@ -287,7 +297,7 @@ class DataFrame {
      */
     toJSON(asCollection = false, path = undefined) {
         const jsonContent = JSON.stringify(asCollection ? this.toCollection() : this.toDict());
-        if (path) {saveFile(path, jsonContent);}
+        if (path) {saveFile(this._cleanSavePath(path), jsonContent);}
         return jsonContent;
     }
 
@@ -335,7 +345,7 @@ class DataFrame {
     /**
      * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
      * {Boolean} [transposeColumnNames=false] An option to transpose columnNames in a rowNames column.
-     * @returns {ÐataFrame} A new transpoded DataFrame.
+     * @returns {ÐataFrame} A new transposed DataFrame.
      * @example
      * df.transpose()
      */
@@ -359,7 +369,7 @@ class DataFrame {
     /**
      * Get the count of a value into a column.
      * @param valueToCount The value to count into the selected column.
-     * @param {String} [columnName=this.listColumns()[0]] The column where found the value.
+     * @param {String} [columnName=this.listColumns()[0]] The column to count the value.
      * @returns {Int} The number of times the selected value appears.
      * @example
       * df.countValue(5, 'column2')
@@ -381,10 +391,10 @@ class DataFrame {
     }
 
     /**
-     * Replace a value by another in the DataFrame or in a column.
+     * Replace a value by another in all the DataFrame or in a column.
      * @param value The value to replace.
      * @param replacement The new value.
-     * @param {String | Array} [columnNames=this.listColumns()] The columns where to apply the replacement.
+     * @param {String | Array} [columnNames=this.listColumns()] The columns to apply the replacement.
      * @returns {DataFrame} A new DataFrame with replaced values.
      * @example
      * df.replace(undefined, 0, 'column1', 'column2')
@@ -399,7 +409,7 @@ class DataFrame {
     /**
      * Compute unique values into a column.
      * @param {String} columnName The column to distinct.
-     * @returns {Array} An Array containing distinct values of the column.
+     * @returns {DataFrame} A DataFrame containing the column with distinct values.
      * @example
      * df.distinct('column1')
      */
@@ -413,7 +423,7 @@ class DataFrame {
      * Compute unique values into a column.
      * Alias from .distinct()
      * @param {String} columnName The column to distinct.
-     * @returns {Array} An Array containing distinct values of the column.
+     * @returns {DataFrame} A DataFrame containing the column with distinct values.
      * @example
      * df.unique('column1')
      */
@@ -464,7 +474,7 @@ class DataFrame {
     /**
      * Modify the structure of the DataFrame by changing columns order, creating new columns or removing some columns.
      * @param {Array} newColumnNames The new columns of the DataFrame.
-     * @returns {DataFrame} A new DataFrame with different columns (renamed, add or deleted).
+     * @returns {DataFrame} A new DataFrame with restructured columns (renamed, add or deleted).
      * @example
      * df.restructure(['column1', 'column4', 'column2', 'column3'])
      * df.restructure(['column1', 'column4'])

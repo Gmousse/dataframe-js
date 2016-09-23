@@ -693,7 +693,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/dataframe.js#L16-L846'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/dataframe.js#L16-L856'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -1778,7 +1778,7 @@ df.show(<span class="hljs-number">10</span>)
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code>&ETH;ataFrame</code>:
-        A new transpoded DataFrame.
+        A new transposed DataFrame.
 
       
     
@@ -1904,7 +1904,7 @@ df.show(<span class="hljs-number">10</span>)
           <div>
             <span class='code bold'>columnName</span> <code class='quiet'>([<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>]
             (default <code>this.listColumns()[0]</code>)
-            )</code> The column where found the value.
+            )</code> The column to count the value.
 
           </div>
           
@@ -2030,7 +2030,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
 
   
 
-  <p>Replace a value by another in the DataFrame or in a column.</p>
+  <p>Replace a value by another in all the DataFrame or in a column.</p>
 
 
   <div class='pre p1 fill-light mt0'>replace(value: any, replacement: any, columnNames: [(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]): <a href="#dataframe">DataFrame</a></div>
@@ -2067,7 +2067,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
           <div>
             <span class='code bold'>columnNames</span> <code class='quiet'>([(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a>)]
             (default <code>this.listColumns()</code>)
-            )</code> The columns where to apply the replacement.
+            )</code> The columns to apply the replacement.
 
           </div>
           
@@ -2123,7 +2123,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
   <p>Compute unique values into a column.</p>
 
 
-  <div class='pre p1 fill-light mt0'>distinct(columnName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  <div class='pre p1 fill-light mt0'>distinct(columnName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -2153,8 +2153,8 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
-        An Array containing distinct values of the column.
+      <code><a href="#dataframe">DataFrame</a></code>:
+        A DataFrame containing the column with distinct values.
 
       
     
@@ -2196,7 +2196,7 @@ df.select(<span class="hljs-string">'column1'</span>).countValue(<span class="hl
 Alias from .distinct()</p>
 
 
-  <div class='pre p1 fill-light mt0'>unique(columnName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></div>
+  <div class='pre p1 fill-light mt0'>unique(columnName: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>): <a href="#dataframe">DataFrame</a></div>
 
   
 
@@ -2226,8 +2226,8 @@ Alias from .distinct()</p>
   
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
-      <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code>:
-        An Array containing distinct values of the column.
+      <code><a href="#dataframe">DataFrame</a></code>:
+        A DataFrame containing the column with distinct values.
 
       
     
@@ -2513,7 +2513,7 @@ df.withColumn(<span class="hljs-string">'column2'</span>, (row) =&gt; row.get(<s
     
       <div class='py1 quiet mt1 prose-big'>Returns</div>
       <code><a href="#dataframe">DataFrame</a></code>:
-        A new DataFrame with different columns (renamed, add or deleted).
+        A new DataFrame with restructured columns (renamed, add or deleted).
 
       
     
@@ -4465,7 +4465,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/groupedDataframe.js#L10-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/groupedDataframe.js#L10-L118'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4923,7 +4923,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5632,7 +5632,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -6042,7 +6042,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6644,7 +6644,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/79ee230612b2c1ef1cf281fb110ecadd2da4e121/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3fa200d79c41f0bd78575c7e0f6cc8acb13a465d/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     
