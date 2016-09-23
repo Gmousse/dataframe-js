@@ -8,6 +8,10 @@
 
 **Changelog**: [1.0.0](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
 
+**Compatibility**:
+- Browsers (IE > 8, Edge, Firefox, Chrome...)
+- NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x 
+
 
 ## Presentation
 
