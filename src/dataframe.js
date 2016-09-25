@@ -344,7 +344,7 @@ class DataFrame {
 
     /**
      * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
-     * {Boolean} [transposeColumnNames=false] An option to transpose columnNames in a rowNames column.
+     * @param {Boolean} [transposeColumnNames=false] An option to transpose columnNames in a rowNames column.
      * @returns {ÐataFrame} A new transposed DataFrame.
      * @example
      * df.transpose()
