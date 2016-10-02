@@ -1,3 +1,4 @@
+
 export function asArray(x) {
     if (!x) return [];
     return Array.isArray(x) ? x : [x];
@@ -62,11 +63,15 @@ export function chain(data, ...operations) {
 }
 
 export function saveFile(path, content) {
-    require('fs').writeFile(path, content, (err) => {
-        if (err) {
-            throw new Error(err);
-        }
-    });
+    try {
+        require('fs').writeFile(path, content, (err) => {
+            if (err) {
+                throw new Error(err);
+            }
+        });
+    } catch (e) {
+        console.log('File system is not available in browsers.');
+    }
 }
 
 export function xSplit(stringToSplit, ...patterns) {
