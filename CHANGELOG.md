@@ -2,6 +2,17 @@
 
 ---
 
+## v0.1.2
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Try catching the fs module for browsers.
+
+---
+
 ## v1.0.0
 
 **Author**: Guillaume Mousnier
