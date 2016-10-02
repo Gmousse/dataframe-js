@@ -1,6 +1,6 @@
 {
   "name": "dataframe-js",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Immutable and sql-like data structure",
   "keywords": [
     "DataFrame",
