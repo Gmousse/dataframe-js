@@ -6,7 +6,7 @@ import { tryCatch } from './utils.js';
 
 const test = tape;
 
-test('DataFrame can ', (assert) => {
+test('DataFrame can be', (assert) => {
     const dict = {
         column1: [3, 6, 8],
         column2: [3, 4, 5, 6],
@@ -39,72 +39,73 @@ test('DataFrame can ', (assert) => {
     assert.equal(
         new DataFrame(dict, ['column1', 'column2']).constructor.name,
         'DataFrame',
-        'be created from an Object of Arrays.'
+        'created from an Object of Arrays.'
     );
 
     assert.equal(
         new DataFrame(dict).constructor.name,
         'DataFrame',
-        'be created from an Object of Arrays by infering columns.'
+        'created from an Object of Arrays by infering columns.'
     );
 
     assert.deepEqual(
         new DataFrame(table, ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']).constructor.name,
         'DataFrame',
-        'be created from an Array of Arrays.'
+        'created from an Array of Arrays.'
     );
 
     assert.deepEqual(
         new DataFrame(table).constructor.name,
         'DataFrame',
-        'be created from Array of Arrays by infering columns.'
+        'created from Array of Arrays by infering columns.'
     );
 
     assert.deepEqual(
         new DataFrame(collection, ['c1', 'c2', 'c3', 'c4', 'c5', 'c6']).constructor.name,
         'DataFrame',
-        'be created from Array of Objects.'
+        'created from Array of Objects.'
     );
 
     assert.deepEqual(
         new DataFrame(collection).constructor.name,
         'DataFrame',
-        'be created from an Array of Objects by infering columns.'
+        'created from an Array of Objects by infering columns.'
     );
 
     assert.deepEqual(
         new DataFrame(new DataFrame(collection)).constructor.name,
         'DataFrame',
-        'be created from another DataFrame.'
+        'created from another DataFrame.'
     );
 
     const currentPath = path.resolve(__dirname) + '/data';
-    DataFrame.fromCSV(`file:///${currentPath}/Titanic.csv`, true).then(
+
+    DataFrame.fromCSV(`${currentPath}/Titanic.csv`, true).then(
         (value) => (
             assert.deepEqual(
                 value.toCollection()[0],
                 {'': '1', Age: 'Child', Class: '1st', Freq: '0', Sex: 'Male', Survived: 'No' },
-                'be created from a csv file wtih header.'
+                'created from a csv file wtih header.'
             )
         )
     );
 
-    DataFrame.fromCSV(`file:///${currentPath}/Titanic_2.csv`, false).then(
+    DataFrame.fromCSV(`${currentPath}/Titanic_2.csv`, false).then(
         (value) => (
             assert.deepEqual(
                 value.toCollection()[0],
                 {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
-                'be created from a csv file without header.'
+                'created from a csv file without header.'
             )
         )
     );
 
-    DataFrame.fromText(`file:///${currentPath}/Titanic_2.csv`, '', false).then(
+    DataFrame.fromText(`${currentPath}/Titanic_2.csv`, '', false).then(
         (value) => (
             assert.deepEqual(
                 value.toCollection()[0],
                 {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
-                'be created from a text file with a custom seprator.'
+                'created from a text file with a custom seprator.'
             )
         )
     );
@@ -114,7 +115,7 @@ test('DataFrame can ', (assert) => {
             assert.deepEqual(
                 value.toCollection()[0],
                 {'': 1, Age: 'Child', Class: '1st', Freq: 0, Sex: 'Male', Survived: 'No' },
-                'be created from a JSON containing a column by key.'
+                'created from a JSON containing a column by key.'
             )
         )
     );
@@ -124,7 +125,7 @@ test('DataFrame can ', (assert) => {
             assert.deepEqual(
                 value.toCollection()[0],
                 {'FIELD1': 1, Age: 'Child', Class: '1st', Freq: 0, Sex: 'Male', Survived: 'No' },
-                'be created from a JSON containing a collection of rows.'
+                'created from a JSON containing a collection of rows.'
             )
         )
     );
@@ -255,12 +256,12 @@ test('DataFrame can ', (assert) => {
     assert.end();
 });
 
-test('DataFrame can\'t', (assert) => {
-    assert.equal(tryCatch(() => new DataFrame('')).name, 'TypeError', ' be created from a String, throwing TypeError.');
+test('DataFrame can\'t be', (assert) => {
+    assert.equal(tryCatch(() => new DataFrame('')).name, 'TypeError', 'created from a String, throwing TypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame()).name, 'TypeError', 'be created from a nothing, throwing TypeError.');
+    assert.equal(tryCatch(() => new DataFrame()).name, 'TypeError', 'created from a nothing, throwing TypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame(445)).name, 'TypeError', 'be created from a Number, throwing TypeError.');
+    assert.equal(tryCatch(() => new DataFrame(445)).name, 'TypeError', 'created from a Number, throwing TypeError.');
 
     assert.end();
 });

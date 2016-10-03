@@ -2,7 +2,7 @@ import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
 import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
 
-import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray } from './reusables.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables.js';
 import { WrongSchemaError, MixedTypeError } from './errors.js';
 import Row from './row.js';
 import GroupedDataFrame from './groupedDataframe.js';
@@ -25,65 +25,75 @@ class DataFrame {
         DataFrame.defaultModules = defaultModules;
     }
 
+    @checktypes(['String', 'File'], 'String')
     /**
      * Create a DataFrame from a Text file. It returns a Promise.
-     * @param {String} path A path to the file (url or local).
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
      * @param {String} sep The separator used to parse the file.
      * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
      * @example
      * DataFrame.fromText('http://myurl/myfile.txt').then(df => df.show())
-     * DataFrame.fromText('file://my/absolue/path/myfile.txt').then(df => df.show())
-     * DataFrame.fromText('file://my/absolue/path/myfile.txt', ';', true).then(df => df.show())
+     * // In browser Only
+     * DataFrame.fromText(myFile).then(df => df.show())
+     * // From node.js only Only
+     * DataFrame.fromText('/my/absolue/path/myfile.txt').then(df => df.show())
+     * DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
-    static fromText(path, sep = ';', header = true) {
+    static fromText(pathOrFile, sep = ';', header = true) {
+        const parser = dsvFormat(sep);
         return new Promise((resolve) => {
-            return text(
-                path,
-                response => {
-                    const parser = dsvFormat(sep);
-                    const data = header ? parser.parse(response) : parser.parseRows(response);
-                    resolve(new DataFrame(data, data.columns));
-                }
-            );
+            const parseText = (txt) => {
+                const data = header ? parser.parse(txt) : parser.parseRows(txt);
+                resolve(new DataFrame(data, data.columns));
+            };
+            return (typeof pathOrFile === 'string') ?
+                text(addFileProtocol(pathOrFile), parseText) :
+                loadTextFile(pathOrFile, parseText);
         });
     }
 
+    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a CSV file. It returns a Promise.
-     * @param {String} path A path to the file (url or local).
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
      * @param {Boolean} [header=true] A boolean indicating if the csv has a header or not.
      * @example
      * DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df.show())
-     * DataFrame.fromCSV('file://my/absolue/path/myfile.csv').then(df => df.show())
-     * DataFrame.fromCSV('file://my/absolue/path/myfile.csv', true).then(df => df.show())
+     * // For browser only
+     * DataFrame.fromCSV(myFile).then(df => df.show())
+     * // From node.js only
+     * DataFrame.fromCSV('/my/absolue/path/myfile.csv').then(df => df.show())
+     * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
      */
-    static fromCSV(path, header = true) {
+    static fromCSV(pathOrFile, header = true) {
         return new Promise((resolve) => {
-            return text(
-                path,
-                response => {
-                    const data = header ? csvParse(response) : csvParseRows(response);
-                    resolve(new DataFrame(data, data.columns));
-                }
-            );
+            const parseCSV = (txt) => {
+                const data = header ? csvParse(txt) : csvParseRows(txt);
+                resolve(new DataFrame(data, data.columns));
+            };
+            return (typeof pathOrFile === 'string') ?
+                text(addFileProtocol(pathOrFile), parseCSV) :
+                loadTextFile(pathOrFile, parseCSV);
         });
     }
 
+    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a JSON file. It returns a Promise.
-     * @param {String} path A path to the file (url or local).
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
      * @example
      * DataFrame.fromJSON('http://myurl/myfile.json').then(df => df.show())
-     * DataFrame.fromCSV('file://my/absolue/path/myfile.json').then(df => df.show())
+     * // For browser only
+     * DataFrame.fromJSON(myFile).then(df => df.show())
+     * // From node.js only
+     * DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
      */
-    static fromJSON(path) {
+    static fromJSON(pathOrFile) {
         return new Promise((resolve) => {
-            return json(
-                path,
-                response => {
-                    resolve(new DataFrame(response));
-                }
-            );
+            const parseJSON = (dict) => resolve(new DataFrame(dict));
+            return (typeof pathOrFile === 'string') ?
+                json(addFileProtocol(pathOrFile), parseJSON) :
+                loadTextFile(pathOrFile, (txt) => parseJSON(JSON.parse(txt)));
         });
     }
 
@@ -261,7 +271,8 @@ class DataFrame {
      * df.toText()
      * df.toText(';')
      * df.toText(';', true)
-     * df.toText(';', true, '~/dataframe.txt')
+     * // From node.js only
+     * df.toText(';', true, '/my/absolute/path/dataframe.txt')
      */
     toText(sep = ';', header = true, path = undefined) {
         const csvContent = this.reduce(
@@ -280,7 +291,8 @@ class DataFrame {
      * @example
      * df.toCSV()
      * df.toCSV(true)
-     * df.toCSV(true, '~/dataframe.csv')
+     * // From node.js only
+     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
      */
     toCSV(header = true, path = undefined) {
         return this.toText(',', header, path);
@@ -293,7 +305,8 @@ class DataFrame {
      * @returns {String} The json file in raw string.
      * @example
      * df.toJSON()
-     * df.toJSON('~/dataframe.json')
+     * // From node.js only
+     * df.toJSON('/my/absolute/path/dataframe.json')
      */
     toJSON(asCollection = false, path = undefined) {
         const jsonContent = JSON.stringify(asCollection ? this.toCollection() : this.toDict());
