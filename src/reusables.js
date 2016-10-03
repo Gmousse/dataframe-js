@@ -70,8 +70,20 @@ export function saveFile(path, content) {
             }
         });
     } catch (e) {
-        console.log('File system is not available in browsers.');
+        console.log('File system module is not available.');
     }
+}
+
+export function loadTextFile(file, func) {
+    if (FileReader && File) {
+        const reader = new FileReader();
+        reader.onload = (event) => func(event.target.result);
+        reader.readAsText(file);
+    }
+}
+
+export function addFileProtocol(path) {
+    return path.startsWith('/') ? `file://${path}` : path;
 }
 
 export function xSplit(stringToSplit, ...patterns) {

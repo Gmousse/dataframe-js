@@ -2,7 +2,18 @@
 
 ---
 
-## v0.1.2
+## v1.1.0
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Feature
+
+**Changes**:
+- (Optional) Adding a support for .fromCSV, .fromText, .fromJSON to use browser File object. 
+
+---
+
+## v1.0.2
 
 **Author**: Guillaume Mousnier.
 

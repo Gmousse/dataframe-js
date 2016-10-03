@@ -1,16 +1,16 @@
 # dataframe-js
-**v1.0.0**
+**v1.1.0**
 
 ![](https://travis-ci.org/Gmousse/dataframe-js.svg?branch=develop)
 
 
 **Official Website**: <https://gmousse.github.io/dataframe-js/>
 
-**Changelog**: [1.0.0](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
+**Changelog**: [1.1.0](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
 
 **Compatibility**:
 - Browsers (IE > 8, Edge, Firefox, Chrome...)
-- NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x 
+- NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x
 
 
 ## Presentation
@@ -111,9 +111,10 @@ const df = new DataFrame({
 }, ['column1', 'column2']);
 
 // From files
-DataFrame.fromText('file://my/absolue/path/myfile.txt').then(df => df);
+DataFrame.fromText('/my/absolue/path/myfile.txt').then(df => df);
 DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df);
 DataFrame.fromJSON('http://myurl/myfile.json').then(df => df);
+DataFrame.fromJSON(new File(...)).then(df => df);
 ```
 Complete list:
 [DataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#constructor)
