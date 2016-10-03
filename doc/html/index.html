@@ -693,7 +693,7 @@
       DataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/dataframe.js#L16-L856'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/dataframe.js#L16-L869'>
       <span>src/dataframe.js</span>
       </a>
     
@@ -795,7 +795,7 @@
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromText(path, [sep], [header])</span>
+            <span class='code strong strong truncate'>fromText(pathOrFile, [sep], [header])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -806,7 +806,7 @@
   <p>Create a DataFrame from a Text file. It returns a Promise.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromText(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, sep: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>](default &#x27;;&#x27;), header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
+  <div class='pre p1 fill-light mt0'>fromText(pathOrFile: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File), sep: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>](default &#x27;;&#x27;), header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
 
   
 
@@ -822,7 +822,7 @@
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+            <span class='code bold'>pathOrFile</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File))</code> A path to the file (url or local) or a browser File object.
 
           </div>
           
@@ -860,8 +860,11 @@
     
       
       <pre class='p1 overflow-auto round fill-light'>DataFrame.fromText(<span class="hljs-string">'http://myurl/myfile.txt'</span>).then(df =&gt; df.show())
-DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'</span>).then(df =&gt; df.show())
-DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'</span>, <span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
+<span class="hljs-comment">// In browser Only</span>
+DataFrame.fromText(myFile).then(df =&gt; df.show())
+<span class="hljs-comment">// From node.js only Only</span>
+DataFrame.fromText(<span class="hljs-string">'/my/absolue/path/myfile.txt'</span>).then(df =&gt; df.show())
+DataFrame.fromText(<span class="hljs-string">'/my/absolue/path/myfile.txt'</span>, <span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
     
   
 
@@ -879,7 +882,7 @@ DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromCSV(path, [header])</span>
+            <span class='code strong strong truncate'>fromCSV(pathOrFile, [header])</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -890,7 +893,7 @@ DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'
   <p>Create a DataFrame from a CSV file. It returns a Promise.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromCSV(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>, header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
+  <div class='pre p1 fill-light mt0'>fromCSV(pathOrFile: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File), header: [<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a>])</div>
 
   
 
@@ -906,7 +909,7 @@ DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+            <span class='code bold'>pathOrFile</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File))</code> A path to the file (url or local) or a browser File object.
 
           </div>
           
@@ -936,8 +939,11 @@ DataFrame.fromText(<span class="hljs-string">'file://my/absolue/path/myfile.txt'
     
       
       <pre class='p1 overflow-auto round fill-light'>DataFrame.fromCSV(<span class="hljs-string">'http://myurl/myfile.csv'</span>).then(df =&gt; df.show())
-DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'</span>).then(df =&gt; df.show())
-DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
+<span class="hljs-comment">// For browser only</span>
+DataFrame.fromCSV(myFile).then(df =&gt; df.show())
+<span class="hljs-comment">// From node.js only</span>
+DataFrame.fromCSV(<span class="hljs-string">'/my/absolue/path/myfile.csv'</span>).then(df =&gt; df.show())
+DataFrame.fromCSV(<span class="hljs-string">'/my/absolue/path/myfile.csv'</span>, <span class="hljs-literal">true</span>).then(df =&gt; df.show())</pre>
     
   
 
@@ -955,7 +961,7 @@ DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'<
       <div class="clearfix small pointer toggle-sibling">
         <div class="py1 contain">
             <a class='icon pin-right py1 dark-link caret-right'>▸</a>
-            <span class='code strong strong truncate'>fromJSON(path)</span>
+            <span class='code strong strong truncate'>fromJSON(pathOrFile)</span>
         </div>
       </div>
       <div class="clearfix display-none toggle-target">
@@ -966,7 +972,7 @@ DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'<
   <p>Create a DataFrame from a JSON file. It returns a Promise.</p>
 
 
-  <div class='pre p1 fill-light mt0'>fromJSON(path: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</div>
+  <div class='pre p1 fill-light mt0'>fromJSON(pathOrFile: (<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File))</div>
 
   
 
@@ -982,7 +988,7 @@ DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'<
       
         <div class='space-bottom0'>
           <div>
-            <span class='code bold'>path</span> <code class='quiet'>(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a>)</code> A path to the file (url or local).
+            <span class='code bold'>pathOrFile</span> <code class='quiet'>((<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a> | File))</code> A path to the file (url or local) or a browser File object.
 
           </div>
           
@@ -1002,7 +1008,10 @@ DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.csv'<
     
       
       <pre class='p1 overflow-auto round fill-light'>DataFrame.fromJSON(<span class="hljs-string">'http://myurl/myfile.json'</span>).then(df =&gt; df.show())
-DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.json'</span>).then(df =&gt; df.show())</pre>
+<span class="hljs-comment">// For browser only</span>
+DataFrame.fromJSON(myFile).then(df =&gt; df.show())
+<span class="hljs-comment">// From node.js only</span>
+DataFrame.fromJSON(<span class="hljs-string">'/my/absolute/path/myfile.json'</span>).then(df =&gt; df.show())</pre>
     
   
 
@@ -1405,7 +1414,8 @@ DataFrame.fromCSV(<span class="hljs-string">'file://my/absolue/path/myfile.json'
       <pre class='p1 overflow-auto round fill-light'>df.toText()
 df.toText(<span class="hljs-string">';'</span>)
 df.toText(<span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>)
-df.toText(<span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">'~/dataframe.txt'</span>)</pre>
+<span class="hljs-comment">// From node.js only</span>
+df.toText(<span class="hljs-string">';'</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">'/my/absolute/path/dataframe.txt'</span>)</pre>
     
   
 
@@ -1489,7 +1499,8 @@ df.toText(<span class="hljs-string">';'</span>, <span class="hljs-literal">true<
       
       <pre class='p1 overflow-auto round fill-light'>df.toCSV()
 df.toCSV(<span class="hljs-literal">true</span>)
-df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'~/dataframe.csv'</span>)</pre>
+<span class="hljs-comment">// From node.js only</span>
+df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'/my/absolute/path/dataframe.csv'</span>)</pre>
     
   
 
@@ -1572,7 +1583,8 @@ df.toCSV(<span class="hljs-literal">true</span>, <span class="hljs-string">'~/da
     
       
       <pre class='p1 overflow-auto round fill-light'>df.toJSON()
-df.toJSON(<span class="hljs-string">'~/dataframe.json'</span>)</pre>
+<span class="hljs-comment">// From node.js only</span>
+df.toJSON(<span class="hljs-string">'/my/absolute/path/dataframe.json'</span>)</pre>
     
   
 
@@ -4474,7 +4486,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       GroupedDataFrame
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/groupedDataframe.js#L10-L118'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/groupedDataframe.js#L10-L118'>
       <span>src/groupedDataframe.js</span>
       </a>
     
@@ -4932,7 +4944,7 @@ df.join(df2, <span class="hljs-string">'id'</span>, <span class="hljs-string">'r
       Stat
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/modules/stat.js#L6-L128'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/modules/stat.js#L6-L128'>
       <span>src/modules/stat.js</span>
       </a>
     
@@ -5641,7 +5653,7 @@ Alias from mean.</p>
       Matrix
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/modules/matrix.js#L9-L94'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/modules/matrix.js#L9-L94'>
       <span>src/modules/matrix.js</span>
       </a>
     
@@ -6051,7 +6063,7 @@ Alias from mean.</p>
       SQL
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/modules/sql.js#L9-L102'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/modules/sql.js#L9-L102'>
       <span>src/modules/sql.js</span>
       </a>
     
@@ -6653,7 +6665,7 @@ Alias from mean.</p>
       Row
     </h3>
     
-      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/d2a5439255ea5c8fc1cd441f04e4af9ef1f16260/src/row.js#L12-L155'>
+      <a class='fr fill-darken0 round round pad1x quiet h5' href='https://github.com/Gmousse/dataframe-js/blob/3e88d81cb1e079567e21a31379420b3827dea51c/src/row.js#L12-L155'>
       <span>src/row.js</span>
       </a>
     
