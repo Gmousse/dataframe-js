@@ -1,12 +1,12 @@
 # dataframe-js
-**v1.1.0**
+**v1.1.1**
 
 ![](https://travis-ci.org/Gmousse/dataframe-js.svg?branch=develop)
 
 
 **Official Website**: <https://gmousse.github.io/dataframe-js/>
 
-**Changelog**: [1.1.0](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
+**Changelog**: [1.1.1](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
 
 **Compatibility**:
 - Browsers (IE > 8, Edge, Firefox, Chrome...)
