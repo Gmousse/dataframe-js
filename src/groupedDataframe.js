@@ -107,7 +107,7 @@ export default class GroupedDataFrame {
      * @param {Function} func The aggregation function.
      * @returns {DataFrame} A new DataFrame with a column 'aggregation' containing the result.
      * @example
-     * groupedDF.aggregate(group => group.sql.sum('column1'));
+     * groupedDF.aggregate(group => group.stat.sum('column1'));
      */
     aggregate(func) {
         return this.df.__newInstance__(

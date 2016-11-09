@@ -2,6 +2,17 @@
 
 ---
 
+## v1.1.1
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Feature
+
+**Changes**:
+- Fixing a doc issue related to [#13](https://github.com/Gmousse/dataframe-js/issues/13).
+
+---
+
 ## v1.1.0
 
 **Author**: Guillaume Mousnier.
@@ -9,7 +20,7 @@
 **Type**: Feature
 
 **Changes**:
-- (Optional) Adding a support for .fromCSV, .fromText, .fromJSON to use browser File object. 
+- (Optional) Adding a support for .fromCSV, .fromText, .fromJSON to use browser File object.
 
 ---
 
