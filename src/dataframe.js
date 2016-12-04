@@ -123,7 +123,7 @@ class DataFrame {
      * new DataFrame(df);
      */
     constructor(data, columns, ...modules) {
-        [this[__rows__], this[__columns__]] = this._build(data, this._dropSpacesInColumnNames(columns));
+        [this[__rows__], this[__columns__]] = this._build(data, columns);
         const defaultModulesNames = DataFrame.defaultModules ? DataFrame.defaultModules.map(
             defaultModule => defaultModule.name
         ) : [];
@@ -142,12 +142,12 @@ class DataFrame {
 
     __newInstance__(data, columns) {
         if (!arrayEqual(columns, this[__columns__], true) || !(data[0] instanceof Row)) {
-            return new DataFrame(data, this._dropSpacesInColumnNames(columns), ...this.modules);
+            return new DataFrame(data, columns, ...this.modules);
         }
         const newInstance = Object.assign(
             Object.create(
                 Object.getPrototypeOf(this)
-            ), this, {[__rows__]: [...data], [__columns__]: [...this._dropSpacesInColumnNames(columns)]}
+            ), this, {[__rows__]: [...data], [__columns__]: [...columns]}
         );
         return Object.assign(newInstance, ...this.__instanciateModules__(this.modules, newInstance));
     }
@@ -157,10 +157,6 @@ class DataFrame {
             const pluginInstance = new Plugin(df ? df : this);
             return {[pluginInstance.name]: pluginInstance};
         });
-    }
-
-    _dropSpacesInColumnNames(columns) {
-        return columns ? columns.map(column => String(column).replace(' ', '')) : columns;
     }
 
     @checktypes(['DataFrame', Array, Object])
