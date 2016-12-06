@@ -31,7 +31,7 @@ const SELECT_FUNCTIONS = {
 };
 
 function sqlArgsToArray(args) {
-    return args.join(' ', '').replace(' ', '').split(',');
+    return xReplace(args.join(' '), [' ', '']).split(',');
 }
 
 function joinHandler(operation, tables, type) {
@@ -51,7 +51,10 @@ const OPERATIONS_HANDLER = {
             return operationalTerms.map(operationalTerm => {
                 const operatorToApply = xContains(operationalTerm, ...Object.keys(WHERE_OPERATORS))[0];
                 const terms = operationalTerm.replace(' ', '').split(operatorToApply);
-                return WHERE_OPERATORS[operatorToApply](row.get(terms[0]), eval(terms[1]));
+                return WHERE_OPERATORS[operatorToApply](
+                    String(row.get(terms[0])),
+                    xReplace(terms[1].trim(), ['\"', ''], ['\'', ''], ['\`', ''])
+                );
             }).reduce((prev, next) => WHERE_OPERATORS[conditionalOperators.shift()](prev, next));
         });
     },
@@ -109,9 +112,9 @@ function parseSelections(selections) {
         throw new SQLParseError('Your query should begin with SELECT keyword');
     }
     selections.shift();
-    return match(selections.join(' ').split(','),
+    return match(selections.join(' ').split(',').map(selection => selection.trim()),
         [
-            (value) => value[0].replace(' ', '') === '*',
+            (value) => xReplace(value[0], [' ', '']) === '*',
             () => (df) => df,
         ],
         [
@@ -119,7 +122,7 @@ function parseSelections(selections) {
             (value) => {
                 const columnName = xReplace(value[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', '']);
                 return (df) => df.distinct(columnName).rename(
-                    columnName, value[0].includes('AS') ? value[0].split('AS')[1] : columnName
+                    columnName, value[0].includes('AS') ? value[0].split('AS')[1].replace(' ', '') : columnName
                 );
             },
         ],
@@ -140,7 +143,7 @@ function parseSelections(selections) {
         [
             () => true,
             (value) => (df) => df.select(...value.map(column => column.split(' AS ')[0].replace(' ', ''))).renameAll(
-                value.map(column => column.includes('AS') ? column.split('AS')[1] : column)
+                value.map(column => column.includes('AS') ? column.split('AS')[1].replace(' ', '') : column)
             ),
         ]
     );
