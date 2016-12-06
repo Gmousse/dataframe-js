@@ -95,7 +95,7 @@ export function xSplit(stringToSplit, ...patterns) {
 
 export function xReplace(stringToReplace, ...patterns) {
     return patterns.reduce(
-        (prev, next) => prev.replace(next[0], next[1]),
+        (prev, next) => prev.split(next[0]).join(next[1]),
         stringToReplace
     );
 }

@@ -774,7 +774,7 @@ class DataFrame {
         if (!arrayEqual(this[__columns__], dfToUnion[__columns__])) {
             throw new WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
         }
-        return this.__newInstance__([...this, ...dfToUnion], this[__columns__]);
+        return this.__newInstance__([...this, ...dfToUnion.restructure(this[__columns__])], this[__columns__]);
     }
 
     /**

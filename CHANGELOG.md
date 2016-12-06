@@ -1,5 +1,20 @@
 # Changelog
 
+
+---
+
+## v1.1.2
+
+**Author**: Guillaume Mousnier. Thanks to @lmeyerov
+
+**Type**: Hotfix
+
+**Changes**:
+- Deleting withespaces removal in DataFrame. [#14](https://github.com/Gmousse/dataframe-js/issues/14).
+- Fixing withespaces bugs in SQL. [#14](https://github.com/Gmousse/dataframe-js/issues/14).
+- Fixing DataFrame.union() bug when columns aren't in the same order.
+[#15](https://github.com/Gmousse/dataframe-js/issues/15).
+
 ---
 
 ## v1.1.1

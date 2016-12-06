@@ -600,13 +600,33 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     const df5b = new DataFrame({
+        id: [3, 1, 8],
+        value: [1, 0, 1],
+    }, ['value', 'id']);
+
+    assert.deepEqual(
+        df3.union(df5b).toArray(), [
+            [8, 1],
+            [8, 4],
+            [6, 0],
+            [3, 1],
+            [3, 2],
+            [1, 1],
+            [1, 1],
+            [1, 3],
+            [0, 1],
+            [1, 8],
+        ], 'concatenated with another DataFrame, with columns not in the same order.'
+    );
+
+    const df6 = new DataFrame({
         id: [3, 3, 1, 8],
         id2: ['a', 'b', 'a', 'c'],
         value: [1, 2, 0, 1],
     }, ['id', 'id2', 'value']);
 
 
-    const df6 = new DataFrame({
+    const df6b = new DataFrame({
         id: [2, 1, 6, 8, 3, 3],
         id2: ['a', 'a', 'c', 'c', 'b', 'b'],
         value2: [1, 0, 1, 2, 6, 5],
@@ -614,7 +634,7 @@ test('DataFrame rows can be ', (assert) => {
 
 
     assert.deepEqual(
-        df5b.innerJoin(df6, 'id').sortBy('id').toCollection(), [
+        df6.innerJoin(df6b, 'id').sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 3, id2: 'a', value: 1, value2: 6 },
             { id: 3, id2: 'a', value: 1, value2: 5 },
@@ -625,7 +645,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.innerJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+        df6.innerJoin(df6b, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 3, id2: 'b', value: 2, value2: 6 },
             { id: 3, id2: 'b', value: 2, value2: 5 },
@@ -634,7 +654,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.fullJoin(df6, 'id').sortBy('id').toCollection(), [
+        df6.fullJoin(df6b, 'id').sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 2, id2: 'a', value: undefined, value2: 1 },
@@ -653,7 +673,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.fullJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+        df6.fullJoin(df6b, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 2, id2: 'a', value: undefined, value2: 1 },
@@ -669,14 +689,14 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.outerJoin(df6, 'id').sortBy('id').toCollection(), [
+        df6.outerJoin(df6b, 'id').sortBy('id').toCollection(), [
             { id: 2, id2: 'a', value: undefined, value2: 1 },
             { id: 6, id2: 'c', value: undefined, value2: 1 },
         ], 'outer joined.'
     );
 
     assert.deepEqual(
-        df5b.outerJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+        df6.outerJoin(df6b, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 2, id2: 'a', value: undefined, value2: 1 },
             { id: 3, id2: 'a', value: 1, value2: undefined },
             { id: 6, id2: 'c', value: undefined, value2: 1 },
@@ -684,7 +704,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df6.leftJoin(df5b, 'id').sortBy('id').toCollection(), [
+        df6b.leftJoin(df6, 'id').sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 2, id2: 'a', value2: 1, value: undefined },
@@ -703,7 +723,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df6.leftJoin(df5b, ['id', 'id2']).sortBy('id').toCollection(), [
+        df6b.leftJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 2, id2: 'a', value2: 1, value: undefined },
@@ -718,7 +738,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.rightJoin(df6, 'id').sortBy('id').toCollection(), [
+        df6.rightJoin(df6b, 'id').sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 1, id2: 'a', value: 0, value2: 0 },
             { id: 2, id2: 'a', value: undefined, value2: 1 },
@@ -737,7 +757,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.rightJoin(df6, ['id', 'id2']).sortBy('id').toCollection(), [
+        df6.rightJoin(df6b, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 2, id2: 'a', value2: 1, value: undefined },
@@ -752,7 +772,7 @@ test('DataFrame rows can be ', (assert) => {
     );
 
     assert.deepEqual(
-        df5b.rightJoin(df6, ['id', 'id2']).sortBy('id').dropDuplicates().toCollection(), [
+        df6.rightJoin(df6b, ['id', 'id2']).sortBy('id').dropDuplicates().toCollection(), [
             { id: 1, id2: 'a', value2: 0, value: 0 },
             { id: 2, id2: 'a', value2: 1, value: undefined },
             { id: 3, id2: 'b', value2: 6, value: 2 },
