@@ -2,13 +2,13 @@
 
 # GroupedDataFrame
 
-[src/groupedDataframe.js:10-118](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L10-L118 "Source code on GitHub")
+[src/groupedDataframe.js:10-118](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L10-L118 "Source code on GitHub")
 
 Grouped DataFrame structure grouping DataFrame rows by column value.
 
 ## constructor
 
-[src/groupedDataframe.js:21-25](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L21-L25 "Source code on GitHub")
+[src/groupedDataframe.js:21-25](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L21-L25 "Source code on GitHub")
 
 Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
 
@@ -16,7 +16,7 @@ Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
 
 -   `df` **DataFrame** The DataFrame to group by.
 -   `columnName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The column used for the group by.
--   `columnNames` **...any**
+-   `columnNames` **...any** 
 
 **Examples**
 
@@ -28,7 +28,7 @@ new GroupedDataFrame(df, 'column1');
 
 ## toCollection
 
-[src/groupedDataframe.js:63-65](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L63-L65 "Source code on GitHub")
+[src/groupedDataframe.js:63-65](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L63-L65 "Source code on GitHub")
 
 Convert GroupedDataFrame into collection (Array) of dictionnaries (Object).
 
@@ -42,7 +42,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ## show
 
-[src/groupedDataframe.js:74-82](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L74-L82 "Source code on GitHub")
+[src/groupedDataframe.js:74-82](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L74-L82 "Source code on GitHub")
 
 Display the GroupedDataFrame as String Table.
 
@@ -60,7 +60,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ## listGroups
 
-[src/groupedDataframe.js:90-92](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L90-L92 "Source code on GitHub")
+[src/groupedDataframe.js:90-92](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L90-L92 "Source code on GitHub")
 
 List GroupedDataFrame groups.
 
@@ -74,7 +74,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ## listHashs
 
-[src/groupedDataframe.js:100-102](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L100-L102 "Source code on GitHub")
+[src/groupedDataframe.js:100-102](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L100-L102 "Source code on GitHub")
 
 List GroupedDataFrame groups as a hashCode.
 
@@ -88,7 +88,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ## aggregate
 
-[src/groupedDataframe.js:112-117](https://github.com/Gmousse/dataframe-js/blob/609850014b32c0866c93150420224531f6c14cb1/src/groupedDataframe.js#L112-L117 "Source code on GitHub")
+[src/groupedDataframe.js:112-117](https://github.com/Gmousse/dataframe-js/blob/8c50b9def00cacc71dded800b1c34815fab2b4bf/src/groupedDataframe.js#L112-L117 "Source code on GitHub")
 
 Create an aggregation from a function.
 
