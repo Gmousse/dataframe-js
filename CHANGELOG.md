@@ -3,6 +3,17 @@
 
 ---
 
+## v1.1.3
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+-Adding code coverage
+
+---
+
 ## v1.1.2
 
 **Author**: Guillaume Mousnier. Thanks to @lmeyerov
