@@ -3,6 +3,17 @@
 
 ---
 
+## v1.1.4
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Contributing.
+
+---
+
 ## v1.1.3
 
 **Author**: Guillaume Mousnier.
@@ -10,7 +21,7 @@
 **Type**: Hotfix
 
 **Changes**:
--Adding code coverage
+- Adding code coverage.
 
 ---
 
