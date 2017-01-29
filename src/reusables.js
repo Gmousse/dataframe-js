@@ -64,11 +64,7 @@ export function chain(data, ...operations) {
 
 export function saveFile(path, content) {
     try {
-        require('fs').writeFile(path, content, (err) => {
-            if (err) {
-                throw new Error(err);
-            }
-        });
+        require('fs').writeFileSync(path, content);
     } catch (e) {
         console.log('File system module is not available.');
     }

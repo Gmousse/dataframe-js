@@ -1,12 +1,12 @@
 # dataframe-js
-**v1.1.4**
+**v1.1.5**
 
 ![](https://travis-ci.org/Gmousse/dataframe-js.svg?branch=develop)
 ![](https://coveralls.io/repos/github/Gmousse/dataframe-js/badge.svg?branch=master)
 
 **Official Website**: <https://gmousse.github.io/dataframe-js/>
 
-**Changelog**: [1.1.4](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
+**Changelog**: [1.1.5](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
 
 **Compatibility**:
 - Browsers (IE > 8, Edge, Firefox, Chrome...)
