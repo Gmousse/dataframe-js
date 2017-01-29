@@ -1,5 +1,15 @@
 # Changelog
 
+---
+
+## v1.1.5
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Replacing fs writeFile by writeFileSync. 
 
 ---
 
