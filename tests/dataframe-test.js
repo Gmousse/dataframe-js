@@ -810,6 +810,16 @@ test('DataFrame rows can be ', (assert) => {
         'bisected by percentage into 2 DataFrames.'
     );
 
+    assert.deepEqual(
+        df6.groupBy('id').pivot('id2', gdf => gdf.stat.sum('value')).toCollection(),
+        [
+            { id: 3, a: 1, b: 2, c: undefined },
+            { id: 1, a: 0, b: undefined, c: undefined },
+            { id: 8, a: undefined, b: undefined, c: 1 },
+        ],
+        'pivoted.'
+    );
+
     assert.end();
 });
 
