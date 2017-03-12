@@ -2,5 +2,5 @@
 
 
  * [Dataframe-js](README.md)
-    * [Presentation](README.md#Presentation)
-    * [Installation](README.md#Installation)
+    * [Presentation](README.md#presentation)
+    * [Installation](README.md#installation)
