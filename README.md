@@ -1,12 +1,11 @@
 # dataframe-js
-**v1.1.5**
 
 ![](https://travis-ci.org/Gmousse/dataframe-js.svg?branch=develop)
 ![](https://coveralls.io/repos/github/Gmousse/dataframe-js/badge.svg?branch=master)
 
-**Official Website**: <https://gmousse.github.io/dataframe-js/>
+**Official Website**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Changelog**: [1.1.5](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
+**Current Version**: [1.1.5](https://github.com/Gmousse/dataframe-js/blob/master/CHANGELOG.md)
 
 **Compatibility**:
 - Browsers (IE > 8, Edge, Firefox, Chrome...)
@@ -59,19 +58,9 @@ in the browser:
 
   * minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
 
-## Usage
+## Basic Usage
 
-### Complete API documentation: [Index](https://gmousse.github.io/dataframe-js/doc/api.html)
-  * Core: [DataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#dataframe), [Row](https://gmousse.github.io/dataframe-js/doc/api.html#row), [GroupedDataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#groupeddataframe)
-  * Modules: [Stat](https://gmousse.github.io/dataframe-js/doc/api.html#stat), [Matrix](https://gmousse.github.io/dataframe-js/doc/api.html#matrix), [SQL](https://gmousse.github.io/dataframe-js/doc/api.html#sql)
-
-### Examples
-
-[A simple use of DataFrame for data exploration tasks](https://github.com/Gmousse/dataframe-js/blob/master/examples/titanic_analysis.js)
-
-[Unit tests](https://github.com/Gmousse/dataframe-js/blob/master/tests/)
-
-### Import
+### Import the library
 
 ```javascript
 // es6
@@ -82,9 +71,7 @@ var DataFrame = require('dataframe-js').DataFrame;
 var DataFrame = dfjs.DataFrame;
 ```
 
-### Core usage
-
-#### DataFrame Creation
+#### Create a DataFrame
 
 You can create a DataFrame by using mutiple ways:
 
@@ -122,7 +109,7 @@ Complete list:
 [DataFrame.fromCSV()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame.fromCSV),
 [DataFrame.fromJSON()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame.fromJSON)
 
-#### DataFrame Export
+#### Export a DataFrame
 
 In the same way, you can also export or convert your DataFrame in files or in JavaScript Objects:
 
