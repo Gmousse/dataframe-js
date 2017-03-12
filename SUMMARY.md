@@ -10,9 +10,9 @@
     * [Import](README.md#import-the-library)
     * [Creation](README.md#create-a-dataframe)
     * [Conversion](README.md#export-or-convert-a-dataframe)
-    * [DataFrame](README.md#dataframe-class)
-    * [Row](README.md#row-class)
-    * [GroupedDataFrame](README.md#groupeddataframe-class)
+    * [DataFrame](README.md#dataframe)
+    * [Row](README.md#row)
+    * [GroupedDataFrame](README.md#groupeddataframe)
     * [Stat](README.md#stat-module)
     * [Matrix](README.md#matrix-module)
     * [SQL](README.md#sql-module)
@@ -21,7 +21,6 @@
     * [Module Creation](README.md#module-creation)
     * [Module Registration](README.md#module-registration)
 
-
 * [API Reference](README.md#api-reference)
     * [DataFrame](doc/api/dataframe.md)
     * [Row](doc/api/row.md)
@@ -29,12 +28,5 @@
     * [Stat](doc/api/modules/stat.md)
     * [Matrix](doc/api/modules/matrix.md)
     * [SQL](doc/api/modules/sql.md)
-    * [Conversion](README.md#export-or-convert-a-dataframe)
-    * [DataFrame](README.md#dataframe-class)
-    * [Row](README.md#row-class)
-    * [GroupedDataFrame](README.md#groupeddataframe-class)
-    * [Stat](README.md#stat-module)
-    * [Matrix](README.md#matrix-module)
-    * [SQL](README.md#sql-module)
 
 * [Contribution](CONTRIBUTING.md)
