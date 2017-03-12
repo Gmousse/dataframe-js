@@ -105,7 +105,7 @@ export default class GroupedDataFrame {
     /**
      * Create an aggregation from a function.
      * @param {Function} func The aggregation function.
-     * @param {String} [columnName='aggregation'] The column name of the aggregation.
+     * @param {String} [columnName='aggregation'] The column name created by the aggregation.
      * @returns {DataFrame} A new DataFrame with a column 'aggregation' containing the result.
      * @example
      * groupedDF.aggregate(group => group.stat.sum('column1'));
@@ -120,20 +120,52 @@ export default class GroupedDataFrame {
     @checktypes('String', 'Function')
     /**
      * Pivot a GroupedDataFrame.
-     * @param {String} columnToColumns The column which will be transposed as columns.
-     * @param {Function} [func=(df)=>df.stat.sum('value')] The function to define each column value from a DataFrame.
+     * @param {String} columnToPivot The column which will be transposed as columns.
+     * @param {Function} [func=(gdf) => gdf.count()] The function to define each column value from a DataFrame.
      * @returns {DataFrame} The pivot DataFrame.
      * @example
      * df.groupBy('carType').pivot('carModel', values => values.stat.sum('kms'))
      */
-    pivot(columnToColumns, func) {
-        const columns = [...this.on, ...this.df.distinct(columnToColumns).toArray(columnToColumns)];
+    pivot(columnToPivot, func = (gdf) => gdf.count()) {
+        const columns = [...this.on, ...this.df.distinct(columnToPivot).toArray(columnToPivot)];
         return this.df.__newInstance__(
             this.aggregate((group) => (
-                group.groupBy(columnToColumns)
-                     .aggregate((gp, gk) => ({[gk[columnToColumns]]: func(gp, gk)}))
+                group.groupBy(columnToPivot)
+                     .aggregate((gp, gk) => ({[gk[columnToPivot]]: func(gp, gk)}))
                      .toArray('aggregation').reduce((p, n) => ({...p, ...n}), {})
             )).toCollection().map(({aggregation, ...rest}) => ({...rest, ...aggregation})),
+            columns
+        );
+    }
+
+    /**
+     * Melt a DataFrame to make it tidy. It's the reverse of GroupedDataFrame.pivot().
+     * @param {String} [variableColumnName='variable'] The column name containing columns.
+     * @param {String} [variableColumnName='value'] The column name containing values.
+     * @returns {DataFrame} The tidy DataFrame.
+     * @example
+     * df.groupBy('carType').melt('kms')
+     */
+    melt(variableColumnName = 'variable', valueColumnName = 'value') {
+        const columns = [...this.on, variableColumnName, valueColumnName];
+        return this.df.__newInstance__(
+            this.aggregate((group) => (
+                Object.entries(group.toDict())
+                      .reduce(
+                          (tidy, [key, value]) => (
+                              [
+                                  ...tidy,
+                                  ...value.reduce((p, n) => !this.on.includes(key) ?
+                                    [...p, {[variableColumnName]: key, [valueColumnName]: n}] : p, []),
+                              ]
+                          ),
+                          []
+                      )
+            ))
+            .toCollection()
+            .reduce(
+                (p, {aggregation, ...rest}) => [...p, ...aggregation.map(x => ({...rest, ...x}))], []
+            ),
             columns
         );
     }
