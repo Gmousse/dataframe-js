@@ -134,7 +134,7 @@ Complete list:
 [.toCSV()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#toCSV),
 [.toJSON()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#toJSON)
 
-### DataFrame class
+### DataFrame
 
 The main Object of the dataframe-js library is the [DataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#dataframe).
 It provides 3 types of methods:
@@ -204,7 +204,7 @@ Complete list:
 [.sample()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#sample),
 [.union()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#union)
 
-### Row class
+### Row
 
 As you could see, the Row api is used for example with [.map()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#map),
 , [.filter()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#filter) DataFrame Rows methods.
@@ -225,7 +225,7 @@ Complete list:
 [.toDict()](https://gmousse.github.io/dataframe-js/doc/api.html#Row#todict),
 [.toArray()](https://gmousse.github.io/dataframe-js/doc/api.html#Row#toarray)
 
-### GroupedDataFrame Class
+### GroupedDataFrame
 
 When you use the DataFrame [.groupBy()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#groupBy) method,  a new GroupedDataFrame object is created.
 It can be used to create DataFrame aggregations (like SQL) in order to resume your data.
@@ -345,6 +345,16 @@ const df = new DataFrame(data, ['column1', 'column2', 'column3'])
 console.log(df.modules);
 // [FakeModule, Matrix]
 ````
+
+## API Reference
+
+[Index](https://gmousse.github.io/dataframe-js/doc/api.html)
+  * Core:
+  [DataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#dataframe), [Row](https://gmousse.github.io/dataframe-js/doc/api.html#row), [GroupedDataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#groupeddataframe)
+  * Modules:
+  [Stat](https://gmousse.github.io/dataframe-js/doc/api.html#stat),
+  [Matrix](https://gmousse.github.io/dataframe-js/doc/api.html#matrix),
+  [SQL](https://gmousse.github.io/dataframe-js/doc/api.html#sql)
 
 
 ## Contribution
