@@ -71,7 +71,7 @@ var DataFrame = require('dataframe-js').DataFrame;
 var DataFrame = dfjs.DataFrame;
 ```
 
-#### Create a DataFrame
+### Create a DataFrame
 
 You can create a DataFrame by using mutiple ways:
 
@@ -109,7 +109,7 @@ Complete list:
 [DataFrame.fromCSV()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame.fromCSV),
 [DataFrame.fromJSON()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame.fromJSON)
 
-#### Export a DataFrame
+### Export or Convert a DataFrame
 
 In the same way, you can also export or convert your DataFrame in files or in JavaScript Objects:
 
@@ -134,7 +134,7 @@ Complete list:
 [.toCSV()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#toCSV),
 [.toJSON()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#toJSON)
 
-#### DataFrame usage
+### DataFrame class
 
 The main Object of the dataframe-js library is the [DataFrame](https://gmousse.github.io/dataframe-js/doc/api.html#dataframe).
 It provides 3 types of methods:
@@ -204,7 +204,7 @@ Complete list:
 [.sample()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#sample),
 [.union()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#union)
 
-#### Rows Usage
+### Row class
 
 As you could see, the Row api is used for example with [.map()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#map),
 , [.filter()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#filter) DataFrame Rows methods.
@@ -225,7 +225,7 @@ Complete list:
 [.toDict()](https://gmousse.github.io/dataframe-js/doc/api.html#Row#todict),
 [.toArray()](https://gmousse.github.io/dataframe-js/doc/api.html#Row#toarray)
 
-#### GroupedDataFrame Usage
+### GroupedDataFrame Class
 
 When you use the DataFrame [.groupBy()](https://gmousse.github.io/dataframe-js/doc/api.html#DataFrame#groupBy) method,  a new GroupedDataFrame object is created.
 It can be used to create DataFrame aggregations (like SQL) in order to resume your data.
@@ -246,11 +246,7 @@ Complete list:
 [.aggregate()](https://gmousse.github.io/dataframe-js/doc/api.html#GroupedDataFrame#aggregate)
 
 
-### Modules Usage
-
-dataframe-js can increase DataFrame API by using modules. Some modules are included by default, but you can also create your own.
-
-#### Default modules usage
+### Stat Module
 
 The [Stat](https://gmousse.github.io/dataframe-js/doc/api.html#stat)
  module provides basic statistical computations on a DataFrame columns.
@@ -271,6 +267,8 @@ Complete list:
 [.stats()](https://gmousse.github.io/dataframe-js/doc/api.html#Stat#stats)
 
 
+### Matrix Module
+
 The [Matrix](https://gmousse.github.io/dataframe-js/doc/api.html#matrix) module provides mathematical matrix operations between DataFrames.
 
 ````js
@@ -284,6 +282,8 @@ Complete list:
 [.product()](https://gmousse.github.io/dataframe-js/doc/api.html#Matrix#product),
 [.dot()](https://gmousse.github.io/dataframe-js/doc/api.html#Matrix#dot),
 [.add()](https://gmousse.github.io/dataframe-js/doc/api.html#Matrix#add)
+
+### SQL Module
 
 To finish, the [SQL](https://gmousse.github.io/dataframe-js/doc/api.html#sql) module allows you to register temporary tables and to request on these, by using SQL syntax.
 
@@ -304,7 +304,9 @@ Complete list:
 [DataFrame.dropTables()](https://gmousse.github.io/dataframe-js/doc/api.html#SQL.dropTables),
 [DataFrame.renameTable()](https://gmousse.github.io/dataframe-js/doc/api.html#SQL.renameTable)
 
-#### Modules creation
+## Advanced Usage
+
+### Module creation
 
 Each module is a class with a constructor taking dataframe as parameter, and having a df and a name properties:
 
@@ -321,7 +323,7 @@ class FakeModule {
 }
 ```
 
-#### Modules registration
+### Module registration
 
 You can register modules when you instantiate a DataFrame:
 
