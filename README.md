@@ -23,7 +23,8 @@ It works both in browser and server-side (node.js).
 
 Example:
 ````javascript
-import data from './titanic_data.js';
+import DataFrame from 'dataframe-js';
+import { data , columns } from './titanic_data.js';
 const df = new DataFrame(data, columns);
 const filteredDf = df
 .filter(row => row.get('survived') === 'yes')
