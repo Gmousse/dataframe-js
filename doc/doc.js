@@ -7,7 +7,7 @@ clean().then(buildMD);
 function clean() {
     return new Promise((resolve, reject) => {
         console.log('Cleaning the doc folder.');
-        exec('rm -rf doc/html && rm -rf doc/md && mkdir doc/html && mkdir doc/md && mkdir doc/md/modules',
+        exec('rm -rf doc/md && mkdir doc/md && mkdir doc/md/modules',
             (err, stdout, stderr) => {
                 if (stderr) {
                     console.error(stderr);

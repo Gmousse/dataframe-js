@@ -2,6 +2,19 @@
 
 ---
 
+## v1.2.0
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Feature
+
+**Changes**:
+- Adding .pivot().
+- Adding .melt().
+- The documentation is now under gitbook. 
+
+---
+
 ## v1.1.5
 
 **Author**: Guillaume Mousnier.
@@ -9,7 +22,7 @@
 **Type**: Hotfix
 
 **Changes**:
-- Replacing fs writeFile by writeFileSync. 
+- Replacing fs writeFile by writeFileSync.
 
 ---
 
