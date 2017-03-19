@@ -52,7 +52,9 @@ in the browser:
 ## Usage
 
 [Basic Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/BASIC_USAGE.html)
+
 [Advanced Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/ADVANCED_USAGE.html)
+
 [API Reference](https://gmousse.gitbooks.io/dataframe-js/content/doc/API_REFERENCE.html)
 
 ## Contribution
