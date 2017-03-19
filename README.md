@@ -15,39 +15,29 @@
 
 ## Presentation
 
-dataframe-js provides another way to work with data in javascript (browser or server side) by using DataFrame, a data structure already used in some languages (Spark, Python, R, ...).
+DataFrame-js provides an immutable data structure for javascript and datascience, the DataFrame, which allows to work on rows and columns with a sql and functional programming inspired api.
 
-A DataFrame is simply built on two concepts:
-- **Columns** provide ways to select your data and reorganize them.
-- **Rows** provide ways to modify or filter your data.
+With the DataFrame, you can easily do a ton of complex stuff such as join, groupby, exploration tasks, machine learning...
 
+It works both in browser and server-side (node.js).
+
+Example:
 ````javascript
-const df = new DataFrame(data, columns)
-df.show()
-// DataFrame example
-| column1   | column2   | column3   | // <--- Columns
-------------------------------------
-| 3         | 3         | undefined | // <--- Row
-| 6         | 4         | undefined |
-| 8         | 5         | undefined |
-| undefined | 6         | undefined |
+import data from './titanic_data.js';
+const df = new DataFrame(data, columns);
+const filteredDf = df
+.filter(row => row.get('survived') === 'yes')
+.select('class', 'age', 'sex');
+filteredDf.show(3);
 ````
 
-dataframe-js provides some **immutable objects** (DataFrame, Row...) and an API closed to **functional** programming and **SQL syntax**. You can sort, groupBy, join, and do complex manipulations with a simple sintax.
-
-It is also compatible (import / export) with native JavaScript objects (Array, Hash...) and other formats (csv, json...).
-
-To resume, dataframe-js contains:
-  * A core:
-    * DataFrame: Main Object, similar to sql table providing methods to manipulate and transform data.
-    * Row: Object contained into a DataFrame, providing lower level manipulations.
-    * GroupedDataFrame: DataFrame grouped by columns.
-
-
-  * Some modules:
-    * Stat: Basic statistics computations on DataFrame columns.
-    * Matrix: Matrix computations (scalar products, ...).
-    * SQL: SQL requests on DataFrame.
+````
+| class       | age        | sex        |
+------------------------------------
+| 1st class | adults    | man       |
+| 1st class | adults    | man       |
+| 1st class | adults    | woman  |
+````
 
 ## Installation
 via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
@@ -56,7 +46,6 @@ via npm: `npm install dataframe-js`
 
 in the browser:
   * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
-
   * minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
 
 ## Usage
