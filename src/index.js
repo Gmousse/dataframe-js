@@ -1,5 +1,3 @@
-import 'babel-polyfill';
-
 import DataFrame from './dataframe.js';
 import Row from './row.js';
 import Stat from './modules/stat.js';

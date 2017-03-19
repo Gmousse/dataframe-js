@@ -2,7 +2,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: __dirname,
-        filename: './lib/browser/dataframe.js',
+        filename: process.env.NODE_ENV === 'production' ? './dist/dataframe-min.js' : './dist/dataframe.js',
         library: 'dfjs',
     },
     node: {
