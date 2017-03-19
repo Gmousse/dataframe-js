@@ -33,10 +33,10 @@ filteredDf.show(3);
 
 ````
 | class       | age        | sex        |
-------------------------------------
+---------------------------------------
 | 1st class | adults    | man       |
 | 1st class | adults    | man       |
-| 1st class | adults    | woman  |
+| 1st class | adults    | woman     |
 ````
 
 ## Installation
