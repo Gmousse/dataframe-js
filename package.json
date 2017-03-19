@@ -24,11 +24,12 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "lint": "eslint -c .eslintrc ./src",
     "doc": "babel-node doc/doc.js",
+    "checkes3": "check-es3-syntax lib/ dist/dataframe-min.js --kill --print",
     "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
-    "build:commonjs": "NODE_ENV=production babel src/ -d lib/",
+    "build:commonjs": "NODE_ENV=production babel  src/ -d lib/ --no-comments",
     "build:umd": "webpack",
     "build:umd:min": "NODE_ENV=production webpack --optimize-minimize",
-    "prepublish": "npm run lint && npm run test && npm run build && npm run doc"
+    "prepublish": "npm run lint && npm run test && npm run build && npm run doc && npm run checkes3"
   },
   "author": {
     "name": "Guillaume Mousnier",
@@ -44,11 +45,14 @@
     "babel-plugin-transform-decorators": "^6.13.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-plugin-transform-es3-member-expression-literals": "^6.5.0",
+    "babel-plugin-transform-es3-property-literals": "^6.5.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-minify": "0.0.0",
     "babel-preset-stage-0": "^6.3.13",
     "babel-runtime": "^6.9.2",
     "babel-tape-runner": "^2.0.1",
+    "check-es3-syntax-cli": "^0.2.0",
     "coveralls": "^2.11.15",
     "documentation": "^4.0.0-beta10",
     "eslint": "^1.10.3",
@@ -60,8 +64,9 @@
     "webpack": "^1.13.1"
   },
   "dependencies": {
-    "es7-checktypes-decorator": "^0.1.3",
+    "babel-polyfill": "^6.23.0",
     "d3-dsv": "^1.0.3",
-    "d3-request": "^1.0.2"
+    "d3-request": "^1.0.2",
+    "es7-checktypes-decorator": "^0.1.7"
   }
 }

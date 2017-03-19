@@ -46,8 +46,8 @@ via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 via npm: `npm install dataframe-js`
 
 in the browser:
-  * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/lib/browser/dataframe.js"></script>`
-  * minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/lib/browser/dataframe-min.js"></script>`
+  * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
+  * minified (production): `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>`
 
 ## Usage
 
