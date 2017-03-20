@@ -47,9 +47,7 @@ var dfjs =
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+	exports.__esModule = true;
 	exports.Benchmark = exports.Row = exports.DataFrame = undefined;
 
 	__webpack_require__(1);
@@ -62,30 +60,30 @@ var dfjs =
 
 	var _row2 = _interopRequireDefault(_row);
 
-	var _stat = __webpack_require__(465);
+	var _stat = __webpack_require__(466);
 
 	var _stat2 = _interopRequireDefault(_stat);
 
-	var _matrix = __webpack_require__(466);
+	var _matrix = __webpack_require__(467);
 
 	var _matrix2 = _interopRequireDefault(_matrix);
 
-	var _sql = __webpack_require__(467);
+	var _sql = __webpack_require__(468);
 
 	var _sql2 = _interopRequireDefault(_sql);
 
-	var _benchmark = __webpack_require__(469);
+	var _benchmark = __webpack_require__(470);
 
 	var _benchmark2 = _interopRequireDefault(_benchmark);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	_dataframe2.default.setDefaultModules(_stat2.default, _matrix2.default, _sql2.default);
-	_dataframe2.default.sql = _sql2.default;
+	_dataframe2['default'].setDefaultModules(_stat2['default'], _matrix2['default'], _sql2['default']);
+	_dataframe2['default'].sql = _sql2['default'];
 
-	exports.DataFrame = _dataframe2.default;
-	exports.Row = _row2.default;
-	exports.Benchmark = _benchmark2.default;
+	exports.DataFrame = _dataframe2['default'];
+	exports.Row = _row2['default'];
+	exports.Benchmark = _benchmark2['default'];
 
 /***/ },
 /* 1 */
@@ -99,14 +97,10 @@ var dfjs =
 
 	__webpack_require__(295);
 
-	/* eslint max-len: 0 */
-
 	if (global._babelPolyfill) {
 	  throw new Error("only one instance of babel-polyfill is allowed");
 	}
 	global._babelPolyfill = true;
-
-	// Should be removed in the next major release:
 
 	var DEFINE_PROPERTY = "defineProperty";
 	function define(O, key, value) {
@@ -7341,7 +7335,8 @@ var dfjs =
 	!(function(global) {
 	  "use strict";
 
-	  var hasOwn = Object.prototype.hasOwnProperty;
+	  var Op = Object.prototype;
+	  var hasOwn = Op.hasOwnProperty;
 	  var undefined; // More compressible than void 0.
 	  var $Symbol = typeof Symbol === "function" ? Symbol : {};
 	  var iteratorSymbol = $Symbol.iterator || "@@iterator";
@@ -7365,8 +7360,9 @@ var dfjs =
 	  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
 
 	  function wrap(innerFn, outerFn, self, tryLocsList) {
-	    // If outerFn provided, then outerFn.prototype instanceof Generator.
-	    var generator = Object.create((outerFn || Generator).prototype);
+	    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+	    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+	    var generator = Object.create(protoGenerator.prototype);
 	    var context = new Context(tryLocsList || []);
 
 	    // The ._invoke method unifies the implementations of the .next,
@@ -7412,10 +7408,29 @@ var dfjs =
 	  function GeneratorFunction() {}
 	  function GeneratorFunctionPrototype() {}
 
-	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
+	  // This is a polyfill for %IteratorPrototype% for environments that
+	  // don't natively support it.
+	  var IteratorPrototype = {};
+	  IteratorPrototype[iteratorSymbol] = function () {
+	    return this;
+	  };
+
+	  var getProto = Object.getPrototypeOf;
+	  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+	  if (NativeIteratorPrototype &&
+	      NativeIteratorPrototype !== Op &&
+	      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+	    // This environment has a native %IteratorPrototype%; use it instead
+	    // of the polyfill.
+	    IteratorPrototype = NativeIteratorPrototype;
+	  }
+
+	  var Gp = GeneratorFunctionPrototype.prototype =
+	    Generator.prototype = Object.create(IteratorPrototype);
 	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
 	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-	  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
+	  GeneratorFunctionPrototype[toStringTagSymbol] =
+	    GeneratorFunction.displayName = "GeneratorFunction";
 
 	  // Helper for defining the .next, .throw, and .return methods of the
 	  // Iterator interface in terms of a single ._invoke method.
@@ -7452,16 +7467,11 @@ var dfjs =
 
 	  // Within the body of any async function, `await x` is transformed to
 	  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-	  // `value instanceof AwaitArgument` to determine if the yielded value is
-	  // meant to be awaited. Some may consider the name of this method too
-	  // cutesy, but they are curmudgeons.
+	  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+	  // meant to be awaited.
 	  runtime.awrap = function(arg) {
-	    return new AwaitArgument(arg);
+	    return { __await: arg };
 	  };
-
-	  function AwaitArgument(arg) {
-	    this.arg = arg;
-	  }
 
 	  function AsyncIterator(generator) {
 	    function invoke(method, arg, resolve, reject) {
@@ -7471,8 +7481,10 @@ var dfjs =
 	      } else {
 	        var result = record.arg;
 	        var value = result.value;
-	        if (value instanceof AwaitArgument) {
-	          return Promise.resolve(value.arg).then(function(value) {
+	        if (value &&
+	            typeof value === "object" &&
+	            hasOwn.call(value, "__await")) {
+	          return Promise.resolve(value.__await).then(function(value) {
 	            invoke("next", value, resolve, reject);
 	          }, function(err) {
 	            invoke("throw", err, resolve, reject);
@@ -7541,6 +7553,7 @@ var dfjs =
 	  }
 
 	  defineIteratorMethods(AsyncIterator.prototype);
+	  runtime.AsyncIterator = AsyncIterator;
 
 	  // Note that simple async functions are implemented on top of
 	  // AsyncIterator objects; they just return a Promise for the value of
@@ -7575,90 +7588,34 @@ var dfjs =
 	        return doneResult();
 	      }
 
+	      context.method = method;
+	      context.arg = arg;
+
 	      while (true) {
 	        var delegate = context.delegate;
 	        if (delegate) {
-	          if (method === "return" ||
-	              (method === "throw" && delegate.iterator[method] === undefined)) {
-	            // A return or throw (when the delegate iterator has no throw
-	            // method) always terminates the yield* loop.
-	            context.delegate = null;
-
-	            // If the delegate iterator has a return method, give it a
-	            // chance to clean up.
-	            var returnMethod = delegate.iterator["return"];
-	            if (returnMethod) {
-	              var record = tryCatch(returnMethod, delegate.iterator, arg);
-	              if (record.type === "throw") {
-	                // If the return method threw an exception, let that
-	                // exception prevail over the original return or throw.
-	                method = "throw";
-	                arg = record.arg;
-	                continue;
-	              }
-	            }
-
-	            if (method === "return") {
-	              // Continue with the outer return, now that the delegate
-	              // iterator has been terminated.
-	              continue;
-	            }
+	          var delegateResult = maybeInvokeDelegate(delegate, context);
+	          if (delegateResult) {
+	            if (delegateResult === ContinueSentinel) continue;
+	            return delegateResult;
 	          }
-
-	          var record = tryCatch(
-	            delegate.iterator[method],
-	            delegate.iterator,
-	            arg
-	          );
-
-	          if (record.type === "throw") {
-	            context.delegate = null;
-
-	            // Like returning generator.throw(uncaught), but without the
-	            // overhead of an extra function call.
-	            method = "throw";
-	            arg = record.arg;
-	            continue;
-	          }
-
-	          // Delegate generator ran and handled its own exceptions so
-	          // regardless of what the method was, we continue as if it is
-	          // "next" with an undefined arg.
-	          method = "next";
-	          arg = undefined;
-
-	          var info = record.arg;
-	          if (info.done) {
-	            context[delegate.resultName] = info.value;
-	            context.next = delegate.nextLoc;
-	          } else {
-	            state = GenStateSuspendedYield;
-	            return info;
-	          }
-
-	          context.delegate = null;
 	        }
 
-	        if (method === "next") {
+	        if (context.method === "next") {
 	          // Setting context._sent for legacy support of Babel's
 	          // function.sent implementation.
-	          context.sent = context._sent = arg;
+	          context.sent = context._sent = context.arg;
 
-	        } else if (method === "throw") {
+	        } else if (context.method === "throw") {
 	          if (state === GenStateSuspendedStart) {
 	            state = GenStateCompleted;
-	            throw arg;
+	            throw context.arg;
 	          }
 
-	          if (context.dispatchException(arg)) {
-	            // If the dispatched exception was caught by a catch block,
-	            // then let that catch block handle the exception normally.
-	            method = "next";
-	            arg = undefined;
-	          }
+	          context.dispatchException(context.arg);
 
-	        } else if (method === "return") {
-	          context.abrupt("return", arg);
+	        } else if (context.method === "return") {
+	          context.abrupt("return", context.arg);
 	        }
 
 	        state = GenStateExecuting;
@@ -7671,39 +7628,111 @@ var dfjs =
 	            ? GenStateCompleted
 	            : GenStateSuspendedYield;
 
-	          var info = {
+	          if (record.arg === ContinueSentinel) {
+	            continue;
+	          }
+
+	          return {
 	            value: record.arg,
 	            done: context.done
 	          };
 
-	          if (record.arg === ContinueSentinel) {
-	            if (context.delegate && method === "next") {
-	              // Deliberately forget the last sent value so that we don't
-	              // accidentally pass it on to the delegate.
-	              arg = undefined;
-	            }
-	          } else {
-	            return info;
-	          }
-
 	        } else if (record.type === "throw") {
 	          state = GenStateCompleted;
 	          // Dispatch the exception by looping back around to the
-	          // context.dispatchException(arg) call above.
-	          method = "throw";
-	          arg = record.arg;
+	          // context.dispatchException(context.arg) call above.
+	          context.method = "throw";
+	          context.arg = record.arg;
 	        }
 	      }
 	    };
 	  }
 
+	  // Call delegate.iterator[context.method](context.arg) and handle the
+	  // result, either by returning a { value, done } result from the
+	  // delegate iterator, or by modifying context.method and context.arg,
+	  // setting context.delegate to null, and returning the ContinueSentinel.
+	  function maybeInvokeDelegate(delegate, context) {
+	    var method = delegate.iterator[context.method];
+	    if (method === undefined) {
+	      // A .throw or .return when the delegate iterator has no .throw
+	      // method always terminates the yield* loop.
+	      context.delegate = null;
+
+	      if (context.method === "throw") {
+	        if (delegate.iterator.return) {
+	          // If the delegate iterator has a return method, give it a
+	          // chance to clean up.
+	          context.method = "return";
+	          context.arg = undefined;
+	          maybeInvokeDelegate(delegate, context);
+
+	          if (context.method === "throw") {
+	            // If maybeInvokeDelegate(context) changed context.method from
+	            // "return" to "throw", let that override the TypeError below.
+	            return ContinueSentinel;
+	          }
+	        }
+
+	        context.method = "throw";
+	        context.arg = new TypeError(
+	          "The iterator does not provide a 'throw' method");
+	      }
+
+	      return ContinueSentinel;
+	    }
+
+	    var record = tryCatch(method, delegate.iterator, context.arg);
+
+	    if (record.type === "throw") {
+	      context.method = "throw";
+	      context.arg = record.arg;
+	      context.delegate = null;
+	      return ContinueSentinel;
+	    }
+
+	    var info = record.arg;
+
+	    if (! info) {
+	      context.method = "throw";
+	      context.arg = new TypeError("iterator result is not an object");
+	      context.delegate = null;
+	      return ContinueSentinel;
+	    }
+
+	    if (info.done) {
+	      // Assign the result of the finished delegate to the temporary
+	      // variable specified by delegate.resultName (see delegateYield).
+	      context[delegate.resultName] = info.value;
+
+	      // Resume execution at the desired location (see delegateYield).
+	      context.next = delegate.nextLoc;
+
+	      // If context.method was "throw" but the delegate handled the
+	      // exception, let the outer generator proceed normally. If
+	      // context.method was "next", forget context.arg since it has been
+	      // "consumed" by the delegate iterator. If context.method was
+	      // "return", allow the original .return call to continue in the
+	      // outer generator.
+	      if (context.method !== "return") {
+	        context.method = "next";
+	        context.arg = undefined;
+	      }
+
+	    } else {
+	      // Re-yield the result returned by the delegate method.
+	      return info;
+	    }
+
+	    // The delegate iterator is finished, so forget it and continue with
+	    // the outer generator.
+	    context.delegate = null;
+	    return ContinueSentinel;
+	  }
+
 	  // Define Generator.prototype.{next,throw,return} in terms of the
 	  // unified ._invoke helper method.
 	  defineIteratorMethods(Gp);
-
-	  Gp[iteratorSymbol] = function() {
-	    return this;
-	  };
 
 	  Gp[toStringTagSymbol] = "Generator";
 
@@ -7821,6 +7850,9 @@ var dfjs =
 	      this.done = false;
 	      this.delegate = null;
 
+	      this.method = "next";
+	      this.arg = undefined;
+
 	      this.tryEntries.forEach(resetTryEntry);
 
 	      if (!skipTempReset) {
@@ -7857,7 +7889,15 @@ var dfjs =
 	        record.type = "throw";
 	        record.arg = exception;
 	        context.next = loc;
-	        return !!caught;
+
+	        if (caught) {
+	          // If the dispatched exception was caught by a catch block,
+	          // then let that catch block handle the exception normally.
+	          context.method = "next";
+	          context.arg = undefined;
+	        }
+
+	        return !! caught;
 	      }
 
 	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
@@ -7925,12 +7965,12 @@ var dfjs =
 	      record.arg = arg;
 
 	      if (finallyEntry) {
+	        this.method = "next";
 	        this.next = finallyEntry.finallyLoc;
-	      } else {
-	        this.complete(record);
+	        return ContinueSentinel;
 	      }
 
-	      return ContinueSentinel;
+	      return this.complete(record);
 	    },
 
 	    complete: function(record, afterLoc) {
@@ -7942,11 +7982,14 @@ var dfjs =
 	          record.type === "continue") {
 	        this.next = record.arg;
 	      } else if (record.type === "return") {
-	        this.rval = record.arg;
+	        this.rval = this.arg = record.arg;
+	        this.method = "return";
 	        this.next = "end";
 	      } else if (record.type === "normal" && afterLoc) {
 	        this.next = afterLoc;
 	      }
+
+	      return ContinueSentinel;
 	    },
 
 	    finish: function(finallyLoc) {
@@ -7984,6 +8027,12 @@ var dfjs =
 	        resultName: resultName,
 	        nextLoc: nextLoc
 	      };
+
+	      if (this.method === "next") {
+	        // Deliberately forget the last sent value so that we don't
+	        // accidentally pass it on to the delegate.
+	        this.arg = undefined;
+	      }
 
 	      return ContinueSentinel;
 	    }
@@ -8222,9 +8271,7 @@ var dfjs =
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _getOwnPropertyDescriptor = __webpack_require__(299);
 
@@ -8330,7 +8377,7 @@ var dfjs =
 
 	var _groupedDataframe2 = _interopRequireDefault(_groupedDataframe);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	    var desc = {};
@@ -8361,14 +8408,14 @@ var dfjs =
 	    return desc;
 	}
 
-	var __columns__ = (0, _symbol2.default)('columns');
-	var __rows__ = (0, _symbol2.default)('rows');
+	var __columns__ = (0, _symbol2['default'])('columns');
+	var __rows__ = (0, _symbol2['default'])('rows');
 
 	/**
 	 * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 	 */
 	var DataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec3 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec4 = (0, _es7ChecktypesDecorator.checktypes)(['DataFrame', Array, Object]), _dec5 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', ['Array', 'String']), (_class = function () {
-	    (0, _createClass3.default)(DataFrame, null, [{
+	    (0, _createClass3['default'])(DataFrame, null, [{
 	        key: 'setDefaultModules',
 
 
@@ -8402,11 +8449,11 @@ var dfjs =
 	         * DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
 	         */
 	        value: function fromText(pathOrFile) {
-	            var sep = arguments.length <= 1 || arguments[1] === undefined ? ';' : arguments[1];
-	            var header = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ';';
+	            var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
 	            var parser = (0, _d3Dsv.dsvFormat)(sep);
-	            return new _promise2.default(function (resolve) {
+	            return new _promise2['default'](function (resolve) {
 	                var parseText = function parseText(txt) {
 	                    var data = header ? parser.parse(txt) : parser.parseRows(txt);
 	                    resolve(new DataFrame(data, data.columns));
@@ -8430,9 +8477,9 @@ var dfjs =
 	         * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
 	         */
 	        value: function fromCSV(pathOrFile) {
-	            var header = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-	            return new _promise2.default(function (resolve) {
+	            return new _promise2['default'](function (resolve) {
 	                var parseCSV = function parseCSV(txt) {
 	                    var data = header ? (0, _d3Dsv.csvParse)(txt) : (0, _d3Dsv.csvParseRows)(txt);
 	                    resolve(new DataFrame(data, data.columns));
@@ -8454,7 +8501,7 @@ var dfjs =
 	         * DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
 	         */
 	        value: function fromJSON(pathOrFile) {
-	            return new _promise2.default(function (resolve) {
+	            return new _promise2['default'](function (resolve) {
 	                var parseJSON = function parseJSON(dict) {
 	                    return resolve(new DataFrame(dict));
 	                };
@@ -8493,11 +8540,11 @@ var dfjs =
 	    }]);
 
 	    function DataFrame(data, columns) {
-	        (0, _classCallCheck3.default)(this, DataFrame);
+	        (0, _classCallCheck3['default'])(this, DataFrame);
 
 	        var _build2 = this._build(data, columns);
 
-	        var _build3 = (0, _slicedToArray3.default)(_build2, 2);
+	        var _build3 = (0, _slicedToArray3['default'])(_build2, 2);
 
 	        this[__rows__] = _build3[0];
 	        this[__columns__] = _build3[1];
@@ -8510,18 +8557,18 @@ var dfjs =
 	            modules[_key2 - 2] = arguments[_key2];
 	        }
 
-	        this.modules = [].concat((0, _toConsumableArray3.default)(DataFrame.defaultModules ? DataFrame.defaultModules : []), (0, _toConsumableArray3.default)(modules.filter(function (module) {
+	        this.modules = [].concat((0, _toConsumableArray3['default'])(DataFrame.defaultModules ? DataFrame.defaultModules : []), (0, _toConsumableArray3['default'])(modules.filter(function (module) {
 	            return !defaultModulesNames.includes(module.name);
 	        })));
-	        _assign2.default.apply(Object, [this].concat((0, _toConsumableArray3.default)(this.__instanciateModules__(this.modules))));
+	        _assign2['default'].apply(Object, [this].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.modules))));
 	    }
 
-	    (0, _createClass3.default)(DataFrame, [{
-	        key: _iterator3.default,
-	        value: _regenerator2.default.mark(function value() {
+	    (0, _createClass3['default'])(DataFrame, [{
+	        key: _iterator3['default'],
+	        value: _regenerator2['default'].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, row;
 
-	            return _regenerator2.default.wrap(function value$(_context) {
+	            return _regenerator2['default'].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -8529,7 +8576,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3.default)(this[__rows__]);
+	                            _iterator = (0, _getIterator3['default'])(this[__rows__]);
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -8560,8 +8607,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator.return) {
-	                                _iterator.return();
+	                            if (!_iteratorNormalCompletion && _iterator['return']) {
+	                                _iterator['return']();
 	                            }
 
 	                        case 21:
@@ -8592,22 +8639,22 @@ var dfjs =
 	        value: function __newInstance__(data, columns) {
 	            var _Object$assign2;
 
-	            if (!(0, _reusables.arrayEqual)(columns, this[__columns__], true) || !(data[0] instanceof _row2.default)) {
-	                return new (Function.prototype.bind.apply(DataFrame, [null].concat([data, columns], (0, _toConsumableArray3.default)(this.modules))))();
+	            if (!(0, _reusables.arrayEqual)(columns, this[__columns__], true) || !(data[0] instanceof _row2['default'])) {
+	                return new (Function.prototype.bind.apply(DataFrame, [null].concat([data, columns], (0, _toConsumableArray3['default'])(this.modules))))();
 	            }
-	            var newInstance = (0, _assign2.default)((0, _create2.default)((0, _getPrototypeOf2.default)(this)), this, (_Object$assign2 = {}, (0, _defineProperty3.default)(_Object$assign2, __rows__, [].concat((0, _toConsumableArray3.default)(data))), (0, _defineProperty3.default)(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3.default)(columns))), _Object$assign2));
-	            return _assign2.default.apply(Object, [newInstance].concat((0, _toConsumableArray3.default)(this.__instanciateModules__(this.modules, newInstance))));
+	            var newInstance = (0, _assign2['default'])((0, _create2['default'])((0, _getPrototypeOf2['default'])(this)), this, (_Object$assign2 = {}, (0, _defineProperty3['default'])(_Object$assign2, __rows__, [].concat((0, _toConsumableArray3['default'])(data))), (0, _defineProperty3['default'])(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3['default'])(columns))), _Object$assign2));
+	            return _assign2['default'].apply(Object, [newInstance].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.modules, newInstance))));
 	        }
 	    }, {
 	        key: '__instanciateModules__',
 	        value: function __instanciateModules__(modules) {
 	            var _this = this;
 
-	            var df = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+	            var df = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
 	            return modules.map(function (Plugin) {
 	                var pluginInstance = new Plugin(df ? df : _this);
-	                return (0, _defineProperty3.default)({}, pluginInstance.name, pluginInstance);
+	                return (0, _defineProperty3['default'])({}, pluginInstance.name, pluginInstance);
 	            });
 	        }
 	    }, {
@@ -8618,33 +8665,33 @@ var dfjs =
 	            return (0, _reusables.match)(data, [function (value) {
 	                return value instanceof DataFrame;
 	            }, function () {
-	                return _this2._fromArray([].concat((0, _toConsumableArray3.default)(data[__rows__])), columns ? columns : data[__columns__]);
+	                return _this2._fromArray([].concat((0, _toConsumableArray3['default'])(data[__rows__])), columns ? columns : data[__columns__]);
 	            }], [function (value) {
 	                return value instanceof Array;
 	            }, function () {
-	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3.default)(new _set2.default(data.map(function (row) {
-	                    return (0, _keys2.default)(row);
+	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](data.map(function (row) {
+	                    return (0, _keys2['default'])(row);
 	                }).reduce(function (p, n) {
-	                    return [].concat((0, _toConsumableArray3.default)(p), (0, _toConsumableArray3.default)(n));
+	                    return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	                })))));
 	            }], [function (value) {
 	                return value instanceof Object;
 	            }, function () {
-	                return _this2._fromDict(data, columns ? columns : (0, _keys2.default)(data));
+	                return _this2._fromDict(data, columns ? columns : (0, _keys2['default'])(data));
 	            }]);
 	        }
 	    }, {
 	        key: '_fromDict',
 	        value: function _fromDict(dict, columns) {
-	            return [(0, _reusables.transpose)((0, _values2.default)(dict)).map(function (row) {
-	                return new _row2.default(row, columns);
+	            return [(0, _reusables.transpose)((0, _values2['default'])(dict)).map(function (row) {
+	                return new _row2['default'](row, columns);
 	            }), columns];
 	        }
 	    }, {
 	        key: '_fromArray',
 	        value: function _fromArray(array, columns) {
 	            return [array.map(function (row) {
-	                return new _row2.default(row, columns);
+	                return new _row2['default'](row, columns);
 	            }), columns];
 	        }
 	    }, {
@@ -8654,23 +8701,21 @@ var dfjs =
 
 	            var gdf2Hashs = gdf2.listHashs();
 	            return gdf1.toCollection().map(function (_ref2) {
-	                var group = _ref2.group;
-	                var hash = _ref2.hash;
+	                var group = _ref2.group,
+	                    hash = _ref2.hash;
 
 	                var isContained = gdf2Hashs.includes(hash);
 	                var modifiedGroup = group;
 	                if (gdf2.get(hash)) {
-	                    (function () {
-	                        var gdf2Collection = gdf2.get(hash).group.toCollection();
-	                        var combinedGroup = group.toCollection().map(function (row) {
-	                            return gdf2Collection.map(function (row2) {
-	                                return (0, _assign2.default)({}, row2, row);
-	                            });
-	                        }).reduce(function (p, n) {
-	                            return [].concat((0, _toConsumableArray3.default)(p), (0, _toConsumableArray3.default)(n));
-	                        }, []);
-	                        modifiedGroup = _this3.__newInstance__(combinedGroup, newColumns);
-	                    })();
+	                    var gdf2Collection = gdf2.get(hash).group.toCollection();
+	                    var combinedGroup = group.toCollection().map(function (row) {
+	                        return gdf2Collection.map(function (row2) {
+	                            return (0, _assign2['default'])({}, row2, row);
+	                        });
+	                    }).reduce(function (p, n) {
+	                        return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
+	                    }, []);
+	                    modifiedGroup = _this3.__newInstance__(combinedGroup, newColumns);
 	                }
 	                var filterCondition = function filterCondition(bool) {
 	                    return bool ? modifiedGroup : false;
@@ -8684,11 +8729,11 @@ var dfjs =
 	    }, {
 	        key: '_join',
 	        value: function _join(dfToJoin, columnNames, types) {
-	            var newColumns = [].concat((0, _toConsumableArray3.default)(new _set2.default([].concat((0, _toConsumableArray3.default)(this.listColumns()), (0, _toConsumableArray3.default)(dfToJoin.listColumns())))));
+	            var newColumns = [].concat((0, _toConsumableArray3['default'])(new _set2['default']([].concat((0, _toConsumableArray3['default'])(this.listColumns()), (0, _toConsumableArray3['default'])(dfToJoin.listColumns())))));
 	            var columns = Array.isArray(columnNames) ? columnNames : [columnNames];
-	            var gdf = this.groupBy.apply(this, (0, _toConsumableArray3.default)(columns));
-	            var gdfToJoin = dfToJoin.groupBy.apply(dfToJoin, (0, _toConsumableArray3.default)(columns));
-	            return [this.__newInstance__([], newColumns)].concat((0, _toConsumableArray3.default)((0, _reusables.iter)([].concat((0, _toConsumableArray3.default)(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []), (0, _toConsumableArray3.default)(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : [])), function (group) {
+	            var gdf = this.groupBy.apply(this, (0, _toConsumableArray3['default'])(columns));
+	            var gdfToJoin = dfToJoin.groupBy.apply(dfToJoin, (0, _toConsumableArray3['default'])(columns));
+	            return [this.__newInstance__([], newColumns)].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)([].concat((0, _toConsumableArray3['default'])(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []), (0, _toConsumableArray3['default'])(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : [])), function (group) {
 	                return group.restructure(newColumns);
 	            }))).reduce(function (p, n) {
 	                return p.union(n);
@@ -8712,12 +8757,12 @@ var dfjs =
 	        value: function toDict() {
 	            var _this4 = this;
 
-	            return _assign2.default.apply(Object, [{}].concat((0, _toConsumableArray3.default)((0, _entries2.default)(this.transpose().toArray()).map(function (_ref3) {
-	                var _ref4 = (0, _slicedToArray3.default)(_ref3, 2);
+	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])((0, _entries2['default'])(this.transpose().toArray()).map(function (_ref3) {
+	                var _ref4 = (0, _slicedToArray3['default'])(_ref3, 2),
+	                    index = _ref4[0],
+	                    column = _ref4[1];
 
-	                var index = _ref4[0];
-	                var column = _ref4[1];
-	                return (0, _defineProperty3.default)({}, _this4[__columns__][index], column);
+	                return (0, _defineProperty3['default'])({}, _this4[__columns__][index], column);
 	            }))));
 	        }
 
@@ -8732,9 +8777,9 @@ var dfjs =
 	    }, {
 	        key: 'toArray',
 	        value: function toArray(columnName) {
-	            return columnName ? [].concat((0, _toConsumableArray3.default)(this)).map(function (row) {
+	            return columnName ? [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
 	                return row.get(columnName);
-	            }) : [].concat((0, _toConsumableArray3.default)(this)).map(function (row) {
+	            }) : [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
 	                return row.toArray();
 	            });
 	        }
@@ -8750,7 +8795,7 @@ var dfjs =
 	    }, {
 	        key: 'toCollection',
 	        value: function toCollection(ofRows) {
-	            return ofRows ? [].concat((0, _toConsumableArray3.default)(this)) : [].concat((0, _toConsumableArray3.default)(this)).map(function (row) {
+	            return ofRows ? [].concat((0, _toConsumableArray3['default'])(this)) : [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
 	                return row.toDict();
 	            });
 	        }
@@ -8772,9 +8817,9 @@ var dfjs =
 	    }, {
 	        key: 'toText',
 	        value: function toText() {
-	            var sep = arguments.length <= 0 || arguments[0] === undefined ? ';' : arguments[0];
-	            var header = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
-	            var path = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ';';
+	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+	            var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
 	            var csvContent = this.reduce(function (p, n) {
 	                return '' + (p ? p + '\n' : '') + n.toArray().join(sep);
@@ -8800,8 +8845,8 @@ var dfjs =
 	    }, {
 	        key: 'toCSV',
 	        value: function toCSV() {
-	            var header = arguments.length <= 0 || arguments[0] === undefined ? true : arguments[0];
-	            var path = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
 	            return this.toText(',', header, path);
 	        }
@@ -8820,10 +8865,10 @@ var dfjs =
 	    }, {
 	        key: 'toJSON',
 	        value: function toJSON() {
-	            var asCollection = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
-	            var path = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+	            var asCollection = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            var jsonContent = (0, _stringify2.default)(asCollection ? this.toCollection() : this.toDict());
+	            var jsonContent = (0, _stringify2['default'])(asCollection ? this.toCollection() : this.toDict());
 	            if (path) {
 	                (0, _reusables.saveFile)(this._cleanSavePath(path), jsonContent);
 	            }
@@ -8844,8 +8889,8 @@ var dfjs =
 	    }, {
 	        key: 'show',
 	        value: function show() {
-	            var rows = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
-	            var quiet = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var rows = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+	            var quiet = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            var makeRow = function makeRow(row) {
 	                return '| ' + row.map(function (column) {
@@ -8855,7 +8900,7 @@ var dfjs =
 	            };
 	            var header = makeRow(this[__columns__]);
 	            var token = 0;
-	            var toShow = [header, Array(header.length).join('-')].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(this[__rows__], function (row) {
+	            var toShow = [header, Array(header.length).join('-')].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
 	                token++;return makeRow(row.toArray());
 	            }, function () {
 	                return token >= rows;
@@ -8890,7 +8935,7 @@ var dfjs =
 	    }, {
 	        key: 'transpose',
 	        value: function transpose(tranposeColumnNames) {
-	            var newColumns = [].concat((0, _toConsumableArray3.default)(tranposeColumnNames ? ['rowNames'] : []), (0, _toConsumableArray3.default)([].concat((0, _toConsumableArray3.default)(Array(this.count()).keys())).reverse()));
+	            var newColumns = [].concat((0, _toConsumableArray3['default'])(tranposeColumnNames ? ['rowNames'] : []), (0, _toConsumableArray3['default'])([].concat((0, _toConsumableArray3['default'])(Array(this.count()).keys())).reverse()));
 	            var transposedRows = (0, _reusables.transpose)((tranposeColumnNames ? this.push(this[__columns__]) : this).toArray());
 	            return this.__newInstance__(transposedRows, newColumns.reverse()).restructure(newColumns);
 	        }
@@ -8921,7 +8966,7 @@ var dfjs =
 	    }, {
 	        key: 'countValue',
 	        value: function countValue(valueToCount) {
-	            var columnName = arguments.length <= 1 || arguments[1] === undefined ? this[__columns__][0] : arguments[1];
+	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this[__columns__][0];
 
 	            return this.filter(function (row) {
 	                return row.get(columnName) === valueToCount;
@@ -8980,7 +9025,7 @@ var dfjs =
 	    }, {
 	        key: 'distinct',
 	        value: function distinct(columnName) {
-	            return this.__newInstance__((0, _defineProperty3.default)({}, columnName, [].concat((0, _toConsumableArray3.default)(new _set2.default(this.toArray(columnName))))), [columnName]);
+	            return this.__newInstance__((0, _defineProperty3['default'])({}, columnName, [].concat((0, _toConsumableArray3['default'])(new _set2['default'](this.toArray(columnName))))), [columnName]);
 	        }
 
 	        /**
@@ -9008,7 +9053,7 @@ var dfjs =
 	    }, {
 	        key: 'listColumns',
 	        value: function listColumns() {
-	            return [].concat((0, _toConsumableArray3.default)(this[__columns__]));
+	            return [].concat((0, _toConsumableArray3['default'])(this[__columns__]));
 	        }
 
 	        /**
@@ -9044,13 +9089,13 @@ var dfjs =
 	    }, {
 	        key: 'withColumn',
 	        value: function withColumn(columnName) {
-	            var func = arguments.length <= 1 || arguments[1] === undefined ? function () {
+	            var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
 	                return undefined;
-	            } : arguments[1];
+	            };
 
 	            return this.__newInstance__(this[__rows__].map(function (row, index) {
 	                return row.set(columnName, func(row, index));
-	            }), this[__columns__].includes(columnName) ? this[__columns__] : [].concat((0, _toConsumableArray3.default)(this[__columns__]), [columnName]));
+	            }), this[__columns__].includes(columnName) ? this[__columns__] : [].concat((0, _toConsumableArray3['default'])(this[__columns__]), [columnName]));
 	        }
 
 	        /**
@@ -9121,7 +9166,7 @@ var dfjs =
 	                throw new _errors.WrongSchemaError(typeFunctions, this[__columns__]);
 	            }
 	            return this.map(function (row) {
-	                return new _row2.default(row.toArray().map(function (column, index) {
+	                return new _row2['default'](row.toArray().map(function (column, index) {
 	                    return typeFunctions[index](column);
 	                }), _this6[__columns__]);
 	            });
@@ -9157,7 +9202,7 @@ var dfjs =
 	        key: 'drop',
 	        value: function drop(columnName) {
 	            return this.__newInstance__(this[__rows__].map(function (row) {
-	                return row.delete(columnName);
+	                return row['delete'](columnName);
 	            }), this[__columns__].filter(function (column) {
 	                return column !== columnName;
 	            }));
@@ -9184,7 +9229,7 @@ var dfjs =
 	                funcs[_key5] = arguments[_key5];
 	            }
 
-	            return this.__newInstance__([].concat((0, _toConsumableArray3.default)(_reusables.chain.apply(undefined, [this[__rows__]].concat(funcs)))), this[__columns__]);
+	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])(_reusables.chain.apply(undefined, [this[__rows__]].concat(funcs)))), this[__columns__]);
 	        }
 
 	        /**
@@ -9199,18 +9244,18 @@ var dfjs =
 	    }, {
 	        key: 'filter',
 	        value: function filter(condition) {
-	            var func = (typeof condition === 'undefined' ? 'undefined' : (0, _typeof3.default)(condition)) === 'object' ? function (row) {
-	                return (0, _entries2.default)(condition).map(function (_ref6) {
-	                    var _ref7 = (0, _slicedToArray3.default)(_ref6, 2);
+	            var func = (typeof condition === 'undefined' ? 'undefined' : (0, _typeof3['default'])(condition)) === 'object' ? function (row) {
+	                return (0, _entries2['default'])(condition).map(function (_ref6) {
+	                    var _ref7 = (0, _slicedToArray3['default'])(_ref6, 2),
+	                        column = _ref7[0],
+	                        value = _ref7[1];
 
-	                    var column = _ref7[0];
-	                    var value = _ref7[1];
-	                    return (0, _is2.default)(row.get(column), value);
+	                    return (0, _is2['default'])(row.get(column), value);
 	                }).reduce(function (p, n) {
 	                    return p && n;
 	                });
 	            } : condition;
-	            var filteredRows = [].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(this[__rows__], function (row) {
+	            var filteredRows = [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
 	                return func(row) ? row : false;
 	            })));
 	            return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
@@ -9258,7 +9303,7 @@ var dfjs =
 	    }, {
 	        key: 'map',
 	        value: function map(func) {
-	            return this.__newInstance__([].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(this[__rows__], function (row) {
+	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
 	                return func(row);
 	            }))), this[__columns__]);
 	        }
@@ -9315,7 +9360,7 @@ var dfjs =
 	    }, {
 	        key: 'dropDuplicates',
 	        value: function dropDuplicates() {
-	            return this.groupBy.apply(this, (0, _toConsumableArray3.default)(this[__columns__])).aggregate(function () {}).drop('aggregation');
+	            return this.groupBy.apply(this, (0, _toConsumableArray3['default'])(this[__columns__])).aggregate(function () {}).drop('aggregation');
 	        }
 
 	        /**
@@ -9330,7 +9375,7 @@ var dfjs =
 	        value: function shuffle() {
 	            return this.__newInstance__(this.reduce(function (p, n) {
 	                var index = Math.floor(Math.random() * (p.length - 1) + 1);
-	                return Array.isArray(p) ? [].concat((0, _toConsumableArray3.default)(p.slice(index, p.length + 1)), [n], (0, _toConsumableArray3.default)(p.slice(0, index))) : [p, n];
+	                return Array.isArray(p) ? [].concat((0, _toConsumableArray3['default'])(p.slice(index, p.length + 1)), [n], (0, _toConsumableArray3['default'])(p.slice(0, index))) : [p, n];
 	            }), this[__columns__]);
 	        }
 
@@ -9347,7 +9392,7 @@ var dfjs =
 	        value: function sample(percentage) {
 	            var nRows = this.count() * percentage;
 	            var token = 0;
-	            return this.__newInstance__([].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
+	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
 	                token++;
 	                return row;
 	            }, function () {
@@ -9369,7 +9414,7 @@ var dfjs =
 	            var nRows = this.count() * percentage;
 	            var token = 0;
 	            var restRows = [];
-	            return [this.__newInstance__([].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
+	            return [this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
 	                if (token < nRows) {
 	                    token++;
 	                    return row;
@@ -9397,7 +9442,7 @@ var dfjs =
 	                columnNames[_key6] = arguments[_key6];
 	            }
 
-	            return new (Function.prototype.bind.apply(_groupedDataframe2.default, [null].concat([this], columnNames)))();
+	            return new (Function.prototype.bind.apply(_groupedDataframe2['default'], [null].concat([this], columnNames)))();
 	        }
 
 	        /**
@@ -9412,13 +9457,14 @@ var dfjs =
 	    }, {
 	        key: 'sortBy',
 	        value: function sortBy(columnName) {
-	            var reverse = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            var sortedRows = this[__rows__].sort(function (p, n) {
-	                var pValue = p.get(columnName);
-	                var nValue = n.get(columnName);
+	                var _ref8 = [p.get(columnName), n.get(columnName)],
+	                    pValue = _ref8[0],
+	                    nValue = _ref8[1];
 
-	                if ((typeof pValue === 'undefined' ? 'undefined' : (0, _typeof3.default)(pValue)) !== (typeof nValue === 'undefined' ? 'undefined' : (0, _typeof3.default)(nValue))) {
+	                if ((typeof pValue === 'undefined' ? 'undefined' : (0, _typeof3['default'])(pValue)) !== (typeof nValue === 'undefined' ? 'undefined' : (0, _typeof3['default'])(nValue))) {
 	                    throw new _errors.MixedTypeError();
 	                }
 	                return (0, _reusables.compare)(pValue, nValue, reverse);
@@ -9440,7 +9486,7 @@ var dfjs =
 	            if (!(0, _reusables.arrayEqual)(this[__columns__], dfToUnion[__columns__])) {
 	                throw new _errors.WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
 	            }
-	            return this.__newInstance__([].concat((0, _toConsumableArray3.default)(this), (0, _toConsumableArray3.default)(dfToUnion.restructure(this[__columns__]))), this[__columns__]);
+	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])(this), (0, _toConsumableArray3['default'])(dfToUnion.restructure(this[__columns__]))), this[__columns__]);
 	        }
 
 	        /**
@@ -9458,7 +9504,7 @@ var dfjs =
 	        value: function join(dfToJoin, columnNames) {
 	            var _this7 = this;
 
-	            var how = arguments.length <= 2 || arguments[2] === undefined ? 'inner' : arguments[2];
+	            var how = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'inner';
 
 	            var joinMethods = {
 	                inner: function inner() {
@@ -9562,8 +9608,8 @@ var dfjs =
 	        }
 	    }]);
 	    return DataFrame;
-	}(), (_applyDecoratedDescriptor(_class, 'fromText', [_dec], (0, _getOwnPropertyDescriptor2.default)(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec2], (0, _getOwnPropertyDescriptor2.default)(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec3], (0, _getOwnPropertyDescriptor2.default)(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec4], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec5], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, '_join'), _class.prototype)), _class));
-	exports.default = DataFrame;
+	}(), (_applyDecoratedDescriptor(_class, 'fromText', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec5], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_join'), _class.prototype)), _class));
+	exports['default'] = DataFrame;
 
 /***/ },
 /* 299 */
@@ -9972,14 +10018,14 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	} : function (obj) {
-	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	};
 
 /***/ },
@@ -12554,9 +12600,9 @@ var dfjs =
 
 	var _checkTypes2 = _interopRequireDefault(_checkTypes);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	exports.checktypes = _checkTypes2.default;
+	exports.checktypes = _checkTypes2['default'];
 
 /***/ },
 /* 445 */
@@ -12592,19 +12638,19 @@ var dfjs =
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	exports.default = checktypes;
+	exports['default'] = checktypes;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var ArgumentTypeError = function (_TypeError) {
-	    (0, _inherits3.default)(ArgumentTypeError, _TypeError);
+	    (0, _inherits3['default'])(ArgumentTypeError, _TypeError);
 
 	    function ArgumentTypeError(arg, argName, supportedTypes) {
-	        (0, _classCallCheck3.default)(this, ArgumentTypeError);
+	        (0, _classCallCheck3['default'])(this, ArgumentTypeError);
 
-	        var _this = (0, _possibleConstructorReturn3.default)(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2.default)(ArgumentTypeError)).call(this));
+	        var _this = (0, _possibleConstructorReturn3['default'])(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2['default'])(ArgumentTypeError)).call(this));
 
-	        _this.message = argName + ' expected as one of [' + supportedTypes.join(', ') + '], ' + ('not as a ' + (typeof arg === 'undefined' ? 'undefined' : (0, _typeof3.default)(arg)) + (arg.constructor ? ' | ' + arg.constructor.name : '') + '.');
+	        _this.message = argName + ' expected as one of [' + supportedTypes.join(', ') + '], ' + ('not as a ' + (typeof arg === 'undefined' ? 'undefined' : (0, _typeof3['default'])(arg)) + (arg.constructor ? ' | ' + arg.constructor.name : '') + '.');
 	        return _this;
 	    }
 
@@ -12621,7 +12667,7 @@ var dfjs =
 	}
 
 	function isOfType(variable, type) {
-	    return typeof type === 'string' ? variable.constructor && variable.constructor.name === type || (typeof variable === 'undefined' ? 'undefined' : (0, _typeof3.default)(variable)) === type.toLowerCase() : variable instanceof type;
+	    return typeof type === 'string' ? variable.constructor && variable.constructor.name === type || (typeof variable === 'undefined' ? 'undefined' : (0, _typeof3['default'])(variable)) === type.toLowerCase() : variable instanceof type;
 	}
 
 	function checkArgType(arg, argName, expectedTypes) {
@@ -12635,7 +12681,7 @@ var dfjs =
 	function checkArgumentsTypes(Func, types) {
 	    var _this2 = this;
 
-	    var isClass = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	    var isClass = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 	    var argNames = getArgumentsNames(Func);
 	    return function () {
@@ -12649,32 +12695,12 @@ var dfjs =
 	            }
 	        });
 	        if (isClass) {
-	            return new (Function.prototype.bind.apply(Func, [null].concat(args)))(); // tricky part
+	            return new (Function.prototype.bind.apply(Func, [null].concat(args)))();
 	        }
 	        return Func.call.apply(Func, [_this2].concat(args));
 	    };
 	}
 
-	/**
-	 * Decorator checking constructor or methods arguments types. When types aren't appropriate, a TypeError is thrown.
-	 * @param {String | Object | Array} ...types The types of the arguments. Can be an array if an argument can be of one of multiple types.
-	 * You can pass a String, checking constructor.name or typeof, or an Object checking by instaceof.
-	 * @return {Function} The function used with the decorator if no error is thrown.
-	 * @example
-	 * @checktypes('Number', CustomClass)
-	 * class Example {
-	 *  constructor(arg1, arg2) {}
-	 *
-	 *  @checktypes('String', 'Number')
-	 *  methodExample(arg1, arg2) {}
-	 *
-	 *  @checktypes(Array, Date, CustomClass)
-	 *  function example(arg1, arg2, arg3) {}
-	 *
-	 *  @checktypes(['String', CustomClass], ['Number', Number])
-	 *  function example(arg1, arg2) {}
-	 * }
-	 */
 	function checktypes() {
 	    for (var _len2 = arguments.length, types = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	        types[_key2] = arguments[_key2];
@@ -12688,7 +12714,7 @@ var dfjs =
 	            configurable: true,
 	            get: function get() {
 	                var func = checkArgumentsTypes.call(this, descriptor.value, types);
-	                (0, _defineProperty2.default)(this, name, {
+	                (0, _defineProperty2['default'])(this, name, {
 	                    value: func,
 	                    configurable: true,
 	                    writable: true
@@ -12814,554 +12840,557 @@ var dfjs =
 /* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://d3js.org/d3-request/ Version 1.0.2. Copyright 2016 Mike Bostock.
+	// https://d3js.org/d3-request/ Version 1.0.5. Copyright 2017 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(453), __webpack_require__(454), __webpack_require__(455)) :
-	  typeof define === 'function' && define.amd ? define(['exports', 'd3-collection', 'd3-dispatch', 'd3-dsv'], factory) :
-	  (factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3));
-	}(this, function (exports,d3Collection,d3Dispatch,d3Dsv) { 'use strict';
+		 true ? factory(exports, __webpack_require__(453), __webpack_require__(454), __webpack_require__(455)) :
+		typeof define === 'function' && define.amd ? define(['exports', 'd3-collection', 'd3-dispatch', 'd3-dsv'], factory) :
+		(factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3));
+	}(this, (function (exports,d3Collection,d3Dispatch,d3Dsv) { 'use strict';
 
-	  function request(url, callback) {
-	    var request,
-	        event = d3Dispatch.dispatch("beforesend", "progress", "load", "error"),
-	        mimeType,
-	        headers = d3Collection.map(),
-	        xhr = new XMLHttpRequest,
-	        user = null,
-	        password = null,
-	        response,
-	        responseType,
-	        timeout = 0;
+	var request = function(url, callback) {
+	  var request,
+	      event = d3Dispatch.dispatch("beforesend", "progress", "load", "error"),
+	      mimeType,
+	      headers = d3Collection.map(),
+	      xhr = new XMLHttpRequest,
+	      user = null,
+	      password = null,
+	      response,
+	      responseType,
+	      timeout = 0;
 
-	    // If IE does not support CORS, use XDomainRequest.
-	    if (typeof XDomainRequest !== "undefined"
-	        && !("withCredentials" in xhr)
-	        && /^(http(s)?:)?\/\//.test(url)) xhr = new XDomainRequest;
+	  // If IE does not support CORS, use XDomainRequest.
+	  if (typeof XDomainRequest !== "undefined"
+	      && !("withCredentials" in xhr)
+	      && /^(http(s)?:)?\/\//.test(url)) xhr = new XDomainRequest;
 
-	    "onload" in xhr
-	        ? xhr.onload = xhr.onerror = xhr.ontimeout = respond
-	        : xhr.onreadystatechange = function(o) { xhr.readyState > 3 && respond(o); };
+	  "onload" in xhr
+	      ? xhr.onload = xhr.onerror = xhr.ontimeout = respond
+	      : xhr.onreadystatechange = function(o) { xhr.readyState > 3 && respond(o); };
 
-	    function respond(o) {
-	      var status = xhr.status, result;
-	      if (!status && hasResponse(xhr)
-	          || status >= 200 && status < 300
-	          || status === 304) {
-	        if (response) {
-	          try {
-	            result = response.call(request, xhr);
-	          } catch (e) {
-	            event.call("error", request, e);
-	            return;
-	          }
-	        } else {
-	          result = xhr;
+	  function respond(o) {
+	    var status = xhr.status, result;
+	    if (!status && hasResponse(xhr)
+	        || status >= 200 && status < 300
+	        || status === 304) {
+	      if (response) {
+	        try {
+	          result = response.call(request, xhr);
+	        } catch (e) {
+	          event.call("error", request, e);
+	          return;
 	        }
-	        event.call("load", request, result);
 	      } else {
-	        event.call("error", request, o);
+	        result = xhr;
 	      }
+	      event.call("load", request, result);
+	    } else {
+	      event.call("error", request, o);
 	    }
+	  }
 
-	    xhr.onprogress = function(e) {
-	      event.call("progress", request, e);
-	    };
+	  xhr.onprogress = function(e) {
+	    event.call("progress", request, e);
+	  };
 
-	    request = {
-	      header: function(name, value) {
-	        name = (name + "").toLowerCase();
-	        if (arguments.length < 2) return headers.get(name);
-	        if (value == null) headers.remove(name);
-	        else headers.set(name, value + "");
-	        return request;
-	      },
+	  request = {
+	    header: function(name, value) {
+	      name = (name + "").toLowerCase();
+	      if (arguments.length < 2) return headers.get(name);
+	      if (value == null) headers.remove(name);
+	      else headers.set(name, value + "");
+	      return request;
+	    },
 
-	      // If mimeType is non-null and no Accept header is set, a default is used.
-	      mimeType: function(value) {
-	        if (!arguments.length) return mimeType;
-	        mimeType = value == null ? null : value + "";
-	        return request;
-	      },
+	    // If mimeType is non-null and no Accept header is set, a default is used.
+	    mimeType: function(value) {
+	      if (!arguments.length) return mimeType;
+	      mimeType = value == null ? null : value + "";
+	      return request;
+	    },
 
-	      // Specifies what type the response value should take;
-	      // for instance, arraybuffer, blob, document, or text.
-	      responseType: function(value) {
-	        if (!arguments.length) return responseType;
-	        responseType = value;
-	        return request;
-	      },
+	    // Specifies what type the response value should take;
+	    // for instance, arraybuffer, blob, document, or text.
+	    responseType: function(value) {
+	      if (!arguments.length) return responseType;
+	      responseType = value;
+	      return request;
+	    },
 
-	      timeout: function(value) {
-	        if (!arguments.length) return timeout;
-	        timeout = +value;
-	        return request;
-	      },
+	    timeout: function(value) {
+	      if (!arguments.length) return timeout;
+	      timeout = +value;
+	      return request;
+	    },
 
-	      user: function(value) {
-	        return arguments.length < 1 ? user : (user = value == null ? null : value + "", request);
-	      },
+	    user: function(value) {
+	      return arguments.length < 1 ? user : (user = value == null ? null : value + "", request);
+	    },
 
-	      password: function(value) {
-	        return arguments.length < 1 ? password : (password = value == null ? null : value + "", request);
-	      },
+	    password: function(value) {
+	      return arguments.length < 1 ? password : (password = value == null ? null : value + "", request);
+	    },
 
-	      // Specify how to convert the response content to a specific type;
-	      // changes the callback value on "load" events.
-	      response: function(value) {
-	        response = value;
-	        return request;
-	      },
+	    // Specify how to convert the response content to a specific type;
+	    // changes the callback value on "load" events.
+	    response: function(value) {
+	      response = value;
+	      return request;
+	    },
 
-	      // Alias for send("GET", …).
-	      get: function(data, callback) {
-	        return request.send("GET", data, callback);
-	      },
+	    // Alias for send("GET", …).
+	    get: function(data, callback) {
+	      return request.send("GET", data, callback);
+	    },
 
-	      // Alias for send("POST", …).
-	      post: function(data, callback) {
-	        return request.send("POST", data, callback);
-	      },
+	    // Alias for send("POST", …).
+	    post: function(data, callback) {
+	      return request.send("POST", data, callback);
+	    },
 
-	      // If callback is non-null, it will be used for error and load events.
-	      send: function(method, data, callback) {
-	        xhr.open(method, url, true, user, password);
-	        if (mimeType != null && !headers.has("accept")) headers.set("accept", mimeType + ",*/*");
-	        if (xhr.setRequestHeader) headers.each(function(value, name) { xhr.setRequestHeader(name, value); });
-	        if (mimeType != null && xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
-	        if (responseType != null) xhr.responseType = responseType;
-	        if (timeout > 0) xhr.timeout = timeout;
-	        if (callback == null && typeof data === "function") callback = data, data = null;
-	        if (callback != null && callback.length === 1) callback = fixCallback(callback);
-	        if (callback != null) request.on("error", callback).on("load", function(xhr) { callback(null, xhr); });
-	        event.call("beforesend", request, xhr);
-	        xhr.send(data == null ? null : data);
-	        return request;
-	      },
+	    // If callback is non-null, it will be used for error and load events.
+	    send: function(method, data, callback) {
+	      xhr.open(method, url, true, user, password);
+	      if (mimeType != null && !headers.has("accept")) headers.set("accept", mimeType + ",*/*");
+	      if (xhr.setRequestHeader) headers.each(function(value, name) { xhr.setRequestHeader(name, value); });
+	      if (mimeType != null && xhr.overrideMimeType) xhr.overrideMimeType(mimeType);
+	      if (responseType != null) xhr.responseType = responseType;
+	      if (timeout > 0) xhr.timeout = timeout;
+	      if (callback == null && typeof data === "function") callback = data, data = null;
+	      if (callback != null && callback.length === 1) callback = fixCallback(callback);
+	      if (callback != null) request.on("error", callback).on("load", function(xhr) { callback(null, xhr); });
+	      event.call("beforesend", request, xhr);
+	      xhr.send(data == null ? null : data);
+	      return request;
+	    },
 
-	      abort: function() {
-	        xhr.abort();
-	        return request;
-	      },
+	    abort: function() {
+	      xhr.abort();
+	      return request;
+	    },
 
-	      on: function() {
-	        var value = event.on.apply(event, arguments);
-	        return value === event ? request : value;
-	      }
-	    };
+	    on: function() {
+	      var value = event.on.apply(event, arguments);
+	      return value === event ? request : value;
+	    }
+	  };
 
+	  if (callback != null) {
+	    if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
+	    return request.get(callback);
+	  }
+
+	  return request;
+	};
+
+	function fixCallback(callback) {
+	  return function(error, xhr) {
+	    callback(error == null ? xhr : null);
+	  };
+	}
+
+	function hasResponse(xhr) {
+	  var type = xhr.responseType;
+	  return type && type !== "text"
+	      ? xhr.response // null on error
+	      : xhr.responseText; // "" on error
+	}
+
+	var type = function(defaultMimeType, response) {
+	  return function(url, callback) {
+	    var r = request(url).mimeType(defaultMimeType).response(response);
 	    if (callback != null) {
 	      if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-	      return request.get(callback);
+	      return r.get(callback);
 	    }
+	    return r;
+	  };
+	};
 
-	    return request;
-	  }
+	var html = type("text/html", function(xhr) {
+	  return document.createRange().createContextualFragment(xhr.responseText);
+	});
 
-	  function fixCallback(callback) {
-	    return function(error, xhr) {
-	      callback(error == null ? xhr : null);
-	    };
-	  }
+	var json = type("application/json", function(xhr) {
+	  return JSON.parse(xhr.responseText);
+	});
 
-	  function hasResponse(xhr) {
-	    var type = xhr.responseType;
-	    return type && type !== "text"
-	        ? xhr.response // null on error
-	        : xhr.responseText; // "" on error
-	  }
+	var text = type("text/plain", function(xhr) {
+	  return xhr.responseText;
+	});
 
-	  function type(defaultMimeType, response) {
-	    return function(url, callback) {
-	      var r = request(url).mimeType(defaultMimeType).response(response);
-	      if (callback != null) {
-	        if (typeof callback !== "function") throw new Error("invalid callback: " + callback);
-	        return r.get(callback);
-	      }
-	      return r;
-	    };
-	  }
+	var xml = type("application/xml", function(xhr) {
+	  var xml = xhr.responseXML;
+	  if (!xml) throw new Error("parse error");
+	  return xml;
+	});
 
-	  var html = type("text/html", function(xhr) {
-	    return document.createRange().createContextualFragment(xhr.responseText);
-	  });
+	var dsv = function(defaultMimeType, parse) {
+	  return function(url, row, callback) {
+	    if (arguments.length < 3) callback = row, row = null;
+	    var r = request(url).mimeType(defaultMimeType);
+	    r.row = function(_) { return arguments.length ? r.response(responseOf(parse, row = _)) : row; };
+	    r.row(row);
+	    return callback ? r.get(callback) : r;
+	  };
+	};
 
-	  var json = type("application/json", function(xhr) {
-	    return JSON.parse(xhr.responseText);
-	  });
+	function responseOf(parse, row) {
+	  return function(request$$1) {
+	    return parse(request$$1.responseText, row);
+	  };
+	}
 
-	  var text = type("text/plain", function(xhr) {
-	    return xhr.responseText;
-	  });
+	var csv = dsv("text/csv", d3Dsv.csvParse);
 
-	  var xml = type("application/xml", function(xhr) {
-	    var xml = xhr.responseXML;
-	    if (!xml) throw new Error("parse error");
-	    return xml;
-	  });
+	var tsv = dsv("text/tab-separated-values", d3Dsv.tsvParse);
 
-	  function dsv(defaultMimeType, parse) {
-	    return function(url, row, callback) {
-	      if (arguments.length < 3) callback = row, row = null;
-	      var r = request(url).mimeType(defaultMimeType);
-	      r.row = function(_) { return arguments.length ? r.response(responseOf(parse, row = _)) : row; };
-	      r.row(row);
-	      return callback ? r.get(callback) : r;
-	    };
-	  }
+	exports.request = request;
+	exports.html = html;
+	exports.json = json;
+	exports.text = text;
+	exports.xml = xml;
+	exports.csv = csv;
+	exports.tsv = tsv;
 
-	  function responseOf(parse, row) {
-	    return function(request) {
-	      return parse(request.responseText, row);
-	    };
-	  }
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-	  var csv = dsv("text/csv", d3Dsv.csvParse);
+	})));
 
-	  var tsv = dsv("text/tab-separated-values", d3Dsv.tsvParse);
-
-	  exports.request = request;
-	  exports.html = html;
-	  exports.json = json;
-	  exports.text = text;
-	  exports.xml = xml;
-	  exports.csv = csv;
-	  exports.tsv = tsv;
-
-	  Object.defineProperty(exports, '__esModule', { value: true });
-
-	}));
 
 /***/ },
 /* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://d3js.org/d3-collection/ Version 1.0.1. Copyright 2016 Mike Bostock.
+	// https://d3js.org/d3-collection/ Version 1.0.3. Copyright 2017 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports) :
-	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	  (factory((global.d3 = global.d3 || {})));
-	}(this, function (exports) { 'use strict';
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.d3 = global.d3 || {})));
+	}(this, (function (exports) { 'use strict';
 
-	  var prefix = "$";
+	var prefix = "$";
 
-	  function Map() {}
+	function Map() {}
 
-	  Map.prototype = map.prototype = {
-	    constructor: Map,
-	    has: function(key) {
-	      return (prefix + key) in this;
-	    },
-	    get: function(key) {
-	      return this[prefix + key];
-	    },
-	    set: function(key, value) {
-	      this[prefix + key] = value;
-	      return this;
-	    },
-	    remove: function(key) {
-	      var property = prefix + key;
-	      return property in this && delete this[property];
-	    },
-	    clear: function() {
-	      for (var property in this) if (property[0] === prefix) delete this[property];
-	    },
-	    keys: function() {
-	      var keys = [];
-	      for (var property in this) if (property[0] === prefix) keys.push(property.slice(1));
-	      return keys;
-	    },
-	    values: function() {
-	      var values = [];
-	      for (var property in this) if (property[0] === prefix) values.push(this[property]);
-	      return values;
-	    },
-	    entries: function() {
-	      var entries = [];
-	      for (var property in this) if (property[0] === prefix) entries.push({key: property.slice(1), value: this[property]});
-	      return entries;
-	    },
-	    size: function() {
-	      var size = 0;
-	      for (var property in this) if (property[0] === prefix) ++size;
-	      return size;
-	    },
-	    empty: function() {
-	      for (var property in this) if (property[0] === prefix) return false;
-	      return true;
-	    },
-	    each: function(f) {
-	      for (var property in this) if (property[0] === prefix) f(this[property], property.slice(1), this);
-	    }
-	  };
-
-	  function map(object, f) {
-	    var map = new Map;
-
-	    // Copy constructor.
-	    if (object instanceof Map) object.each(function(value, key) { map.set(key, value); });
-
-	    // Index array by numeric index or specified key function.
-	    else if (Array.isArray(object)) {
-	      var i = -1,
-	          n = object.length,
-	          o;
-
-	      if (f == null) while (++i < n) map.set(i, object[i]);
-	      else while (++i < n) map.set(f(o = object[i], i, object), o);
-	    }
-
-	    // Convert object to map.
-	    else if (object) for (var key in object) map.set(key, object[key]);
-
-	    return map;
-	  }
-
-	  function nest() {
-	    var keys = [],
-	        sortKeys = [],
-	        sortValues,
-	        rollup,
-	        nest;
-
-	    function apply(array, depth, createResult, setResult) {
-	      if (depth >= keys.length) return rollup != null
-	          ? rollup(array) : (sortValues != null
-	          ? array.sort(sortValues)
-	          : array);
-
-	      var i = -1,
-	          n = array.length,
-	          key = keys[depth++],
-	          keyValue,
-	          value,
-	          valuesByKey = map(),
-	          values,
-	          result = createResult();
-
-	      while (++i < n) {
-	        if (values = valuesByKey.get(keyValue = key(value = array[i]) + "")) {
-	          values.push(value);
-	        } else {
-	          valuesByKey.set(keyValue, [value]);
-	        }
-	      }
-
-	      valuesByKey.each(function(values, key) {
-	        setResult(result, key, apply(values, depth, createResult, setResult));
-	      });
-
-	      return result;
-	    }
-
-	    function entries(map, depth) {
-	      if (++depth > keys.length) return map;
-	      var array, sortKey = sortKeys[depth - 1];
-	      if (rollup != null && depth >= keys.length) array = map.entries();
-	      else array = [], map.each(function(v, k) { array.push({key: k, values: entries(v, depth)}); });
-	      return sortKey != null ? array.sort(function(a, b) { return sortKey(a.key, b.key); }) : array;
-	    }
-
-	    return nest = {
-	      object: function(array) { return apply(array, 0, createObject, setObject); },
-	      map: function(array) { return apply(array, 0, createMap, setMap); },
-	      entries: function(array) { return entries(apply(array, 0, createMap, setMap), 0); },
-	      key: function(d) { keys.push(d); return nest; },
-	      sortKeys: function(order) { sortKeys[keys.length - 1] = order; return nest; },
-	      sortValues: function(order) { sortValues = order; return nest; },
-	      rollup: function(f) { rollup = f; return nest; }
-	    };
-	  }
-
-	  function createObject() {
-	    return {};
-	  }
-
-	  function setObject(object, key, value) {
-	    object[key] = value;
-	  }
-
-	  function createMap() {
-	    return map();
-	  }
-
-	  function setMap(map, key, value) {
-	    map.set(key, value);
-	  }
-
-	  function Set() {}
-
-	  var proto = map.prototype;
-
-	  Set.prototype = set.prototype = {
-	    constructor: Set,
-	    has: proto.has,
-	    add: function(value) {
-	      value += "";
-	      this[prefix + value] = value;
-	      return this;
-	    },
-	    remove: proto.remove,
-	    clear: proto.clear,
-	    values: proto.keys,
-	    size: proto.size,
-	    empty: proto.empty,
-	    each: proto.each
-	  };
-
-	  function set(object, f) {
-	    var set = new Set;
-
-	    // Copy constructor.
-	    if (object instanceof Set) object.each(function(value) { set.add(value); });
-
-	    // Otherwise, assume it’s an array.
-	    else if (object) {
-	      var i = -1, n = object.length;
-	      if (f == null) while (++i < n) set.add(object[i]);
-	      else while (++i < n) set.add(f(object[i], i, object));
-	    }
-
-	    return set;
-	  }
-
-	  function keys(map) {
+	Map.prototype = map.prototype = {
+	  constructor: Map,
+	  has: function(key) {
+	    return (prefix + key) in this;
+	  },
+	  get: function(key) {
+	    return this[prefix + key];
+	  },
+	  set: function(key, value) {
+	    this[prefix + key] = value;
+	    return this;
+	  },
+	  remove: function(key) {
+	    var property = prefix + key;
+	    return property in this && delete this[property];
+	  },
+	  clear: function() {
+	    for (var property in this) if (property[0] === prefix) delete this[property];
+	  },
+	  keys: function() {
 	    var keys = [];
-	    for (var key in map) keys.push(key);
+	    for (var property in this) if (property[0] === prefix) keys.push(property.slice(1));
 	    return keys;
-	  }
-
-	  function values(map) {
+	  },
+	  values: function() {
 	    var values = [];
-	    for (var key in map) values.push(map[key]);
+	    for (var property in this) if (property[0] === prefix) values.push(this[property]);
 	    return values;
-	  }
-
-	  function entries(map) {
+	  },
+	  entries: function() {
 	    var entries = [];
-	    for (var key in map) entries.push({key: key, value: map[key]});
+	    for (var property in this) if (property[0] === prefix) entries.push({key: property.slice(1), value: this[property]});
 	    return entries;
+	  },
+	  size: function() {
+	    var size = 0;
+	    for (var property in this) if (property[0] === prefix) ++size;
+	    return size;
+	  },
+	  empty: function() {
+	    for (var property in this) if (property[0] === prefix) return false;
+	    return true;
+	  },
+	  each: function(f) {
+	    for (var property in this) if (property[0] === prefix) f(this[property], property.slice(1), this);
+	  }
+	};
+
+	function map(object, f) {
+	  var map = new Map;
+
+	  // Copy constructor.
+	  if (object instanceof Map) object.each(function(value, key) { map.set(key, value); });
+
+	  // Index array by numeric index or specified key function.
+	  else if (Array.isArray(object)) {
+	    var i = -1,
+	        n = object.length,
+	        o;
+
+	    if (f == null) while (++i < n) map.set(i, object[i]);
+	    else while (++i < n) map.set(f(o = object[i], i, object), o);
 	  }
 
-	  exports.nest = nest;
-	  exports.set = set;
-	  exports.map = map;
-	  exports.keys = keys;
-	  exports.values = values;
-	  exports.entries = entries;
+	  // Convert object to map.
+	  else if (object) for (var key in object) map.set(key, object[key]);
 
-	  Object.defineProperty(exports, '__esModule', { value: true });
+	  return map;
+	}
 
-	}));
+	var nest = function() {
+	  var keys = [],
+	      sortKeys = [],
+	      sortValues,
+	      rollup,
+	      nest;
+
+	  function apply(array, depth, createResult, setResult) {
+	    if (depth >= keys.length) return rollup != null
+	        ? rollup(array) : (sortValues != null
+	        ? array.sort(sortValues)
+	        : array);
+
+	    var i = -1,
+	        n = array.length,
+	        key = keys[depth++],
+	        keyValue,
+	        value,
+	        valuesByKey = map(),
+	        values,
+	        result = createResult();
+
+	    while (++i < n) {
+	      if (values = valuesByKey.get(keyValue = key(value = array[i]) + "")) {
+	        values.push(value);
+	      } else {
+	        valuesByKey.set(keyValue, [value]);
+	      }
+	    }
+
+	    valuesByKey.each(function(values, key) {
+	      setResult(result, key, apply(values, depth, createResult, setResult));
+	    });
+
+	    return result;
+	  }
+
+	  function entries(map$$1, depth) {
+	    if (++depth > keys.length) return map$$1;
+	    var array, sortKey = sortKeys[depth - 1];
+	    if (rollup != null && depth >= keys.length) array = map$$1.entries();
+	    else array = [], map$$1.each(function(v, k) { array.push({key: k, values: entries(v, depth)}); });
+	    return sortKey != null ? array.sort(function(a, b) { return sortKey(a.key, b.key); }) : array;
+	  }
+
+	  return nest = {
+	    object: function(array) { return apply(array, 0, createObject, setObject); },
+	    map: function(array) { return apply(array, 0, createMap, setMap); },
+	    entries: function(array) { return entries(apply(array, 0, createMap, setMap), 0); },
+	    key: function(d) { keys.push(d); return nest; },
+	    sortKeys: function(order) { sortKeys[keys.length - 1] = order; return nest; },
+	    sortValues: function(order) { sortValues = order; return nest; },
+	    rollup: function(f) { rollup = f; return nest; }
+	  };
+	};
+
+	function createObject() {
+	  return {};
+	}
+
+	function setObject(object, key, value) {
+	  object[key] = value;
+	}
+
+	function createMap() {
+	  return map();
+	}
+
+	function setMap(map$$1, key, value) {
+	  map$$1.set(key, value);
+	}
+
+	function Set() {}
+
+	var proto = map.prototype;
+
+	Set.prototype = set.prototype = {
+	  constructor: Set,
+	  has: proto.has,
+	  add: function(value) {
+	    value += "";
+	    this[prefix + value] = value;
+	    return this;
+	  },
+	  remove: proto.remove,
+	  clear: proto.clear,
+	  values: proto.keys,
+	  size: proto.size,
+	  empty: proto.empty,
+	  each: proto.each
+	};
+
+	function set(object, f) {
+	  var set = new Set;
+
+	  // Copy constructor.
+	  if (object instanceof Set) object.each(function(value) { set.add(value); });
+
+	  // Otherwise, assume it’s an array.
+	  else if (object) {
+	    var i = -1, n = object.length;
+	    if (f == null) while (++i < n) set.add(object[i]);
+	    else while (++i < n) set.add(f(object[i], i, object));
+	  }
+
+	  return set;
+	}
+
+	var keys = function(map) {
+	  var keys = [];
+	  for (var key in map) keys.push(key);
+	  return keys;
+	};
+
+	var values = function(map) {
+	  var values = [];
+	  for (var key in map) values.push(map[key]);
+	  return values;
+	};
+
+	var entries = function(map) {
+	  var entries = [];
+	  for (var key in map) entries.push({key: key, value: map[key]});
+	  return entries;
+	};
+
+	exports.nest = nest;
+	exports.set = set;
+	exports.map = map;
+	exports.keys = keys;
+	exports.values = values;
+	exports.entries = entries;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
+
+	})));
+
 
 /***/ },
 /* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://d3js.org/d3-dispatch/ Version 1.0.1. Copyright 2016 Mike Bostock.
+	// https://d3js.org/d3-dispatch/ Version 1.0.3. Copyright 2017 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports) :
-	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	  (factory((global.d3 = global.d3 || {})));
-	}(this, function (exports) { 'use strict';
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.d3 = global.d3 || {})));
+	}(this, (function (exports) { 'use strict';
 
-	  var noop = {value: function() {}};
+	var noop = {value: function() {}};
 
-	  function dispatch() {
-	    for (var i = 0, n = arguments.length, _ = {}, t; i < n; ++i) {
-	      if (!(t = arguments[i] + "") || (t in _)) throw new Error("illegal type: " + t);
-	      _[t] = [];
+	function dispatch() {
+	  for (var i = 0, n = arguments.length, _ = {}, t; i < n; ++i) {
+	    if (!(t = arguments[i] + "") || (t in _)) throw new Error("illegal type: " + t);
+	    _[t] = [];
+	  }
+	  return new Dispatch(_);
+	}
+
+	function Dispatch(_) {
+	  this._ = _;
+	}
+
+	function parseTypenames(typenames, types) {
+	  return typenames.trim().split(/^|\s+/).map(function(t) {
+	    var name = "", i = t.indexOf(".");
+	    if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
+	    if (t && !types.hasOwnProperty(t)) throw new Error("unknown type: " + t);
+	    return {type: t, name: name};
+	  });
+	}
+
+	Dispatch.prototype = dispatch.prototype = {
+	  constructor: Dispatch,
+	  on: function(typename, callback) {
+	    var _ = this._,
+	        T = parseTypenames(typename + "", _),
+	        t,
+	        i = -1,
+	        n = T.length;
+
+	    // If no callback was specified, return the callback of the given type and name.
+	    if (arguments.length < 2) {
+	      while (++i < n) if ((t = (typename = T[i]).type) && (t = get(_[t], typename.name))) return t;
+	      return;
 	    }
-	    return new Dispatch(_);
-	  }
 
-	  function Dispatch(_) {
-	    this._ = _;
-	  }
-
-	  function parseTypenames(typenames, types) {
-	    return typenames.trim().split(/^|\s+/).map(function(t) {
-	      var name = "", i = t.indexOf(".");
-	      if (i >= 0) name = t.slice(i + 1), t = t.slice(0, i);
-	      if (t && !types.hasOwnProperty(t)) throw new Error("unknown type: " + t);
-	      return {type: t, name: name};
-	    });
-	  }
-
-	  Dispatch.prototype = dispatch.prototype = {
-	    constructor: Dispatch,
-	    on: function(typename, callback) {
-	      var _ = this._,
-	          T = parseTypenames(typename + "", _),
-	          t,
-	          i = -1,
-	          n = T.length;
-
-	      // If no callback was specified, return the callback of the given type and name.
-	      if (arguments.length < 2) {
-	        while (++i < n) if ((t = (typename = T[i]).type) && (t = get(_[t], typename.name))) return t;
-	        return;
-	      }
-
-	      // If a type was specified, set the callback for the given type and name.
-	      // Otherwise, if a null callback was specified, remove callbacks of the given name.
-	      if (callback != null && typeof callback !== "function") throw new Error("invalid callback: " + callback);
-	      while (++i < n) {
-	        if (t = (typename = T[i]).type) _[t] = set(_[t], typename.name, callback);
-	        else if (callback == null) for (t in _) _[t] = set(_[t], typename.name, null);
-	      }
-
-	      return this;
-	    },
-	    copy: function() {
-	      var copy = {}, _ = this._;
-	      for (var t in _) copy[t] = _[t].slice();
-	      return new Dispatch(copy);
-	    },
-	    call: function(type, that) {
-	      if ((n = arguments.length - 2) > 0) for (var args = new Array(n), i = 0, n, t; i < n; ++i) args[i] = arguments[i + 2];
-	      if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
-	      for (t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
-	    },
-	    apply: function(type, that, args) {
-	      if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
-	      for (var t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
+	    // If a type was specified, set the callback for the given type and name.
+	    // Otherwise, if a null callback was specified, remove callbacks of the given name.
+	    if (callback != null && typeof callback !== "function") throw new Error("invalid callback: " + callback);
+	    while (++i < n) {
+	      if (t = (typename = T[i]).type) _[t] = set(_[t], typename.name, callback);
+	      else if (callback == null) for (t in _) _[t] = set(_[t], typename.name, null);
 	    }
-	  };
 
-	  function get(type, name) {
-	    for (var i = 0, n = type.length, c; i < n; ++i) {
-	      if ((c = type[i]).name === name) {
-	        return c.value;
-	      }
+	    return this;
+	  },
+	  copy: function() {
+	    var copy = {}, _ = this._;
+	    for (var t in _) copy[t] = _[t].slice();
+	    return new Dispatch(copy);
+	  },
+	  call: function(type, that) {
+	    if ((n = arguments.length - 2) > 0) for (var args = new Array(n), i = 0, n, t; i < n; ++i) args[i] = arguments[i + 2];
+	    if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
+	    for (t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
+	  },
+	  apply: function(type, that, args) {
+	    if (!this._.hasOwnProperty(type)) throw new Error("unknown type: " + type);
+	    for (var t = this._[type], i = 0, n = t.length; i < n; ++i) t[i].value.apply(that, args);
+	  }
+	};
+
+	function get(type, name) {
+	  for (var i = 0, n = type.length, c; i < n; ++i) {
+	    if ((c = type[i]).name === name) {
+	      return c.value;
 	    }
 	  }
+	}
 
-	  function set(type, name, callback) {
-	    for (var i = 0, n = type.length; i < n; ++i) {
-	      if (type[i].name === name) {
-	        type[i] = noop, type = type.slice(0, i).concat(type.slice(i + 1));
-	        break;
-	      }
+	function set(type, name, callback) {
+	  for (var i = 0, n = type.length; i < n; ++i) {
+	    if (type[i].name === name) {
+	      type[i] = noop, type = type.slice(0, i).concat(type.slice(i + 1));
+	      break;
 	    }
-	    if (callback != null) type.push({name: name, value: callback});
-	    return type;
 	  }
+	  if (callback != null) type.push({name: name, value: callback});
+	  return type;
+	}
 
-	  exports.dispatch = dispatch;
+	exports.dispatch = dispatch;
 
-	  Object.defineProperty(exports, '__esModule', { value: true });
+	Object.defineProperty(exports, '__esModule', { value: true });
 
-	}));
+	})));
+
 
 /***/ },
 /* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// https://d3js.org/d3-dsv/ Version 1.0.3. Copyright 2016 Mike Bostock.
+	// https://d3js.org/d3-dsv/ Version 1.0.5. Copyright 2017 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports) :
-	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	  (factory((global.d3 = global.d3 || {})));
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.d3 = global.d3 || {})));
 	}(this, (function (exports) { 'use strict';
 
 	function objectConverter(columns) {
@@ -13393,8 +13422,8 @@ var dfjs =
 	  return columns;
 	}
 
-	function dsv(delimiter) {
-	  var reFormat = new RegExp("[\"" + delimiter + "\n]"),
+	var dsv = function(delimiter) {
+	  var reFormat = new RegExp("[\"" + delimiter + "\n\r]"),
 	      delimiterCode = delimiter.charCodeAt(0);
 
 	  function parse(text, f) {
@@ -13497,7 +13526,7 @@ var dfjs =
 	    format: format,
 	    formatRows: formatRows
 	  };
-	}
+	};
 
 	var csv = dsv(",");
 
@@ -13527,15 +13556,14 @@ var dfjs =
 
 	})));
 
+
 /***/ },
 /* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _getIterator2 = __webpack_require__(418);
 
@@ -13576,9 +13604,9 @@ var dfjs =
 	exports.compare = compare;
 	exports.hashCode = hashCode;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	var _marked = [makeGenerator, iter].map(_regenerator2.default.mark);
+	var _marked = [makeGenerator, iter].map(_regenerator2['default'].mark);
 
 	function asArray(x) {
 	    if (!x) return [];
@@ -13586,7 +13614,7 @@ var dfjs =
 	}
 
 	function isArrayOfType(value, ofType) {
-	    var index = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	    var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
 	    return value instanceof Array && value.hasOwnProperty(index) && (ofType === String ? typeof value[index] === 'string' : value[index] instanceof ofType) ? true : false;
 	}
@@ -13596,14 +13624,14 @@ var dfjs =
 	}
 
 	function arrayEqual(a, b) {
-	    var byOrder = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	    var byOrder = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-	    return byOrder ? (0, _keys2.default)(a).map(function (x) {
+	    return byOrder ? (0, _keys2['default'])(a).map(function (x) {
 	        return a[x] === b[x];
 	    }).reduce(function (p, n) {
 	        return p ? n : p;
-	    }, true) : [].concat((0, _toConsumableArray3.default)(new _set2.default(a.filter(function (x) {
-	        return !new _set2.default(b).has(x);
+	    }, true) : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](a.filter(function (x) {
+	        return !new _set2['default'](b).has(x);
 	    })))).length === 0;
 	}
 
@@ -13613,7 +13641,7 @@ var dfjs =
 	    }).reduce(function (p, n) {
 	        return Math.max(p, n);
 	    }, 0);
-	    return [].concat((0, _toConsumableArray3.default)(Array(tableSize).keys())).map(function (index) {
+	    return [].concat((0, _toConsumableArray3['default'])(Array(tableSize).keys())).map(function (index) {
 	        return table.map(function (row) {
 	            return row[index];
 	        });
@@ -13621,22 +13649,22 @@ var dfjs =
 	}
 
 	function combine(table) {
-	    var memory = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+	    var memory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
 
 	    if (table.length === 1) {
 	        return table[0].map(function (elem) {
-	            return [].concat((0, _toConsumableArray3.default)(memory), [elem]);
+	            return [].concat((0, _toConsumableArray3['default'])(memory), [elem]);
 	        });
 	    }
 	    return table[0].map(function (elem) {
-	        return combine(table.slice(1, table.length), [].concat((0, _toConsumableArray3.default)(memory), [elem]));
+	        return combine(table.slice(1, table.length), [].concat((0, _toConsumableArray3['default'])(memory), [elem]));
 	    }).reduce(function (p, n) {
-	        return [].concat((0, _toConsumableArray3.default)(p), (0, _toConsumableArray3.default)(n));
+	        return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	    });
 	}
 
 	function makeGenerator(x) {
-	    return _regenerator2.default.wrap(function makeGenerator$(_context) {
+	    return _regenerator2['default'].wrap(function makeGenerator$(_context) {
 	        while (1) {
 	            switch (_context.prev = _context.next) {
 	                case 0:
@@ -13663,13 +13691,13 @@ var dfjs =
 	}
 
 	function iter(data, func) {
-	    var abort = arguments.length <= 2 || arguments[2] === undefined ? function () {
+	    var abort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {
 	        return false;
-	    } : arguments[2];
+	    };
 
 	    var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, iteration, modifiedRow;
 
-	    return _regenerator2.default.wrap(function iter$(_context2) {
+	    return _regenerator2['default'].wrap(function iter$(_context2) {
 	        while (1) {
 	            switch (_context2.prev = _context2.next) {
 	                case 0:
@@ -13677,7 +13705,7 @@ var dfjs =
 	                    _didIteratorError = false;
 	                    _iteratorError = undefined;
 	                    _context2.prev = 3;
-	                    _iterator = (0, _getIterator3.default)(data);
+	                    _iterator = (0, _getIterator3['default'])(data);
 
 	                case 5:
 	                    if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -13724,8 +13752,8 @@ var dfjs =
 	                    _context2.prev = 22;
 	                    _context2.prev = 23;
 
-	                    if (!_iteratorNormalCompletion && _iterator.return) {
-	                        _iterator.return();
+	                    if (!_iteratorNormalCompletion && _iterator['return']) {
+	                        _iterator['return']();
 	                    }
 
 	                case 25:
@@ -13799,7 +13827,7 @@ var dfjs =
 	        return prev.map(function (str) {
 	            return str.split(next);
 	        }).reduce(function (p, n) {
-	            return [].concat((0, _toConsumableArray3.default)(p), (0, _toConsumableArray3.default)(n));
+	            return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	        }, []);
 	    }, [stringToSplit]);
 	}
@@ -13825,7 +13853,7 @@ var dfjs =
 	}
 
 	function compare(firstElem, secondElem) {
-	    var reverse = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	    var reverse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 	    if (firstElem > secondElem) {
 	        return reverse ? -1 : 1;
@@ -13859,9 +13887,7 @@ var dfjs =
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 	exports.TableAlreadyExistsError = exports.SQLParseError = exports.WrongSchemaError = exports.NoSuchColumnError = exports.InputTypeError = exports.MixedTypeError = undefined;
 
 	var _getPrototypeOf = __webpack_require__(410);
@@ -13880,15 +13906,15 @@ var dfjs =
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var MixedTypeError = exports.MixedTypeError = function (_TypeError) {
-	    (0, _inherits3.default)(MixedTypeError, _TypeError);
+	    (0, _inherits3['default'])(MixedTypeError, _TypeError);
 
 	    function MixedTypeError() {
-	        (0, _classCallCheck3.default)(this, MixedTypeError);
+	        (0, _classCallCheck3['default'])(this, MixedTypeError);
 
-	        var _this = (0, _possibleConstructorReturn3.default)(this, (MixedTypeError.__proto__ || (0, _getPrototypeOf2.default)(MixedTypeError)).call(this));
+	        var _this = (0, _possibleConstructorReturn3['default'])(this, (MixedTypeError.__proto__ || (0, _getPrototypeOf2['default'])(MixedTypeError)).call(this));
 
 	        for (var _len = arguments.length, types = Array(_len), _key = 0; _key < _len; _key++) {
 	            types[_key] = arguments[_key];
@@ -13903,12 +13929,12 @@ var dfjs =
 	}(TypeError);
 
 	var InputTypeError = exports.InputTypeError = function (_TypeError2) {
-	    (0, _inherits3.default)(InputTypeError, _TypeError2);
+	    (0, _inherits3['default'])(InputTypeError, _TypeError2);
 
 	    function InputTypeError(inputName, supportedTypes, inputType) {
-	        (0, _classCallCheck3.default)(this, InputTypeError);
+	        (0, _classCallCheck3['default'])(this, InputTypeError);
 
-	        var _this2 = (0, _possibleConstructorReturn3.default)(this, (InputTypeError.__proto__ || (0, _getPrototypeOf2.default)(InputTypeError)).call(this));
+	        var _this2 = (0, _possibleConstructorReturn3['default'])(this, (InputTypeError.__proto__ || (0, _getPrototypeOf2['default'])(InputTypeError)).call(this));
 
 	        _this2.message = inputName + ' must be one of [' + supportedTypes.join(',') + '], not a ' + inputType + '.';
 	        return _this2;
@@ -13918,12 +13944,12 @@ var dfjs =
 	}(TypeError);
 
 	var NoSuchColumnError = exports.NoSuchColumnError = function (_TypeError3) {
-	    (0, _inherits3.default)(NoSuchColumnError, _TypeError3);
+	    (0, _inherits3['default'])(NoSuchColumnError, _TypeError3);
 
 	    function NoSuchColumnError(column, columns) {
-	        (0, _classCallCheck3.default)(this, NoSuchColumnError);
+	        (0, _classCallCheck3['default'])(this, NoSuchColumnError);
 
-	        var _this3 = (0, _possibleConstructorReturn3.default)(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2.default)(NoSuchColumnError)).call(this));
+	        var _this3 = (0, _possibleConstructorReturn3['default'])(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2['default'])(NoSuchColumnError)).call(this));
 
 	        _this3.message = column + ' not found in [' + columns.join(', ') + '].';
 	        _this3.name = 'NoSuchColumnError';
@@ -13934,12 +13960,12 @@ var dfjs =
 	}(TypeError);
 
 	var WrongSchemaError = exports.WrongSchemaError = function (_Error) {
-	    (0, _inherits3.default)(WrongSchemaError, _Error);
+	    (0, _inherits3['default'])(WrongSchemaError, _Error);
 
 	    function WrongSchemaError(columns, expected) {
-	        (0, _classCallCheck3.default)(this, WrongSchemaError);
+	        (0, _classCallCheck3['default'])(this, WrongSchemaError);
 
-	        var _this4 = (0, _possibleConstructorReturn3.default)(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2.default)(WrongSchemaError)).call(this));
+	        var _this4 = (0, _possibleConstructorReturn3['default'])(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2['default'])(WrongSchemaError)).call(this));
 
 	        _this4.message = '[' + columns.join(', ') + '] while expecting [' + expected.join(', ') + '].';
 	        _this4.name = 'WrongSchemaError';
@@ -13950,12 +13976,12 @@ var dfjs =
 	}(Error);
 
 	var SQLParseError = exports.SQLParseError = function (_Error2) {
-	    (0, _inherits3.default)(SQLParseError, _Error2);
+	    (0, _inherits3['default'])(SQLParseError, _Error2);
 
 	    function SQLParseError(message) {
-	        (0, _classCallCheck3.default)(this, SQLParseError);
+	        (0, _classCallCheck3['default'])(this, SQLParseError);
 
-	        var _this5 = (0, _possibleConstructorReturn3.default)(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2.default)(SQLParseError)).call(this));
+	        var _this5 = (0, _possibleConstructorReturn3['default'])(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2['default'])(SQLParseError)).call(this));
 
 	        _this5.message = message + '.';
 	        _this5.name = 'SQLParseError';
@@ -13966,12 +13992,12 @@ var dfjs =
 	}(Error);
 
 	var TableAlreadyExistsError = exports.TableAlreadyExistsError = function (_Error3) {
-	    (0, _inherits3.default)(TableAlreadyExistsError, _Error3);
+	    (0, _inherits3['default'])(TableAlreadyExistsError, _Error3);
 
 	    function TableAlreadyExistsError(tableName) {
-	        (0, _classCallCheck3.default)(this, TableAlreadyExistsError);
+	        (0, _classCallCheck3['default'])(this, TableAlreadyExistsError);
 
-	        var _this6 = (0, _possibleConstructorReturn3.default)(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2.default)(TableAlreadyExistsError)).call(this));
+	        var _this6 = (0, _possibleConstructorReturn3['default'])(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2['default'])(TableAlreadyExistsError)).call(this));
 
 	        _this6.message = 'The SQL temporary table ' + tableName + ' already exits. Use overwrite = true to overwrite it.';
 	        _this6.name = 'TableAlreadyExistsError';
@@ -13987,9 +14013,7 @@ var dfjs =
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _getOwnPropertyDescriptor = __webpack_require__(299);
 
@@ -14071,7 +14095,7 @@ var dfjs =
 
 	var _errors = __webpack_require__(458);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	    var desc = {};
@@ -14102,8 +14126,8 @@ var dfjs =
 	    return desc;
 	}
 
-	var __columns__ = (0, _symbol2.default)('columns');
-	var __values__ = (0, _symbol2.default)('values');
+	var __columns__ = (0, _symbol2['default'])('columns');
+	var __values__ = (0, _symbol2['default'])('values');
 
 	/**
 	 * Row data structure used into the dataframe-js.
@@ -14124,18 +14148,18 @@ var dfjs =
 	     * new Row(Row, ['column1', 'column3'])
 	     */
 	    function Row(data, columns) {
-	        (0, _classCallCheck3.default)(this, Row);
+	        (0, _classCallCheck3['default'])(this, Row);
 
-	        this[__columns__] = columns ? columns : (0, _keys2.default)(data);
-	        this[__values__] = (0, _freeze2.default)(this._build(data));
+	        this[__columns__] = columns ? columns : (0, _keys2['default'])(data);
+	        this[__values__] = (0, _freeze2['default'])(this._build(data));
 	    }
 
-	    (0, _createClass3.default)(Row, [{
-	        key: _iterator3.default,
-	        value: _regenerator2.default.mark(function value() {
+	    (0, _createClass3['default'])(Row, [{
+	        key: _iterator3['default'],
+	        value: _regenerator2['default'].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-	            return _regenerator2.default.wrap(function value$(_context) {
+	            return _regenerator2['default'].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -14143,7 +14167,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3.default)((0, _values2.default)(this[__values__]));
+	                            _iterator = (0, _getIterator3['default'])((0, _values2['default'])(this[__values__]));
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -14174,8 +14198,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator.return) {
-	                                _iterator.return();
+	                            if (!_iteratorNormalCompletion && _iterator['return']) {
+	                                _iterator['return']();
 	                            }
 
 	                        case 21:
@@ -14209,7 +14233,7 @@ var dfjs =
 	            if (!(0, _reusables.arrayEqual)(this[__columns__], columns)) {
 	                return new Row(data, columns);
 	            }
-	            return (0, _assign2.default)((0, _create2.default)((0, _getPrototypeOf2.default)(this)), this, (_Object$assign2 = {}, (0, _defineProperty3.default)(_Object$assign2, __values__, data), (0, _defineProperty3.default)(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3.default)(columns))), _Object$assign2));
+	            return (0, _assign2['default'])((0, _create2['default'])((0, _getPrototypeOf2['default'])(this)), this, (_Object$assign2 = {}, (0, _defineProperty3['default'])(_Object$assign2, __values__, data), (0, _defineProperty3['default'])(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3['default'])(columns))), _Object$assign2));
 	        }
 	    }, {
 	        key: '_build',
@@ -14225,7 +14249,7 @@ var dfjs =
 	            }, function () {
 	                return _this._fromObject(data[__values__]);
 	            }], [function (value) {
-	                return (typeof value === 'undefined' ? 'undefined' : (0, _typeof3.default)(value)) === 'object' && !(0, _is2.default)(value, null);
+	                return (typeof value === 'undefined' ? 'undefined' : (0, _typeof3['default'])(value)) === 'object' && !(0, _is2['default'])(value, null);
 	            }, function () {
 	                return _this._fromObject(data);
 	            }]);
@@ -14233,15 +14257,15 @@ var dfjs =
 	    }, {
 	        key: '_fromObject',
 	        value: function _fromObject(object) {
-	            return _assign2.default.apply(Object, [{}].concat((0, _toConsumableArray3.default)(this[__columns__].map(function (column) {
-	                return (0, _defineProperty3.default)({}, column, object[column]);
+	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])(this[__columns__].map(function (column) {
+	                return (0, _defineProperty3['default'])({}, column, object[column]);
 	            }))));
 	        }
 	    }, {
 	        key: '_fromArray',
 	        value: function _fromArray(array) {
-	            return _assign2.default.apply(Object, [{}].concat((0, _toConsumableArray3.default)((0, _entries2.default)(this[__columns__]).map(function (column) {
-	                return (0, _defineProperty3.default)({}, column[1], array[column[0]]);
+	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])((0, _entries2['default'])(this[__columns__]).map(function (column) {
+	                return (0, _defineProperty3['default'])({}, column[1], array[column[0]]);
 	            }))));
 	        }
 
@@ -14255,7 +14279,7 @@ var dfjs =
 	    }, {
 	        key: 'toDict',
 	        value: function toDict() {
-	            return (0, _assign2.default)({}, this[__values__]);
+	            return (0, _assign2['default'])({}, this[__values__]);
 	        }
 
 	        /**
@@ -14268,7 +14292,7 @@ var dfjs =
 	    }, {
 	        key: 'toArray',
 	        value: function toArray() {
-	            return [].concat((0, _toConsumableArray3.default)(this));
+	            return [].concat((0, _toConsumableArray3['default'])(this));
 	        }
 
 	        /**
@@ -14315,8 +14339,8 @@ var dfjs =
 	                columnNames[_key] = arguments[_key];
 	            }
 
-	            return this.__newInstance__(_assign2.default.apply(Object, [{}].concat((0, _toConsumableArray3.default)(columnNames.map(function (column) {
-	                return (0, _defineProperty3.default)({}, column, _this2.get(column));
+	            return this.__newInstance__(_assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])(columnNames.map(function (column) {
+	                return (0, _defineProperty3['default'])({}, column, _this2.get(column));
 	            })))), columnNames);
 	        }
 
@@ -14348,8 +14372,8 @@ var dfjs =
 	    }, {
 	        key: 'set',
 	        value: function set(columnToSet, value) {
-	            var newRow = (0, _assign2.default)({}, this[__values__], (0, _defineProperty3.default)({}, columnToSet, value));
-	            return this.__newInstance__(newRow, (0, _keys2.default)(newRow));
+	            var newRow = (0, _assign2['default'])({}, this[__values__], (0, _defineProperty3['default'])({}, columnToSet, value));
+	            return this.__newInstance__(newRow, (0, _keys2['default'])(newRow));
 	        }
 
 	        /**
@@ -14366,14 +14390,14 @@ var dfjs =
 	            if (!this.has(columnToDel)) {
 	                throw new _errors.NoSuchColumnError(columnToDel, this[__columns__]);
 	            }
-	            return this.select.apply(this, (0, _toConsumableArray3.default)(this[__columns__].filter(function (column) {
+	            return this.select.apply(this, (0, _toConsumableArray3['default'])(this[__columns__].filter(function (column) {
 	                return column !== columnToDel;
 	            })));
 	        }
 	    }]);
 	    return Row;
-	}(), (_applyDecoratedDescriptor(_class.prototype, '_build', [_dec], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, '_build'), _class.prototype)), _class));
-	exports.default = Row;
+	}(), (_applyDecoratedDescriptor(_class.prototype, '_build', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype)), _class));
+	exports['default'] = Row;
 
 /***/ },
 /* 460 */
@@ -14408,18 +14432,24 @@ var dfjs =
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = undefined;
+	exports.__esModule = true;
+	exports['default'] = undefined;
 
 	var _getOwnPropertyDescriptor = __webpack_require__(299);
 
 	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
-	var _extends2 = __webpack_require__(464);
+	var _slicedToArray2 = __webpack_require__(431);
 
-	var _extends3 = _interopRequireDefault(_extends2);
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+	var _objectWithoutProperties2 = __webpack_require__(464);
+
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+
+	var _extends3 = __webpack_require__(465);
+
+	var _extends4 = _interopRequireDefault(_extends3);
 
 	var _stringify = __webpack_require__(375);
 
@@ -14469,13 +14499,13 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _dec, _dec2, _desc, _value, _class;
+	var _dec, _dec2, _dec3, _desc, _value, _class;
 
 	var _es7ChecktypesDecorator = __webpack_require__(444);
 
 	var _reusables = __webpack_require__(456);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	    var desc = {};
@@ -14506,12 +14536,12 @@ var dfjs =
 	    return desc;
 	}
 
-	var __groups__ = (0, _symbol2.default)('groups');
+	var __groups__ = (0, _symbol2['default'])('groups');
 
 	/**
 	 * Grouped DataFrame structure grouping DataFrame rows by column value.
 	 */
-	var GroupedDataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', Array), _dec2 = (0, _es7ChecktypesDecorator.checktypes)('Function'), (_class = function () {
+	var GroupedDataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', Array), _dec2 = (0, _es7ChecktypesDecorator.checktypes)('Function'), _dec3 = (0, _es7ChecktypesDecorator.checktypes)('String', 'Function'), (_class = function () {
 
 	    /**
 	     * Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
@@ -14523,7 +14553,7 @@ var dfjs =
 	     * new GroupedDataFrame(df, 'column1');
 	     */
 	    function GroupedDataFrame(df) {
-	        (0, _classCallCheck3.default)(this, GroupedDataFrame);
+	        (0, _classCallCheck3['default'])(this, GroupedDataFrame);
 
 	        this.df = df;
 
@@ -14535,12 +14565,12 @@ var dfjs =
 	        this[__groups__] = this._groupBy(df, columnNames);
 	    }
 
-	    (0, _createClass3.default)(GroupedDataFrame, [{
-	        key: _iterator3.default,
-	        value: _regenerator2.default.mark(function value() {
+	    (0, _createClass3['default'])(GroupedDataFrame, [{
+	        key: _iterator3['default'],
+	        value: _regenerator2['default'].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, group;
 
-	            return _regenerator2.default.wrap(function value$(_context) {
+	            return _regenerator2['default'].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -14548,7 +14578,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3.default)(this[__groups__]);
+	                            _iterator = (0, _getIterator3['default'])(this[__groups__]);
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -14579,8 +14609,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator.return) {
-	                                _iterator.return();
+	                            if (!_iteratorNormalCompletion && _iterator['return']) {
+	                                _iterator['return']();
 	                            }
 
 	                        case 21:
@@ -14609,8 +14639,8 @@ var dfjs =
 	    }, {
 	        key: '__hashKey__',
 	        value: function __hashKey__(groupKey) {
-	            return (0, _reusables.hashCode)((0, _entries2.default)(groupKey).reduce(function (p, n) {
-	                return [].concat((0, _toConsumableArray3.default)(p), (0, _toConsumableArray3.default)(n));
+	            return (0, _reusables.hashCode)((0, _entries2['default'])(groupKey).reduce(function (p, n) {
+	                return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	            }).join(''));
 	        }
 	    }, {
@@ -14621,15 +14651,15 @@ var dfjs =
 	            return (0, _reusables.combine)(columnNames.map(function (column) {
 	                return df.distinct(column).toArray(column);
 	            })).map(function (combination) {
-	                var groupKey = _assign2.default.apply(Object, [{}].concat((0, _toConsumableArray3.default)(combination.map(function (column, i) {
-	                    return (0, _defineProperty3.default)({}, columnNames[i], column);
+	                var groupKey = _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])(combination.map(function (column, i) {
+	                    return (0, _defineProperty3['default'])({}, columnNames[i], column);
 	                }))));
 	                return {
 	                    groupKey: groupKey,
 	                    hash: _this.__hashKey__(groupKey),
 	                    group: df.filter(function (row) {
-	                        return (0, _entries2.default)(groupKey).reduce(function (p, n) {
-	                            return p && (0, _is2.default)(row.get(n[0]), n[1]);
+	                        return (0, _entries2['default'])(groupKey).reduce(function (p, n) {
+	                            return p && (0, _is2['default'])(row.get(n[0]), n[1]);
 	                        }, true);
 	                    })
 	                };
@@ -14656,7 +14686,7 @@ var dfjs =
 	    }, {
 	        key: 'toCollection',
 	        value: function toCollection() {
-	            return [].concat((0, _toConsumableArray3.default)(this));
+	            return [].concat((0, _toConsumableArray3['default'])(this));
 	        }
 
 	        /**
@@ -14670,13 +14700,13 @@ var dfjs =
 	    }, {
 	        key: 'show',
 	        value: function show() {
-	            var quiet = arguments.length <= 0 || arguments[0] === undefined ? false : arguments[0];
+	            var quiet = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-	            return [].concat((0, _toConsumableArray3.default)(this)).map(function (_ref3) {
-	                var group = _ref3.group;
-	                var groupKey = _ref3.groupKey;
+	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref3) {
+	                var group = _ref3.group,
+	                    groupKey = _ref3.groupKey;
 
-	                var groupLog = '--\n[' + (0, _stringify2.default)(groupKey) + ']\n--';
+	                var groupLog = '--\n[' + (0, _stringify2['default'])(groupKey) + ']\n--';
 	                if (!quiet) {
 	                    console.log(groupLog);
 	                }
@@ -14696,7 +14726,7 @@ var dfjs =
 	    }, {
 	        key: 'listGroups',
 	        value: function listGroups() {
-	            return [].concat((0, _toConsumableArray3.default)(this)).map(function (_ref4) {
+	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref4) {
 	                var groupKey = _ref4.groupKey;
 	                return groupKey;
 	            });
@@ -14712,7 +14742,7 @@ var dfjs =
 	    }, {
 	        key: 'listHashs',
 	        value: function listHashs() {
-	            return [].concat((0, _toConsumableArray3.default)(this)).map(function (_ref5) {
+	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref5) {
 	                var hash = _ref5.hash;
 	                return hash;
 	            });
@@ -14723,24 +14753,115 @@ var dfjs =
 	        /**
 	         * Create an aggregation from a function.
 	         * @param {Function} func The aggregation function.
+	         * @param {String} [columnName='aggregation'] The column name created by the aggregation.
 	         * @returns {DataFrame} A new DataFrame with a column 'aggregation' containing the result.
 	         * @example
 	         * groupedDF.aggregate(group => group.stat.sum('column1'));
 	         */
 	        value: function aggregate(func) {
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3.default)(this)).map(function (_ref6) {
-	                var group = _ref6.group;
-	                var groupKey = _ref6.groupKey;
-	                return (0, _extends3.default)({}, groupKey, { aggregation: func(group, groupKey) });
-	            }), [].concat((0, _toConsumableArray3.default)(this.on), ['aggregation']));
+	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'aggregation';
+
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref6) {
+	                var group = _ref6.group,
+	                    groupKey = _ref6.groupKey;
+	                return (0, _extends4['default'])({}, groupKey, (0, _defineProperty3['default'])({}, columnName, func(group, groupKey)));
+	            }), [].concat((0, _toConsumableArray3['default'])(this.on), [columnName]));
+	        }
+	    }, {
+	        key: 'pivot',
+
+	        /**
+	         * Pivot a GroupedDataFrame.
+	         * @param {String} columnToPivot The column which will be transposed as columns.
+	         * @param {Function} [func=(gdf) => gdf.count()] The function to define each column value from a DataFrame.
+	         * @returns {DataFrame} The pivot DataFrame.
+	         * @example
+	         * df.groupBy('carType').pivot('carModel', values => values.stat.sum('kms'))
+	         */
+	        value: function pivot(columnToPivot) {
+	            var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (gdf) {
+	                return gdf.count();
+	            };
+
+	            var columns = [].concat((0, _toConsumableArray3['default'])(this.on), (0, _toConsumableArray3['default'])(this.df.distinct(columnToPivot).toArray(columnToPivot)));
+	            return this.df.__newInstance__(this.aggregate(function (group) {
+	                return group.groupBy(columnToPivot).aggregate(function (gp, gk) {
+	                    return (0, _defineProperty3['default'])({}, gk[columnToPivot], func(gp, gk));
+	                }).toArray('aggregation').reduce(function (p, n) {
+	                    return (0, _extends4['default'])({}, p, n);
+	                }, {});
+	            }).toCollection().map(function (_ref8) {
+	                var aggregation = _ref8.aggregation,
+	                    rest = (0, _objectWithoutProperties3['default'])(_ref8, ['aggregation']);
+	                return (0, _extends4['default'])({}, rest, aggregation);
+	            }), columns);
+	        }
+
+	        /**
+	         * Melt a DataFrame to make it tidy. It's the reverse of GroupedDataFrame.pivot().
+	         * @param {String} [variableColumnName='variable'] The column name containing columns.
+	         * @param {String} [variableColumnName='value'] The column name containing values.
+	         * @returns {DataFrame} The tidy DataFrame.
+	         * @example
+	         * df.groupBy('carType').melt('kms')
+	         */
+
+	    }, {
+	        key: 'melt',
+	        value: function melt() {
+	            var _this2 = this;
+
+	            var variableColumnName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'variable';
+	            var valueColumnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
+
+	            var columns = [].concat((0, _toConsumableArray3['default'])(this.on), [variableColumnName, valueColumnName]);
+	            return this.df.__newInstance__(this.aggregate(function (group) {
+	                return (0, _entries2['default'])(group.toDict()).reduce(function (tidy, _ref9) {
+	                    var _ref10 = (0, _slicedToArray3['default'])(_ref9, 2),
+	                        key = _ref10[0],
+	                        value = _ref10[1];
+
+	                    return [].concat((0, _toConsumableArray3['default'])(tidy), (0, _toConsumableArray3['default'])(value.reduce(function (p, n) {
+	                        var _ref11;
+
+	                        return !_this2.on.includes(key) ? [].concat((0, _toConsumableArray3['default'])(p), [(_ref11 = {}, (0, _defineProperty3['default'])(_ref11, variableColumnName, key), (0, _defineProperty3['default'])(_ref11, valueColumnName, n), _ref11)]) : p;
+	                    }, [])));
+	                }, []);
+	            }).toCollection().reduce(function (p, _ref12) {
+	                var aggregation = _ref12.aggregation,
+	                    rest = (0, _objectWithoutProperties3['default'])(_ref12, ['aggregation']);
+	                return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(aggregation.map(function (x) {
+	                    return (0, _extends4['default'])({}, rest, x);
+	                })));
+	            }, []), columns);
 	        }
 	    }]);
 	    return GroupedDataFrame;
-	}(), (_applyDecoratedDescriptor(_class.prototype, '_groupBy', [_dec], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, '_groupBy'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'aggregate', [_dec2], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'aggregate'), _class.prototype)), _class));
-	exports.default = GroupedDataFrame;
+	}(), (_applyDecoratedDescriptor(_class.prototype, '_groupBy', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_groupBy'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'aggregate', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'aggregate'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'pivot', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'pivot'), _class.prototype)), _class));
+	exports['default'] = GroupedDataFrame;
 
 /***/ },
 /* 464 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	exports.__esModule = true;
+
+	exports.default = function (obj, keys) {
+	  var target = {};
+
+	  for (var i in obj) {
+	    if (keys.indexOf(i) >= 0) continue;
+	    if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+	    target[i] = obj[i];
+	  }
+
+	  return target;
+	};
+
+/***/ },
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -14768,14 +14889,12 @@ var dfjs =
 	};
 
 /***/ },
-/* 465 */
+/* 466 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _classCallCheck2 = __webpack_require__(442);
 
@@ -14787,7 +14906,7 @@ var dfjs =
 
 	var _reusables = __webpack_require__(456);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	/**
 	* Stat module for DataFrame, providing basic statistical metrics for numeric columns.
@@ -14798,7 +14917,7 @@ var dfjs =
 	     * @param {DataFrame} df An instance of DataFrame.
 	     */
 	    function Stat(df) {
-	        (0, _classCallCheck3.default)(this, Stat);
+	        (0, _classCallCheck3['default'])(this, Stat);
 
 	        this.df = df;
 	        this.name = 'stat';
@@ -14813,7 +14932,7 @@ var dfjs =
 	    */
 
 
-	    (0, _createClass3.default)(Stat, [{
+	    (0, _createClass3['default'])(Stat, [{
 	        key: 'sum',
 	        value: function sum(columnName) {
 	            return Number(this.df.reduce(function (p, n) {
@@ -14899,7 +15018,7 @@ var dfjs =
 	    }, {
 	        key: 'var',
 	        value: function _var(columnName) {
-	            var population = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var population = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            var numericDF = this.df.filter(function (row) {
 	                return (0, _reusables.isNumber)(row.get(columnName));
@@ -14922,9 +15041,9 @@ var dfjs =
 	    }, {
 	        key: 'sd',
 	        value: function sd(columnName) {
-	            var population = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var population = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-	            return Math.sqrt(this.var(columnName, population));
+	            return Math.sqrt(this['var'](columnName, population));
 	        }
 
 	        /**
@@ -14943,8 +15062,8 @@ var dfjs =
 	                mean: this.mean(columnName),
 	                min: this.min(columnName),
 	                max: this.max(columnName),
-	                var: this.var(columnName),
-	                varpop: this.var(columnName, true),
+	                'var': this['var'](columnName),
+	                varpop: this['var'](columnName, true),
 	                sd: this.sd(columnName),
 	                sdpop: this.sd(columnName, true)
 	            };
@@ -14953,17 +15072,15 @@ var dfjs =
 	    return Stat;
 	}();
 
-	exports.default = Stat;
+	exports['default'] = Stat;
 
 /***/ },
-/* 466 */
+/* 467 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _getOwnPropertyDescriptor = __webpack_require__(299);
 
@@ -14993,7 +15110,7 @@ var dfjs =
 
 	var _reusables = __webpack_require__(456);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	    var desc = {};
@@ -15033,13 +15150,13 @@ var dfjs =
 	     * @param {DataFrame} df An instance of DataFrame.
 	     */
 	    function Matrix(df) {
-	        (0, _classCallCheck3.default)(this, Matrix);
+	        (0, _classCallCheck3['default'])(this, Matrix);
 
 	        this.df = df;
 	        this.name = 'matrix';
 	    }
 
-	    (0, _createClass3.default)(Matrix, [{
+	    (0, _createClass3['default'])(Matrix, [{
 	        key: 'isCommutative',
 
 	        /**
@@ -15051,7 +15168,7 @@ var dfjs =
 	         * df.matrix.isCommutative(df2)
 	         */
 	        value: function isCommutative(df) {
-	            var reverse = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            return (0, _reusables.arrayEqual)(this.df.dim(), reverse ? df.dim().reverse() : df.dim(), true);
 	        }
@@ -15071,10 +15188,10 @@ var dfjs =
 	            if (!this.isCommutative(df)) {
 	                throw new _errors.WrongSchemaError(this.df.dim(), df.dim());
 	            }
-	            var columns = [].concat((0, _toConsumableArray3.default)(Array(this.df.dim()[1]).keys()));
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3.default)((0, _reusables.iter)((0, _keys2.default)([].concat((0, _toConsumableArray3.default)(this.df))), function (rowKey) {
-	                var a = [].concat((0, _toConsumableArray3.default)(_this.df))[rowKey].toArray();
-	                var b = [].concat((0, _toConsumableArray3.default)(df))[rowKey].toArray();
+	            var columns = [].concat((0, _toConsumableArray3['default'])(Array(this.df.dim()[1]).keys()));
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)((0, _keys2['default'])([].concat((0, _toConsumableArray3['default'])(this.df))), function (rowKey) {
+	                var a = [].concat((0, _toConsumableArray3['default'])(_this.df))[rowKey].toArray();
+	                var b = [].concat((0, _toConsumableArray3['default'])(df))[rowKey].toArray();
 	                return columns.map(function (column) {
 	                    return a[column] + b[column];
 	                });
@@ -15113,12 +15230,12 @@ var dfjs =
 	            if (!this.isCommutative(df, true)) {
 	                throw new _errors.WrongSchemaError(this.df.dim(), df.dim().reverse());
 	            }
-	            var columns = [].concat((0, _toConsumableArray3.default)(Array(this.df.dim()[0]).keys()));
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3.default)((0, _reusables.iter)((0, _keys2.default)([].concat((0, _toConsumableArray3.default)(this.df))), function (rowKey) {
-	                var a = [].concat((0, _toConsumableArray3.default)(_this2.df))[rowKey].toArray();
-	                return [].concat((0, _toConsumableArray3.default)((0, _reusables.iter)(columns, function (column) {
-	                    var b = [].concat((0, _toConsumableArray3.default)(df.transpose()))[column].toArray();
-	                    return (0, _keys2.default)(b).reduce(function (p, n) {
+	            var columns = [].concat((0, _toConsumableArray3['default'])(Array(this.df.dim()[0]).keys()));
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)((0, _keys2['default'])([].concat((0, _toConsumableArray3['default'])(this.df))), function (rowKey) {
+	                var a = [].concat((0, _toConsumableArray3['default'])(_this2.df))[rowKey].toArray();
+	                return [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(columns, function (column) {
+	                    var b = [].concat((0, _toConsumableArray3['default'])(df.transpose()))[column].toArray();
+	                    return (0, _keys2['default'])(b).reduce(function (p, n) {
 	                        return p + b[n] * a[n];
 	                    }, 0);
 	                })));
@@ -15126,18 +15243,16 @@ var dfjs =
 	        }
 	    }]);
 	    return Matrix;
-	}(), (_applyDecoratedDescriptor(_class.prototype, 'isCommutative', [_dec], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'isCommutative'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'add', [_dec2], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'add'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'product', [_dec3], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'product'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'dot', [_dec4], (0, _getOwnPropertyDescriptor2.default)(_class.prototype, 'dot'), _class.prototype)), _class));
-	exports.default = Matrix;
+	}(), (_applyDecoratedDescriptor(_class.prototype, 'isCommutative', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'isCommutative'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'add', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'add'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'product', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'product'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'dot', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'dot'), _class.prototype)), _class));
+	exports['default'] = Matrix;
 
 /***/ },
-/* 467 */
+/* 468 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _getOwnPropertyDescriptor = __webpack_require__(299);
 
@@ -15159,13 +15274,13 @@ var dfjs =
 
 	var _es7ChecktypesDecorator = __webpack_require__(444);
 
-	var _sqlEngine = __webpack_require__(468);
+	var _sqlEngine = __webpack_require__(469);
 
 	var _sqlEngine2 = _interopRequireDefault(_sqlEngine);
 
 	var _errors = __webpack_require__(458);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
 	    var desc = {};
@@ -15200,7 +15315,7 @@ var dfjs =
 	* SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
 	 */
 	var SQL = (_dec = (0, _es7ChecktypesDecorator.checktypes)('String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', 'String'), (_class = function () {
-	    (0, _createClass3.default)(SQL, null, [{
+	    (0, _createClass3['default'])(SQL, null, [{
 	        key: 'request',
 
 	        /**
@@ -15211,7 +15326,7 @@ var dfjs =
 	         * DataFrame.request('SELECT * FROM tmp');
 	         */
 	        value: function request(query) {
-	            return (0, _sqlEngine2.default)(query, SQL.tables);
+	            return (0, _sqlEngine2['default'])(query, SQL.tables);
 	        }
 
 	        /**
@@ -15251,7 +15366,7 @@ var dfjs =
 	    }, {
 	        key: 'renameTable',
 	        value: function renameTable(tableName, replacement) {
-	            var overwrite = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	            var overwrite = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 	            SQL.registerTable(SQL.tables[tableName], replacement, overwrite);
 	            SQL.dropTable(tableName);
@@ -15267,7 +15382,7 @@ var dfjs =
 	    }, {
 	        key: 'listTables',
 	        value: function listTables() {
-	            return (0, _keys2.default)(SQL.tables);
+	            return (0, _keys2['default'])(SQL.tables);
 	        }
 	    }, {
 	        key: 'registerTable',
@@ -15281,7 +15396,7 @@ var dfjs =
 	         * DataFrame.registerTable('tmp', df);
 	         */
 	        value: function registerTable(df, tableName) {
-	            var overwrite = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	            var overwrite = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
 	            if (SQL.listTables().includes(tableName) && !overwrite) {
 	                throw new _errors.TableAlreadyExistsError(tableName);
@@ -15297,7 +15412,7 @@ var dfjs =
 	    }]);
 
 	    function SQL(df) {
-	        (0, _classCallCheck3.default)(this, SQL);
+	        (0, _classCallCheck3['default'])(this, SQL);
 
 	        this.df = df;
 	        this.name = 'sql';
@@ -15312,32 +15427,30 @@ var dfjs =
 	     */
 
 
-	    (0, _createClass3.default)(SQL, [{
+	    (0, _createClass3['default'])(SQL, [{
 	        key: 'register',
 	        value: function register(tableName) {
-	            var overwrite = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+	            var overwrite = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            SQL.registerTable(this.df, tableName, overwrite);
 	            return this.df;
 	        }
 	    }]);
 	    return SQL;
-	}(), (_applyDecoratedDescriptor(_class, 'request', [_dec], (0, _getOwnPropertyDescriptor2.default)(_class, 'request'), _class), _applyDecoratedDescriptor(_class, 'registerTable', [_dec2], (0, _getOwnPropertyDescriptor2.default)(_class, 'registerTable'), _class)), _class));
+	}(), (_applyDecoratedDescriptor(_class, 'request', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'request'), _class), _applyDecoratedDescriptor(_class, 'registerTable', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'registerTable'), _class)), _class));
 
 
 	SQL.tables = {};
 
-	exports.default = SQL;
+	exports['default'] = SQL;
 
 /***/ },
-/* 468 */
+/* 469 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
+	exports.__esModule = true;
 
 	var _slicedToArray2 = __webpack_require__(431);
 
@@ -15351,13 +15464,13 @@ var dfjs =
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	exports.default = sqlParser;
+	exports['default'] = sqlParser;
 
 	var _reusables = __webpack_require__(456);
 
 	var _errors = __webpack_require__(458);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var REPLACMENTS = [['INNER JOIN', 'INNERJOIN'], ['LEFT JOIN', 'LEFTJOIN'], ['RIGHT JOIN', 'RIGHTJOIN'], ['FULL JOIN', 'FULLJOIN'], ['GROUP BY', 'GROUPBY']];
 
@@ -15436,7 +15549,7 @@ var dfjs =
 	                    return ['AND', 'OR'].includes(term.toUpperCase());
 	                });
 	                return operationalTerms.map(function (operationalTerm) {
-	                    var operatorToApply = _reusables.xContains.apply(undefined, [operationalTerm].concat((0, _toConsumableArray3.default)((0, _keys2.default)(WHERE_OPERATORS))))[0];
+	                    var operatorToApply = _reusables.xContains.apply(undefined, [operationalTerm].concat((0, _toConsumableArray3['default'])((0, _keys2['default'])(WHERE_OPERATORS))))[0];
 	                    var terms = operationalTerm.replace(' ', '').split(operatorToApply);
 	                    return WHERE_OPERATORS[operatorToApply](String(row.get(terms[0])), (0, _reusables.xReplace)(terms[1].trim(), ['\"', ''], ['\'', ''], ['\`', '']));
 	                }).reduce(function (prev, next) {
@@ -15467,7 +15580,7 @@ var dfjs =
 	    },
 	    'GROUPBY': function GROUPBY(operation) {
 	        return function (df) {
-	            return df.groupBy.apply(df, (0, _toConsumableArray3.default)(sqlArgsToArray(operation)));
+	            return df.groupBy.apply(df, (0, _toConsumableArray3['default'])(sqlArgsToArray(operation)));
 	        };
 	    }
 	};
@@ -15475,10 +15588,9 @@ var dfjs =
 	function replaceTermsInQuery(query) {
 	    var replacedQuery = query;
 	    REPLACMENTS.forEach(function (_ref) {
-	        var _ref2 = (0, _slicedToArray3.default)(_ref, 2);
-
-	        var joinType = _ref2[0];
-	        var replacment = _ref2[1];
+	        var _ref2 = (0, _slicedToArray3['default'])(_ref, 2),
+	            joinType = _ref2[0],
+	            replacment = _ref2[1];
 
 	        replacedQuery = replacedQuery.replace(joinType, replacment).replace(joinType.toLowerCase(), replacment);
 	    });
@@ -15502,7 +15614,7 @@ var dfjs =
 
 	function parseOperations(operations, tables) {
 	    var operationsLoc = operations.map(function (word, index) {
-	        return (0, _keys2.default)(OPERATIONS_HANDLER).includes(word.toUpperCase()) ? index : undefined;
+	        return (0, _keys2['default'])(OPERATIONS_HANDLER).includes(word.toUpperCase()) ? index : undefined;
 	    }).filter(function (loc) {
 	        return loc !== undefined;
 	    });
@@ -15539,10 +15651,10 @@ var dfjs =
 	            return df.distinct(columnName).rename(columnName, value[0].includes('AS') ? value[0].split('AS')[1].replace(' ', '') : columnName);
 	        };
 	    }], [function (value) {
-	        return _reusables.xContains.apply(undefined, [value[0].toUpperCase()].concat((0, _toConsumableArray3.default)((0, _keys2.default)(SELECT_FUNCTIONS))))[0];
+	        return _reusables.xContains.apply(undefined, [value[0].toUpperCase()].concat((0, _toConsumableArray3['default'])((0, _keys2['default'])(SELECT_FUNCTIONS))))[0];
 	    }, function (value) {
 	        return function (df) {
-	            var functionToApply = (0, _keys2.default)(SELECT_FUNCTIONS).find(function (func) {
+	            var functionToApply = (0, _keys2['default'])(SELECT_FUNCTIONS).find(function (func) {
 	                return value[0].toUpperCase().includes(func);
 	            });
 	            var applyFunction = function applyFunction(dfToImpact) {
@@ -15554,7 +15666,7 @@ var dfjs =
 	        return true;
 	    }, function (value) {
 	        return function (df) {
-	            return df.select.apply(df, (0, _toConsumableArray3.default)(value.map(function (column) {
+	            return df.select.apply(df, (0, _toConsumableArray3['default'])(value.map(function (column) {
 	                return column.split(' AS ')[0].replace(' ', '');
 	            }))).renameAll(value.map(function (column) {
 	                return column.includes('AS') ? column.split('AS')[1].replace(' ', '') : column;
@@ -15564,13 +15676,12 @@ var dfjs =
 	}
 
 	function sqlParser(query, tables) {
-	    var _sqlSplitter = sqlSplitter(query);
+	    var _sqlSplitter = sqlSplitter(query),
+	        selections = _sqlSplitter.selections,
+	        table = _sqlSplitter.table,
+	        operations = _sqlSplitter.operations;
 
-	    var selections = _sqlSplitter.selections;
-	    var table = _sqlSplitter.table;
-	    var operations = _sqlSplitter.operations;
-
-	    if (!table || !(0, _keys2.default)(tables).includes(table)) {
+	    if (!table || !(0, _keys2['default'])(tables).includes(table)) {
 	        throw new _errors.SQLParseError('Wrong table name in your query: ' + table);
 	    }
 	    var applyOperations = parseOperations(operations, tables);
@@ -15579,15 +15690,13 @@ var dfjs =
 	}
 
 /***/ },
-/* 469 */
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = undefined;
+	exports.__esModule = true;
+	exports['default'] = undefined;
 
 	var _toConsumableArray2 = __webpack_require__(425);
 
@@ -15609,19 +15718,19 @@ var dfjs =
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 	var Benchmark = function () {
 	    function Benchmark() {
-	        (0, _classCallCheck3.default)(this, Benchmark);
+	        (0, _classCallCheck3['default'])(this, Benchmark);
 	    }
 
-	    (0, _createClass3.default)(Benchmark, [{
+	    (0, _createClass3['default'])(Benchmark, [{
 	        key: '__benchmarks__',
-	        value: _regenerator2.default.mark(function __benchmarks__(func, repeats) {
+	        value: _regenerator2['default'].mark(function __benchmarks__(func, repeats) {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, bench, timer, diff;
 
-	            return _regenerator2.default.wrap(function __benchmarks__$(_context) {
+	            return _regenerator2['default'].wrap(function __benchmarks__$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -15629,7 +15738,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3.default)(Array(repeats));
+	                            _iterator = (0, _getIterator3['default'])(Array(repeats));
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -15664,8 +15773,8 @@ var dfjs =
 	                            _context.prev = 21;
 	                            _context.prev = 22;
 
-	                            if (!_iteratorNormalCompletion && _iterator.return) {
-	                                _iterator.return();
+	                            if (!_iteratorNormalCompletion && _iterator['return']) {
+	                                _iterator['return']();
 	                            }
 
 	                        case 24:
@@ -15701,15 +15810,16 @@ var dfjs =
 	    }, {
 	        key: 'start',
 	        value: function start(func, repeats) {
-	            var benchmarkResult = this._mean([].concat((0, _toConsumableArray3.default)(this.__benchmarks__(func, repeats))));
+	            var benchmarkResult = this._mean([].concat((0, _toConsumableArray3['default'])(this.__benchmarks__(func, repeats))));
 	            console.log('New benchmark: ' + benchmarkResult + ' nanoseconds');
 	            return benchmarkResult;
 	        }
 	    }, {
 	        key: 'compare',
 	        value: function compare(func1, func2, repeats) {
-	            var benchmarkResult1 = this.start(func1, repeats);
-	            var benchmarkResult2 = this.start(func2, repeats);
+	            var _ref = [this.start(func1, repeats), this.start(func2, repeats)],
+	                benchmarkResult1 = _ref[0],
+	                benchmarkResult2 = _ref[1];
 
 	            console.log('Most rapid function: ' + (benchmarkResult1 > benchmarkResult2 ? 'func2' : 'func1'));
 	            return [benchmarkResult1, benchmarkResult2];
@@ -15718,7 +15828,7 @@ var dfjs =
 	    return Benchmark;
 	}();
 
-	exports.default = Benchmark;
+	exports['default'] = Benchmark;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(294)))
 
 /***/ }

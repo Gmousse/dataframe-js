@@ -810,6 +810,34 @@ test('DataFrame rows can be ', (assert) => {
         'bisected by percentage into 2 DataFrames.'
     );
 
+    const pivotedDf6 = df6.groupBy('id').pivot('id2', gdf => gdf.stat.sum('value'));
+
+    assert.deepEqual(
+        pivotedDf6.toCollection(),
+        [
+            { id: 3, a: 1, b: 2, c: undefined },
+            { id: 1, a: 0, b: undefined, c: undefined },
+            { id: 8, a: undefined, b: undefined, c: 1 },
+        ],
+        'pivoted.'
+    );
+
+    assert.deepEqual(
+        pivotedDf6.groupBy('id').melt().toCollection(),
+        [
+            { id: 3, variable: 'a', value: 1 },
+            { id: 3, variable: 'b', value: 2 },
+            { id: 3, variable: 'c', value: undefined },
+            { id: 1, variable: 'a', value: 0 },
+            { id: 1, variable: 'b', value: undefined },
+            { id: 1, variable: 'c', value: undefined },
+            { id: 8, variable: 'a', value: undefined },
+            { id: 8, variable: 'b', value: undefined },
+            { id: 8, variable: 'c', value: 1 },
+        ],
+        'melted.'
+    );
+
     assert.end();
 });
 

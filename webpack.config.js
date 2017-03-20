@@ -2,7 +2,7 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: __dirname,
-        filename: './lib/browser/dataframe.js',
+        filename: process.env.NODE_ENV === 'production' ? './dist/dataframe-min.js' : './dist/dataframe.js',
         library: 'dfjs',
     },
     node: {
@@ -12,7 +12,7 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel-loader',
+            loaders: ['babel-loader'],
         }],
     },
 };
