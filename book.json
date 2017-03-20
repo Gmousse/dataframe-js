@@ -1,0 +1,12 @@
+{
+    "gitbook": "3.2.2",
+    "title": "DataFrame-js",
+    "author": "Guillaume Mousnier",
+    "language": "en",
+    "plugins": ["prism", "-highlight", "github", "anchorjs"],
+    "pluginsConfig": {
+        "github": {
+            "url": "https://github.com/Gmousse/dataframe-js"
+        }
+    }
+}

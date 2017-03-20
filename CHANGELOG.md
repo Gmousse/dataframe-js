@@ -2,6 +2,17 @@
 
 ---
 
+## v1.2.1
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Modify gitbook and link in npm.
+
+---
+
 ## v1.2.0
 
 **Author**: Guillaume Mousnier.
