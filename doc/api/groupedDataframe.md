@@ -1,12 +1,12 @@
 # groupedDataframe
 
-[src/groupedDataframe.js:10-172](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L10-L172 "Source code on GitHub")
+[src/groupedDataframe.js:10-172](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L10-L172 "Source code on GitHub")
 
 Grouped DataFrame structure grouping DataFrame rows by column value.
 
 # constructor
 
-[src/groupedDataframe.js:21-25](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L21-L25 "Source code on GitHub")
+[src/groupedDataframe.js:21-25](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L21-L25 "Source code on GitHub")
 
 Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
 
@@ -26,7 +26,7 @@ new GroupedDataFrame(df, 'column1');
 
 # toCollection
 
-[src/groupedDataframe.js:63-65](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L63-L65 "Source code on GitHub")
+[src/groupedDataframe.js:63-65](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L63-L65 "Source code on GitHub")
 
 Convert GroupedDataFrame into collection (Array) of dictionnaries (Object).
 
@@ -40,7 +40,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 # show
 
-[src/groupedDataframe.js:74-82](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L74-L82 "Source code on GitHub")
+[src/groupedDataframe.js:74-82](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L74-L82 "Source code on GitHub")
 
 Display the GroupedDataFrame as String Table.
 
@@ -58,7 +58,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 # listGroups
 
-[src/groupedDataframe.js:90-92](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L90-L92 "Source code on GitHub")
+[src/groupedDataframe.js:90-92](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L90-L92 "Source code on GitHub")
 
 List GroupedDataFrame groups.
 
@@ -72,7 +72,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 # listHashs
 
-[src/groupedDataframe.js:100-102](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L100-L102 "Source code on GitHub")
+[src/groupedDataframe.js:100-102](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L100-L102 "Source code on GitHub")
 
 List GroupedDataFrame groups as a hashCode.
 
@@ -86,7 +86,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 # aggregate
 
-[src/groupedDataframe.js:113-118](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L113-L118 "Source code on GitHub")
+[src/groupedDataframe.js:113-118](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L113-L118 "Source code on GitHub")
 
 Create an aggregation from a function.
 
@@ -105,7 +105,7 @@ Returns **DataFrame** A new DataFrame with a column 'aggregation' containing the
 
 # pivot
 
-[src/groupedDataframe.js:129-139](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L129-L139 "Source code on GitHub")
+[src/groupedDataframe.js:129-139](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L129-L139 "Source code on GitHub")
 
 Pivot a GroupedDataFrame.
 
@@ -124,7 +124,7 @@ Returns **DataFrame** The pivot DataFrame.
 
 # melt
 
-[src/groupedDataframe.js:149-171](https://github.com/Gmousse/dataframe-js/blob/643e9e7c361eca70ee2ec16b181a045e65623649/src/groupedDataframe.js#L149-L171 "Source code on GitHub")
+[src/groupedDataframe.js:149-171](https://github.com/Gmousse/dataframe-js/blob/a0683cbf6edf3fbb2b24c6140aba7b05fa0869e2/src/groupedDataframe.js#L149-L171 "Source code on GitHub")
 
 Melt a DataFrame to make it tidy. It's the reverse of GroupedDataFrame.pivot().
 

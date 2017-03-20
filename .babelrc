@@ -2,7 +2,8 @@
     "presets": ["es2015", "stage-0"],
     "plugins": [
         "transform-decorators-legacy", "transform-decorators", "transform-runtime",
-        ["transform-es3-member-expression-literals", {"loose": true}],
-        ["transform-es3-property-literals", {"loose": true}]
+        ["transform-es2015-modules-commonjs", {"loose": true}],
+        "transform-es3-member-expression-literals",
+        "transform-es3-property-literals"
      ]
 }

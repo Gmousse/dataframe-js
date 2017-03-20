@@ -11,7 +11,7 @@
 **Changes**:
 - Adding .pivot().
 - Adding .melt().
-- Better umd code compression (~400k -> ~100k).
+- Better umd code compression.
 - Cleaning the repo.
 - The documentation is now under gitbook.
 
