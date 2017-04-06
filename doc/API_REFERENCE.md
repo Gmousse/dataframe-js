@@ -37,6 +37,7 @@ Columns manipulation:
   [.fullJoin()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fullJoin),
   [.leftJoin()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#leftJoin),
   [.rightJoin()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#rightJoin)
+  [.diff()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#diff)
 
 Rows manipulation:
   [.transpose()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#transpose),
