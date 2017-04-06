@@ -10,7 +10,7 @@
 
 **Changes**:
 - Bugfix on join methods. They have now a correct behaviour. Thanks to @PaulMest
-- .joinOuter had a wrong behaviour, making the difference between dataframes. .outerJoin is now an alias for .fullJoin. The old behaviour can now be find into .diff.
+- .outerJoin had a wrong behaviour. It would show the difference between dataframes. .outerJoin is now an alias for .fullJoin. The old behaviour can now be found in .diff.
 - Tests on join methods are now splitted into a single file dataframe_join-test.js. In the future, each test will be splitted by category of functions.
 
 ---
