@@ -838,18 +838,6 @@ class DataFrame {
     }
 
     /**
-     * Find the differences between two DataFrames (reverse of join).
-     * @param {DataFrame} dfToDiff The DataFrame to diff.
-     * @param {String | Array} columnNames The selected columns for the diff.
-     * @returns {DataFrame} The differences DataFrame.
-     * @example
-     * df2.diff(df2, 'id')
-     */
-    diff(dfToDiff, columnNames) {
-        return this._join(dfToDiff, columnNames, ['out', 'out']);
-    }
-
-    /**
      * Join two DataFrames with left mode.
      * @param {DataFrame} dfToJoin The DataFrame to join.
      * @param {String | Array} columnNames The selected columns for the join.
@@ -873,6 +861,18 @@ class DataFrame {
      */
     rightJoin(dfToJoin, columnNames) {
         return this._join(dfToJoin, columnNames, ['in', 'full']);
+    }
+
+    /**
+     * Find the differences between two DataFrames (reverse of join).
+     * @param {DataFrame} dfToDiff The DataFrame to diff.
+     * @param {String | Array} columnNames The selected columns for the diff.
+     * @returns {DataFrame} The differences DataFrame.
+     * @example
+     * df2.diff(df2, 'id')
+     */
+    diff(dfToDiff, columnNames) {
+        return this._join(dfToDiff, columnNames, ['out', 'out']);
     }
 }
 

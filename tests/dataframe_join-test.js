@@ -140,27 +140,27 @@ test('DataFrame can be joined', (assert) => {
 });
 
 test('DataFrame can be diff', (assert) => {
-    const df2 = new DataFrame({
+    const df = new DataFrame({
         id: [3, 3, 1, 8],
         id2: ['a', 'b', 'a', 'c'],
         value: [1, 2, 0, 1],
     }, ['id', 'id2', 'value']);
 
-    const df2b = new DataFrame({
+    const dfb = new DataFrame({
         id: [2, 1, 6, 8, 3, 3],
         id2: ['a', 'a', 'c', 'c', 'b', 'b'],
         value2: [1, 0, 1, 2, 6, 5],
     }, ['id', 'id2', 'value2']);
 
     assert.deepEqual(
-        df2.diff(df2b, 'id').sortBy('id').toCollection(), [
+        df.diff(dfb, 'id').sortBy('id').toCollection(), [
             { id: 2, id2: 'a', value: undefined, value2: 1 },
             { id: 6, id2: 'c', value: undefined, value2: 1 },
         ], 'simply.'
     );
 
     assert.deepEqual(
-        df2.diff(df2b, ['id', 'id2']).sortBy('id').toCollection(), [
+        df.diff(dfb, ['id', 'id2']).sortBy('id').toCollection(), [
             { id: 2, id2: 'a', value: undefined, value2: 1 },
             { id: 3, id2: 'a', value: 1, value2: undefined },
             { id: 6, id2: 'c', value: undefined, value2: 1 },

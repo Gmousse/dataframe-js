@@ -2,6 +2,19 @@
 
 ---
 
+## v1.2.2
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Bugfix on join methods. They have now a correct behaviour. Thanks to @PaulMest
+- .joinOuter had a wrong behaviour, making the difference between dataframes. .outerJoin is now an alias for .fullJoin. The old behaviour can now be find into .diff.
+- Tests on join methods are now splitted into a single file dataframe_join-test.js. In the future, each test will be splitted by category of functions.
+
+---
+
 ## v1.2.1
 
 **Author**: Guillaume Mousnier.
