@@ -216,7 +216,7 @@ class DataFrame {
         return [this.__newInstance__([], newColumns), ...iter([
             ...(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []),
             ...(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : []),
-        ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n));
+        ], group => group.restructure(newColumns))].reduce((p, n) => p.union(n)).dropDuplicates();
     }
 
     _cleanSavePath(path) {
@@ -830,11 +830,11 @@ class DataFrame {
      * @param {String | Array} columnNames The selected columns for the join.
      * @returns {DataFrame} The joined DataFrame.
      * @example
-     * df2.rightJoin(df2, 'id')
+     * df2.outerJoin(df2, 'id')
      * df2.join(df2, 'id', 'outer')
      */
     outerJoin(dfToJoin, columnNames) {
-        return this._join(dfToJoin, columnNames, ['out', 'out']);
+        return this.fullJoin(dfToJoin, columnNames);
     }
 
     /**
@@ -861,6 +861,18 @@ class DataFrame {
      */
     rightJoin(dfToJoin, columnNames) {
         return this._join(dfToJoin, columnNames, ['in', 'full']);
+    }
+
+    /**
+     * Find the differences between two DataFrames (reverse of join).
+     * @param {DataFrame} dfToDiff The DataFrame to diff.
+     * @param {String | Array} columnNames The selected columns for the diff.
+     * @returns {DataFrame} The differences DataFrame.
+     * @example
+     * df2.diff(df2, 'id')
+     */
+    diff(dfToDiff, columnNames) {
+        return this._join(dfToDiff, columnNames, ['out', 'out']);
     }
 }
 

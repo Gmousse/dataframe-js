@@ -8737,7 +8737,7 @@ var dfjs =
 	                return group.restructure(newColumns);
 	            }))).reduce(function (p, n) {
 	                return p.union(n);
-	            });
+	            }).dropDuplicates();
 	        }
 	    }, {
 	        key: '_cleanSavePath',
@@ -9565,14 +9565,14 @@ var dfjs =
 	         * @param {String | Array} columnNames The selected columns for the join.
 	         * @returns {DataFrame} The joined DataFrame.
 	         * @example
-	         * df2.rightJoin(df2, 'id')
+	         * df2.outerJoin(df2, 'id')
 	         * df2.join(df2, 'id', 'outer')
 	         */
 
 	    }, {
 	        key: 'outerJoin',
 	        value: function outerJoin(dfToJoin, columnNames) {
-	            return this._join(dfToJoin, columnNames, ['out', 'out']);
+	            return this.fullJoin(dfToJoin, columnNames);
 	        }
 
 	        /**
@@ -9605,6 +9605,21 @@ var dfjs =
 	        key: 'rightJoin',
 	        value: function rightJoin(dfToJoin, columnNames) {
 	            return this._join(dfToJoin, columnNames, ['in', 'full']);
+	        }
+
+	        /**
+	         * Find the differences between two DataFrames (reverse of join).
+	         * @param {DataFrame} dfToDiff The DataFrame to diff.
+	         * @param {String | Array} columnNames The selected columns for the diff.
+	         * @returns {DataFrame} The differences DataFrame.
+	         * @example
+	         * df2.diff(df2, 'id')
+	         */
+
+	    }, {
+	        key: 'diff',
+	        value: function diff(dfToDiff, columnNames) {
+	            return this._join(dfToDiff, columnNames, ['out', 'out']);
 	        }
 	    }]);
 	    return DataFrame;
