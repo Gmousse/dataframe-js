@@ -2,6 +2,7 @@ import { checktypes } from 'es7-checktypes-decorator';
 
 import { match, arrayEqual } from './reusables.js';
 import { NoSuchColumnError } from './errors.js';
+import { hashCode } from './reusables.js';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
@@ -89,6 +90,16 @@ class Row {
      */
     size() {
         return this[__columns__].length;
+    }
+
+    /**
+     * Get the Row hash code.
+     * @returns {Str} The Row hash unique code.
+     * @example
+     * row.hash()
+     */
+    hash() {
+        return hashCode(JSON.stringify(this[__values__]));
     }
 
     /**

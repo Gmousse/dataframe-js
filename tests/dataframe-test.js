@@ -549,9 +549,9 @@ test('DataFrame rows can be ', (assert) => {
 
     assert.deepEqual(
         df4.groupBy('id', 'id2').aggregate(group => group.count()).toDict(), {
-            id: [3, 3, 6, 8, 1, 1],
-            id2: ['a', 'b', 'a', 'b', 'b', 'c'],
-            aggregation: [2, 1, 1, 2, 1, 1],
+            id: [3, 6, 8, 1, 1, 3],
+            id2: ['a', 'a', 'b', 'c', 'b', 'b'],
+            aggregation: [2, 1, 2, 1, 1, 1],
         }, 'groupBy on multiple columns and compute the count by group.'
     );
 
