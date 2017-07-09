@@ -20,9 +20,9 @@
   },
   "main": "./lib/index.js",
   "scripts": {
-    "lint": "eslint -c .eslintrc ./src",
-    "pretest": "check-node-version --node '>= 4' || npm run lint",
+    "lint": "check-node-version --node '>= 4' && eslint -c .eslintrc ./src || check-node-version --node '< 4'",
     "test": "NODE_ENV=production nyc babel-tape-runner 'tests/*-test.js' | tap-diff",
+    "posttest": "npm run lint",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "doc": "babel-node doc/doc.js",
     "checkes3": "check-es3-syntax lib/ --kill --print",
