@@ -23,7 +23,7 @@ module.exports = {
                 warnings: false,
             },
             mangle: {
-                keep_fnames: false,
+                keep_fnames: true,
             },
         }),
     ] : [],
