@@ -1,8 +1,10 @@
+const webpack = require('webpack');
+const production = process.env.NODE_ENV === 'production';
 module.exports = {
     entry: './src/index.js',
     output: {
         path: __dirname,
-        filename: process.env.NODE_ENV === 'production' ? './dist/dataframe-min.js' : './dist/dataframe.js',
+        filename: production ? './dist/dataframe-min.js' : './dist/dataframe.js',
         library: 'dfjs',
     },
     node: {
@@ -15,4 +17,14 @@ module.exports = {
             loaders: ['babel-loader'],
         }],
     },
+    plugins: production ? [
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+            },
+            mangle: {
+                keep_fnames: false,
+            },
+        }),
+    ] : [],
 };

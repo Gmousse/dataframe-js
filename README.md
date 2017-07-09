@@ -49,6 +49,8 @@ in the browser:
   * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
   * minified (production): `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>`
 
+/!\ If if you want to build an uglified application using dataframe-js (e.g. webpack -p), please consider the dataframe-js webpack.config.js or use uglyjs --keep-fnames option.
+
 ## Usage
 
 [Basic Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/BASIC_USAGE.html)
