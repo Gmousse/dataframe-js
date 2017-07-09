@@ -8191,7 +8191,7 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _dec, _dec2, _dec3, _dec4, _dec5, _desc, _value, _class;
+	var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _desc, _value, _class;
 
 	var _es7ChecktypesDecorator = __webpack_require__(443);
 
@@ -8248,7 +8248,7 @@ var dfjs =
 	/**
 	 * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 	 */
-	var DataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec3 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec4 = (0, _es7ChecktypesDecorator.checktypes)(['DataFrame', Array, Object]), _dec5 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', ['Array', 'String']), (_class = function () {
+	var DataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec3 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec4 = (0, _es7ChecktypesDecorator.checktypes)(['DataFrame', Array, Object]), _dec5 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', ['Array', 'String']), _dec6 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame'), (_class = function () {
 	    (0, _createClass3['default'])(DataFrame, null, [{
 	        key: 'setDefaultModules',
 
@@ -9305,6 +9305,8 @@ var dfjs =
 	            });
 	            return this.__newInstance__(sortedRows, this[__columns__]);
 	        }
+	    }, {
+	        key: 'union',
 
 	        /**
 	         * Concat two DataFrames.
@@ -9313,9 +9315,6 @@ var dfjs =
 	         * @example
 	         * df.union(df2)
 	         */
-
-	    }, {
-	        key: 'union',
 	        value: function union(dfToUnion) {
 	            if (!(0, _reusables.arrayEqual)(this[__columns__], dfToUnion[__columns__])) {
 	                throw new _errors.WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
@@ -9457,7 +9456,7 @@ var dfjs =
 	        }
 	    }]);
 	    return DataFrame;
-	}(), (_applyDecoratedDescriptor(_class, 'fromText', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec5], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_join'), _class.prototype)), _class));
+	}(), (_applyDecoratedDescriptor(_class, 'fromText', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec5], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_join'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'union', [_dec6], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'union'), _class.prototype)), _class));
 	exports['default'] = DataFrame;
 
 /***/ }),
@@ -12491,15 +12490,28 @@ var dfjs =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+	function isNull(arg) {
+	    return arg === null;
+	}
+
 	var ArgumentTypeError = function (_TypeError) {
 	    (0, _inherits3['default'])(ArgumentTypeError, _TypeError);
 
 	    function ArgumentTypeError(arg, argName, supportedTypes) {
 	        (0, _classCallCheck3['default'])(this, ArgumentTypeError);
 
-	        var _this = (0, _possibleConstructorReturn3['default'])(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2['default'])(ArgumentTypeError)).call(this));
+	        var _this = (0, _possibleConstructorReturn3['default'])(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2['default'])(ArgumentTypeError)).call(this, TypeError));
 
-	        _this.message = argName + ' expected as one of [' + supportedTypes.join(', ') + '], ' + ('not as a ' + (typeof arg === 'undefined' ? 'undefined' : (0, _typeof3['default'])(arg)) + (arg.constructor ? ' | ' + arg.constructor.name : '') + '.');
+	        var argType = function () {
+	            try {
+	                if (isNull(arg)) return 'null';
+	                return '' + (typeof arg === 'undefined' ? 'undefined' : (0, _typeof3['default'])(arg)) + (arg.constructor ? ' | ' + arg.constructor.name : '');
+	            } catch (e) {
+	                return '' + (typeof arg === 'undefined' ? 'undefined' : (0, _typeof3['default'])(arg));
+	            }
+	        }();
+	        _this.message = argName + ' expected as one of [' + supportedTypes.join(', ') + '], ' + ('not as a ' + argType + '.');
+	        _this.name = 'ArgumentTypeError';
 	        return _this;
 	    }
 
@@ -12516,7 +12528,20 @@ var dfjs =
 	}
 
 	function isOfType(variable, type) {
-	    return typeof type === 'string' ? variable.constructor && variable.constructor.name === type || (typeof variable === 'undefined' ? 'undefined' : (0, _typeof3['default'])(variable)) === type.toLowerCase() : variable instanceof type;
+	    try {
+	        if (typeof type === 'string') {
+	            if (type.toLowerCase() === 'null') {
+	                return isNull(variable);
+	            }
+	            return (typeof variable === 'undefined' ? 'undefined' : (0, _typeof3['default'])(variable)) === type.toLowerCase() || variable.constructor && variable.constructor.name === type;
+	        }
+	        if (isNull(type)) {
+	            return isNull(variable);
+	        }
+	        return variable instanceof type;
+	    } catch (e) {
+	        return false;
+	    }
 	}
 
 	function checkArgType(arg, argName, expectedTypes) {
@@ -12538,10 +12563,8 @@ var dfjs =
 	            args[_key] = arguments[_key];
 	        }
 
-	        args.forEach(function (arg, index) {
-	            if (types[index]) {
-	                checkArgType(arg, argNames[index], Array.isArray(types[index]) ? types[index] : [types[index]]);
-	            }
+	        types.forEach(function (type, index) {
+	            checkArgType(args[index], argNames[index], Array.isArray(type) ? type : [type]);
 	        });
 	        if (isClass) {
 	            return new (Function.prototype.bind.apply(Func, [null].concat(args)))();
@@ -13439,7 +13462,6 @@ var dfjs =
 	exports.isNumber = isNumber;
 	exports.arrayEqual = arrayEqual;
 	exports.transpose = transpose;
-	exports.combine = combine;
 	exports.makeGenerator = makeGenerator;
 	exports.match = match;
 	exports.iter = iter;
@@ -13494,21 +13516,6 @@ var dfjs =
 	        return table.map(function (row) {
 	            return row[index];
 	        });
-	    });
-	}
-
-	function combine(table) {
-	    var memory = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-	    if (table.length === 1) {
-	        return table[0].map(function (elem) {
-	            return [].concat((0, _toConsumableArray3['default'])(memory), [elem]);
-	        });
-	    }
-	    return table[0].map(function (elem) {
-	        return combine(table.slice(1, table.length), [].concat((0, _toConsumableArray3['default'])(memory), [elem]));
-	    }).reduce(function (p, n) {
-	        return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	    });
 	}
 
@@ -13777,13 +13784,13 @@ var dfjs =
 	    return MixedTypeError;
 	}(TypeError);
 
-	var NoSuchColumnError = exports.NoSuchColumnError = function (_TypeError2) {
-	    (0, _inherits3['default'])(NoSuchColumnError, _TypeError2);
+	var NoSuchColumnError = exports.NoSuchColumnError = function (_Error) {
+	    (0, _inherits3['default'])(NoSuchColumnError, _Error);
 
 	    function NoSuchColumnError(column, columns) {
 	        (0, _classCallCheck3['default'])(this, NoSuchColumnError);
 
-	        var _this2 = (0, _possibleConstructorReturn3['default'])(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2['default'])(NoSuchColumnError)).call(this));
+	        var _this2 = (0, _possibleConstructorReturn3['default'])(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2['default'])(NoSuchColumnError)).call(this, Error));
 
 	        _this2.message = column + ' not found in [' + columns.join(', ') + '].';
 	        _this2.name = 'NoSuchColumnError';
@@ -13791,15 +13798,15 @@ var dfjs =
 	    }
 
 	    return NoSuchColumnError;
-	}(TypeError);
+	}(Error);
 
-	var WrongSchemaError = exports.WrongSchemaError = function (_Error) {
-	    (0, _inherits3['default'])(WrongSchemaError, _Error);
+	var WrongSchemaError = exports.WrongSchemaError = function (_Error2) {
+	    (0, _inherits3['default'])(WrongSchemaError, _Error2);
 
 	    function WrongSchemaError(columns, expected) {
 	        (0, _classCallCheck3['default'])(this, WrongSchemaError);
 
-	        var _this3 = (0, _possibleConstructorReturn3['default'])(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2['default'])(WrongSchemaError)).call(this));
+	        var _this3 = (0, _possibleConstructorReturn3['default'])(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2['default'])(WrongSchemaError)).call(this, Error));
 
 	        _this3.message = '[' + columns.join(', ') + '] while expecting [' + expected.join(', ') + '].';
 	        _this3.name = 'WrongSchemaError';
@@ -13809,13 +13816,13 @@ var dfjs =
 	    return WrongSchemaError;
 	}(Error);
 
-	var SQLParseError = exports.SQLParseError = function (_Error2) {
-	    (0, _inherits3['default'])(SQLParseError, _Error2);
+	var SQLParseError = exports.SQLParseError = function (_Error3) {
+	    (0, _inherits3['default'])(SQLParseError, _Error3);
 
 	    function SQLParseError(message) {
 	        (0, _classCallCheck3['default'])(this, SQLParseError);
 
-	        var _this4 = (0, _possibleConstructorReturn3['default'])(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2['default'])(SQLParseError)).call(this));
+	        var _this4 = (0, _possibleConstructorReturn3['default'])(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2['default'])(SQLParseError)).call(this, Error));
 
 	        _this4.message = message + '.';
 	        _this4.name = 'SQLParseError';
@@ -13825,13 +13832,13 @@ var dfjs =
 	    return SQLParseError;
 	}(Error);
 
-	var TableAlreadyExistsError = exports.TableAlreadyExistsError = function (_Error3) {
-	    (0, _inherits3['default'])(TableAlreadyExistsError, _Error3);
+	var TableAlreadyExistsError = exports.TableAlreadyExistsError = function (_Error4) {
+	    (0, _inherits3['default'])(TableAlreadyExistsError, _Error4);
 
 	    function TableAlreadyExistsError(tableName) {
 	        (0, _classCallCheck3['default'])(this, TableAlreadyExistsError);
 
-	        var _this5 = (0, _possibleConstructorReturn3['default'])(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2['default'])(TableAlreadyExistsError)).call(this));
+	        var _this5 = (0, _possibleConstructorReturn3['default'])(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2['default'])(TableAlreadyExistsError)).call(this, Error));
 
 	        _this5.message = 'The SQL temporary table ' + tableName + ' already exits. Use overwrite = true to overwrite it.';
 	        _this5.name = 'TableAlreadyExistsError';
@@ -13848,10 +13855,6 @@ var dfjs =
 	'use strict';
 
 	exports.__esModule = true;
-
-	var _getOwnPropertyDescriptor = __webpack_require__(298);
-
-	var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
 	var _stringify = __webpack_require__(374);
 
@@ -13925,7 +13928,7 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _dec, _desc, _value, _class;
+	var _dec, _class;
 
 	var _es7ChecktypesDecorator = __webpack_require__(443);
 
@@ -13935,42 +13938,13 @@ var dfjs =
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-	function _applyDecoratedDescriptor(target, property, decorators, descriptor, context) {
-	    var desc = {};
-	    Object['ke' + 'ys'](descriptor).forEach(function (key) {
-	        desc[key] = descriptor[key];
-	    });
-	    desc.enumerable = !!desc.enumerable;
-	    desc.configurable = !!desc.configurable;
-
-	    if ('value' in desc || desc.initializer) {
-	        desc.writable = true;
-	    }
-
-	    desc = decorators.slice().reverse().reduce(function (desc, decorator) {
-	        return decorator(target, property, desc) || desc;
-	    }, desc);
-
-	    if (context && desc.initializer !== void 0) {
-	        desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-	        desc.initializer = undefined;
-	    }
-
-	    if (desc.initializer === void 0) {
-	        Object['define' + 'Property'](target, property, desc);
-	        desc = null;
-	    }
-
-	    return desc;
-	}
-
 	var __columns__ = (0, _symbol2['default'])('columns');
 	var __values__ = (0, _symbol2['default'])('values');
 
 	/**
 	 * Row data structure used into the dataframe-js.
 	 */
-	var Row = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['Row', Array, Object]), (_class = function () {
+	var Row = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['Row', Array, Object]), _dec(_class = function () {
 	    /**
 	     * Create a new Row.
 	     * @param {Array | Object | Row} data The data of the Row.
@@ -14148,7 +14122,7 @@ var dfjs =
 
 	        /**
 	         * Get the Row hash code.
-	         * @returns {Str} The Row hash unique code.
+	         * @returns {Int} The Row hash unique code.
 	         * @example
 	         * row.hash()
 	         */
@@ -14247,7 +14221,7 @@ var dfjs =
 	        }
 	    }]);
 	    return Row;
-	}(), (_applyDecoratedDescriptor(_class.prototype, '_build', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype)), _class));
+	}()) || _class);
 	exports['default'] = Row;
 
 /***/ }),
@@ -14396,14 +14370,13 @@ var dfjs =
 	    function GroupedDataFrame(df) {
 	        (0, _classCallCheck3['default'])(this, GroupedDataFrame);
 
-	        this.df = df;
-
 	        for (var _len = arguments.length, columnNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	            columnNames[_key - 1] = arguments[_key];
 	        }
 
-	        this.on = columnNames.length > 0 ? columnNames : df.listColumns();
 	        this[__groups__] = this._groupBy(df, columnNames);
+	        this.df = df;
+	        this.on = columnNames.length > 0 ? columnNames : df.listColumns();
 	    }
 
 	    (0, _createClass3['default'])(GroupedDataFrame, [{
@@ -14483,8 +14456,7 @@ var dfjs =
 	            var hashedDF = df.withColumn('hash', function (row) {
 	                return row.select.apply(row, (0, _toConsumableArray3['default'])(columnNames)).hash();
 	            });
-	            var a = hashedDF.distinct('hash').toArray('hash');
-	            return a.map(function (hash) {
+	            return hashedDF.distinct('hash').toArray('hash').map(function (hash) {
 	                var _group$toCollection$;
 
 	                var group = hashedDF.filter(function (row) {
