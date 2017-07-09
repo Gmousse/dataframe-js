@@ -36,28 +36,26 @@ test('GroupedDataFrame can be ', (assert) => {
         [['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group']],
         'converted into a collection of dictionnaries containing each group.'
     );
-
     assert.deepEqual([...new GroupedDataFrame(df, 'column1')].map(x => Object.keys(x)),
         [['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group'], ['groupKey', 'hash', 'group']],
         'converted into a collection of dictionnaries containing each group when destructured.'
     );
-
     assert.deepEqual(
         new GroupedDataFrame(df, 'column1', 'column3').show(true), [
             '--\n[{"column1":1}]\n--',
             '| column1   | column2   | column3   |',
             '------------------------------------',
             '| 1         | On the... | undefined |',
-            '--\n[{"column1":1,"column3":null}]\n--',
-            '| column1   | column2   | column3   |',
-            '------------------------------------',
-            '| 1         | again     | NaN       |',
-            '| 1         | On the... | NaN       |',
             '--\n[{"column1":3}]\n--',
             '| column1   | column2   | column3   |',
             '------------------------------------',
             '| 3         | again     | undefined |',
             '| 3         | On the... | undefined |',
+            '--\n[{"column1":1,"column3":null}]\n--',
+            '| column1   | column2   | column3   |',
+            '------------------------------------',
+            '| 1         | again     | NaN       |',
+            '| 1         | On the... | NaN       |',
             '--\n[{"column1":2}]\n--',
             '| column1   | column2   | column3   |',
             '------------------------------------',
@@ -70,22 +68,8 @@ test('GroupedDataFrame can be ', (assert) => {
 });
 
 test('GroupedDataFrame can\'t be ', (assert) => {
-    const df = new DataFrame([
-        {'column1': 1, 'column2': 'On the road', 'column3': undefined},
-        {'column1': 3, 'column2': 'again', 'column3': undefined},
-        {'column1': 1, 'column2': 'again', 'column3': NaN},
-        {'column1': 3, 'column2': 'On the road', 'column3': undefined},
-        {'column1': 1, 'column2': 'On the road', 'column3': NaN},
-        {'column1': 2, 'column2': 'again', 'column3': undefined},
-    ], ['column1', 'column2', 'column3']);
-
-    assert.equal(tryCatch(() => new GroupedDataFrame(df)).name,
-        'TypeError',
-        'created without column names.'
-    );
-
     assert.equal(tryCatch(() => new GroupedDataFrame()).name,
-        'TypeError',
+        'ArgumentTypeError',
         'created without DataFrame.'
     );
 
@@ -105,9 +89,9 @@ test('GroupedDataFrame groups can be ', (assert) => {
     assert.deepEqual(
         new GroupedDataFrame(df, 'column1', 'column2').listGroups(), [
             { column1: 1, column2: 'On the road' },
+            { column1: 3, column2: 'again' },
             { column1: 1, column2: 'again' },
             { column1: 3, column2: 'On the road' },
-            { column1: 3, column2: 'again' },
             { column1: 2, column2: 'again' },
         ],
         'listed.'

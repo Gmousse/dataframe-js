@@ -25,13 +25,6 @@ export function transpose(table) {
     return [...Array(tableSize).keys()].map((index) => table.map(row => row[index]));
 }
 
-export function combine(table, memory = []) {
-    if (table.length === 1) {
-        return table[0].map(elem => [...memory, elem]);
-    }
-    return table[0].map(elem => combine(table.slice(1, table.length), [...memory, elem])).reduce((p, n) => [...p, ...n]);
-}
-
 export function* makeGenerator(x) {
     yield* x;
 }

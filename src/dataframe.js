@@ -763,6 +763,7 @@ class DataFrame {
         return this.__newInstance__(sortedRows, this[__columns__]);
     }
 
+    @checktypes('DataFrame')
     /**
      * Concat two DataFrames.
      * @param {DataFrame} dfToUnion The DataFrame to concat.

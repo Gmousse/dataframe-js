@@ -164,14 +164,14 @@ test('DataFrame sql module can ', (assert) => {
 test('DataFrame sql module can\'t ', (assert) => {
     assert.equal(
         tryCatch(() => DataFrame.sql.registerTable([], 'tmp3')).name,
-        'TypeError',
+        'ArgumentTypeError',
         'register a table which is not a DataFrame.'
     );
 
     assert.equal(
         tryCatch(() => DataFrame.sql.request()).name,
-        'TypeError',
-        'execute a query which is not a String, throwing TypeError.'
+        'ArgumentTypeError',
+        'execute a query which is not a String, throwing ArgumentTypeError.'
     );
 
     assert.equal(
