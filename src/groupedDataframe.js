@@ -1,7 +1,5 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import { hashCode } from './reusables.js';
-
 const __groups__ = Symbol('groups');
 
 /**
@@ -19,9 +17,9 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
+        this[__groups__] = this._groupBy(df, columnNames);
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
-        this[__groups__] = this._groupBy(df, columnNames);
     }
 
     * [Symbol.iterator]() {
@@ -33,12 +31,11 @@ export default class GroupedDataFrame {
     @checktypes('DataFrame', Array)
     _groupBy(df, columnNames) {
         const hashedDF = df.withColumn('hash', row => row.select(...columnNames).hash());
-        const a = hashedDF.distinct('hash').toArray('hash');
-        return a.map(
+        return hashedDF.distinct('hash').toArray('hash').map(
             hash => {
-                const group = hashedDF.filter(
-                    (row) => row.get('hash') === hash
-                ).drop('hash');
+                const group = hashedDF
+                    .filter((row) => row.get('hash') === hash)
+                    .drop('hash');
                 return ({
                     groupKey: group.toCollection(true)[0].select(...columnNames).toDict(),
                     hash,

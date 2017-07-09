@@ -87,26 +87,26 @@ test('DataFrame matrix module can\'t', (assert) => {
 
     assert.equal(
         tryCatch(() => df1.matrix.add().toDict()).name,
-        'TypeError',
-        'realize a pairwise sum between a DataFrame and another type, throwing TypeError.'
+        'ArgumentTypeError',
+        'realize a pairwise sum between a DataFrame and another type, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => df1.matrix.isCommutative().toDict()).name,
-        'TypeError',
-        'realize a commutative check between a DataFrame and another type, throwing TypeError.'
+        'ArgumentTypeError',
+        'realize a commutative check between a DataFrame and another type, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => df1.matrix.product('yolo').toDict()).name,
-        'TypeError',
-        'realize a scalar product between a DataFrame and not a Number, throwing TypeError.'
+        'ArgumentTypeError',
+        'realize a scalar product between a DataFrame and not a Number, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => df1.matrix.dot().toDict()).name,
-        'TypeError',
-        'realize a matrix multiplication between a DataFrame and another type, throwing TypeError.'
+        'ArgumentTypeError',
+        'realize a matrix multiplication between a DataFrame and another type, throwing ArgumentTypeError.'
     );
 
     assert.end();

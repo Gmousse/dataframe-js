@@ -7,6 +7,7 @@ import { hashCode } from './reusables.js';
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
 
+@checktypes(['Row', Array, Object])
 /**
  * Row data structure used into the dataframe-js.
  */
@@ -45,7 +46,6 @@ class Row {
         );
     }
 
-    @checktypes(['Row', Array, Object])
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
@@ -94,7 +94,7 @@ class Row {
 
     /**
      * Get the Row hash code.
-     * @returns {Str} The Row hash unique code.
+     * @returns {Int} The Row hash unique code.
      * @example
      * row.hash()
      */

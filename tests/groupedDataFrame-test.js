@@ -69,7 +69,7 @@ test('GroupedDataFrame can be ', (assert) => {
 
 test('GroupedDataFrame can\'t be ', (assert) => {
     assert.equal(tryCatch(() => new GroupedDataFrame()).name,
-        'TypeError',
+        'ArgumentTypeError',
         'created without DataFrame.'
     );
 
