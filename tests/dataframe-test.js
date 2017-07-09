@@ -257,11 +257,11 @@ test('DataFrame can be', (assert) => {
 });
 
 test('DataFrame can\'t be', (assert) => {
-    assert.equal(tryCatch(() => new DataFrame('')).name, 'TypeError', 'created from a String, throwing TypeError.');
+    assert.equal(tryCatch(() => new DataFrame('')).name, 'ArgumentTypeError', 'created from a String, throwing ArgumentTypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame()).name, 'TypeError', 'created from a nothing, throwing TypeError.');
+    assert.equal(tryCatch(() => new DataFrame()).name, 'ArgumentTypeError', 'created from a nothing, throwing ArgumentTypeError.');
 
-    assert.equal(tryCatch(() => new DataFrame(445)).name, 'TypeError', 'created from a Number, throwing TypeError.');
+    assert.equal(tryCatch(() => new DataFrame(445)).name, 'ArgumentTypeError', 'created from a Number, throwing ArgumentTypeError.');
 
     assert.end();
 });
@@ -549,9 +549,9 @@ test('DataFrame rows can be ', (assert) => {
 
     assert.deepEqual(
         df4.groupBy('id', 'id2').aggregate(group => group.count()).toDict(), {
-            id: [3, 3, 6, 8, 1, 1],
-            id2: ['a', 'b', 'a', 'b', 'b', 'c'],
-            aggregation: [2, 1, 1, 2, 1, 1],
+            id: [3, 6, 8, 1, 1, 3],
+            id2: ['a', 'a', 'b', 'c', 'b', 'b'],
+            aggregation: [2, 1, 2, 1, 1, 1],
         }, 'groupBy on multiple columns and compute the count by group.'
     );
 
@@ -693,14 +693,14 @@ test('DataFrame rows can\'t be ', (assert) => {
 
     assert.equal(
         tryCatch(() => new DataFrame([{c1: 1, c2: 3}]).union([])).name,
-        'TypeError',
-        'concatened with not a DataFrame, throwing TypeError.'
+        'ArgumentTypeError',
+        'concatened with not a DataFrame, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => new DataFrame([{c1: 1, c2: 3}]).innerJoin([])).name,
-        'TypeError',
-        'joined with not a DataFrame, throwing TypeError.'
+        'ArgumentTypeError',
+        'joined with not a DataFrame, throwing ArgumentTypeError.'
     );
 
     assert.equal(

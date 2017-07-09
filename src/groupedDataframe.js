@@ -1,7 +1,5 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import { combine, hashCode } from './reusables.js';
-
 const __groups__ = Symbol('groups');
 
 /**
@@ -19,9 +17,9 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
-        this.df = df;
-        this.on = columnNames;
         this[__groups__] = this._groupBy(df, columnNames);
+        this.df = df;
+        this.on = columnNames.length > 0 ? columnNames : df.listColumns();
     }
 
     * [Symbol.iterator]() {
@@ -30,21 +28,18 @@ export default class GroupedDataFrame {
         }
     }
 
-    __hashKey__(groupKey) {
-        return hashCode(Object.entries(groupKey).reduce((p, n) => [...p, ...n]).join(''));
-    }
-
     @checktypes('DataFrame', Array)
     _groupBy(df, columnNames) {
-        return combine(columnNames.map((column) => df.distinct(column).toArray(column))).map(
-            combination => {
-                const groupKey = Object.assign({}, ...combination.map((column, i) => ({[columnNames[i]]: column})));
+        const hashedDF = df.withColumn('hash', row => row.select(...columnNames).hash());
+        return hashedDF.distinct('hash').toArray('hash').map(
+            hash => {
+                const group = hashedDF
+                    .filter((row) => row.get('hash') === hash)
+                    .drop('hash');
                 return ({
-                    groupKey,
-                    hash: this.__hashKey__(groupKey),
-                    group: df.filter(
-                        (row) => Object.entries(groupKey).reduce((p, n) => p && Object.is(row.get(n[0]), n[1]), true)
-                    ),
+                    groupKey: group.toCollection(true)[0].select(...columnNames).toDict(),
+                    hash,
+                    group,
                 });
             }
         ).filter(({group}) => group.count() > 0);

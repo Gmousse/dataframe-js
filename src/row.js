@@ -2,10 +2,12 @@ import { checktypes } from 'es7-checktypes-decorator';
 
 import { match, arrayEqual } from './reusables.js';
 import { NoSuchColumnError } from './errors.js';
+import { hashCode } from './reusables.js';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
 
+@checktypes(['Row', Array, Object])
 /**
  * Row data structure used into the dataframe-js.
  */
@@ -44,7 +46,6 @@ class Row {
         );
     }
 
-    @checktypes(['Row', Array, Object])
     _build(data) {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
@@ -89,6 +90,16 @@ class Row {
      */
     size() {
         return this[__columns__].length;
+    }
+
+    /**
+     * Get the Row hash code.
+     * @returns {Int} The Row hash unique code.
+     * @example
+     * row.hash()
+     */
+    hash() {
+        return hashCode(JSON.stringify(this[__values__]));
     }
 
     /**

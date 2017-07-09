@@ -2,6 +2,25 @@
 
 ---
 
+## v1.2.3
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- A critical performance issue related to GroupedDataFrame is now resolved. **GroupedDataFrame, DataFrame.groupBy, DataFrame.join(s), DataFrame.diff, DataFrame.dropDuplicates are now 10000 x faster** than previously. See below for the detail:
+    - Removing shitty combine function which was the cause of the performance issue.
+    - Adding a Row.hash generating the hash id for a row.
+    - Modifying GroupedDataFrame._groupBy to resolve the performance issue.
+- Error messages are now displayed correctly.
+- NoSuchColumnError is now correctly typed (not TypeError) but simply an Error.
+- DataFrame Errors are now exported in the Errors module.
+- Updating es7-checktypes-decorator to 0.2.1 for the same purpose.
+- Better Error handling on missing or wrong parameters.
+
+---
+
 ## v1.2.2
 
 **Author**: Guillaume Mousnier.

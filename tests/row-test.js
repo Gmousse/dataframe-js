@@ -42,17 +42,17 @@ test('Row can be ', (assert) => {
 test('Row can\'t be ', (assert) => {
     assert.equal(
         tryCatch(() => new Row()).name,
-        'TypeError', 'created from nothing, throwing TypeError.'
+        'ArgumentTypeError', 'created from nothing, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => new Row(1, ['c1', 'c2', 'c3'])).name,
-        'TypeError', 'created from a wrong type, throwing TypeError.'
+        'ArgumentTypeError', 'created from a wrong type, throwing ArgumentTypeError.'
     );
 
     assert.equal(
         tryCatch(() => new Row(null, ['c1', 'c2', 'c3'])).name,
-        'TypeError', 'created from a wrong type (2), throwing TypeError.'
+        'ArgumentTypeError', 'created from a wrong type (2), throwing ArgumentTypeError.'
     );
 
     assert.end();
