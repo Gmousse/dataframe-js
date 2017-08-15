@@ -14,7 +14,7 @@
 
 ## SQL
 
-[src/modules/sql/index.js:9-106](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L9-L106 "Source code on GitHub")
+[src/modules/sql/index.js:9-106](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L9-L106 "Source code on GitHub")
 
 SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
 
@@ -24,7 +24,7 @@ SQL module for DataFrame, providing SQL-like syntax for data exploration in Data
 
 ### constructor
 
-[src/modules/sql/index.js:89-92](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L89-L92 "Source code on GitHub")
+[src/modules/sql/index.js:89-92](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L89-L92 "Source code on GitHub")
 
 Start the SQL module.
 
@@ -34,7 +34,7 @@ Start the SQL module.
 
 ### register
 
-[src/modules/sql/index.js:101-104](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L101-L104 "Source code on GitHub")
+[src/modules/sql/index.js:101-104](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L101-L104 "Source code on GitHub")
 
 Register the DataFrame as temporary table.
 
@@ -51,7 +51,7 @@ df.sql.register('tmp');
 
 ### request
 
-[src/modules/sql/index.js:19-21](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L19-L21 "Source code on GitHub")
+[src/modules/sql/index.js:19-21](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L19-L21 "Source code on GitHub")
 
 Request on a SQL query.
 
@@ -69,7 +69,7 @@ Returns **any** The result of the query.
 
 ### dropTables
 
-[src/modules/sql/index.js:28-30](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L28-L30 "Source code on GitHub")
+[src/modules/sql/index.js:28-30](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L28-L30 "Source code on GitHub")
 
 Drop or remove all registered tables.
 
@@ -81,7 +81,7 @@ DataFrame.dropTables();
 
 ### dropTable
 
-[src/modules/sql/index.js:38-40](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L38-L40 "Source code on GitHub")
+[src/modules/sql/index.js:38-40](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L38-L40 "Source code on GitHub")
 
 Drop or remove a registered table.
 
@@ -97,7 +97,7 @@ DataFrame.dropTable('tmp1');
 
 ### renameTable
 
-[src/modules/sql/index.js:50-53](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L50-L53 "Source code on GitHub")
+[src/modules/sql/index.js:50-53](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L50-L53 "Source code on GitHub")
 
 Rename a registered table.
 
@@ -115,7 +115,7 @@ DataFrame.renameTable('tmp1', 'notTmp1');
 
 ### listTables
 
-[src/modules/sql/index.js:61-63](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L61-L63 "Source code on GitHub")
+[src/modules/sql/index.js:61-63](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L61-L63 "Source code on GitHub")
 
 List all registered tables.
 
@@ -129,7 +129,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### registerTable
 
-[src/modules/sql/index.js:74-83](https://github.com/Gmousse/dataframe-js/blob/6be47f9242958162d0ea2b8da9949934e3312f80/src/modules/sql/index.js#L74-L83 "Source code on GitHub")
+[src/modules/sql/index.js:74-83](https://github.com/Gmousse/dataframe-js/blob/fb749cc38ce406d350714022f683790677e132b0/src/modules/sql/index.js#L74-L83 "Source code on GitHub")
 
 Register a DataFrame as a temporary table.
 

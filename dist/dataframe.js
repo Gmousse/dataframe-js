@@ -91,6 +91,7 @@ var dfjs =
 	exports.Row = _row2['default'];
 	exports.Benchmark = _benchmark2['default'];
 	exports.Errors = Errors;
+	exports['default'] = _dataframe2['default'];
 
 /***/ }),
 /* 1 */
@@ -9165,7 +9166,7 @@ var dfjs =
 	            var parser = (0, _d3Dsv.dsvFormat)(sep);
 	            return new _promise2['default'](function (resolve) {
 	                var parseText = function parseText(fileContent) {
-	                    if (fileContent.includes('Error: ENOENT:')) return resolve(null);
+	                    if (fileContent.includes('Error: ENOENT')) return resolve(null);
 	                    var data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
 	                    return resolve(data);
 	                };
