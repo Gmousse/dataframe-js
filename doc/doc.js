@@ -24,7 +24,7 @@ function buildMD() {
     return new Promise(() => {
         console.log('Building markdown doc:');
         FILES_TO_DOC.forEach(file =>
-            exec(`documentation build src/${file}.js --github --format 'md' --output doc/api/${file}.md`,
+            exec(`documentation build src/${file}.js --github --shallow --format 'md' --output doc/api/${file}.md`,
                 (err, stdout, stderr) => {
                     if (stderr) {
                         console.error(stderr);

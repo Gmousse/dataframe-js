@@ -12,3 +12,4 @@ DataFrame.setDefaultModules(Stat, Matrix, SQL);
 DataFrame.sql = SQL;
 
 export { DataFrame, Row, Benchmark, Errors};
+export default DataFrame;

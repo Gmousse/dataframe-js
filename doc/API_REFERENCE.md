@@ -1,14 +1,21 @@
 ## API Reference
 
  ### [DataFrame](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html)
-
+  [.fromDSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fromDSV),
+  [.fromCSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fromCSV),
+  [.fromPSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fromPSV),
+  [.fromTSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fromTSV),
+  [.fromJSON()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#fromJSON)
 
 Dataframe conversion:
   [.toDict()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toDict),
   [.toArray()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toArray),
   [.toCollection()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toCollection),
   [.toText()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toText),
+  [.toDSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toDSV),
   [.toCSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toCSV),
+  [.toPSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toPSV),
+  [.toTSV()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toTSV),
   [.toJSON()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html#toJSON)
 
 DataFrame exploration:
@@ -61,6 +68,8 @@ Rows manipulation:
   [.select()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#select),
   [.delete()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#delete),
   [.has()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#has),
+  [.hash()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#hash),
+  [.size()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#size),
   [.toDict()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#todict),
   [.toArray()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/row.html#toarray)
 
@@ -75,7 +84,7 @@ Rows manipulation:
   [.melt()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/groupedDataframe.html#melt),
 
 
-###     [Stat](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/modules/stat.html)  
+### [Stat](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/modules/stat.html)  
 
 [.min()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/modules/stat.html#min),
   [.max()](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/modules/stat.html#max),

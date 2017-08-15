@@ -4,7 +4,8 @@
 
 ```javascript
 // es6
-import { DataFrame, Row } from 'dataframe-js';
+import DataFrame from 'dataframe-js';
+import DataFrame, { Row } from 'dataframe-js';
 // es5
 var DataFrame = require('dataframe-js').DataFrame;
 // Browser
@@ -39,6 +40,9 @@ const df = new DataFrame({
 
 // From files
 DataFrame.fromText('/my/absolue/path/myfile.txt').then(df => df);
+DataFrame.fromDSV('/my/absolue/path/myfile.txt').then(df => df);
+DataFrame.fromPSV('http://myurl/myfile.psv').then(df => df);
+DataFrame.fromTSV('http://myurl/myfile.tsv').then(df => df);
 DataFrame.fromCSV('http://myurl/myfile.csv').then(df => df);
 DataFrame.fromJSON('http://myurl/myfile.json').then(df => df);
 DataFrame.fromJSON(new File(...)).then(df => df);
@@ -58,8 +62,11 @@ df.toDict();
 
 // To files
 DataFrame.toText(true, ';', '/my/absolue/path/myfile.txt');
-DataFrame.toCSV('file://my/absolue/path/myfile.csv');
-DataFrame.toJSON('/my/absolue/path/myfile.json');
+DataFrame.toDSV(true, ';', '/my/absolue/path/myfile.txt');
+DataFrame.toCSV(true, '/my/absolue/path/myfile.csv');
+DataFrame.toTSV(true, '/my/absolue/path/myfile.tsv');
+DataFrame.toPSV(true, '/my/absolue/path/myfile.psv');
+DataFrame.toJSON(true, '/my/absolue/path/myfile.json');
 ```
 
 ### DataFrame
