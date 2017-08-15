@@ -9067,7 +9067,7 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _desc, _value, _class;
+	var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _desc, _value, _class;
 
 	var _es7ChecktypesDecorator = __webpack_require__(485);
 
@@ -9124,7 +9124,7 @@ var dfjs =
 	/**
 	 * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 	 */
-	var DataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec3 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec4 = (0, _es7ChecktypesDecorator.checktypes)(['DataFrame', Array, Object]), _dec5 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', ['Array', 'String']), _dec6 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame'), (_class = function () {
+	var DataFrame = (_dec = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec2 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File'], 'String'), _dec3 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec4 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec5 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec6 = (0, _es7ChecktypesDecorator.checktypes)(['String', 'File']), _dec7 = (0, _es7ChecktypesDecorator.checktypes)(['DataFrame', Array, Object]), _dec8 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame', ['Array', 'String']), _dec9 = (0, _es7ChecktypesDecorator.checktypes)('DataFrame'), (_class = function () {
 	    (0, _createClass3['default'])(DataFrame, null, [{
 	        key: 'setDefaultModules',
 
@@ -9143,10 +9143,45 @@ var dfjs =
 	            DataFrame.defaultModules = defaultModules;
 	        }
 	    }, {
+	        key: 'fromDSV',
+
+	        /**
+	         * Create a DataFrame from a delimiter separated values text file. It returns a Promise.
+	         * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+	         * @param {String} sep The separator used to parse the file.
+	         * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
+	         * @example
+	         * DataFrame.fromDSV('http://myurl/myfile.txt').then(df => df.show())
+	         * // In browser Only
+	         * DataFrame.fromDSV(myFile).then(df => df.show())
+	         * // From node.js only Only
+	         * DataFrame.fromDSV('/my/absolue/path/myfile.txt').then(df => df.show())
+	         * DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
+	         */
+	        value: function fromDSV(pathOrFile) {
+	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ';';
+	            var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
+	            var parser = (0, _d3Dsv.dsvFormat)(sep);
+	            return new _promise2['default'](function (resolve) {
+	                var parseText = function parseText(fileContent) {
+	                    if (fileContent.includes('Error: ENOENT:')) return resolve(null);
+	                    var data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
+	                    return resolve(data);
+	                };
+	                return typeof pathOrFile === 'string' ? (0, _d3Request.text)((0, _reusables.addFileProtocol)(pathOrFile), parseText) : (0, _reusables.loadTextFile)(pathOrFile, parseText);
+	            }).then(function (fileContent) {
+	                if (fileContent === null) {
+	                    throw new _errors.FileNotFoundError(pathOrFile);
+	                }
+	                return new DataFrame(fileContent);
+	            });
+	        }
+	    }, {
 	        key: 'fromText',
 
 	        /**
-	         * Create a DataFrame from a Text file. It returns a Promise.
+	         * Create a DataFrame from a delimiter separated values text file. It returns a Promise. Alias of DataFrame.fromDSV.
 	         * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
 	         * @param {String} sep The separator used to parse the file.
 	         * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
@@ -9162,20 +9197,13 @@ var dfjs =
 	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ';';
 	            var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
-	            var parser = (0, _d3Dsv.dsvFormat)(sep);
-	            return new _promise2['default'](function (resolve) {
-	                var parseText = function parseText(txt) {
-	                    var data = header ? parser.parse(txt) : parser.parseRows(txt);
-	                    resolve(new DataFrame(data, data.columns));
-	                };
-	                return typeof pathOrFile === 'string' ? (0, _d3Request.text)((0, _reusables.addFileProtocol)(pathOrFile), parseText) : (0, _reusables.loadTextFile)(pathOrFile, parseText);
-	            });
+	            return DataFrame.fromDSV(pathOrFile, sep, header);
 	        }
 	    }, {
 	        key: 'fromCSV',
 
 	        /**
-	         * Create a DataFrame from a CSV file. It returns a Promise.
+	         * Create a DataFrame from a comma separated values file. It returns a Promise.
 	         * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
 	         * @param {Boolean} [header=true] A boolean indicating if the csv has a header or not.
 	         * @example
@@ -9189,13 +9217,47 @@ var dfjs =
 	        value: function fromCSV(pathOrFile) {
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-	            return new _promise2['default'](function (resolve) {
-	                var parseCSV = function parseCSV(txt) {
-	                    var data = header ? (0, _d3Dsv.csvParse)(txt) : (0, _d3Dsv.csvParseRows)(txt);
-	                    resolve(new DataFrame(data, data.columns));
-	                };
-	                return typeof pathOrFile === 'string' ? (0, _d3Request.text)((0, _reusables.addFileProtocol)(pathOrFile), parseCSV) : (0, _reusables.loadTextFile)(pathOrFile, parseCSV);
-	            });
+	            return DataFrame.fromDSV(pathOrFile, ',', header);
+	        }
+	    }, {
+	        key: 'fromTSV',
+
+	        /**
+	         * Create a DataFrame from a tab separated values file. It returns a Promise.
+	         * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+	         * @param {Boolean} [header=true] A boolean indicating if the tsv has a header or not.
+	         * @example
+	         * DataFrame.fromTSV('http://myurl/myfile.tsv').then(df => df.show())
+	         * // For browser only
+	         * DataFrame.fromTSV(myFile).then(df => df.show())
+	         * // From node.js only
+	         * DataFrame.fromTSV('/my/absolue/path/myfile.tsv').then(df => df.show())
+	         * DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
+	         */
+	        value: function fromTSV(pathOrFile) {
+	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+	            return DataFrame.fromDSV(pathOrFile, '\t', header);
+	        }
+	    }, {
+	        key: 'fromPSV',
+
+	        /**
+	         * Create a DataFrame from a pipe separated values file. It returns a Promise.
+	         * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+	         * @param {Boolean} [header=true] A boolean indicating if the psv has a header or not.
+	         * @example
+	         * DataFrame.fromPSV('http://myurl/myfile.psv').then(df => df.show())
+	         * // For browser only
+	         * DataFrame.fromPSV(myFile).then(df => df.show())
+	         * // From node.js only
+	         * DataFrame.fromPSV('/my/absolue/path/myfile.psv').then(df => df.show())
+	         * DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
+	         */
+	        value: function fromPSV(pathOrFile) {
+	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+	            return DataFrame.fromDSV(pathOrFile, '|', header);
 	        }
 	    }, {
 	        key: 'fromJSON',
@@ -9513,7 +9575,38 @@ var dfjs =
 	        }
 
 	        /**
-	         * Convert the DataFrame into a text string. You can also save the file if you are using nodejs.
+	         * Convert the DataFrame into a text delimiter separated values.
+	         You can also save the file if you are using nodejs.
+	         * @param {String} [sep=' '] Column separator.
+	         * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+	         * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+	         * @returns {String} The text file in raw string.
+	         * @example
+	         * df.toDSV()
+	         * df.toDSV(';')
+	         * df.toDSV(';', true)
+	         * // From node.js only
+	         * df.toDSV(';', true, '/my/absolute/path/dataframe.txt')
+	         */
+
+	    }, {
+	        key: 'toDSV',
+	        value: function toDSV() {
+	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ';';
+	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+	            var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
+
+	            var parser = (0, _d3Dsv.dsvFormat)(sep);
+	            var csvContent = header ? parser.format(this.toCollection(), this[__columns__]) : parser.formatRows(this.toArray());
+	            if (path) {
+	                (0, _reusables.saveFile)(this._cleanSavePath(path), csvContent);
+	            }
+	            return csvContent;
+	        }
+
+	        /**
+	        * Convert the DataFrame into a text delimiter separated values. Alias for .toDSV.
+	         You can also save the file if you are using nodejs.
 	         * @param {String} [sep=' '] Column separator.
 	         * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
 	         * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
@@ -9533,17 +9626,12 @@ var dfjs =
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 	            var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
-	            var csvContent = this.reduce(function (p, n) {
-	                return '' + (p ? p + '\n' : '') + n.toArray().join(sep);
-	            }, header ? this[__columns__].join(sep) : '');
-	            if (path) {
-	                (0, _reusables.saveFile)(this._cleanSavePath(path), csvContent);
-	            }
-	            return csvContent;
+	            return this.toDSV(sep, header, path);
 	        }
 
 	        /**
-	         * Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+	         * Convert the DataFrame into a comma separated values string.
+	         You can also save the file if you are using nodejs.
 	         * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
 	         * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
 	         * @returns {String} The csv file in raw string.
@@ -9560,7 +9648,51 @@ var dfjs =
 	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            return this.toText(',', header, path);
+	            return this.toDSV(',', header, path);
+	        }
+
+	        /**
+	         * Convert the DataFrame into a tab separated values string.
+	         You can also save the file if you are using nodejs.
+	         * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+	         * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+	         * @returns {String} The csv file in raw string.
+	         * @example
+	         * df.toCSV()
+	         * df.toCSV(true)
+	         * // From node.js only
+	         * df.toCSV(true, '/my/absolute/path/dataframe.csv')
+	         */
+
+	    }, {
+	        key: 'toTSV',
+	        value: function toTSV() {
+	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+	            return this.toDSV('\t', header, path);
+	        }
+
+	        /**
+	         * Convert the DataFrame into a pipe separated values string.
+	         You can also save the file if you are using nodejs.
+	         * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+	         * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+	         * @returns {String} The csv file in raw string.
+	         * @example
+	         * df.toPSV()
+	         * df.toPSV(true)
+	         * // From node.js only
+	         * df.toPSV(true, '/my/absolute/path/dataframe.csv')
+	         */
+
+	    }, {
+	        key: 'toPSV',
+	        value: function toPSV() {
+	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+	            return this.toDSV('|', header, path);
 	        }
 
 	        /**
@@ -10334,7 +10466,7 @@ var dfjs =
 	        }
 	    }]);
 	    return DataFrame;
-	}(), (_applyDecoratedDescriptor(_class, 'fromText', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec5], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_join'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'union', [_dec6], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'union'), _class.prototype)), _class));
+	}(), (_applyDecoratedDescriptor(_class, 'fromDSV', [_dec], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromDSV'), _class), _applyDecoratedDescriptor(_class, 'fromText', [_dec2], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromText'), _class), _applyDecoratedDescriptor(_class, 'fromCSV', [_dec3], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromCSV'), _class), _applyDecoratedDescriptor(_class, 'fromTSV', [_dec4], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromTSV'), _class), _applyDecoratedDescriptor(_class, 'fromPSV', [_dec5], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromPSV'), _class), _applyDecoratedDescriptor(_class, 'fromJSON', [_dec6], (0, _getOwnPropertyDescriptor2['default'])(_class, 'fromJSON'), _class), _applyDecoratedDescriptor(_class.prototype, '_build', [_dec7], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_build'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, '_join', [_dec8], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, '_join'), _class.prototype), _applyDecoratedDescriptor(_class.prototype, 'union', [_dec9], (0, _getOwnPropertyDescriptor2['default'])(_class.prototype, 'union'), _class.prototype)), _class));
 	exports['default'] = DataFrame;
 
 /***/ }),
@@ -14849,7 +14981,7 @@ var dfjs =
 	    try {
 	        __webpack_require__(498).writeFileSync(path, content);
 	    } catch (e) {
-	        console.log('File system module is not available.');
+	        console.warn('File system module is not available.');
 	    }
 	}
 
@@ -14864,7 +14996,7 @@ var dfjs =
 	}
 
 	function addFileProtocol(path) {
-	    return path.startsWith('/') ? 'file://' + path : path;
+	    return path.startsWith('/') || path.startsWith('./') ? 'file://' + path : path;
 	}
 
 	function xSplit(stringToSplit) {

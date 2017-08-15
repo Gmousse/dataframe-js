@@ -11,7 +11,7 @@
 
 ## Matrix
 
-[src/modules/matrix.js:9-94](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L9-L94 "Source code on GitHub")
+[src/modules/matrix.js:9-94](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L9-L94 "Source code on GitHub")
 
 Matrix module for DataFrame, providing basic mathematical matrix computations.
 
@@ -21,7 +21,7 @@ Matrix module for DataFrame, providing basic mathematical matrix computations.
 
 ### constructor
 
-[src/modules/matrix.js:14-17](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L14-L17 "Source code on GitHub")
+[src/modules/matrix.js:14-17](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L14-L17 "Source code on GitHub")
 
 Start the Matrix module.
 
@@ -31,7 +31,7 @@ Start the Matrix module.
 
 ### isCommutative
 
-[src/modules/matrix.js:28-30](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L28-L30 "Source code on GitHub")
+[src/modules/matrix.js:28-30](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L28-L30 "Source code on GitHub")
 
 Check if two DataFrames are commutative, if both have the same dimensions.
 
@@ -50,7 +50,7 @@ Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refe
 
 ### add
 
-[src/modules/matrix.js:40-53](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L40-L53 "Source code on GitHub")
+[src/modules/matrix.js:40-53](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L40-L53 "Source code on GitHub")
 
 Provide an elements pairwise addition of two DataFrames having the same dimensions.
 
@@ -68,7 +68,7 @@ Returns **DataFrame** A new DataFrame resulting to the addition two DataFrames.
 
 ### product
 
-[src/modules/matrix.js:63-65](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L63-L65 "Source code on GitHub")
+[src/modules/matrix.js:63-65](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L63-L65 "Source code on GitHub")
 
 Provide a scalar product between a number and a DataFrame.
 
@@ -86,7 +86,7 @@ Returns **DataFrame** A new DataFrame resulting to the scalar product.
 
 ### dot
 
-[src/modules/matrix.js:75-93](https://github.com/Gmousse/dataframe-js/blob/bc62c16cedf6c35fb2ced64f6f67607ad6d4d5e6/src/modules/matrix.js#L75-L93 "Source code on GitHub")
+[src/modules/matrix.js:75-93](https://github.com/Gmousse/dataframe-js/blob/787885338f0ef0760ff7ce4e75bdf0efed58acff/src/modules/matrix.js#L75-L93 "Source code on GitHub")
 
 Multiply one DataFrame n x p and a second p x n.
 
