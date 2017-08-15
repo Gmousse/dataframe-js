@@ -59,7 +59,7 @@ export function saveFile(path, content) {
     try {
         require('fs').writeFileSync(path, content);
     } catch (e) {
-        console.log('File system module is not available.');
+        console.warn('File system module is not available.');
     }
 }
 
@@ -72,7 +72,7 @@ export function loadTextFile(file, func) {
 }
 
 export function addFileProtocol(path) {
-    return path.startsWith('/') ? `file://${path}` : path;
+    return (path.startsWith('/') || path.startsWith('./')) ? `file://${path}` : path;
 }
 
 export function xSplit(stringToSplit, ...patterns) {
@@ -89,8 +89,8 @@ export function xReplace(stringToReplace, ...patterns) {
     );
 }
 
-export function xContains(stringWhereFind, ...patterns) {
-    return patterns.filter(pattern => stringWhereFind.includes(pattern));
+export function xContains(stringToFilter, ...patterns) {
+    return patterns.filter(pattern => stringToFilter.includes(pattern));
 }
 
 export function compare(firstElem, secondElem, reverse = false) {

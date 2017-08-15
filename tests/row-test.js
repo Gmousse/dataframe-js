@@ -1,7 +1,7 @@
 import tape from 'tape';
 
-import { Row } from '../src/index.js';
-import { tryCatch } from './utils.js';
+import { Row } from '../src/index';
+import { tryCatch } from './utils';
 
 const test = tape;
 

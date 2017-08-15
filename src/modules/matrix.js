@@ -1,7 +1,7 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import { WrongSchemaError } from '../errors.js';
-import { arrayEqual, iter } from '../reusables.js';
+import { WrongSchemaError } from '../errors';
+import { arrayEqual, iter } from '../reusables';
 
 /**
 * Matrix module for DataFrame, providing basic mathematical matrix computations.
