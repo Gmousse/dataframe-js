@@ -21,7 +21,7 @@
     * [Module Creation](doc/ADVANCED_USAGE.md#module-creation)
     * [Module Registration](doc/ADVANCED_USAGE.md#module-registration)
 
-* [API Reference](doc/API_REFERENCE.md#api-reference)
+* [API Reference](doc/api/dataframe.md)
     * [DataFrame](doc/api/dataframe.md)
     * [Row](doc/api/row.md)
     * [GroupedDataFrame](doc/api/groupedDataframe.md)
