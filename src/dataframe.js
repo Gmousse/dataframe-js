@@ -43,7 +43,7 @@ class DataFrame {
         const parser = dsvFormat(sep);
         return new Promise((resolve) => {
             const parseText = (fileContent) => {
-                if (fileContent.includes('Error: ENOENT:')) return resolve(null);
+                if (fileContent.includes('Error: ENOENT')) return resolve(null);
                 const data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
                 return resolve(data);
             };
