@@ -59,7 +59,7 @@ in the browser:
 
 [Advanced Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/ADVANCED_USAGE.html)
 
-[API Reference](https://gmousse.gitbooks.io/dataframe-js/content/doc/API_REFERENCE.html)
+[API Reference](https://gmousse.gitbooks.io/dataframe-js/content/doc/api/dataframe.html)
 
 ## Contribution
 

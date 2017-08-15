@@ -1,6 +1,6 @@
 import { exec } from 'child_process';
 
-const FILES_TO_DOC = ['dataframe', 'groupedDataframe', 'row', 'modules/sql', 'modules/stat', 'modules/matrix'];
+const FILES_TO_DOC = ['dataframe', 'groupedDataframe', 'row', 'modules/sql/index', 'modules/stat', 'modules/matrix'];
 
 clean().then(buildMD);
 
@@ -23,8 +23,9 @@ function clean() {
 function buildMD() {
     return new Promise(() => {
         console.log('Building markdown doc:');
-        FILES_TO_DOC.forEach(file =>
-            exec(`documentation build src/${file}.js --github --format 'md' --output doc/api/${file}.md`,
+        FILES_TO_DOC.forEach(file => {
+            const output = file.endsWith('/index') ? file.replace('/index', '') : file;
+            exec(`documentation build src/${file}.js --github --shallow --format 'md' --output doc/api/${output}.md`,
                 (err, stdout, stderr) => {
                     if (stderr) {
                         console.error(stderr);
@@ -32,7 +33,7 @@ function buildMD() {
                         console.log(`src/${file}.js ---> doc/md/${file}.md`);
                     }
                 }
-            )
-        );
+            );
+        });
     });
 }
