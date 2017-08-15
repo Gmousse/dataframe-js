@@ -31,8 +31,7 @@
     "build:commonjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
     "build:umd": "webpack",
     "build:umd:min": "NODE_ENV=production webpack",
-    "postbuild": "npm run checkes3 && npm run doc",
-    "prepublish": "npm run build"
+    "postbuild": "npm run checkes3 && npm run doc"
   },
   "author": {
     "name": "Guillaume Mousnier",

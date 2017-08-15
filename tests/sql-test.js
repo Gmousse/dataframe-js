@@ -1,7 +1,7 @@
 import tape from 'tape';
 
-import { DataFrame } from '../src/index.js';
-import { tryCatch } from './utils.js';
+import { DataFrame } from '../src/index';
+import { tryCatch } from './utils';
 
 const test = tape;
 
@@ -111,6 +111,12 @@ test('DataFrame sql module can ', (assert) => {
     );
 
     assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM tmp WHERE "road" IN column2').toDict(),
+        df1.filter(row => row.get('column2').includes('road')).toDict(),
+        'select column by finding a string in reach row.'
+    );
+
+    assert.deepEqual(
         DataFrame.sql.request('SELECT COUNT(column1) FROM tmp'),
         df1.select('column1').count(),
         'count column rows.'
@@ -156,6 +162,25 @@ test('DataFrame sql module can ', (assert) => {
         DataFrame.sql.request('SELECT COUNT(column1) FROM tmp GROUP BY column1, column2').toDict(),
         df1.groupBy('column1', 'column2').aggregate((group) => group.count()).toDict(),
         'groupBy on multiple columns and compute an aggregation.'
+    );
+
+    const df3 = new DataFrame({
+        id: [1, 0, 8],
+        'column 1': ['hello', 'world', 'hello world'],
+    }, ['id', 'column 1']);
+
+    df3.sql.register('my_table');
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM my_table WHERE column 1 = "hello"').toDict(),
+        df3.filter(row => row.get('column 1') === 'hello').toDict(),
+        'filter on column name having space.'
+    );
+
+    assert.deepEqual(
+        DataFrame.sql.request('SELECT * FROM my_table WHERE "hello world" IN column 1').toDict(),
+        df3.filter(row => row.get('column 1').includes('hello world')).toDict(),
+        'filter on column name having space with a string having space.'
     );
 
     assert.end();
@@ -219,7 +244,19 @@ test('DataFrame sql module can\'t ', (assert) => {
     assert.deepEqual(
         tryCatch(() => DataFrame.sql.request('SELECT column1 FROM tmp2')).name,
         'NoSuchColumnError',
-        'execute a query with a wron column name, throwing NoSuchColumnError.'
+        'execute a query with a wrong column name, throwing NoSuchColumnError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.request('SELECT * FROM tmp2').sql.register('my table')).name,
+        'WrongTableNameError',
+        'register a bad formatted table name, throwing WrongTableNameError.'
+    );
+
+    assert.deepEqual(
+        tryCatch(() => DataFrame.sql.renameTable('tmp2', 'my table')).name,
+        'WrongTableNameError',
+        'rename a bad formatted table name, throwing WrongTableNameError.'
     );
 
     assert.end();

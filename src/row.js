@@ -1,8 +1,8 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import { match, arrayEqual } from './reusables.js';
-import { NoSuchColumnError } from './errors.js';
-import { hashCode } from './reusables.js';
+import { match, arrayEqual } from './reusables';
+import { NoSuchColumnError } from './errors';
+import { hashCode } from './reusables';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');

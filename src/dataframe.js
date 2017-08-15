@@ -1,11 +1,11 @@
 import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
-import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
+import { dsvFormat } from 'd3-dsv';
 
-import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables.js';
-import { WrongSchemaError, MixedTypeError } from './errors.js';
-import Row from './row.js';
-import GroupedDataFrame from './groupedDataframe.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables';
+import { WrongSchemaError, MixedTypeError, FileNotFoundError } from './errors';
+import Row from './row';
+import GroupedDataFrame from './groupedDataframe';
 
 const __columns__ = Symbol('columns');
 const __rows__ = Symbol('rows');
@@ -42,13 +42,20 @@ class DataFrame {
     static fromText(pathOrFile, sep = ';', header = true) {
         const parser = dsvFormat(sep);
         return new Promise((resolve) => {
-            const parseText = (txt) => {
-                const data = header ? parser.parse(txt) : parser.parseRows(txt);
-                resolve(new DataFrame(data, data.columns));
+            const parseText = (fileContent) => {
+                if (fileContent.includes('Error: ENOENT:')) return resolve(null);
+                const data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
+                return resolve(data);
             };
             return (typeof pathOrFile === 'string') ?
                 text(addFileProtocol(pathOrFile), parseText) :
                 loadTextFile(pathOrFile, parseText);
+        })
+        .then(fileContent => {
+            if (fileContent === null) {
+                throw new FileNotFoundError(pathOrFile);
+            }
+            return new DataFrame(fileContent);
         });
     }
 
@@ -66,15 +73,7 @@ class DataFrame {
      * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
      */
     static fromCSV(pathOrFile, header = true) {
-        return new Promise((resolve) => {
-            const parseCSV = (txt) => {
-                const data = header ? csvParse(txt) : csvParseRows(txt);
-                resolve(new DataFrame(data, data.columns));
-            };
-            return (typeof pathOrFile === 'string') ?
-                text(addFileProtocol(pathOrFile), parseCSV) :
-                loadTextFile(pathOrFile, parseCSV);
-        });
+        return DataFrame.fromText(pathOrFile, ';', header);
     }
 
     @checktypes(['String', 'File'])
@@ -90,10 +89,15 @@ class DataFrame {
      */
     static fromJSON(pathOrFile) {
         return new Promise((resolve) => {
-            const parseJSON = (dict) => resolve(new DataFrame(dict));
             return (typeof pathOrFile === 'string') ?
-                json(addFileProtocol(pathOrFile), parseJSON) :
-                loadTextFile(pathOrFile, (txt) => parseJSON(JSON.parse(txt)));
+                json(addFileProtocol(pathOrFile), resolve) :
+                loadTextFile(pathOrFile, (txt) => resolve(JSON.parse(txt)));
+        })
+        .then(fileContent => {
+            if (fileContent === null) {
+                throw new FileNotFoundError(pathOrFile);
+            }
+            return new DataFrame(fileContent);
         });
     }
 
