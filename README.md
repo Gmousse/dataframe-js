@@ -5,11 +5,11 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.2.3](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.2.4](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
 
 **Compatibility**:
 - Browsers (IE > 8, Edge, Firefox, Chrome...)
-- NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x
+- NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x, 8.x.x
 
 **License**: MIT
 

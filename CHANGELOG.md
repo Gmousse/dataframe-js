@@ -26,6 +26,7 @@
 - Adding DataFrame.toPSV.
 - Adding DataFrame.toTSV.
 - Adding tests on different file formats.
+- Catching strange behaviour of csv loading in nodejs 0.10.0 and 0.12.0.
 
 ---
 

@@ -299,6 +299,7 @@ test('DataFrame can\'t be created from', (assert) => {
     assert.equal(tryCatch(() => new DataFrame(445)).name, 'ArgumentTypeError', 'a Number, throwing ArgumentTypeError.');
 
     DataFrame.fromText(`./data/Titanic_2.csv`, '', false)
+        .then(() => assert.fail())
         .catch(err => {
             assert.equal(
                 err.name,
@@ -308,6 +309,7 @@ test('DataFrame can\'t be created from', (assert) => {
         });
 
     DataFrame.fromCSV(`./data/Titanic_2.csv`, false)
+        .then(() => assert.fail())
         .catch(err => {
             assert.equal(
                 err.name,
@@ -317,6 +319,7 @@ test('DataFrame can\'t be created from', (assert) => {
         });
 
     DataFrame.fromJSON('./data/Titanic_2.json')
+        .then(() => assert.fail())
         .catch(err => {
             assert.equal(
                 err.name,
