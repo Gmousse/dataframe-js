@@ -2,6 +2,33 @@
 
 ---
 
+## v1.2.4
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Debugging SQL module in order to handle correctly IN operator.
+- Adding validation on SQL module table names. Spaces, tabs, ... are not valid anymore.
+- Debugging SQL module in order to work properly with column names having spaces...
+- Adding tests on SQL module.
+- Debugging file import (JSON, CSVs) unit tests (promises were bugged in the test).
+- Adding a FileNotFoundError.
+- Wrong file paths or relative paths are now correctly catched and throw an FileNotFoundError.
+- Refactoring file imports.
+- Adding yarn documentation in the README.
+- Adding DataFrame.fromDSV (alias of fromText, to be more precise).
+- Adding DataFrame.fromPSV.
+- Adding DataFrame.fromTSV.
+- Now using d3.format to handle DataFrame.toDSV, DataFrame.toText, DataFrame.toCSV...
+- Adding DataFrame.toDSV (alias of toText, to be more precise).
+- Adding DataFrame.toPSV.
+- Adding DataFrame.toTSV.
+- Adding tests on different file formats.
+
+---
+
 ## v1.2.3
 
 **Author**: Guillaume Mousnier.

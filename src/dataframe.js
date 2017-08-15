@@ -1,11 +1,11 @@
 import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
-import { csvParse, csvParseRows, dsvFormat } from 'd3-dsv';
+import { dsvFormat } from 'd3-dsv';
 
-import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables.js';
-import { WrongSchemaError, MixedTypeError } from './errors.js';
-import Row from './row.js';
-import GroupedDataFrame from './groupedDataframe.js';
+import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables';
+import { WrongSchemaError, MixedTypeError, FileNotFoundError } from './errors';
+import Row from './row';
+import GroupedDataFrame from './groupedDataframe';
 
 const __columns__ = Symbol('columns');
 const __rows__ = Symbol('rows');
@@ -27,7 +27,41 @@ class DataFrame {
 
     @checktypes(['String', 'File'], 'String')
     /**
-     * Create a DataFrame from a Text file. It returns a Promise.
+     * Create a DataFrame from a delimiter separated values text file. It returns a Promise.
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+     * @param {String} sep The separator used to parse the file.
+     * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
+     * @example
+     * DataFrame.fromDSV('http://myurl/myfile.txt').then(df => df.show())
+     * // In browser Only
+     * DataFrame.fromDSV(myFile).then(df => df.show())
+     * // From node.js only Only
+     * DataFrame.fromDSV('/my/absolue/path/myfile.txt').then(df => df.show())
+     * DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
+     */
+    static fromDSV(pathOrFile, sep = ';', header = true) {
+        const parser = dsvFormat(sep);
+        return new Promise((resolve) => {
+            const parseText = (fileContent) => {
+                if (fileContent.includes('Error: ENOENT:')) return resolve(null);
+                const data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
+                return resolve(data);
+            };
+            return (typeof pathOrFile === 'string') ?
+                text(addFileProtocol(pathOrFile), parseText) :
+                loadTextFile(pathOrFile, parseText);
+        })
+        .then(fileContent => {
+            if (fileContent === null) {
+                throw new FileNotFoundError(pathOrFile);
+            }
+            return new DataFrame(fileContent);
+        });
+    }
+
+    @checktypes(['String', 'File'], 'String')
+    /**
+     * Create a DataFrame from a delimiter separated values text file. It returns a Promise. Alias of DataFrame.fromDSV.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
      * @param {String} sep The separator used to parse the file.
      * @param {Boolean} [header=true] A boolean indicating if the text has a header or not.
@@ -40,21 +74,12 @@ class DataFrame {
      * DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
     static fromText(pathOrFile, sep = ';', header = true) {
-        const parser = dsvFormat(sep);
-        return new Promise((resolve) => {
-            const parseText = (txt) => {
-                const data = header ? parser.parse(txt) : parser.parseRows(txt);
-                resolve(new DataFrame(data, data.columns));
-            };
-            return (typeof pathOrFile === 'string') ?
-                text(addFileProtocol(pathOrFile), parseText) :
-                loadTextFile(pathOrFile, parseText);
-        });
+        return DataFrame.fromDSV(pathOrFile, sep, header);
     }
 
     @checktypes(['String', 'File'])
     /**
-     * Create a DataFrame from a CSV file. It returns a Promise.
+     * Create a DataFrame from a comma separated values file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
      * @param {Boolean} [header=true] A boolean indicating if the csv has a header or not.
      * @example
@@ -66,15 +91,41 @@ class DataFrame {
      * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
      */
     static fromCSV(pathOrFile, header = true) {
-        return new Promise((resolve) => {
-            const parseCSV = (txt) => {
-                const data = header ? csvParse(txt) : csvParseRows(txt);
-                resolve(new DataFrame(data, data.columns));
-            };
-            return (typeof pathOrFile === 'string') ?
-                text(addFileProtocol(pathOrFile), parseCSV) :
-                loadTextFile(pathOrFile, parseCSV);
-        });
+        return DataFrame.fromDSV(pathOrFile, ',', header);
+    }
+
+    @checktypes(['String', 'File'])
+    /**
+     * Create a DataFrame from a tab separated values file. It returns a Promise.
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+     * @param {Boolean} [header=true] A boolean indicating if the tsv has a header or not.
+     * @example
+     * DataFrame.fromTSV('http://myurl/myfile.tsv').then(df => df.show())
+     * // For browser only
+     * DataFrame.fromTSV(myFile).then(df => df.show())
+     * // From node.js only
+     * DataFrame.fromTSV('/my/absolue/path/myfile.tsv').then(df => df.show())
+     * DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
+     */
+    static fromTSV(pathOrFile, header = true) {
+        return DataFrame.fromDSV(pathOrFile, '\t', header);
+    }
+
+    @checktypes(['String', 'File'])
+    /**
+     * Create a DataFrame from a pipe separated values file. It returns a Promise.
+     * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
+     * @param {Boolean} [header=true] A boolean indicating if the psv has a header or not.
+     * @example
+     * DataFrame.fromPSV('http://myurl/myfile.psv').then(df => df.show())
+     * // For browser only
+     * DataFrame.fromPSV(myFile).then(df => df.show())
+     * // From node.js only
+     * DataFrame.fromPSV('/my/absolue/path/myfile.psv').then(df => df.show())
+     * DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
+     */
+    static fromPSV(pathOrFile, header = true) {
+        return DataFrame.fromDSV(pathOrFile, '|', header);
     }
 
     @checktypes(['String', 'File'])
@@ -90,10 +141,15 @@ class DataFrame {
      */
     static fromJSON(pathOrFile) {
         return new Promise((resolve) => {
-            const parseJSON = (dict) => resolve(new DataFrame(dict));
             return (typeof pathOrFile === 'string') ?
-                json(addFileProtocol(pathOrFile), parseJSON) :
-                loadTextFile(pathOrFile, (txt) => parseJSON(JSON.parse(txt)));
+                json(addFileProtocol(pathOrFile), resolve) :
+                loadTextFile(pathOrFile, (txt) => resolve(JSON.parse(txt)));
+        })
+        .then(fileContent => {
+            if (fileContent === null) {
+                throw new FileNotFoundError(pathOrFile);
+            }
+            return new DataFrame(fileContent);
         });
     }
 
@@ -258,7 +314,31 @@ class DataFrame {
     }
 
     /**
-     * Convert the DataFrame into a text string. You can also save the file if you are using nodejs.
+     * Convert the DataFrame into a text delimiter separated values.
+     You can also save the file if you are using nodejs.
+     * @param {String} [sep=' '] Column separator.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The text file in raw string.
+     * @example
+     * df.toDSV()
+     * df.toDSV(';')
+     * df.toDSV(';', true)
+     * // From node.js only
+     * df.toDSV(';', true, '/my/absolute/path/dataframe.txt')
+     */
+    toDSV(sep = ';', header = true, path = undefined) {
+        const parser = dsvFormat(sep);
+        const csvContent = header ?
+            parser.format(this.toCollection(), this[__columns__]) :
+            parser.formatRows(this.toArray());
+        if (path) {saveFile(this._cleanSavePath(path), csvContent);}
+        return csvContent;
+    }
+
+    /**
+    * Convert the DataFrame into a text delimiter separated values. Alias for .toDSV.
+     You can also save the file if you are using nodejs.
      * @param {String} [sep=' '] Column separator.
      * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
@@ -271,16 +351,12 @@ class DataFrame {
      * df.toText(';', true, '/my/absolute/path/dataframe.txt')
      */
     toText(sep = ';', header = true, path = undefined) {
-        const csvContent = this.reduce(
-            (p, n) => `${p ? p + '\n' : ''}${n.toArray().join(sep)}`,
-            header ? this[__columns__].join(sep) : ''
-        );
-        if (path) {saveFile(this._cleanSavePath(path), csvContent);}
-        return csvContent;
+        return this.toDSV(sep, header, path);
     }
 
     /**
-     * Convert the DataFrame into a csv string. You can also save the file if you are using nodejs.
+     * Convert the DataFrame into a comma separated values string.
+     You can also save the file if you are using nodejs.
      * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The csv file in raw string.
@@ -291,7 +367,39 @@ class DataFrame {
      * df.toCSV(true, '/my/absolute/path/dataframe.csv')
      */
     toCSV(header = true, path = undefined) {
-        return this.toText(',', header, path);
+        return this.toDSV(',', header, path);
+    }
+
+    /**
+     * Convert the DataFrame into a tab separated values string.
+     You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     * @example
+     * df.toCSV()
+     * df.toCSV(true)
+     * // From node.js only
+     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
+     */
+    toTSV(header = true, path = undefined) {
+        return this.toDSV('\t', header, path);
+    }
+
+    /**
+     * Convert the DataFrame into a pipe separated values string.
+     You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     * @example
+     * df.toPSV()
+     * df.toPSV(true)
+     * // From node.js only
+     * df.toPSV(true, '/my/absolute/path/dataframe.csv')
+     */
+    toPSV(header = true, path = undefined) {
+        return this.toDSV('|', header, path);
     }
 
     /**

@@ -1,7 +1,7 @@
 import { checktypes } from 'es7-checktypes-decorator';
 
-import sqlParser from '../sqlEngine.js';
-import { TableAlreadyExistsError } from '../errors.js';
+import sqlParser from './sqlEngine';
+import { TableAlreadyExistsError, WrongTableNameError } from '../../errors';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
@@ -72,6 +72,10 @@ class SQL {
      * DataFrame.registerTable('tmp', df);
      */
     static registerTable(df, tableName, overwrite = false) {
+        const validation = new RegExp('^[a-zA-Z_][a-zA-Z0-9_]*$');
+        if (!validation.test(tableName)) {
+            throw new WrongTableNameError(tableName);
+        }
         if (SQL.listTables().includes(tableName) && !overwrite) {
             throw new TableAlreadyExistsError(tableName);
         }

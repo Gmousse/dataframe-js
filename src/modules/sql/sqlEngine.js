@@ -1,5 +1,5 @@
-import { match, xContains, xSplit, xReplace } from './reusables.js';
-import { SQLParseError } from './errors.js';
+import { match, xContains, xSplit, xReplace } from '../../reusables';
+import { SQLParseError } from '../../errors';
 
 const REPLACMENTS = [
     ['INNER JOIN', 'INNERJOIN'],
@@ -50,7 +50,15 @@ const OPERATIONS_HANDLER = {
             const conditionalOperators = operation.filter(term => ['AND', 'OR'].includes(term.toUpperCase()));
             return operationalTerms.map(operationalTerm => {
                 const operatorToApply = xContains(operationalTerm, ...Object.keys(WHERE_OPERATORS))[0];
-                const terms = operationalTerm.replace(' ', '').split(operatorToApply);
+                const terms = operationalTerm
+                    .split(operatorToApply)
+                    .map(term => term.trim());
+                if (!row.has(terms[0]) && row.has(terms[1])) {
+                    return WHERE_OPERATORS[operatorToApply](
+                        xReplace(terms[0].trim(), ['\"', ''], ['\'', ''], ['\`', '']),
+                        String(row.get(terms[1])),
+                    );
+                }
                 return WHERE_OPERATORS[operatorToApply](
                     String(row.get(terms[0])),
                     xReplace(terms[1].trim(), ['\"', ''], ['\'', ''], ['\`', ''])

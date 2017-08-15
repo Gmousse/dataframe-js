@@ -1,3 +1,12 @@
+export class FileNotFoundError extends Error {
+    constructor(fileName) {
+        super(Error);
+        this.message = `${fileName} not found. You maybe use a wrong path or url. \
+Be sure you use absolute path, relative one being not supported.`;
+        this.name = 'FileNotFoundError';
+    }
+}
+
 export class MixedTypeError extends TypeError {
     constructor(...types) {
         super(TypeError);
@@ -35,5 +44,13 @@ export class TableAlreadyExistsError extends Error {
         super(Error);
         this.message = `The SQL temporary table ${tableName} already exits. Use overwrite = true to overwrite it.`;
         this.name = 'TableAlreadyExistsError';
+    }
+}
+
+export class WrongTableNameError extends Error {
+    constructor(tableName) {
+        super(Error);
+        this.message = `The SQL temporary table ${tableName} is not allowed. Avoid to use Spaces, quotes, tabs....`;
+        this.name = 'WrongTableNameError';
     }
 }

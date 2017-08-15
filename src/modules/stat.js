@@ -1,4 +1,4 @@
-import { isNumber } from '../reusables.js';
+import { isNumber } from '../reusables';
 
 /**
 * Stat module for DataFrame, providing basic statistical metrics for numeric columns.

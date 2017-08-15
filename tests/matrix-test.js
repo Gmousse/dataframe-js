@@ -1,7 +1,7 @@
 import tape from 'tape';
 
-import { DataFrame } from '../src/index.js';
-import { tryCatch } from './utils.js';
+import { DataFrame } from '../src/index';
+import { tryCatch } from './utils';
 
 const test = tape;
 
