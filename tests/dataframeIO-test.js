@@ -59,15 +59,21 @@ test('DataFrame can be', (assert) => {
     );
 
     assert.equal(
-        df1.toText(),
+        df1.toDSV(),
         'c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',
-        'converted into a text with header.'
+        'converted into a dsv with header.'
     );
 
     assert.equal(
-        df1.toText(';', false),
+        df1.toText(),
+        'c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',
+        'converted into a text (or dsv) with header.'
+    );
+
+    assert.equal(
+        df1.toDSV(';', false),
         '1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12',
-        'converted into a text without header.'
+        'converted into a dsv without header.'
     );
 
     assert.equal(
@@ -80,6 +86,18 @@ test('DataFrame can be', (assert) => {
         df1.toCSV(),
         'c1,c2,c3,c4,c5,c6\n1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12',
         'converted into a csv with header.'
+    );
+
+    assert.equal(
+        df1.toPSV(),
+        'c1|c2|c3|c4|c5|c6\n1|6|9|10|12|\n1|2||||\n6|6|9|8|9|12',
+        'converted into a psv with header.'
+    );
+
+    assert.equal(
+        df1.toTSV(),
+        'c1\tc2\tc3\tc4\tc5\tc6\n1\t6\t9\t10\t12\t\n1\t2\t\t\t\t\n6\t6\t9\t8\t9\t12',
+        'converted into a tsv with header.'
     );
 
     assert.equal(
@@ -115,7 +133,7 @@ test('DataFrame can be', (assert) => {
 });
 
 test('DataFrame can be created from', (assert) => {
-    assert.plan(12);
+    assert.plan(15);
 
     const dict = {
         column1: [3, 6, 8],
@@ -195,7 +213,7 @@ test('DataFrame can be created from', (assert) => {
             assert.deepEqual(
                 value.toCollection()[0],
                 {'': '1', Age: 'Child', Class: '1st', Freq: '0', Sex: 'Male', Survived: 'No' },
-                'a csv file wtih header.'
+                'a csv file with header.'
             )
         )
     );
@@ -210,12 +228,42 @@ test('DataFrame can be created from', (assert) => {
         )
     );
 
-    DataFrame.fromText(`${currentPath}/Titanic_2.csv`, '', false).then(
+    DataFrame.fromTSV(`${currentPath}/Titanic.tsv`, true).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'': '1', Age: 'Child', Class: '1st', Freq: '0', Sex: 'Male', Survived: 'No' },
+                'a tsv file.'
+            )
+        )
+    );
+
+    DataFrame.fromPSV(`${currentPath}/Titanic.psv`, true).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'': '1', Age: 'Child', Class: '1st', Freq: '0', Sex: 'Male', Survived: 'No' },
+                'a psv file.'
+            )
+        )
+    );
+
+    DataFrame.fromDSV(`${currentPath}/Titanic_2.csv`, '', false).then(
         (value) => (
             assert.deepEqual(
                 value.toCollection()[0],
                 {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
-                'a text file with a custom seprator.'
+                'a dsv file with a custom seprator.'
+            )
+        )
+    );
+
+    DataFrame.fromDSV(`${currentPath}/Titanic_2.csv`, '', false).then(
+        (value) => (
+            assert.deepEqual(
+                value.toCollection()[0],
+                {'0': '1', '1': '1st', '2': 'Male', '3': 'Child', '4': 'No', '5': '0' },
+                'a text file (or dsv) with a custom seprator.'
             )
         )
     );
@@ -259,7 +307,7 @@ test('DataFrame can\'t be created from', (assert) => {
             );
         });
 
-    DataFrame.fromCSV(`./data/Titanic_2.csv`, '', false)
+    DataFrame.fromCSV(`./data/Titanic_2.csv`, false)
         .catch(err => {
             assert.equal(
                 err.name,

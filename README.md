@@ -34,16 +34,18 @@ filteredDf.show(3);
 
 ````
 | class       | age        | sex        |
----------------------------------------
-| 1st class | adults    | man       |
-| 1st class | adults    | man       |
-| 1st class | adults    | woman     |
+----------------------------------------
+| 1st class   | adults     | man        |
+| 1st class   | adults     | man        |
+| 1st class   | adults     | woman      |
 ````
 
 ## Installation
 via git: `npm install git+https://github.com/Gmousse/dataframe-js.git`
 
 via npm: `npm install dataframe-js`
+
+via yarn: `yarn add dataframe-js`
 
 in the browser:
   * not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
