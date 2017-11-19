@@ -1,4 +1,5 @@
-import { checktypes } from 'es7-checktypes-decorator';
+import DataFrame from './dataframe';
+import { ArgumentTypeError } from './errors';
 
 const __groups__ = Symbol('groups');
 
@@ -17,6 +18,7 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
+        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
         this[__groups__] = this._groupBy(df, columnNames);
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
@@ -28,7 +30,6 @@ export default class GroupedDataFrame {
         }
     }
 
-    @checktypes('DataFrame', Array)
     _groupBy(df, columnNames) {
         const hashedDF = df.withColumn('hash', row => row.select(...columnNames).hash());
         return hashedDF.distinct('hash').toArray('hash').map(
@@ -96,7 +97,6 @@ export default class GroupedDataFrame {
         return [...this].map(({hash}) => hash);
     }
 
-    @checktypes('Function')
     /**
      * Create an aggregation from a function.
      * @param {Function} func The aggregation function.
@@ -112,7 +112,6 @@ export default class GroupedDataFrame {
         );
     }
 
-    @checktypes('String', 'Function')
     /**
      * Pivot a GroupedDataFrame.
      * @param {String} columnToPivot The column which will be transposed as columns.

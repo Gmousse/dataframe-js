@@ -1,13 +1,10 @@
-import { checktypes } from 'es7-checktypes-decorator';
-
 import { match, arrayEqual } from './reusables';
-import { NoSuchColumnError } from './errors';
+import { ArgumentTypeError, NoSuchColumnError } from './errors';
 import { hashCode } from './reusables';
 
 const __columns__ = Symbol('columns');
 const __values__ = Symbol('values');
 
-@checktypes(['Row', Array, Object])
 /**
  * Row data structure used into the dataframe-js.
  */
@@ -27,6 +24,7 @@ class Row {
      * new Row(Row, ['column1', 'column3'])
      */
     constructor(data, columns) {
+        if (!data) throw new ArgumentTypeError(data, 'Row | Array | Object');
         this[__columns__] = columns ? columns : Object.keys(data);
         this[__values__] = Object.freeze(this._build(data));
     }
@@ -50,7 +48,8 @@ class Row {
         return match(data,
                 [(value) => (value instanceof Array), () => this._fromArray(data)],
                 [(value) => (value instanceof Row), () => this._fromObject(data[__values__])],
-                [(value) => (typeof value === 'object' && !Object.is(value, null)), () => this._fromObject(data)]
+                [(value) => (value instanceof Object && value !== null), () => this._fromObject(data)],
+                [() => true, (value) => {throw new ArgumentTypeError(value, 'Row | Array | Object');}]
             );
     }
 
