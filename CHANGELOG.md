@@ -2,6 +2,19 @@
 
 ---
 
+## v1.2.5
+
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Removing checktypes. (https://github.com/Gmousse/dataframe-js/pull/27)
+- Adding some documentation.
+
+---
+
 ## v1.2.4
 
 **Author**: Guillaume Mousnier.
