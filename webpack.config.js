@@ -22,9 +22,6 @@ module.exports = {
             compress: {
                 warnings: false,
             },
-            mangle: {
-                keep_fnames: true,
-            },
         }),
     ] : [],
 };

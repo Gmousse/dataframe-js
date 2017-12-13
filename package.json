@@ -71,7 +71,6 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "d3-dsv": "^1.0.3",
-    "d3-request": "^1.0.2",
-    "es7-checktypes-decorator": "^0.2.1"
+    "d3-request": "^1.0.2"
   }
 }

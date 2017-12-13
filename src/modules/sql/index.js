@@ -1,14 +1,12 @@
-import { checktypes } from 'es7-checktypes-decorator';
-
 import sqlParser from './sqlEngine';
-import { TableAlreadyExistsError, WrongTableNameError } from '../../errors';
+import DataFrame from '../../dataframe';
+import { ArgumentTypeError, TableAlreadyExistsError, WrongTableNameError } from '../../errors';
 
 /**
 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
  */
 class SQL {
 
-    @checktypes('String')
     /**
      * Request on a SQL query.
      * @param {String} query A SQL query to request.
@@ -17,6 +15,7 @@ class SQL {
      * DataFrame.request('SELECT * FROM tmp');
      */
     static request(query) {
+        if (!(typeof query === 'string')) throw new ArgumentTypeError(query, 'Stri g');
         return sqlParser(query, SQL.tables);
     }
 
@@ -62,7 +61,6 @@ class SQL {
         return Object.keys(SQL.tables);
     }
 
-    @checktypes('DataFrame', 'String')
     /**
      * Register a DataFrame as a temporary table.
      * @param {DataFrame} df The DataFrame to register.
@@ -72,6 +70,7 @@ class SQL {
      * DataFrame.registerTable('tmp', df);
      */
     static registerTable(df, tableName, overwrite = false) {
+        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
         const validation = new RegExp('^[a-zA-Z_][a-zA-Z0-9_]*$');
         if (!validation.test(tableName)) {
             throw new WrongTableNameError(tableName);

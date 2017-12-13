@@ -30,6 +30,13 @@ export class WrongSchemaError extends Error {
         this.name = 'WrongSchemaError';
     }
 }
+export class ArgumentTypeError extends TypeError {
+    constructor(input, expected) {
+        super(TypeError);
+        this.message = `${(input && input.constructor) ? input.constructor.name : typeof input} while expecting ${expected}.`;
+        this.name = 'ArgumentTypeError';
+    }
+}
 
 export class SQLParseError extends Error {
     constructor(message) {
