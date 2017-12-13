@@ -62,7 +62,7 @@
 
 ## DataFrame
 
-[src/dataframe.js:15-982](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L15-L982 "Source code on GitHub")
+[src/dataframe.js:15-982](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L15-L982 "Source code on GitHub")
 
 DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 
@@ -74,7 +74,7 @@ DataFrame data structure providing an immutable, flexible and powerfull way to m
 
 ### constructor
 
-[src/dataframe.js:174-184](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L174-L184 "Source code on GitHub")
+[src/dataframe.js:174-184](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L174-L184 "Source code on GitHub")
 
 Create a new DataFrame.
 
@@ -109,7 +109,7 @@ new DataFrame(df);
 
 ### toDict
 
-[src/dataframe.js:284-288](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L284-L288 "Source code on GitHub")
+[src/dataframe.js:284-288](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L284-L288 "Source code on GitHub")
 
 Convert DataFrame into dict / hash / object.
 
@@ -123,7 +123,7 @@ Returns **[Object](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toArray
 
-[src/dataframe.js:297-299](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L297-L299 "Source code on GitHub")
+[src/dataframe.js:297-299](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L297-L299 "Source code on GitHub")
 
 Convert DataFrame into Array of Arrays. You can also extract only one column as Array.
 
@@ -141,7 +141,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### toCollection
 
-[src/dataframe.js:308-310](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L308-L310 "Source code on GitHub")
+[src/dataframe.js:308-310](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L308-L310 "Source code on GitHub")
 
 Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
 
@@ -159,7 +159,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### toDSV
 
-[src/dataframe.js:326-333](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L326-L333 "Source code on GitHub")
+[src/dataframe.js:326-333](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L326-L333 "Source code on GitHub")
 
 Convert the DataFrame into a text delimiter separated values.
 You can also save the file if you are using nodejs.
@@ -184,7 +184,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toText
 
-[src/dataframe.js:349-351](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L349-L351 "Source code on GitHub")
+[src/dataframe.js:349-351](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L349-L351 "Source code on GitHub")
 
 Convert the DataFrame into a text delimiter separated values. Alias for .toDSV.
 You can also save the file if you are using nodejs.
@@ -209,7 +209,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toCSV
 
-[src/dataframe.js:365-367](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L365-L367 "Source code on GitHub")
+[src/dataframe.js:365-367](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L365-L367 "Source code on GitHub")
 
 Convert the DataFrame into a comma separated values string.
 You can also save the file if you are using nodejs.
@@ -232,7 +232,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toTSV
 
-[src/dataframe.js:381-383](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L381-L383 "Source code on GitHub")
+[src/dataframe.js:381-383](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L381-L383 "Source code on GitHub")
 
 Convert the DataFrame into a tab separated values string.
 You can also save the file if you are using nodejs.
@@ -255,7 +255,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toPSV
 
-[src/dataframe.js:397-399](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L397-L399 "Source code on GitHub")
+[src/dataframe.js:397-399](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L397-L399 "Source code on GitHub")
 
 Convert the DataFrame into a pipe separated values string.
 You can also save the file if you are using nodejs.
@@ -278,7 +278,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### toJSON
 
-[src/dataframe.js:411-415](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L411-L415 "Source code on GitHub")
+[src/dataframe.js:411-415](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L411-L415 "Source code on GitHub")
 
 Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
 
@@ -299,7 +299,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### show
 
-[src/dataframe.js:427-446](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L427-L446 "Source code on GitHub")
+[src/dataframe.js:427-446](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L427-L446 "Source code on GitHub")
 
 Display the DataFrame as String Table. Can only return a sring instead of displaying the DataFrame.
 
@@ -320,7 +320,7 @@ Returns **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refer
 
 ### dim
 
-[src/dataframe.js:454-456](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L454-L456 "Source code on GitHub")
+[src/dataframe.js:454-456](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L454-L456 "Source code on GitHub")
 
 Get the DataFrame dimensions.
 
@@ -334,7 +334,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### transpose
 
-[src/dataframe.js:465-470](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L465-L470 "Source code on GitHub")
+[src/dataframe.js:465-470](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L465-L470 "Source code on GitHub")
 
 Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
 
@@ -353,7 +353,7 @@ Returns **ÐataFrame** A new transposed DataFrame.
 
 ### count
 
-[src/dataframe.js:478-480](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L478-L480 "Source code on GitHub")
+[src/dataframe.js:478-480](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L478-L480 "Source code on GitHub")
 
 Get the rows number.
 
@@ -367,7 +367,7 @@ Returns **Int** The number of DataFrame rows.
 
 ### countValue
 
-[src/dataframe.js:491-493](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L491-L493 "Source code on GitHub")
+[src/dataframe.js:491-493](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L491-L493 "Source code on GitHub")
 
 Get the count of a value into a column.
 
@@ -387,7 +387,7 @@ Returns **Int** The number of times the selected value appears.
 
 ### push
 
-[src/dataframe.js:502-504](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L502-L504 "Source code on GitHub")
+[src/dataframe.js:502-504](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L502-L504 "Source code on GitHub")
 
 Push new rows into the DataFrame.
 
@@ -405,7 +405,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with the new rows.
 
 ### replace
 
-[src/dataframe.js:515-520](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L515-L520 "Source code on GitHub")
+[src/dataframe.js:515-520](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L515-L520 "Source code on GitHub")
 
 Replace a value by another in all the DataFrame or in a column.
 
@@ -425,7 +425,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with replaced values.
 
 ### distinct
 
-[src/dataframe.js:529-533](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L529-L533 "Source code on GitHub")
+[src/dataframe.js:529-533](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L529-L533 "Source code on GitHub")
 
 Compute unique values into a column.
 
@@ -443,7 +443,7 @@ Returns **[DataFrame](#dataframe)** A DataFrame containing the column with disti
 
 ### unique
 
-[src/dataframe.js:543-545](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L543-L545 "Source code on GitHub")
+[src/dataframe.js:543-545](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L543-L545 "Source code on GitHub")
 
 Compute unique values into a column.
 Alias from .distinct()
@@ -462,7 +462,7 @@ Returns **[DataFrame](#dataframe)** A DataFrame containing the column with disti
 
 ### listColumns
 
-[src/dataframe.js:553-555](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L553-L555 "Source code on GitHub")
+[src/dataframe.js:553-555](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L553-L555 "Source code on GitHub")
 
 List DataFrame columns.
 
@@ -476,7 +476,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### select
 
-[src/dataframe.js:564-568](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L564-L568 "Source code on GitHub")
+[src/dataframe.js:564-568](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L564-L568 "Source code on GitHub")
 
 Select columns in the DataFrame.
 
@@ -494,7 +494,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame containing selected columns.
 
 ### withColumn
 
-[src/dataframe.js:579-585](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L579-L585 "Source code on GitHub")
+[src/dataframe.js:579-585](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L579-L585 "Source code on GitHub")
 
 Add a new column or set an existing one.
 
@@ -514,7 +514,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame containing the new or modifi
 
 ### restructure
 
-[src/dataframe.js:596-598](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L596-L598 "Source code on GitHub")
+[src/dataframe.js:596-598](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L596-L598 "Source code on GitHub")
 
 Modify the structure of the DataFrame by changing columns order, creating new columns or removing some columns.
 
@@ -534,7 +534,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with restructured columns (r
 
 ### renameAll
 
-[src/dataframe.js:607-612](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L607-L612 "Source code on GitHub")
+[src/dataframe.js:607-612](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L607-L612 "Source code on GitHub")
 
 Rename each column.
 
@@ -552,7 +552,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with the new column names.
 
 ### rename
 
-[src/dataframe.js:622-625](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L622-L625 "Source code on GitHub")
+[src/dataframe.js:622-625](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L622-L625 "Source code on GitHub")
 
 Rename a column.
 
@@ -571,7 +571,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with the new column name.
 
 ### castAll
 
-[src/dataframe.js:634-641](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L634-L641 "Source code on GitHub")
+[src/dataframe.js:634-641](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L634-L641 "Source code on GitHub")
 
 Cast each column into a given type.
 
@@ -589,7 +589,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with the columns having new 
 
 ### cast
 
-[src/dataframe.js:652-654](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L652-L654 "Source code on GitHub")
+[src/dataframe.js:652-654](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L652-L654 "Source code on GitHub")
 
 Cast a column into a given type.
 
@@ -610,7 +610,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with the column having a new
 
 ### drop
 
-[src/dataframe.js:663-667](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L663-L667 "Source code on GitHub")
+[src/dataframe.js:663-667](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L663-L667 "Source code on GitHub")
 
 Remove a single column.
 
@@ -628,7 +628,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame without the dropped column.
 
 ### chain
 
-[src/dataframe.js:682-684](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L682-L684 "Source code on GitHub")
+[src/dataframe.js:682-684](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L682-L684 "Source code on GitHub")
 
 Chain maps and filters functions on DataFrame by optimizing their executions.
 If a function returns boolean, it's a filter. Else it's a map.
@@ -652,7 +652,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with modified rows.
 
 ### filter
 
-[src/dataframe.js:694-700](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L694-L700 "Source code on GitHub")
+[src/dataframe.js:694-700](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L694-L700 "Source code on GitHub")
 
 Filter DataFrame rows.
 
@@ -671,7 +671,7 @@ Returns **[DataFrame](#dataframe)** A new filtered DataFrame.
 
 ### where
 
-[src/dataframe.js:711-713](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L711-L713 "Source code on GitHub")
+[src/dataframe.js:711-713](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L711-L713 "Source code on GitHub")
 
 Filter DataFrame rows.
 Alias of .filter()
@@ -691,7 +691,7 @@ Returns **[DataFrame](#dataframe)** A new filtered DataFrame.
 
 ### find
 
-[src/dataframe.js:723-725](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L723-L725 "Source code on GitHub")
+[src/dataframe.js:723-725](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L723-L725 "Source code on GitHub")
 
 Find a row (the first met) based on a condition.
 
@@ -710,7 +710,7 @@ Returns **Row** The targeted Row.
 
 ### map
 
-[src/dataframe.js:734-736](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L734-L736 "Source code on GitHub")
+[src/dataframe.js:734-736](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L734-L736 "Source code on GitHub")
 
 Map on DataFrame rows. /!\\ Prefer to use .chain().
 
@@ -728,7 +728,7 @@ Returns **[DataFrame](#dataframe)** A new DataFrame with modified rows.
 
 ### reduce
 
-[src/dataframe.js:750-753](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L750-L753 "Source code on GitHub")
+[src/dataframe.js:750-753](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L750-L753 "Source code on GitHub")
 
 Reduce DataFrame into a value.
 
@@ -751,7 +751,7 @@ Returns **any** A reduced value.
 
 ### reduceRight
 
-[src/dataframe.js:763-766](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L763-L766 "Source code on GitHub")
+[src/dataframe.js:763-766](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L763-L766 "Source code on GitHub")
 
 Reduce DataFrame into a value, starting from the last row (see .reduce()).
 
@@ -770,7 +770,7 @@ Returns **any** A reduced value.
 
 ### dropDuplicates
 
-[src/dataframe.js:774-776](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L774-L776 "Source code on GitHub")
+[src/dataframe.js:774-776](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L774-L776 "Source code on GitHub")
 
 Return a DataFrame without duplicated columns.
 
@@ -784,7 +784,7 @@ Returns **[DataFrame](#dataframe)** A DataFrame without duplicated rows.
 
 ### shuffle
 
-[src/dataframe.js:784-795](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L784-L795 "Source code on GitHub")
+[src/dataframe.js:784-795](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L784-L795 "Source code on GitHub")
 
 Return a shuffled DataFrame rows.
 
@@ -798,7 +798,7 @@ Returns **[DataFrame](#dataframe)** A shuffled DataFrame.
 
 ### sample
 
-[src/dataframe.js:804-813](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L804-L813 "Source code on GitHub")
+[src/dataframe.js:804-813](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L804-L813 "Source code on GitHub")
 
 Return a random sample of rows.
 
@@ -816,7 +816,7 @@ Returns **[DataFrame](#dataframe)** A sample DataFrame
 
 ### bisect
 
-[src/dataframe.js:822-836](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L822-L836 "Source code on GitHub")
+[src/dataframe.js:822-836](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L822-L836 "Source code on GitHub")
 
 Randomly split a DataFrame into 2 DataFrames.
 
@@ -834,7 +834,7 @@ Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Refere
 
 ### groupBy
 
-[src/dataframe.js:849-851](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L849-L851 "Source code on GitHub")
+[src/dataframe.js:849-851](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L849-L851 "Source code on GitHub")
 
 Group DataFrame rows by columns giving a GroupedDataFrame object. See its doc for more examples.
 
@@ -856,7 +856,7 @@ Returns **GroupedDataFrame** A GroupedDataFrame object.
 
 ### sortBy
 
-[src/dataframe.js:861-868](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L861-L868 "Source code on GitHub")
+[src/dataframe.js:861-868](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L861-L868 "Source code on GitHub")
 
 Sort DataFrame rows based on a column values. The row should contains only one variable type.
 
@@ -875,7 +875,7 @@ Returns **[DataFrame](#dataframe)** An ordered DataFrame.
 
 ### union
 
-[src/dataframe.js:877-883](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L877-L883 "Source code on GitHub")
+[src/dataframe.js:877-883](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L877-L883 "Source code on GitHub")
 
 Concat two DataFrames.
 
@@ -893,7 +893,7 @@ Returns **[DataFrame](#dataframe)** A new concatenated DataFrame resulting of th
 
 ### join
 
-[src/dataframe.js:894-903](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L894-L903 "Source code on GitHub")
+[src/dataframe.js:894-903](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L894-L903 "Source code on GitHub")
 
 Join two DataFrames.
 
@@ -913,7 +913,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### innerJoin
 
-[src/dataframe.js:915-917](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L915-L917 "Source code on GitHub")
+[src/dataframe.js:915-917](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L915-L917 "Source code on GitHub")
 
 Join two DataFrames with inner mode.
 
@@ -934,7 +934,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### fullJoin
 
-[src/dataframe.js:928-930](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L928-L930 "Source code on GitHub")
+[src/dataframe.js:928-930](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L928-L930 "Source code on GitHub")
 
 Join two DataFrames with full mode.
 
@@ -954,7 +954,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### outerJoin
 
-[src/dataframe.js:941-943](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L941-L943 "Source code on GitHub")
+[src/dataframe.js:941-943](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L941-L943 "Source code on GitHub")
 
 Join two DataFrames with outer mode.
 
@@ -974,7 +974,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### leftJoin
 
-[src/dataframe.js:954-956](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L954-L956 "Source code on GitHub")
+[src/dataframe.js:954-956](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L954-L956 "Source code on GitHub")
 
 Join two DataFrames with left mode.
 
@@ -994,7 +994,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### rightJoin
 
-[src/dataframe.js:967-969](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L967-L969 "Source code on GitHub")
+[src/dataframe.js:967-969](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L967-L969 "Source code on GitHub")
 
 Join two DataFrames with right mode.
 
@@ -1014,7 +1014,7 @@ Returns **[DataFrame](#dataframe)** The joined DataFrame.
 
 ### diff
 
-[src/dataframe.js:979-981](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L979-L981 "Source code on GitHub")
+[src/dataframe.js:979-981](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L979-L981 "Source code on GitHub")
 
 Find the differences between two DataFrames (reverse of join).
 
@@ -1033,7 +1033,7 @@ Returns **[DataFrame](#dataframe)** The differences DataFrame.
 
 ### setDefaultModules
 
-[src/dataframe.js:23-25](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L23-L25 "Source code on GitHub")
+[src/dataframe.js:23-25](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L23-L25 "Source code on GitHub")
 
 Set the default modules used in DataFrame instances.
 
@@ -1049,7 +1049,7 @@ DataFrame.setDefaultModules(SQL, Stat)
 
 ### fromDSV
 
-[src/dataframe.js:40-58](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L40-L58 "Source code on GitHub")
+[src/dataframe.js:40-58](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L40-L58 "Source code on GitHub")
 
 Create a DataFrame from a delimiter separated values text file. It returns a Promise.
 
@@ -1072,7 +1072,7 @@ DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show()
 
 ### fromText
 
-[src/dataframe.js:73-75](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L73-L75 "Source code on GitHub")
+[src/dataframe.js:73-75](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L73-L75 "Source code on GitHub")
 
 Create a DataFrame from a delimiter separated values text file. It returns a Promise. Alias of DataFrame.fromDSV.
 
@@ -1095,7 +1095,7 @@ DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show(
 
 ### fromCSV
 
-[src/dataframe.js:89-91](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L89-L91 "Source code on GitHub")
+[src/dataframe.js:89-91](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L89-L91 "Source code on GitHub")
 
 Create a DataFrame from a comma separated values file. It returns a Promise.
 
@@ -1117,7 +1117,7 @@ DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
 
 ### fromTSV
 
-[src/dataframe.js:105-107](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L105-L107 "Source code on GitHub")
+[src/dataframe.js:105-107](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L105-L107 "Source code on GitHub")
 
 Create a DataFrame from a tab separated values file. It returns a Promise.
 
@@ -1139,7 +1139,7 @@ DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
 
 ### fromPSV
 
-[src/dataframe.js:121-123](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L121-L123 "Source code on GitHub")
+[src/dataframe.js:121-123](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L121-L123 "Source code on GitHub")
 
 Create a DataFrame from a pipe separated values file. It returns a Promise.
 
@@ -1161,7 +1161,7 @@ DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
 
 ### fromJSON
 
-[src/dataframe.js:135-147](https://github.com/Gmousse/dataframe-js/blob/f11cceeed6b5204d14591bda54d5889ce593cc71/src/dataframe.js#L135-L147 "Source code on GitHub")
+[src/dataframe.js:135-147](https://github.com/Gmousse/dataframe-js/blob/c90b92415af13a1dcaac32d58b5c6b6d91dba27b/src/dataframe.js#L135-L147 "Source code on GitHub")
 
 Create a DataFrame from a JSON file. It returns a Promise.
 
