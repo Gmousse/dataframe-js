@@ -39,3 +39,11 @@ const df = new DataFrame(data, ['column1', 'column2', 'column3'])
 console.log(df.modules);
 // [FakeModule, Matrix]
 ````
+
+### Reduce the bundle size
+
+If you use webpack or other bundlers, and you only want the core of dataframe-js without additional modules (like sql, stat or other) you can use es6 imports in order to reduce your bundle size (https://github.com/Gmousse/dataframe-js/issues/25):
+
+````js
+import DataFrame from 'dataframe-js/lib/dataframe';
+````

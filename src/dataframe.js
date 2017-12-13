@@ -1,9 +1,8 @@
-import { checktypes } from 'es7-checktypes-decorator';
 import { text, json } from 'd3-request';
 import { dsvFormat } from 'd3-dsv';
 
 import { match, transpose, chain, iter, arrayEqual, saveFile, compare, asArray, loadTextFile, addFileProtocol } from './reusables';
-import { WrongSchemaError, MixedTypeError, FileNotFoundError } from './errors';
+import { ArgumentTypeError, WrongSchemaError, MixedTypeError, FileNotFoundError } from './errors';
 import Row from './row';
 import GroupedDataFrame from './groupedDataframe';
 
@@ -25,7 +24,6 @@ class DataFrame {
         DataFrame.defaultModules = defaultModules;
     }
 
-    @checktypes(['String', 'File'], 'String')
     /**
      * Create a DataFrame from a delimiter separated values text file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -59,7 +57,6 @@ class DataFrame {
         });
     }
 
-    @checktypes(['String', 'File'], 'String')
     /**
      * Create a DataFrame from a delimiter separated values text file. It returns a Promise. Alias of DataFrame.fromDSV.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -77,7 +74,6 @@ class DataFrame {
         return DataFrame.fromDSV(pathOrFile, sep, header);
     }
 
-    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a comma separated values file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -94,7 +90,6 @@ class DataFrame {
         return DataFrame.fromDSV(pathOrFile, ',', header);
     }
 
-    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a tab separated values file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -111,7 +106,6 @@ class DataFrame {
         return DataFrame.fromDSV(pathOrFile, '\t', header);
     }
 
-    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a pipe separated values file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -128,7 +122,6 @@ class DataFrame {
         return DataFrame.fromDSV(pathOrFile, '|', header);
     }
 
-    @checktypes(['String', 'File'])
     /**
      * Create a DataFrame from a JSON file. It returns a Promise.
      * @param {String | File} pathOrFile A path to the file (url or local) or a browser File object.
@@ -215,7 +208,6 @@ class DataFrame {
         });
     }
 
-    @checktypes(['DataFrame', Array, Object])
     _build(data, columns) {
         return match(data,
             [
@@ -231,6 +223,10 @@ class DataFrame {
             [
                 (value) => (value instanceof Object),
                 () => this._fromDict(data, columns ? columns : Object.keys(data)),
+            ],
+            [
+                () => true,
+                () => {throw new ArgumentTypeError(data, 'DataFrame | Array | Object');},
             ]);
     }
 
@@ -263,8 +259,8 @@ class DataFrame {
         }).filter(group => group);
     }
 
-    @checktypes('DataFrame', ['Array', 'String'])
     _join(dfToJoin, columnNames, types) {
+        if (!(dfToJoin instanceof DataFrame)) throw new ArgumentTypeError(dfToJoin, 'DataFrame');
         const newColumns = [...new Set([...this.listColumns(), ...dfToJoin.listColumns()])];
         const columns = Array.isArray(columnNames) ? columnNames : [columnNames];
         const gdf = this.groupBy(...columns);
@@ -871,7 +867,6 @@ class DataFrame {
         return this.__newInstance__(sortedRows, this[__columns__]);
     }
 
-    @checktypes('DataFrame')
     /**
      * Concat two DataFrames.
      * @param {DataFrame} dfToUnion The DataFrame to concat.
@@ -880,6 +875,7 @@ class DataFrame {
      * df.union(df2)
      */
     union(dfToUnion) {
+        if (!(dfToUnion instanceof DataFrame)) throw new ArgumentTypeError(dfToUnion, 'DataFrame');
         if (!arrayEqual(this[__columns__], dfToUnion[__columns__])) {
             throw new WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
         }

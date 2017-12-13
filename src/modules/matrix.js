@@ -1,6 +1,5 @@
-import { checktypes } from 'es7-checktypes-decorator';
-
-import { WrongSchemaError } from '../errors';
+import DataFrame from '../dataframe';
+import { ArgumentTypeError, WrongSchemaError } from '../errors';
 import { arrayEqual, iter } from '../reusables';
 
 /**
@@ -16,7 +15,6 @@ class Matrix {
         this.name = 'matrix';
     }
 
-    @checktypes('DataFrame')
     /**
      * Check if two DataFrames are commutative, if both have the same dimensions.
      * @param {DataFrame} df The second DataFrame to check.
@@ -26,10 +24,10 @@ class Matrix {
      * df.matrix.isCommutative(df2)
      */
     isCommutative(df, reverse = false) {
+        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
         return arrayEqual(this.df.dim(), reverse ? df.dim().reverse() : df.dim(), true);
     }
 
-    @checktypes('DataFrame')
     /**
      * Provide an elements pairwise addition of two DataFrames having the same dimensions.
      * @param {DataFrame} df The second DataFrame to add.
@@ -52,7 +50,6 @@ class Matrix {
         )], this.df.listColumns());
     }
 
-    @checktypes('Number')
     /**
      * Provide a scalar product between a number and a DataFrame.
      * @param {Number} number The number to multiply.
@@ -61,10 +58,10 @@ class Matrix {
      * df.matrix.product(6)
      */
     product(number) {
+        if (!(typeof number === 'number')) throw new ArgumentTypeError(number, 'Number');
         return this.df.map(row => row.toArray().map(column => column * number));
     }
 
-    @checktypes('DataFrame')
     /**
      * Multiply one DataFrame n x p and a second p x n.
      * @param {DataFrame} df The second DataFrame to multiply.
