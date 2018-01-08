@@ -2,6 +2,19 @@
 
 ---
 
+## v1.2.6
+
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Removing the file /lib/modules/sql.js (present due to a bug of npm run build).
+- The code doesn't need es7-checktypes anymore.
+
+---
+
 ## v1.2.5
 
 
