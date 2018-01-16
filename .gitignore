@@ -2,3 +2,4 @@ npm-debug.log*
 logs
 node_modules
 .nyc_output
+package-lock.json
