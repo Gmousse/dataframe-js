@@ -71,6 +71,6 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "d3-dsv": "^1.0.3",
-    "d3-request": "^1.0.2"
+    "d3-request": "1.0.2"
   }
 }

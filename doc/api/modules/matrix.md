@@ -11,7 +11,7 @@
 
 ## Matrix
 
-[src/modules/matrix.js:8-91](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L8-L91 "Source code on GitHub")
+[src/modules/matrix.js:8-91](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L8-L91 "Source code on GitHub")
 
 Matrix module for DataFrame, providing basic mathematical matrix computations.
 
@@ -21,7 +21,7 @@ Matrix module for DataFrame, providing basic mathematical matrix computations.
 
 ### constructor
 
-[src/modules/matrix.js:13-16](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L13-L16 "Source code on GitHub")
+[src/modules/matrix.js:13-16](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L13-L16 "Source code on GitHub")
 
 Start the Matrix module.
 
@@ -31,14 +31,14 @@ Start the Matrix module.
 
 ### isCommutative
 
-[src/modules/matrix.js:26-29](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L26-L29 "Source code on GitHub")
+[src/modules/matrix.js:26-29](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L26-L29 "Source code on GitHub")
 
 Check if two DataFrames are commutative, if both have the same dimensions.
 
 **Parameters**
 
 -   `df` **DataFrame** The second DataFrame to check.
--   `reverse` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Revert the second DataFrame before the comparison. (optional, default `false`)
+-   `reverse` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Revert the second DataFrame before the comparison. (optional, default `false`)
 
 **Examples**
 
@@ -46,11 +46,11 @@ Check if two DataFrames are commutative, if both have the same dimensions.
 df.matrix.isCommutative(df2)
 ```
 
-Returns **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** True if they are commutative, else false.
+Returns **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** True if they are commutative, else false.
 
 ### add
 
-[src/modules/matrix.js:38-51](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L38-L51 "Source code on GitHub")
+[src/modules/matrix.js:38-51](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L38-L51 "Source code on GitHub")
 
 Provide an elements pairwise addition of two DataFrames having the same dimensions.
 
@@ -68,13 +68,13 @@ Returns **DataFrame** A new DataFrame resulting to the addition two DataFrames.
 
 ### product
 
-[src/modules/matrix.js:60-63](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L60-L63 "Source code on GitHub")
+[src/modules/matrix.js:60-63](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L60-L63 "Source code on GitHub")
 
 Provide a scalar product between a number and a DataFrame.
 
 **Parameters**
 
--   `number` **[Number](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number)** The number to multiply.
+-   `number` **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number)** The number to multiply.
 
 **Examples**
 
@@ -86,7 +86,7 @@ Returns **DataFrame** A new DataFrame resulting to the scalar product.
 
 ### dot
 
-[src/modules/matrix.js:72-90](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/matrix.js#L72-L90 "Source code on GitHub")
+[src/modules/matrix.js:72-90](https://github.com/Gmousse/dataframe-js/blob/ff038de7aa3b3e5eff5d760ec33fdb3ac77972fd/src/modules/matrix.js#L72-L90 "Source code on GitHub")
 
 Multiply one DataFrame n x p and a second p x n.
 
