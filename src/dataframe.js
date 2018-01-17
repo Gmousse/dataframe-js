@@ -855,19 +855,29 @@ class DataFrame {
     }
 
     /**
-     * Sort DataFrame rows based on a column values. The row should contains only one variable type.
-     * @param {String} columnName The column giving order.
+     * Sort DataFrame rows based on column values. The row should contains only one variable type. Columns are sorted left-to-right.
+     * @param {String | Array<string>} columnNames The columns giving order.
      * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
      * @returns {DataFrame} An ordered DataFrame.
      * @example
      * df.sortBy('id')
-     */
-    sortBy(columnName, reverse = false) {
+     * df.sortBy(['id1', 'id2'])
+     * df.sortBy(['id1'], true)
+    */
+    sortBy(columnNames, reverse = false) {
+        // ensure unique columns
+        const _columnNames = Array.from(new Set(asArray(columnNames)));
+
         const sortedRows = this[__rows__].sort((p, n) => {
-            const [pValue, nValue] = [p.get(columnName), n.get(columnName)];
-            if (typeof pValue !== typeof nValue) { throw new MixedTypeError(); }
-            return compare(pValue, nValue, reverse);
+            return _columnNames.map((col) => {
+                const [pValue, nValue] = [p.get(col), n.get(col)];
+                if (typeof pValue !== typeof nValue) { throw new MixedTypeError(); }
+                return compare(pValue, nValue, reverse);
+            }).reduce((acc, curr) => {
+                return acc || curr;
+            });
         });
+
         return this.__newInstance__(sortedRows, this[__columns__]);
     }
 
