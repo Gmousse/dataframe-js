@@ -2,6 +2,19 @@
 
 ---
 
+## v1.2.7
+
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Row.set and Row.delete now changes DataFrame schema. See [](https://github.com/Gmousse/dataframe-js/issues/30)
+- Fixing d3-requests to avoid build error. See [](https://github.com/d3/d3-request/issues/24)
+
+---
+
 ## v1.2.6
 
 
