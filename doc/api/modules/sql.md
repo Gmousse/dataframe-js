@@ -14,7 +14,7 @@
 
 ## SQL
 
-[src/modules/sql/index.js:8-105](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L8-L105 "Source code on GitHub")
+[src/modules/sql/index.js:8-105](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L8-L105 "Source code on GitHub")
 
 SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
 
@@ -24,7 +24,7 @@ SQL module for DataFrame, providing SQL-like syntax for data exploration in Data
 
 ### constructor
 
-[src/modules/sql/index.js:88-91](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L88-L91 "Source code on GitHub")
+[src/modules/sql/index.js:88-91](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L88-L91 "Source code on GitHub")
 
 Start the SQL module.
 
@@ -34,14 +34,14 @@ Start the SQL module.
 
 ### register
 
-[src/modules/sql/index.js:100-103](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L100-L103 "Source code on GitHub")
+[src/modules/sql/index.js:100-103](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L100-L103 "Source code on GitHub")
 
 Register the DataFrame as temporary table.
 
 **Parameters**
 
--   `tableName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the table.
--   `overwrite` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The name of the table.
+-   `overwrite` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
 
 **Examples**
 
@@ -51,13 +51,13 @@ df.sql.register('tmp');
 
 ### request
 
-[src/modules/sql/index.js:17-20](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L17-L20 "Source code on GitHub")
+[src/modules/sql/index.js:17-20](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L17-L20 "Source code on GitHub")
 
 Request on a SQL query.
 
 **Parameters**
 
--   `query` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** A SQL query to request.
+-   `query` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** A SQL query to request.
 
 **Examples**
 
@@ -69,7 +69,7 @@ Returns **any** The result of the query.
 
 ### dropTables
 
-[src/modules/sql/index.js:27-29](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L27-L29 "Source code on GitHub")
+[src/modules/sql/index.js:27-29](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L27-L29 "Source code on GitHub")
 
 Drop or remove all registered tables.
 
@@ -81,13 +81,13 @@ DataFrame.dropTables();
 
 ### dropTable
 
-[src/modules/sql/index.js:37-39](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L37-L39 "Source code on GitHub")
+[src/modules/sql/index.js:37-39](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L37-L39 "Source code on GitHub")
 
 Drop or remove a registered table.
 
 **Parameters**
 
--   `tableName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The registered table to drop.
+-   `tableName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The registered table to drop.
 
 **Examples**
 
@@ -97,15 +97,15 @@ DataFrame.dropTable('tmp1');
 
 ### renameTable
 
-[src/modules/sql/index.js:49-52](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L49-L52 "Source code on GitHub")
+[src/modules/sql/index.js:49-52](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L49-L52 "Source code on GitHub")
 
 Rename a registered table.
 
 **Parameters**
 
--   `tableName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The registered table to rename.
--   `replacement` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The new table name.
--   `overwrite` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The registered table to rename.
+-   `replacement` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The new table name.
+-   `overwrite` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
 
 **Examples**
 
@@ -115,7 +115,7 @@ DataFrame.renameTable('tmp1', 'notTmp1');
 
 ### listTables
 
-[src/modules/sql/index.js:60-62](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L60-L62 "Source code on GitHub")
+[src/modules/sql/index.js:60-62](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L60-L62 "Source code on GitHub")
 
 List all registered tables.
 
@@ -125,19 +125,19 @@ List all registered tables.
 DataFrame.listTables();
 ```
 
-Returns **[Array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array)** A list of the registered tables.
+Returns **[Array](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array)** A list of the registered tables.
 
 ### registerTable
 
-[src/modules/sql/index.js:72-82](https://github.com/Gmousse/dataframe-js/blob/a0765a3c3067d3d86e9d6d62f3faa57d8a13da63/src/modules/sql/index.js#L72-L82 "Source code on GitHub")
+[src/modules/sql/index.js:72-82](https://github.com/Gmousse/dataframe-js/blob/7cdfea5128895f81839719d27664f251a8765f81/src/modules/sql/index.js#L72-L82 "Source code on GitHub")
 
 Register a DataFrame as a temporary table.
 
 **Parameters**
 
 -   `df` **DataFrame** The DataFrame to register.
--   `tableName` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** The temporary table name.
--   `overwrite` **[Boolean](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The temporary table name.
+-   `overwrite` **[Boolean](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean)** Overwrite if the table already exists. (optional, default `false`)
 
 **Examples**
 
