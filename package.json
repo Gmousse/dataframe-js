@@ -1,6 +1,6 @@
 {
   "name": "dataframe-js",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Immutable and functional data structure for datascientists and developpers",
   "keywords": [
     "DataFrame",
