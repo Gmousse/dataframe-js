@@ -193,6 +193,10 @@ class DataFrame {
         if (!arrayEqual(columns, this[__columns__], true) || !(data[0] instanceof Row)) {
             return new DataFrame(data, columns, ...this.modules);
         }
+        const firstRowColumns = Object.keys(data[0].toDict());
+        if (!arrayEqual(firstRowColumns, this[__columns__], true)) {
+            return new DataFrame(data, firstRowColumns, ...this.modules);
+        }
         const newInstance = Object.assign(
             Object.create(
                 Object.getPrototypeOf(this)
