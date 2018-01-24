@@ -295,6 +295,14 @@ test('DataFrame rows can be ', (assert) => {
         value: [1, 0, 1, 1, 1, 2, 4, 6],
     }, ['id', 'id2', 'value']);
 
+    const df4b = new DataFrame({
+        name: ['Henry', 'Jess', 'William', 'Clair', 'Barbara', 'John'],
+        test1: [95, 95, 95, 95, 94, 94],
+        test2: [90, 90, 95, 89, 94, 98],
+        test3: [76, 75, 76, 76, 99, 77],
+        isTall: [false, true, false, true, true, false]
+    }, ['name', 'test1', 'test2', 'test3', 'isTall']);
+
     assert.deepEqual(
         df3.groupBy('id').toCollection().map(({groupKey, group}) => ({groupKey, group: group.toDict()})), [
             { groupKey: {id: 3}, group: {id: [3, 3], value: [1, 2]}},
@@ -341,6 +349,30 @@ test('DataFrame rows can be ', (assert) => {
             [1, 1],
             [1, 1],
         ], 'sorted and reverse by a column.'
+    );
+
+    assert.deepEqual(
+        df4b.sortBy(['test1', 'test2', 'isTall']).toArray(),
+        [
+            ["Barbara", 94, 94, 99, true],
+            ["John", 94, 98, 77, false],
+            ["Clair", 95, 89, 76, true],
+            ["Henry", 95, 90, 76, false],
+            ["Jess", 95, 90, 75, true],
+            ["William", 95, 95, 76, false]
+        ], 'sorted by three columns.'
+    );
+
+    assert.deepEqual(
+        df4b.sortBy(['test1', 'test2', 'isTall'], true).toArray(),
+        [
+            ["William", 95, 95, 76, false],
+            ["Jess", 95, 90, 75, true],
+            ["Henry", 95, 90, 76, false],
+            ["Clair", 95, 89, 76, true],
+            ["John", 94, 98, 77, false],
+            ["Barbara", 94, 94, 99, true],
+        ], 'sorted and reverse by three columns.'
     );
 
     const df5 = new DataFrame({
