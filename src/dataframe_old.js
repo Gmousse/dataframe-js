@@ -14,8 +14,6 @@ const __rows__ = Symbol('rows');
  */
 class DataFrame {
 
-    static defaultModules = [];
-
     /**
      * Set the default modules used in DataFrame instances.
      * @param {...Object} defaultModules DataFrame modules used by default.
@@ -173,11 +171,16 @@ class DataFrame {
      *
      * new DataFrame(df);
      */
-    constructor(data, columns, options = {}) {
+    constructor(data, columns, ...modules) {
         [this[__rows__], this[__columns__]] = this._build(data, columns);
-        this.options = options;
-        this.options.modules = this.options.modules ? this.options.modules : DataFrame.defaultModules;
-        Object.assign(this, ...this.__instanciateModules__(this.options.modules));
+        const defaultModulesNames = DataFrame.defaultModules ? DataFrame.defaultModules.map(
+            defaultModule => defaultModule.name
+        ) : [];
+        this.modules = [
+            ...(DataFrame.defaultModules ? DataFrame.defaultModules : []),
+            ...modules.filter(module => !defaultModulesNames.includes(module.name)),
+        ];
+        Object.assign(this, ...this.__instanciateModules__(this.modules));
     }
 
     * [Symbol.iterator]() {
@@ -186,27 +189,20 @@ class DataFrame {
         }
     }
 
-    _columnsAreEquals(columns, columns2 = this[__columns__]) {
-        for (const key of Object.keys(columns)) {
-            if (columns[key] !== columns2[key]) return false;
-        }
-        return true;
-    }
-
     __newInstance__(data, columns) {
-        if (!this._columnsAreEquals(columns) || !(data[0] instanceof Row)) {
-            return new DataFrame(data, columns, this.options);
+        if (!arrayEqual(columns, this[__columns__], true) || !(data[0] instanceof Row)) {
+            return new DataFrame(data, columns, ...this.modules);
         }
-
         const firstRowColumns = Object.keys(data[0].toDict());
         if (!arrayEqual(firstRowColumns, this[__columns__], true)) {
-            return new DataFrame(data, firstRowColumns, this.options);
+            return new DataFrame(data, firstRowColumns, ...this.modules);
         }
-
-        const newInstance = new DataFrame([], [], this.options);
-        newInstance[__rows__] = [...data];
-        newInstance[__columns__] = [...columns];
-        return newInstance;
+        const newInstance = Object.assign(
+            Object.create(
+                Object.getPrototypeOf(this)
+            ), this, {[__rows__]: [...data], [__columns__]: [...columns]}
+        );
+        return Object.assign(newInstance, ...this.__instanciateModules__(this.modules, newInstance));
     }
 
     __instanciateModules__(modules, df = undefined) {
@@ -223,17 +219,10 @@ class DataFrame {
                 () => this._fromArray([...data[__rows__]], columns ? columns : data[__columns__]),
             ],
             [
-                (value) => (value instanceof Array && value.length !== 0),
+                (value) => (value instanceof Array),
                 () => this._fromArray(data, columns ? columns :
-                     [...new Set([
-                         ...data.slice(0, 10),
-                         ...data.slice(-10, -1),
-                     ].map(row => Object.keys(row)).reduce((p, n) => [...p, ...n]))]
+                     [...new Set(data.map(row => Object.keys(row)).reduce((p, n) => [...p, ...n]))]
                 ),
-            ],
-            [
-                (value) => (value instanceof Array && value.length === 0),
-                () => this._fromArray(data, columns ? columns : []),
             ],
             [
                 (value) => (value instanceof Object),
