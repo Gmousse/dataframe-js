@@ -300,7 +300,7 @@ test('DataFrame rows can be ', (assert) => {
         test1: [95, 95, 95, 95, 94, 94],
         test2: [90, 90, 95, 89, 94, 98],
         test3: [76, 75, 76, 76, 99, 77],
-        isTall: [false, true, false, true, true, false]
+        isTall: [false, true, false, true, true, false],
     }, ['name', 'test1', 'test2', 'test3', 'isTall']);
 
     assert.deepEqual(
@@ -354,24 +354,24 @@ test('DataFrame rows can be ', (assert) => {
     assert.deepEqual(
         df4b.sortBy(['test1', 'test2', 'isTall']).toArray(),
         [
-            ["Barbara", 94, 94, 99, true],
-            ["John", 94, 98, 77, false],
-            ["Clair", 95, 89, 76, true],
-            ["Henry", 95, 90, 76, false],
-            ["Jess", 95, 90, 75, true],
-            ["William", 95, 95, 76, false]
+            ['Barbara', 94, 94, 99, true],
+            ['John', 94, 98, 77, false],
+            ['Clair', 95, 89, 76, true],
+            ['Henry', 95, 90, 76, false],
+            ['Jess', 95, 90, 75, true],
+            ['William', 95, 95, 76, false],
         ], 'sorted by three columns.'
     );
 
     assert.deepEqual(
         df4b.sortBy(['test1', 'test2', 'isTall'], true).toArray(),
         [
-            ["William", 95, 95, 76, false],
-            ["Jess", 95, 90, 75, true],
-            ["Henry", 95, 90, 76, false],
-            ["Clair", 95, 89, 76, true],
-            ["John", 94, 98, 77, false],
-            ["Barbara", 94, 94, 99, true],
+            ['William', 95, 95, 76, false],
+            ['Jess', 95, 90, 75, true],
+            ['Henry', 95, 90, 76, false],
+            ['Clair', 95, 89, 76, true],
+            ['John', 94, 98, 77, false],
+            ['Barbara', 94, 94, 99, true],
         ], 'sorted and reverse by three columns.'
     );
 
@@ -524,7 +524,7 @@ test('DataFrame modules can be ', (assert) => {
         column1: [3, 6, 8],
         column2: ['3', '4', '5', '6', 'yolo'],
         column3: [],
-    }, ['column1', 'column2', 'column3'], FakeModule);
+    }, ['column1', 'column2', 'column3'], {modules: [FakeModule]});
 
     assert.equal(
         df.fakemodule.test(4),
@@ -533,9 +533,15 @@ test('DataFrame modules can be ', (assert) => {
     );
 
     assert.equal(
-        df.modules.length,
-        4,
-        'listed from an instance and counted.'
+        df.options.modules.length,
+        1,
+        'listed from an instance where modules are changed from options.'
+    );
+
+    assert.equal(
+        new DataFrame([], []).options.modules.length,
+        3,
+        'listed from an instance where modules are default modules.'
     );
 
     assert.equal(

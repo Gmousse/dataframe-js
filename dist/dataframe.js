@@ -48,7 +48,7 @@ var dfjs =
 	'use strict';
 
 	exports.__esModule = true;
-	exports.Errors = exports.Benchmark = exports.Row = exports.DataFrame = undefined;
+	exports.Errors = exports.Row = exports.DataFrame = undefined;
 
 	__webpack_require__(1);
 
@@ -60,7 +60,7 @@ var dfjs =
 
 	var _row2 = _interopRequireDefault(_row);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
 	var Errors = _interopRequireWildcard(_errors);
 
@@ -76,10 +76,6 @@ var dfjs =
 
 	var _sql2 = _interopRequireDefault(_sql);
 
-	var _benchmark = __webpack_require__(504);
-
-	var _benchmark2 = _interopRequireDefault(_benchmark);
-
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
@@ -89,7 +85,6 @@ var dfjs =
 
 	exports.DataFrame = _dataframe2['default'];
 	exports.Row = _row2['default'];
-	exports.Benchmark = _benchmark2['default'];
 	exports.Errors = Errors;
 	exports['default'] = _dataframe2['default'];
 
@@ -8963,51 +8958,43 @@ var dfjs =
 
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-	var _getPrototypeOf = __webpack_require__(441);
-
-	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-	var _create = __webpack_require__(445);
-
-	var _create2 = _interopRequireDefault(_create);
-
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _regenerator = __webpack_require__(451);
+	var _regenerator = __webpack_require__(445);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _getIterator2 = __webpack_require__(454);
+	var _getIterator2 = __webpack_require__(448);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
-	var _iterator2 = __webpack_require__(386);
+	var _iterator3 = __webpack_require__(386);
 
-	var _iterator3 = _interopRequireDefault(_iterator2);
+	var _iterator4 = _interopRequireDefault(_iterator3);
 
-	var _assign = __webpack_require__(457);
+	var _assign = __webpack_require__(451);
 
 	var _assign2 = _interopRequireDefault(_assign);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	var _slicedToArray2 = __webpack_require__(462);
+	var _slicedToArray2 = __webpack_require__(456);
 
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
-	var _promise = __webpack_require__(466);
+	var _promise = __webpack_require__(460);
 
 	var _promise2 = _interopRequireDefault(_promise);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -9015,13 +9002,15 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _d3Request = __webpack_require__(480);
+	var _class, _temp;
 
-	var _d3Dsv = __webpack_require__(483);
+	var _d3Request = __webpack_require__(474);
 
-	var _reusables = __webpack_require__(484);
+	var _d3Dsv = __webpack_require__(477);
 
-	var _errors = __webpack_require__(486);
+	var _reusables = __webpack_require__(478);
+
+	var _errors = __webpack_require__(480);
 
 	var _row = __webpack_require__(493);
 
@@ -9039,8 +9028,7 @@ var dfjs =
 	/**
 	 * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 	 */
-
-	var DataFrame = function () {
+	var DataFrame = (_temp = _class = function () {
 	    (0, _createClass3['default'])(DataFrame, null, [{
 	        key: 'setDefaultModules',
 
@@ -9236,6 +9224,7 @@ var dfjs =
 	    }]);
 
 	    function DataFrame(data, columns) {
+	        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 	        (0, _classCallCheck3['default'])(this, DataFrame);
 
 	        var _build2 = this._build(data, columns);
@@ -9245,22 +9234,13 @@ var dfjs =
 	        this[__rows__] = _build3[0];
 	        this[__columns__] = _build3[1];
 
-	        var defaultModulesNames = DataFrame.defaultModules ? DataFrame.defaultModules.map(function (defaultModule) {
-	            return defaultModule.name;
-	        }) : [];
-
-	        for (var _len2 = arguments.length, modules = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-	            modules[_key2 - 2] = arguments[_key2];
-	        }
-
-	        this.modules = [].concat((0, _toConsumableArray3['default'])(DataFrame.defaultModules ? DataFrame.defaultModules : []), (0, _toConsumableArray3['default'])(modules.filter(function (module) {
-	            return !defaultModulesNames.includes(module.name);
-	        })));
-	        _assign2['default'].apply(Object, [this].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.modules))));
+	        this.options = options;
+	        this.options.modules = this.options.modules ? this.options.modules : DataFrame.defaultModules;
+	        _assign2['default'].apply(Object, [this].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.options.modules))));
 	    }
 
 	    (0, _createClass3['default'])(DataFrame, [{
-	        key: _iterator3['default'],
+	        key: _iterator4['default'],
 	        value: /*#__PURE__*/_regenerator2['default'].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, row;
 
@@ -9331,19 +9311,52 @@ var dfjs =
 	            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
 	        })
 	    }, {
+	        key: '_columnsAreEquals',
+	        value: function _columnsAreEquals(columns) {
+	            var columns2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this[__columns__];
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
+
+	            try {
+	                for (var _iterator2 = (0, _getIterator3['default'])((0, _keys2['default'])(columns)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var key = _step2.value;
+
+	                    if (columns[key] !== columns2[key]) return false;
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
+	                        _iterator2['return']();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+
+	            return true;
+	        }
+	    }, {
 	        key: '__newInstance__',
 	        value: function __newInstance__(data, columns) {
-	            var _Object$assign2;
-
-	            if (!(0, _reusables.arrayEqual)(columns, this[__columns__], true) || !(data[0] instanceof _row2['default'])) {
-	                return new (Function.prototype.bind.apply(DataFrame, [null].concat([data, columns], (0, _toConsumableArray3['default'])(this.modules))))();
+	            if (!this._columnsAreEquals(columns) || !(data[0] instanceof _row2['default'])) {
+	                return new DataFrame(data, columns, this.options);
 	            }
+
 	            var firstRowColumns = (0, _keys2['default'])(data[0].toDict());
 	            if (!(0, _reusables.arrayEqual)(firstRowColumns, this[__columns__], true)) {
-	                return new (Function.prototype.bind.apply(DataFrame, [null].concat([data, firstRowColumns], (0, _toConsumableArray3['default'])(this.modules))))();
+	                return new DataFrame(data, firstRowColumns, this.options);
 	            }
-	            var newInstance = (0, _assign2['default'])((0, _create2['default'])((0, _getPrototypeOf2['default'])(this)), this, (_Object$assign2 = {}, (0, _defineProperty3['default'])(_Object$assign2, __rows__, [].concat((0, _toConsumableArray3['default'])(data))), (0, _defineProperty3['default'])(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3['default'])(columns))), _Object$assign2));
-	            return _assign2['default'].apply(Object, [newInstance].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.modules, newInstance))));
+
+	            var newInstance = new DataFrame([], [], this.options);
+	            newInstance[__rows__] = [].concat((0, _toConsumableArray3['default'])(data));
+	            newInstance[__columns__] = [].concat((0, _toConsumableArray3['default'])(columns));
+	            return newInstance;
 	        }
 	    }, {
 	        key: '__instanciateModules__',
@@ -9369,7 +9382,7 @@ var dfjs =
 	            }], [function (value) {
 	                return value instanceof Array;
 	            }, function () {
-	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](data.map(function (row) {
+	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](data.slice(0, 10).map(function (row) {
 	                    return (0, _keys2['default'])(row);
 	                }).reduce(function (p, n) {
 	                    return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
@@ -9759,8 +9772,8 @@ var dfjs =
 	    }, {
 	        key: 'push',
 	        value: function push() {
-	            for (var _len3 = arguments.length, rows = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-	                rows[_key3] = arguments[_key3];
+	            for (var _len2 = arguments.length, rows = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	                rows[_key2] = arguments[_key2];
 	            }
 
 	            return this.union(new DataFrame(rows, this[__columns__]));
@@ -9842,8 +9855,8 @@ var dfjs =
 	    }, {
 	        key: 'select',
 	        value: function select() {
-	            for (var _len4 = arguments.length, columnNames = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
-	                columnNames[_key4] = arguments[_key4];
+	            for (var _len3 = arguments.length, columnNames = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	                columnNames[_key3] = arguments[_key3];
 	            }
 
 	            return this.__newInstance__(this[__rows__].map(function (row) {
@@ -10000,8 +10013,8 @@ var dfjs =
 	    }, {
 	        key: 'chain',
 	        value: function chain() {
-	            for (var _len5 = arguments.length, funcs = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
-	                funcs[_key5] = arguments[_key5];
+	            for (var _len4 = arguments.length, funcs = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+	                funcs[_key4] = arguments[_key4];
 	            }
 
 	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])(_reusables.chain.apply(undefined, [this[__rows__]].concat(funcs)))), this[__columns__]);
@@ -10213,8 +10226,8 @@ var dfjs =
 	    }, {
 	        key: 'groupBy',
 	        value: function groupBy() {
-	            for (var _len6 = arguments.length, columnNames = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-	                columnNames[_key6] = arguments[_key6];
+	            for (var _len5 = arguments.length, columnNames = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+	                columnNames[_key5] = arguments[_key5];
 	            }
 
 	            return new (Function.prototype.bind.apply(_groupedDataframe2['default'], [null].concat([this], columnNames)))();
@@ -10409,8 +10422,7 @@ var dfjs =
 	        }
 	    }]);
 	    return DataFrame;
-	}();
-
+	}(), _class.defaultModules = [], _temp);
 	exports['default'] = DataFrame;
 
 /***/ }),
@@ -12656,20 +12668,20 @@ var dfjs =
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(443);
-	module.exports = __webpack_require__(338).Object.getPrototypeOf;
+	module.exports = __webpack_require__(338).Object.keys;
 
 
 /***/ }),
 /* 443 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	// 19.1.2.9 Object.getPrototypeOf(O)
+	// 19.1.2.14 Object.keys(O)
 	var toObject = __webpack_require__(373);
-	var $getPrototypeOf = __webpack_require__(372);
+	var $keys = __webpack_require__(357);
 
-	__webpack_require__(444)('getPrototypeOf', function () {
-	  return function getPrototypeOf(it) {
-	    return $getPrototypeOf(toObject(it));
+	__webpack_require__(444)('keys', function () {
+	  return function keys(it) {
+	    return $keys(toObject(it));
 	  };
 	});
 
@@ -12694,66 +12706,11 @@ var dfjs =
 /* 445 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(446), __esModule: true };
+	module.exports = __webpack_require__(446);
+
 
 /***/ }),
 /* 446 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	__webpack_require__(447);
-	var $Object = __webpack_require__(338).Object;
-	module.exports = function create(P, D) {
-	  return $Object.create(P, D);
-	};
-
-
-/***/ }),
-/* 447 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	var $export = __webpack_require__(336);
-	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-	$export($export.S, 'Object', { create: __webpack_require__(355) });
-
-
-/***/ }),
-/* 448 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(449), __esModule: true };
-
-/***/ }),
-/* 449 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	__webpack_require__(450);
-	module.exports = __webpack_require__(338).Object.keys;
-
-
-/***/ }),
-/* 450 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	// 19.1.2.14 Object.keys(O)
-	var toObject = __webpack_require__(373);
-	var $keys = __webpack_require__(357);
-
-	__webpack_require__(444)('keys', function () {
-	  return function keys(it) {
-	    return $keys(toObject(it));
-	  };
-	});
-
-
-/***/ }),
-/* 451 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(452);
-
-
-/***/ }),
-/* 452 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/**
@@ -12778,7 +12735,7 @@ var dfjs =
 	// Force reevalutation of runtime.js.
 	g.regeneratorRuntime = undefined;
 
-	module.exports = __webpack_require__(453);
+	module.exports = __webpack_require__(447);
 
 	if (hadRuntime) {
 	  // Restore the original runtime.
@@ -12794,7 +12751,7 @@ var dfjs =
 
 
 /***/ }),
-/* 453 */
+/* 447 */
 /***/ (function(module, exports) {
 
 	/**
@@ -13527,22 +13484,22 @@ var dfjs =
 
 
 /***/ }),
-/* 454 */
+/* 448 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(455), __esModule: true };
+	module.exports = { "default": __webpack_require__(449), __esModule: true };
 
 /***/ }),
-/* 455 */
+/* 449 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(388);
 	__webpack_require__(330);
-	module.exports = __webpack_require__(456);
+	module.exports = __webpack_require__(450);
 
 
 /***/ }),
-/* 456 */
+/* 450 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var anObject = __webpack_require__(343);
@@ -13555,31 +13512,31 @@ var dfjs =
 
 
 /***/ }),
-/* 457 */
+/* 451 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(458), __esModule: true };
+	module.exports = { "default": __webpack_require__(452), __esModule: true };
 
 /***/ }),
-/* 458 */
+/* 452 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(459);
+	__webpack_require__(453);
 	module.exports = __webpack_require__(338).Object.assign;
 
 
 /***/ }),
-/* 459 */
+/* 453 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.3.1 Object.assign(target, source)
 	var $export = __webpack_require__(336);
 
-	$export($export.S + $export.F, 'Object', { assign: __webpack_require__(460) });
+	$export($export.S + $export.F, 'Object', { assign: __webpack_require__(454) });
 
 
 /***/ }),
-/* 460 */
+/* 454 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13619,7 +13576,7 @@ var dfjs =
 
 
 /***/ }),
-/* 461 */
+/* 455 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -13645,18 +13602,18 @@ var dfjs =
 	};
 
 /***/ }),
-/* 462 */
+/* 456 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _isIterable2 = __webpack_require__(463);
+	var _isIterable2 = __webpack_require__(457);
 
 	var _isIterable3 = _interopRequireDefault(_isIterable2);
 
-	var _getIterator2 = __webpack_require__(454);
+	var _getIterator2 = __webpack_require__(448);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -13701,22 +13658,22 @@ var dfjs =
 	}();
 
 /***/ }),
-/* 463 */
+/* 457 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(464), __esModule: true };
+	module.exports = { "default": __webpack_require__(458), __esModule: true };
 
 /***/ }),
-/* 464 */
+/* 458 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(388);
 	__webpack_require__(330);
-	module.exports = __webpack_require__(465);
+	module.exports = __webpack_require__(459);
 
 
 /***/ }),
-/* 465 */
+/* 459 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var classof = __webpack_require__(379);
@@ -13732,26 +13689,26 @@ var dfjs =
 
 
 /***/ }),
-/* 466 */
+/* 460 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(467), __esModule: true };
+	module.exports = { "default": __webpack_require__(461), __esModule: true };
 
 /***/ }),
-/* 467 */
+/* 461 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	__webpack_require__(405);
 	__webpack_require__(330);
 	__webpack_require__(388);
-	__webpack_require__(468);
-	__webpack_require__(476);
-	__webpack_require__(477);
+	__webpack_require__(462);
+	__webpack_require__(470);
+	__webpack_require__(471);
 	module.exports = __webpack_require__(338).Promise;
 
 
 /***/ }),
-/* 468 */
+/* 462 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -13764,12 +13721,12 @@ var dfjs =
 	var aFunction = __webpack_require__(340);
 	var anInstance = __webpack_require__(422);
 	var forOf = __webpack_require__(423);
-	var speciesConstructor = __webpack_require__(469);
-	var task = __webpack_require__(470).set;
-	var microtask = __webpack_require__(472)();
-	var newPromiseCapabilityModule = __webpack_require__(473);
-	var perform = __webpack_require__(474);
-	var promiseResolve = __webpack_require__(475);
+	var speciesConstructor = __webpack_require__(463);
+	var task = __webpack_require__(464).set;
+	var microtask = __webpack_require__(466)();
+	var newPromiseCapabilityModule = __webpack_require__(467);
+	var perform = __webpack_require__(468);
+	var promiseResolve = __webpack_require__(469);
 	var PROMISE = 'Promise';
 	var TypeError = global.TypeError;
 	var process = global.process;
@@ -14030,7 +13987,7 @@ var dfjs =
 
 
 /***/ }),
-/* 469 */
+/* 463 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
@@ -14045,11 +14002,11 @@ var dfjs =
 
 
 /***/ }),
-/* 470 */
+/* 464 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var ctx = __webpack_require__(339);
-	var invoke = __webpack_require__(471);
+	var invoke = __webpack_require__(465);
 	var html = __webpack_require__(369);
 	var cel = __webpack_require__(348);
 	var global = __webpack_require__(337);
@@ -14135,7 +14092,7 @@ var dfjs =
 
 
 /***/ }),
-/* 471 */
+/* 465 */
 /***/ (function(module, exports) {
 
 	// fast apply, http://jsperf.lnkit.com/fast-apply/5
@@ -14157,11 +14114,11 @@ var dfjs =
 
 
 /***/ }),
-/* 472 */
+/* 466 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var global = __webpack_require__(337);
-	var macrotask = __webpack_require__(470).set;
+	var macrotask = __webpack_require__(464).set;
 	var Observer = global.MutationObserver || global.WebKitMutationObserver;
 	var process = global.process;
 	var Promise = global.Promise;
@@ -14231,7 +14188,7 @@ var dfjs =
 
 
 /***/ }),
-/* 473 */
+/* 467 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -14255,7 +14212,7 @@ var dfjs =
 
 
 /***/ }),
-/* 474 */
+/* 468 */
 /***/ (function(module, exports) {
 
 	module.exports = function (exec) {
@@ -14268,12 +14225,12 @@ var dfjs =
 
 
 /***/ }),
-/* 475 */
+/* 469 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var anObject = __webpack_require__(343);
 	var isObject = __webpack_require__(344);
-	var newPromiseCapability = __webpack_require__(473);
+	var newPromiseCapability = __webpack_require__(467);
 
 	module.exports = function (C, x) {
 	  anObject(C);
@@ -14286,7 +14243,7 @@ var dfjs =
 
 
 /***/ }),
-/* 476 */
+/* 470 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// https://github.com/tc39/proposal-promise-finally
@@ -14294,8 +14251,8 @@ var dfjs =
 	var $export = __webpack_require__(336);
 	var core = __webpack_require__(338);
 	var global = __webpack_require__(337);
-	var speciesConstructor = __webpack_require__(469);
-	var promiseResolve = __webpack_require__(475);
+	var speciesConstructor = __webpack_require__(463);
+	var promiseResolve = __webpack_require__(469);
 
 	$export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
 	  var C = speciesConstructor(this, core.Promise || global.Promise);
@@ -14312,14 +14269,14 @@ var dfjs =
 
 
 /***/ }),
-/* 477 */
+/* 471 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	// https://github.com/tc39/proposal-promise-try
 	var $export = __webpack_require__(336);
-	var newPromiseCapability = __webpack_require__(473);
-	var perform = __webpack_require__(474);
+	var newPromiseCapability = __webpack_require__(467);
+	var perform = __webpack_require__(468);
 
 	$export($export.S, 'Promise', { 'try': function (callbackfn) {
 	  var promiseCapability = newPromiseCapability.f(this);
@@ -14330,7 +14287,7 @@ var dfjs =
 
 
 /***/ }),
-/* 478 */
+/* 472 */
 /***/ (function(module, exports) {
 
 	"use strict";
@@ -14344,7 +14301,7 @@ var dfjs =
 	};
 
 /***/ }),
-/* 479 */
+/* 473 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -14376,12 +14333,12 @@ var dfjs =
 	}();
 
 /***/ }),
-/* 480 */
+/* 474 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-request/ Version 1.0.2. Copyright 2016 Mike Bostock.
 	(function (global, factory) {
-	   true ? factory(exports, __webpack_require__(481), __webpack_require__(482), __webpack_require__(483)) :
+	   true ? factory(exports, __webpack_require__(475), __webpack_require__(476), __webpack_require__(477)) :
 	  typeof define === 'function' && define.amd ? define(['exports', 'd3-collection', 'd3-dispatch', 'd3-dsv'], factory) :
 	  (factory((global.d3 = global.d3 || {}),global.d3,global.d3,global.d3));
 	}(this, function (exports,d3Collection,d3Dispatch,d3Dsv) { 'use strict';
@@ -14597,7 +14554,7 @@ var dfjs =
 	}));
 
 /***/ }),
-/* 481 */
+/* 475 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-collection/ Version 1.0.4. Copyright 2017 Mike Bostock.
@@ -14820,7 +14777,7 @@ var dfjs =
 
 
 /***/ }),
-/* 482 */
+/* 476 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-dispatch/ Version 1.0.3. Copyright 2017 Mike Bostock.
@@ -14921,7 +14878,7 @@ var dfjs =
 
 
 /***/ }),
-/* 483 */
+/* 477 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// https://d3js.org/d3-dsv/ Version 1.0.8. Copyright 2017 Mike Bostock.
@@ -15089,18 +15046,18 @@ var dfjs =
 
 
 /***/ }),
-/* 484 */
+/* 478 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _getIterator2 = __webpack_require__(454);
+	var _getIterator2 = __webpack_require__(448);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
-	var _regenerator = __webpack_require__(451);
+	var _regenerator = __webpack_require__(445);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
@@ -15108,11 +15065,11 @@ var dfjs =
 
 	var _set2 = _interopRequireDefault(_set);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
@@ -15314,7 +15271,7 @@ var dfjs =
 
 	function saveFile(path, content) {
 	    try {
-	        __webpack_require__(485).writeFileSync(path, content);
+	        __webpack_require__(479).writeFileSync(path, content);
 	    } catch (e) {
 	        console.warn('File system module is not available.');
 	    }
@@ -15392,13 +15349,13 @@ var dfjs =
 	}
 
 /***/ }),
-/* 485 */
+/* 479 */
 /***/ (function(module, exports) {
 
 	
 
 /***/ }),
-/* 486 */
+/* 480 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -15410,19 +15367,19 @@ var dfjs =
 
 	var _typeof3 = _interopRequireDefault(_typeof2);
 
-	var _getPrototypeOf = __webpack_require__(441);
+	var _getPrototypeOf = __webpack_require__(481);
 
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _possibleConstructorReturn2 = __webpack_require__(487);
+	var _possibleConstructorReturn2 = __webpack_require__(484);
 
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-	var _inherits2 = __webpack_require__(488);
+	var _inherits2 = __webpack_require__(485);
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
@@ -15561,7 +15518,36 @@ var dfjs =
 	}(Error);
 
 /***/ }),
-/* 487 */
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(482), __esModule: true };
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	__webpack_require__(483);
+	module.exports = __webpack_require__(338).Object.getPrototypeOf;
+
+
+/***/ }),
+/* 483 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// 19.1.2.9 Object.getPrototypeOf(O)
+	var toObject = __webpack_require__(373);
+	var $getPrototypeOf = __webpack_require__(372);
+
+	__webpack_require__(444)('getPrototypeOf', function () {
+	  return function getPrototypeOf(it) {
+	    return $getPrototypeOf(toObject(it));
+	  };
+	});
+
+
+/***/ }),
+/* 484 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -15583,18 +15569,18 @@ var dfjs =
 	};
 
 /***/ }),
-/* 488 */
+/* 485 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	exports.__esModule = true;
 
-	var _setPrototypeOf = __webpack_require__(489);
+	var _setPrototypeOf = __webpack_require__(486);
 
 	var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
-	var _create = __webpack_require__(445);
+	var _create = __webpack_require__(490);
 
 	var _create2 = _interopRequireDefault(_create);
 
@@ -15621,30 +15607,30 @@ var dfjs =
 	};
 
 /***/ }),
-/* 489 */
+/* 486 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(490), __esModule: true };
+	module.exports = { "default": __webpack_require__(487), __esModule: true };
 
 /***/ }),
-/* 490 */
+/* 487 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	__webpack_require__(491);
+	__webpack_require__(488);
 	module.exports = __webpack_require__(338).Object.setPrototypeOf;
 
 
 /***/ }),
-/* 491 */
+/* 488 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.3.19 Object.setPrototypeOf(O, proto)
 	var $export = __webpack_require__(336);
-	$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(492).set });
+	$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(489).set });
 
 
 /***/ }),
-/* 492 */
+/* 489 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	// Works with __proto__ only. Old v8 can't work with null proto objects.
@@ -15675,6 +15661,32 @@ var dfjs =
 
 
 /***/ }),
+/* 490 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(491), __esModule: true };
+
+/***/ }),
+/* 491 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	__webpack_require__(492);
+	var $Object = __webpack_require__(338).Object;
+	module.exports = function create(P, D) {
+	  return $Object.create(P, D);
+	};
+
+
+/***/ }),
+/* 492 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(336);
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	$export($export.S, 'Object', { create: __webpack_require__(355) });
+
+
+/***/ }),
 /* 493 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15694,23 +15706,23 @@ var dfjs =
 
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	var _getPrototypeOf = __webpack_require__(441);
+	var _getPrototypeOf = __webpack_require__(481);
 
 	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-	var _create = __webpack_require__(445);
+	var _create = __webpack_require__(490);
 
 	var _create2 = _interopRequireDefault(_create);
 
-	var _assign = __webpack_require__(457);
+	var _assign = __webpack_require__(451);
 
 	var _assign2 = _interopRequireDefault(_assign);
 
-	var _regenerator = __webpack_require__(451);
+	var _regenerator = __webpack_require__(445);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
@@ -15718,7 +15730,7 @@ var dfjs =
 
 	var _values2 = _interopRequireDefault(_values);
 
-	var _getIterator2 = __webpack_require__(454);
+	var _getIterator2 = __webpack_require__(448);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -15730,15 +15742,15 @@ var dfjs =
 
 	var _freeze2 = _interopRequireDefault(_freeze);
 
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -15746,9 +15758,9 @@ var dfjs =
 
 	var _symbol2 = _interopRequireDefault(_symbol);
 
-	var _reusables = __webpack_require__(484);
+	var _reusables = __webpack_require__(478);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -16083,7 +16095,7 @@ var dfjs =
 	exports.__esModule = true;
 	exports['default'] = undefined;
 
-	var _slicedToArray2 = __webpack_require__(462);
+	var _slicedToArray2 = __webpack_require__(456);
 
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
@@ -16107,15 +16119,15 @@ var dfjs =
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	var _regenerator = __webpack_require__(451);
+	var _regenerator = __webpack_require__(445);
 
 	var _regenerator2 = _interopRequireDefault(_regenerator);
 
-	var _getIterator2 = __webpack_require__(454);
+	var _getIterator2 = __webpack_require__(448);
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -16123,11 +16135,11 @@ var dfjs =
 
 	var _iterator3 = _interopRequireDefault(_iterator2);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -16139,7 +16151,7 @@ var dfjs =
 
 	var _dataframe2 = _interopRequireDefault(_dataframe);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -16470,7 +16482,7 @@ var dfjs =
 
 	exports.__esModule = true;
 
-	var _assign = __webpack_require__(457);
+	var _assign = __webpack_require__(451);
 
 	var _assign2 = _interopRequireDefault(_assign);
 
@@ -16498,15 +16510,15 @@ var dfjs =
 
 	exports.__esModule = true;
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
-	var _reusables = __webpack_require__(484);
+	var _reusables = __webpack_require__(478);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -16684,19 +16696,19 @@ var dfjs =
 
 	exports.__esModule = true;
 
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -16704,9 +16716,9 @@ var dfjs =
 
 	var _dataframe2 = _interopRequireDefault(_dataframe);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
-	var _reusables = __webpack_require__(484);
+	var _reusables = __webpack_require__(478);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -16830,15 +16842,15 @@ var dfjs =
 
 	exports.__esModule = true;
 
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _classCallCheck2 = __webpack_require__(478);
+	var _classCallCheck2 = __webpack_require__(472);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-	var _createClass2 = __webpack_require__(479);
+	var _createClass2 = __webpack_require__(473);
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
@@ -16850,7 +16862,7 @@ var dfjs =
 
 	var _dataframe2 = _interopRequireDefault(_dataframe);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -17002,23 +17014,23 @@ var dfjs =
 
 	exports.__esModule = true;
 
-	var _slicedToArray2 = __webpack_require__(462);
+	var _slicedToArray2 = __webpack_require__(456);
 
 	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
-	var _keys = __webpack_require__(448);
+	var _keys = __webpack_require__(441);
 
 	var _keys2 = _interopRequireDefault(_keys);
 
-	var _toConsumableArray2 = __webpack_require__(461);
+	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 	exports['default'] = sqlParser;
 
-	var _reusables = __webpack_require__(484);
+	var _reusables = __webpack_require__(478);
 
-	var _errors = __webpack_require__(486);
+	var _errors = __webpack_require__(480);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -17243,338 +17255,6 @@ var dfjs =
 	    var applySelections = parseSelections(selections);
 	    return applySelections(applyOperations(tables[table]));
 	}
-
-/***/ }),
-/* 504 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	exports.__esModule = true;
-	exports['default'] = undefined;
-
-	var _toConsumableArray2 = __webpack_require__(461);
-
-	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-	var _regenerator = __webpack_require__(451);
-
-	var _regenerator2 = _interopRequireDefault(_regenerator);
-
-	var _getIterator2 = __webpack_require__(454);
-
-	var _getIterator3 = _interopRequireDefault(_getIterator2);
-
-	var _classCallCheck2 = __webpack_require__(478);
-
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-	var _createClass2 = __webpack_require__(479);
-
-	var _createClass3 = _interopRequireDefault(_createClass2);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-	var Benchmark = function () {
-	    function Benchmark() {
-	        (0, _classCallCheck3['default'])(this, Benchmark);
-	    }
-
-	    (0, _createClass3['default'])(Benchmark, [{
-	        key: '__benchmarks__',
-	        value: /*#__PURE__*/_regenerator2['default'].mark(function __benchmarks__(func, repeats) {
-	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, bench, timer, diff;
-
-	            return _regenerator2['default'].wrap(function __benchmarks__$(_context) {
-	                while (1) {
-	                    switch (_context.prev = _context.next) {
-	                        case 0:
-	                            _iteratorNormalCompletion = true;
-	                            _didIteratorError = false;
-	                            _iteratorError = undefined;
-	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3['default'])(Array(repeats));
-
-	                        case 5:
-	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-	                                _context.next = 15;
-	                                break;
-	                            }
-
-	                            bench = _step.value;
-	                            timer = process.hrtime();
-
-	                            func(bench);
-	                            diff = process.hrtime(timer);
-	                            _context.next = 12;
-	                            return diff[0] * 1e9 + diff[1];
-
-	                        case 12:
-	                            _iteratorNormalCompletion = true;
-	                            _context.next = 5;
-	                            break;
-
-	                        case 15:
-	                            _context.next = 21;
-	                            break;
-
-	                        case 17:
-	                            _context.prev = 17;
-	                            _context.t0 = _context['catch'](3);
-	                            _didIteratorError = true;
-	                            _iteratorError = _context.t0;
-
-	                        case 21:
-	                            _context.prev = 21;
-	                            _context.prev = 22;
-
-	                            if (!_iteratorNormalCompletion && _iterator['return']) {
-	                                _iterator['return']();
-	                            }
-
-	                        case 24:
-	                            _context.prev = 24;
-
-	                            if (!_didIteratorError) {
-	                                _context.next = 27;
-	                                break;
-	                            }
-
-	                            throw _iteratorError;
-
-	                        case 27:
-	                            return _context.finish(24);
-
-	                        case 28:
-	                            return _context.finish(21);
-
-	                        case 29:
-	                        case 'end':
-	                            return _context.stop();
-	                    }
-	                }
-	            }, __benchmarks__, this, [[3, 17, 21, 29], [22,, 24, 28]]);
-	        })
-	    }, {
-	        key: '_mean',
-	        value: function _mean(array) {
-	            return array.reduce(function (p, n) {
-	                return p + n;
-	            }, 0) / array.length;
-	        }
-	    }, {
-	        key: 'start',
-	        value: function start(func, repeats) {
-	            var benchmarkResult = this._mean([].concat((0, _toConsumableArray3['default'])(this.__benchmarks__(func, repeats))));
-	            console.log('New benchmark: ' + benchmarkResult + ' nanoseconds');
-	            return benchmarkResult;
-	        }
-	    }, {
-	        key: 'compare',
-	        value: function compare(func1, func2, repeats) {
-	            var _ref = [this.start(func1, repeats), this.start(func2, repeats)],
-	                benchmarkResult1 = _ref[0],
-	                benchmarkResult2 = _ref[1];
-
-	            console.log('Most rapid function: ' + (benchmarkResult1 > benchmarkResult2 ? 'func2' : 'func1'));
-	            return [benchmarkResult1, benchmarkResult2];
-	        }
-	    }]);
-	    return Benchmark;
-	}();
-
-	exports['default'] = Benchmark;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(505)))
-
-/***/ }),
-/* 505 */
-/***/ (function(module, exports) {
-
-	// shim for using process in browser
-	var process = module.exports = {};
-
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
-
-	var cachedSetTimeout;
-	var cachedClearTimeout;
-
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
-	(function () {
-	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
-	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
-	    }
-	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
-	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
-	    }
-	} ())
-	function runTimeout(fun) {
-	    if (cachedSetTimeout === setTimeout) {
-	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
-	        return setTimeout(fun, 0);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedSetTimeout(fun, 0);
-	    } catch(e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-	            return cachedSetTimeout.call(null, fun, 0);
-	        } catch(e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-	            return cachedSetTimeout.call(this, fun, 0);
-	        }
-	    }
-
-
-	}
-	function runClearTimeout(marker) {
-	    if (cachedClearTimeout === clearTimeout) {
-	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
-	        return clearTimeout(marker);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedClearTimeout(marker);
-	    } catch (e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-	            return cachedClearTimeout.call(null, marker);
-	        } catch (e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-	            return cachedClearTimeout.call(this, marker);
-	        }
-	    }
-
-
-
-	}
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = runTimeout(cleanUpNextTick);
-	    draining = true;
-
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    runClearTimeout(timeout);
-	}
-
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        runTimeout(drainQueue);
-	    }
-	};
-
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-
-	function noop() {}
-
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	process.prependListener = noop;
-	process.prependOnceListener = noop;
-
-	process.listeners = function (name) { return [] }
-
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
 
 /***/ })
 /******/ ]);
