@@ -10026,8 +10026,8 @@ var dfjs =
 	                    return p && n;
 	                });
 	            } : condition;
-	            var filteredRows = [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
-	                return func(row) ? row : false;
+	            var filteredRows = [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row, i) {
+	                return func(row, i) ? row : false;
 	            })));
 	            return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
 	        }
@@ -10074,8 +10074,8 @@ var dfjs =
 	    }, {
 	        key: 'map',
 	        value: function map(func) {
-	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
-	                return func(row);
+	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row, i) {
+	                return func(row, i);
 	            }))), this[__columns__]);
 	        }
 
@@ -10131,7 +10131,14 @@ var dfjs =
 	    }, {
 	        key: 'dropDuplicates',
 	        value: function dropDuplicates() {
-	            return this.groupBy.apply(this, (0, _toConsumableArray3['default'])(this[__columns__])).aggregate(function () {}).drop('aggregation');
+	            for (var _len6 = arguments.length, columnNames = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+	                columnNames[_key6] = arguments[_key6];
+	            }
+
+	            var groupCols = columnNames && columnNames.length > 0 ? columnNames : this[__columns__];
+	            return this.groupBy.apply(this, (0, _toConsumableArray3['default'])(groupCols)).filter(function (row, i) {
+	                return i === 0;
+	            });
 	        }
 
 	        /**
@@ -10209,8 +10216,8 @@ var dfjs =
 	    }, {
 	        key: 'groupBy',
 	        value: function groupBy() {
-	            for (var _len6 = arguments.length, columnNames = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
-	                columnNames[_key6] = arguments[_key6];
+	            for (var _len7 = arguments.length, columnNames = Array(_len7), _key7 = 0; _key7 < _len7; _key7++) {
+	                columnNames[_key7] = arguments[_key7];
 	            }
 
 	            return new (Function.prototype.bind.apply(_groupedDataframe2['default'], [null].concat([this], columnNames)))();
@@ -15197,89 +15204,90 @@ var dfjs =
 	        return false;
 	    };
 
-	    var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, iteration, modifiedRow;
+	    var i, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, iteration, modifiedRow;
 
 	    return _regenerator2['default'].wrap(function iter$(_context2) {
 	        while (1) {
 	            switch (_context2.prev = _context2.next) {
 	                case 0:
+	                    i = 0;
 	                    _iteratorNormalCompletion = true;
 	                    _didIteratorError = false;
 	                    _iteratorError = undefined;
-	                    _context2.prev = 3;
+	                    _context2.prev = 4;
 	                    _iterator = (0, _getIterator3['default'])(data);
 
-	                case 5:
+	                case 6:
 	                    if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-	                        _context2.next = 16;
+	                        _context2.next = 17;
 	                        break;
 	                    }
 
 	                    iteration = _step.value;
 
 	                    if (!abort()) {
-	                        _context2.next = 9;
+	                        _context2.next = 10;
 	                        break;
 	                    }
 
 	                    return _context2.abrupt('return');
 
-	                case 9:
-	                    modifiedRow = func(iteration);
+	                case 10:
+	                    modifiedRow = func(iteration, i++);
 
 	                    if (!modifiedRow) {
-	                        _context2.next = 13;
+	                        _context2.next = 14;
 	                        break;
 	                    }
 
-	                    _context2.next = 13;
+	                    _context2.next = 14;
 	                    return modifiedRow;
 
-	                case 13:
+	                case 14:
 	                    _iteratorNormalCompletion = true;
-	                    _context2.next = 5;
+	                    _context2.next = 6;
 	                    break;
 
-	                case 16:
-	                    _context2.next = 22;
+	                case 17:
+	                    _context2.next = 23;
 	                    break;
 
-	                case 18:
-	                    _context2.prev = 18;
-	                    _context2.t0 = _context2['catch'](3);
+	                case 19:
+	                    _context2.prev = 19;
+	                    _context2.t0 = _context2['catch'](4);
 	                    _didIteratorError = true;
 	                    _iteratorError = _context2.t0;
 
-	                case 22:
-	                    _context2.prev = 22;
+	                case 23:
 	                    _context2.prev = 23;
+	                    _context2.prev = 24;
 
 	                    if (!_iteratorNormalCompletion && _iterator['return']) {
 	                        _iterator['return']();
 	                    }
 
-	                case 25:
-	                    _context2.prev = 25;
+	                case 26:
+	                    _context2.prev = 26;
 
 	                    if (!_didIteratorError) {
-	                        _context2.next = 28;
+	                        _context2.next = 29;
 	                        break;
 	                    }
 
 	                    throw _iteratorError;
 
-	                case 28:
-	                    return _context2.finish(25);
-
 	                case 29:
-	                    return _context2.finish(22);
+	                    return _context2.finish(26);
 
 	                case 30:
+	                    return _context2.finish(23);
+
+	                case 31:
 	                case 'end':
 	                    return _context2.stop();
 	            }
 	        }
-	    }, _marked2, this, [[3, 18, 22, 30], [23,, 25, 29]]);
+	    }, _marked2, this, [[4, 19, 23, 31], [24,, 26, 30]]);
 	}
 
 	function chain(data) {
@@ -15288,9 +15296,9 @@ var dfjs =
 	    }
 
 	    return iter(data, operations.reduce(function (p, n) {
-	        return function (x) {
-	            var prev = p(x);
-	            var next = prev ? n(prev) : false;
+	        return function (x, i) {
+	            var prev = p(x, i);
+	            var next = prev ? n(prev, i) : false;
 	            return next === true ? prev : next;
 	        };
 	    }, function (x) {
@@ -16334,6 +16342,84 @@ var dfjs =
 	        }
 
 	        /**
+	         * Map on DataFrame groups.
+	         * @param {Function} func The function to apply to each row of each group.
+	         * @returns {DataFrame} A new DataFrame containing the result.
+	         * @example
+	         * groupedDF.map((row,i) => row.set('b', row.get('a')*i));
+	         */
+
+	    }, {
+	        key: 'map',
+	        value: function map(func) {
+	            var _ref6;
+
+	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref5) {
+	                var group = _ref5.group;
+	                return group.map(func);
+	            });
+	            return this.df.__newInstance__((_ref6 = []).concat.apply(_ref6, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	                return group.toCollection();
+	            }))), mapped[0].listColumns());
+	        }
+
+	        /**
+	         * Filter a grouped DataFrame.
+	         * @param {Function} condition A filter function or a column/value object.
+	         * @returns {DataFrame} A new filtered DataFrame.
+	         * @example
+	         * groupedDF.filter((row,i) => (i === 0));
+	         */
+
+	    }, {
+	        key: 'filter',
+	        value: function filter(condition) {
+	            var _ref8;
+
+	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref7) {
+	                var group = _ref7.group;
+	                return group.filter(condition);
+	            }).filter(function (group) {
+	                return group.listColumns().length > 0;
+	            });
+	            return mapped.length === 0 ? [] : this.df.__newInstance__((_ref8 = []).concat.apply(_ref8, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	                return group.toCollection();
+	            }))), mapped[0].listColumns());
+	        }
+
+	        /**
+	         * Chain maps and filters functions on DataFrame by optimizing their executions.
+	         * If a function returns boolean, it's a filter. Else it's a map.
+	         * It can be 10 - 100 x faster than standard chains of .map() and .filter().
+	         * @param {...Function} funcs Functions to apply on the DataFrame rows taking the row as parameter.
+	         * @returns {DataFrame} A new DataFrame with modified rows.
+	         * @example
+	         * groupedDF.chain(
+	         *      (row, i) => (i === 0), // filter
+	         *      row => row.set('column1', 3),  // map
+	         *      row => row.get('column2') === '5' // filter
+	         * )
+	         */
+
+	    }, {
+	        key: 'chain',
+	        value: function chain() {
+	            var _ref10;
+
+	            for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	                funcs[_key2] = arguments[_key2];
+	            }
+
+	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref9) {
+	                var group = _ref9.group;
+	                return group.chain.apply(group, funcs);
+	            });
+	            return this.df.__newInstance__((_ref10 = []).concat.apply(_ref10, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	                return group.toCollection();
+	            }))), mapped[0].listColumns());
+	        }
+
+	        /**
 	         * Create an aggregation from a function.
 	         * @param {Function} func The aggregation function.
 	         * @param {String} [columnName='aggregation'] The column name created by the aggregation.
@@ -16347,9 +16433,9 @@ var dfjs =
 	        value: function aggregate(func) {
 	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'aggregation';
 
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref5) {
-	                var group = _ref5.group,
-	                    groupKey = _ref5.groupKey;
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref11) {
+	                var group = _ref11.group,
+	                    groupKey = _ref11.groupKey;
 	                return (0, _extends4['default'])({}, groupKey, (0, _defineProperty3['default'])({}, columnName, func(group, groupKey)));
 	            }), [].concat((0, _toConsumableArray3['default'])(this.on), [columnName]));
 	        }
@@ -16377,9 +16463,9 @@ var dfjs =
 	                }).toArray('aggregation').reduce(function (p, n) {
 	                    return (0, _extends4['default'])({}, p, n);
 	                }, {});
-	            }).toCollection().map(function (_ref7) {
-	                var aggregation = _ref7.aggregation,
-	                    rest = (0, _objectWithoutProperties3['default'])(_ref7, ['aggregation']);
+	            }).toCollection().map(function (_ref13) {
+	                var aggregation = _ref13.aggregation,
+	                    rest = (0, _objectWithoutProperties3['default'])(_ref13, ['aggregation']);
 	                return (0, _extends4['default'])({}, rest, aggregation);
 	            }), columns);
 	        }
@@ -16403,20 +16489,20 @@ var dfjs =
 
 	            var columns = [].concat((0, _toConsumableArray3['default'])(this.on), [variableColumnName, valueColumnName]);
 	            return this.df.__newInstance__(this.aggregate(function (group) {
-	                return (0, _entries2['default'])(group.toDict()).reduce(function (tidy, _ref8) {
-	                    var _ref9 = (0, _slicedToArray3['default'])(_ref8, 2),
-	                        key = _ref9[0],
-	                        value = _ref9[1];
+	                return (0, _entries2['default'])(group.toDict()).reduce(function (tidy, _ref14) {
+	                    var _ref15 = (0, _slicedToArray3['default'])(_ref14, 2),
+	                        key = _ref15[0],
+	                        value = _ref15[1];
 
 	                    return [].concat((0, _toConsumableArray3['default'])(tidy), (0, _toConsumableArray3['default'])(value.reduce(function (p, n) {
-	                        var _ref10;
+	                        var _ref16;
 
-	                        return !_this.on.includes(key) ? [].concat((0, _toConsumableArray3['default'])(p), [(_ref10 = {}, (0, _defineProperty3['default'])(_ref10, variableColumnName, key), (0, _defineProperty3['default'])(_ref10, valueColumnName, n), _ref10)]) : p;
+	                        return !_this.on.includes(key) ? [].concat((0, _toConsumableArray3['default'])(p), [(_ref16 = {}, (0, _defineProperty3['default'])(_ref16, variableColumnName, key), (0, _defineProperty3['default'])(_ref16, valueColumnName, n), _ref16)]) : p;
 	                    }, [])));
 	                }, []);
-	            }).toCollection().reduce(function (p, _ref11) {
-	                var aggregation = _ref11.aggregation,
-	                    rest = (0, _objectWithoutProperties3['default'])(_ref11, ['aggregation']);
+	            }).toCollection().reduce(function (p, _ref17) {
+	                var aggregation = _ref17.aggregation,
+	                    rest = (0, _objectWithoutProperties3['default'])(_ref17, ['aggregation']);
 	                return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(aggregation.map(function (x) {
 	                    return (0, _extends4['default'])({}, rest, x);
 	                })));

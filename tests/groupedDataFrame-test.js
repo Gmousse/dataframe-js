@@ -64,6 +64,36 @@ test('GroupedDataFrame can be ', (assert) => {
         'showed as a String.'
     );
 
+    assert.deepEqual(
+        (new GroupedDataFrame(df, 'column1')).map((row, i) => row.set('idx', i)).drop('column3').toCollection(),[
+            {'column1': 1, 'column2': 'On the road', 'idx': 0},
+            {'column1': 1, 'column2': 'again', 'idx': 1},
+            {'column1': 1, 'column2': 'On the road', 'idx': 2},
+            {'column1': 3, 'column2': 'again', 'idx': 0},
+            {'column1': 3, 'column2': 'On the road', 'idx': 1},
+            {'column1': 2, 'column2': 'again', 'idx': 0}
+        ], 'mapped with row index'
+    );
+
+    assert.deepEqual(
+        (new GroupedDataFrame(df, 'column1')).filter((row, i) => (i === 0)).drop('column3').toCollection(),[
+            {'column1': 1, 'column2': 'On the road'},
+            {'column1': 3, 'column2': 'again'},
+            {'column1': 2, 'column2': 'again'}
+        ], 'filtered based on index'
+    );
+
+    assert.deepEqual(
+        (new GroupedDataFrame(df, 'column1')).chain(
+          (row, i) => (i === 0),
+          row => row.set('column4', row.get('column1')*2)
+        ).drop('column3').toCollection(),[
+            {'column1': 1, 'column2': 'On the road', 'column4': 2},
+            {'column1': 3, 'column2': 'again', 'column4': 6},
+            {'column1': 2, 'column2': 'again', 'column4': 4}
+        ], 'filtered based on index'
+    );
+
     assert.end();
 });
 
