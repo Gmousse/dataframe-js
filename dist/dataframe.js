@@ -9380,13 +9380,17 @@ var dfjs =
 	            }, function () {
 	                return _this2._fromArray([].concat((0, _toConsumableArray3['default'])(data[__rows__])), columns ? columns : data[__columns__]);
 	            }], [function (value) {
-	                return value instanceof Array;
+	                return value instanceof Array && value.length !== 0;
 	            }, function () {
-	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](data.slice(0, 10).map(function (row) {
+	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default']([].concat((0, _toConsumableArray3['default'])(data.slice(0, 10)), (0, _toConsumableArray3['default'])(data.slice(-10, -1))).map(function (row) {
 	                    return (0, _keys2['default'])(row);
 	                }).reduce(function (p, n) {
 	                    return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
 	                })))));
+	            }], [function (value) {
+	                return value instanceof Array && value.length === 0;
+	            }, function () {
+	                return _this2._fromArray(data, columns ? columns : []);
 	            }], [function (value) {
 	                return value instanceof Object;
 	            }, function () {
