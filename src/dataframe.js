@@ -771,9 +771,10 @@ class DataFrame {
 
     /**
      * Return a DataFrame without duplicated columns.
+     * @param {...String} columnNames The columns used to check unicity of rows. If omitted, unicity is checked on all columns.
      * @returns {DataFrame} A DataFrame without duplicated rows.
      * @example
-     * df.dropDuplicates()
+     * df.dropDuplicates('id', 'name')
      */
     dropDuplicates(...columnNames) {
         const groupCols = columnNames && columnNames.length > 0 ? columnNames : this[__columns__];
