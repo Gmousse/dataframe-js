@@ -710,7 +710,7 @@ class DataFrame {
         const func = typeof condition === 'object' ?
             row => Object.entries(condition).map(([column, value]) => Object.is(row.get(column), value)).reduce((p, n) => p && n)
         : condition;
-        const filteredRows = [...iter(this[__rows__], row => func(row) ? row : false)];
+        const filteredRows = [...iter(this[__rows__], (row, i) => func(row, i) ? row : false)];
         return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
     }
 
@@ -747,7 +747,7 @@ class DataFrame {
      * df.map(row => row.set('column1', row.get('column1') * 2))
      */
     map(func) {
-        return this.__newInstance__([...iter(this[__rows__], row => func(row))], this[__columns__]);
+        return this.__newInstance__([...iter(this[__rows__], (row, i) => func(row, i))], this[__columns__]);
     }
 
     /**
@@ -782,13 +782,15 @@ class DataFrame {
 
     /**
      * Return a DataFrame without duplicated columns.
+     * @param {...String} columnNames The columns used to check unicity of rows. If omitted, unicity is checked on all columns.
      * @returns {DataFrame} A DataFrame without duplicated rows.
      * @example
-     * df.dropDuplicates()
+     * df.dropDuplicates('id', 'name')
      */
-     dropDuplicates() {
-         return this.groupBy(...this[__columns__]).aggregate(() => {}).drop('aggregation');
-     }
+    dropDuplicates(...columnNames) {
+        const groupCols = columnNames && columnNames.length > 0 ? columnNames : this[__columns__];
+        return this.groupBy(...groupCols).filter((row, i) => (i === 0));
+    }
 
     /**
      * Return a shuffled DataFrame rows.

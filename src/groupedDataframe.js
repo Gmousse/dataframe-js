@@ -98,6 +98,57 @@ export default class GroupedDataFrame {
     }
 
     /**
+     * Map on DataFrame groups.
+     * @param {Function} func The function to apply to each row of each group.
+     * @returns {DataFrame} A new DataFrame containing the result.
+     * @example
+     * groupedDF.map((row,i) => row.set('b', row.get('a')*i));
+     */
+    map(func) {
+        const mapped = [...this].map(({group}) => group.map(func));
+        return this.df.__newInstance__(
+            [].concat(...mapped.map(group => group.toCollection())),
+            mapped[0].listColumns()
+        );
+    }
+
+    /**
+     * Filter a grouped DataFrame.
+     * @param {Function} condition A filter function or a column/value object.
+     * @returns {DataFrame} A new filtered DataFrame.
+     * @example
+     * groupedDF.filter((row,i) => (i === 0));
+     */
+    filter(condition) {
+        const mapped = [...this].map(({group}) => group.filter(condition)).filter(group => group.listColumns().length > 0);
+        return mapped.length === 0 ? [] : this.df.__newInstance__(
+            [].concat(...mapped.map(group => group.toCollection())),
+            mapped[0].listColumns()
+        );
+    }
+
+    /**
+     * Chain maps and filters functions on DataFrame by optimizing their executions.
+     * If a function returns boolean, it's a filter. Else it's a map.
+     * It can be 10 - 100 x faster than standard chains of .map() and .filter().
+     * @param {...Function} funcs Functions to apply on the DataFrame rows taking the row as parameter.
+     * @returns {DataFrame} A new DataFrame with modified rows.
+     * @example
+     * groupedDF.chain(
+     *      (row, i) => (i === 0), // filter
+     *      row => row.set('column1', 3),  // map
+     *      row => row.get('column2') === '5' // filter
+     * )
+     */
+    chain(...funcs) {
+        const mapped = [...this].map(({group}) => group.chain(...funcs));
+        return this.df.__newInstance__(
+            [].concat(...mapped.map(group => group.toCollection())),
+            mapped[0].listColumns()
+        );
+    }
+
+    /**
      * Create an aggregation from a function.
      * @param {Function} func The aggregation function.
      * @param {String} [columnName='aggregation'] The column name created by the aggregation.

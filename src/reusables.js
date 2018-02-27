@@ -36,9 +36,10 @@ export function match(value, ...cases) {
 }
 
 export function* iter(data, func, abort = () => false) {
+    let i = 0;
     for (const iteration of data) {
         if (abort()) return;
-        const modifiedRow = func(iteration);
+        const modifiedRow = func(iteration, i++);
         if (modifiedRow) {yield modifiedRow;}
     }
 }
@@ -47,11 +48,11 @@ export function chain(data, ...operations) {
     return iter(
         data,
         operations.reduce(
-            (p, n) => (x) => {
-                const prev = p(x);
-                const next = prev ? n(prev) : false;
+            (p, n) => (x, i) => {
+                const prev = p(x, i);
+                const next = prev ? n(prev, i) : false;
                 return next === true ? prev : next;
-            }, (x) => x)
+            }, x => x)
         );
 }
 
