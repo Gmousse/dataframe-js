@@ -64,6 +64,7 @@
     "eslint-config-airbnb": "^2.1.1",
     "eslint-plugin-react": "^5.1.1",
     "nyc": "^10.0.0",
+    "simple-benchmark": "gist:131f8013582c6254c5c38e5d0a4156b4",
     "tap-diff": "^0.1.1",
     "tape": "^4.5.1",
     "webpack": "^1.13.1"

@@ -3,6 +3,53 @@ import test from 'tape';
 import { DataFrame } from '../src/index';
 
 
+test('DataFrame can be empty', (assert) => {
+    try {
+        /* eslint-disable */
+        const df = new DataFrame([]);
+        /* eslint-enable */
+        assert.pass('without throwing error while passing no columns');
+        assert.deepEqual(
+            df.listColumns(),
+            [],
+            'with having no columns while passing no columns.'
+        );
+    } catch (e) {
+        assert.fail('without throwing error while passing no columns');
+    }
+
+    try {
+        /* eslint-disable */
+        const df = new DataFrame([], ['1', '2']);
+        /* eslint-enable */
+        assert.pass('without throwing error while passing columns');
+        assert.deepEqual(
+            df.listColumns(),
+            ['1', '2'],
+            'with having columns while passing columns.'
+        );
+    } catch (e) {
+        assert.fail('without throwing error while passing columns');
+    }
+
+    try {
+        /* eslint-disable */
+        const df = new DataFrame([], []);
+        /* eslint-enable */
+        assert.pass('without throwing error while passing empty columns');
+        assert.deepEqual(
+            df.listColumns(),
+            [],
+            'with having no columns while passing empty columns.'
+        );
+    } catch (e) {
+        assert.fail('without throwing error while passing empty columns');
+    }
+
+
+    assert.end();
+});
+
 test('DataFrame can detect schema changes', (assert) => {
     const df = new DataFrame([
         {c1: 1, c2: 'A', c3: 2.144},

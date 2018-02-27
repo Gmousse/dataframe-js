@@ -3,3 +3,5 @@ logs
 node_modules
 .nyc_output
 package-lock.json
+coverage
+report*.txt
