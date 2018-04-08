@@ -66,3 +66,30 @@ test('DataFrame stat module can ', (assert) => {
 
     assert.end();
 });
+
+
+test('DataFrame stat module works with negative values ', (assert) => {
+    const df = new DataFrame({
+        column1: [-12, -4, -3],
+        column2: [12, 0, 2, -4],
+        column3: [],
+    }, ['column1', 'column2', 'column3']);
+
+    assert.equal(
+        df.stat.max('column1'), -3, 'compute the maximal numerical value of a column.'
+    );
+
+    assert.equal(
+        df.stat.max('column2'), 12, 'compute the maximal numerical value of a column (2).'
+    );
+
+    assert.equal(
+        df.stat.min('column1'), -12, 'compute the minimal numerical value of a column.'
+    );
+
+    assert.equal(
+        df.stat.min('column2'), -4, 'compute the minimal numerical value of a column (2).'
+    );
+
+    assert.end();
+});

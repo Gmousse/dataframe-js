@@ -68,15 +68,15 @@ var dfjs =
 
 	var _stat2 = _interopRequireDefault(_stat);
 
-	var _matrix = __webpack_require__(501);
+	var _matrix = __webpack_require__(504);
 
 	var _matrix2 = _interopRequireDefault(_matrix);
 
-	var _sql = __webpack_require__(502);
+	var _sql = __webpack_require__(505);
 
 	var _sql2 = _interopRequireDefault(_sql);
 
-	var _benchmark = __webpack_require__(504);
+	var _benchmark = __webpack_require__(507);
 
 	var _benchmark2 = _interopRequireDefault(_benchmark);
 
@@ -16484,6 +16484,10 @@ var dfjs =
 
 	exports.__esModule = true;
 
+	var _isNan = __webpack_require__(501);
+
+	var _isNan2 = _interopRequireDefault(_isNan);
+
 	var _classCallCheck2 = __webpack_require__(478);
 
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
@@ -16511,16 +16515,25 @@ var dfjs =
 	        this.name = 'stat';
 	    }
 
-	    /**
-	    * Compute the sum of a numeric column.
-	    * @param {String} columnName The column to evaluate, containing Numbers.
-	    * @returns {Number} The sum of the column.
-	    * @example
-	    * df.stat.sum('column1')
-	    */
-
-
 	    (0, _createClass3['default'])(Stat, [{
+	        key: '_castAsNumber',
+	        value: function _castAsNumber(columnName) {
+	            return this.df.withColumn(columnName, function (row) {
+	                return Number(row.get(columnName));
+	            }).filter(function (row) {
+	                return !(0, _isNan2['default'])(row.get(columnName));
+	            });
+	        }
+
+	        /**
+	        * Compute the sum of a numeric column.
+	        * @param {String} columnName The column to evaluate, containing Numbers.
+	        * @returns {Number} The sum of the column.
+	        * @example
+	        * df.stat.sum('column1')
+	        */
+
+	    }, {
 	        key: 'sum',
 	        value: function sum(columnName) {
 	            return Number(this.df.reduce(function (p, n) {
@@ -16539,9 +16552,9 @@ var dfjs =
 	    }, {
 	        key: 'max',
 	        value: function max(columnName) {
-	            return Number(this.df.reduce(function (p, n) {
-	                return (0, _reusables.isNumber)(n.get(columnName)) && n.get(columnName) > p ? n.get(columnName) : p;
-	            }, 0));
+	            return this._castAsNumber(columnName).reduce(function (p, n) {
+	                return n.get(columnName) > p.get(columnName) ? n : p;
+	            }).get(columnName);
 	        }
 
 	        /**
@@ -16555,14 +16568,14 @@ var dfjs =
 	    }, {
 	        key: 'min',
 	        value: function min(columnName) {
-	            return Number(this.df.reduce(function (p, n) {
-	                return (0, _reusables.isNumber)(n.get(columnName)) && n.get(columnName) < p.get(columnName) ? n : p;
-	            }).get(columnName));
+	            return this._castAsNumber(columnName).reduce(function (p, n) {
+	                return p.get(columnName) > n.get(columnName) ? n : p;
+	            }).get(columnName);
 	        }
 
 	        /**
 	         * Compute the mean value into a numeric column.
-	         * @param {String} columnName The column to evaluate, containing Numbers.
+	         * @param {String} columnName The column to evaluate,isNumber(n.get(columnName)) ? p + Number( containing Numbers.
 	         * @returns {Number} The mean value into the column.
 	         * @example
 	         * df.stat.mean('column1')
@@ -16664,6 +16677,35 @@ var dfjs =
 
 /***/ }),
 /* 501 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(502), __esModule: true };
+
+/***/ }),
+/* 502 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	__webpack_require__(503);
+	module.exports = __webpack_require__(333).Number.isNaN;
+
+
+/***/ }),
+/* 503 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	// 20.1.2.4 Number.isNaN(number)
+	var $export = __webpack_require__(331);
+
+	$export($export.S, 'Number', {
+	  isNaN: function isNaN(number) {
+	    // eslint-disable-next-line no-self-compare
+	    return number != number;
+	  }
+	});
+
+
+/***/ }),
+/* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16809,7 +16851,7 @@ var dfjs =
 	exports['default'] = Matrix;
 
 /***/ }),
-/* 502 */
+/* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -16828,7 +16870,7 @@ var dfjs =
 
 	var _createClass3 = _interopRequireDefault(_createClass2);
 
-	var _sqlEngine = __webpack_require__(503);
+	var _sqlEngine = __webpack_require__(506);
 
 	var _sqlEngine2 = _interopRequireDefault(_sqlEngine);
 
@@ -16981,7 +17023,7 @@ var dfjs =
 	exports['default'] = SQL;
 
 /***/ }),
-/* 503 */
+/* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17231,7 +17273,7 @@ var dfjs =
 	}
 
 /***/ }),
-/* 504 */
+/* 507 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -17370,10 +17412,10 @@ var dfjs =
 	}();
 
 	exports['default'] = Benchmark;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(505)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(508)))
 
 /***/ }),
-/* 505 */
+/* 508 */
 /***/ (function(module, exports) {
 
 	// shim for using process in browser
