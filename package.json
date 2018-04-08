@@ -26,12 +26,15 @@
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "doc": "babel-node doc/doc.js",
     "checkes3": "check-es3-syntax lib/ --kill --print",
-    "prebuild": "npm run test",
-    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "predts": "mkdir -p ../tmp-dfjs && cd ../tmp-dfjs && npm i ../dataframe-js",
+    "dts": "cd ../tmp-dfjs && dts-gen -m dataframe-js --overwrite -f ../dataframe-js/dataframe-js.d.ts",
+    "postdts": "rm -rf ../tmp-dfjs",
     "build:commonjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
     "build:umd": "webpack",
     "build:umd:min": "NODE_ENV=production webpack",
-    "postbuild": "npm run checkes3 && npm run doc"
+    "prebuild": "npm run test && rm -rf lib dist",
+    "build": "npm run build:commonjs && npm run build:umd && npm run build:umd:min",
+    "postbuild": "npm run checkes3 && npm run doc && npm run dts"
   },
   "author": {
     "name": "Guillaume Mousnier",
@@ -60,6 +63,7 @@
     "check-node-version": "^2.1.0",
     "coveralls": "^2.11.15",
     "documentation": "^4.0.0-beta10",
+    "dts-gen": "^0.5.7",
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^2.1.1",
     "eslint-plugin-react": "^5.1.1",
