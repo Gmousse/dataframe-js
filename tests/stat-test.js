@@ -75,8 +75,6 @@ test('DataFrame stat module works with negative values ', (assert) => {
         column3: [],
     }, ['column1', 'column2', 'column3']);
 
-    console.log(df.stat.max('column1'))
-
     assert.equal(
         df.stat.max('column1'), -3, 'compute the maximal numerical value of a column.'
     );

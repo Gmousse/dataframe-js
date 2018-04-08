@@ -15,7 +15,7 @@
 
 ## Stat
 
-[src/modules/stat.js:6-128](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L6-L128 "Source code on GitHub")
+[src/modules/stat.js:6-133](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L6-L133 "Source code on GitHub")
 
 Stat module for DataFrame, providing basic statistical metrics for numeric columns.
 
@@ -25,7 +25,7 @@ Stat module for DataFrame, providing basic statistical metrics for numeric colum
 
 ### constructor
 
-[src/modules/stat.js:11-14](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L11-L14 "Source code on GitHub")
+[src/modules/stat.js:11-14](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L11-L14 "Source code on GitHub")
 
 Start the Stat module.
 
@@ -35,7 +35,7 @@ Start the Stat module.
 
 ### sum
 
-[src/modules/stat.js:23-27](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L23-L27 "Source code on GitHub")
+[src/modules/stat.js:28-32](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L28-L32 "Source code on GitHub")
 
 Compute the sum of a numeric column.
 
@@ -53,7 +53,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### max
 
-[src/modules/stat.js:36-40](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L36-L40 "Source code on GitHub")
+[src/modules/stat.js:41-45](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L41-L45 "Source code on GitHub")
 
 Compute the maximal value into a numeric column.
 
@@ -71,7 +71,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### min
 
-[src/modules/stat.js:49-53](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L49-L53 "Source code on GitHub")
+[src/modules/stat.js:54-58](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L54-L58 "Source code on GitHub")
 
 Compute the minimal value into a numeric column.
 
@@ -89,13 +89,13 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### mean
 
-[src/modules/stat.js:62-67](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L62-L67 "Source code on GitHub")
+[src/modules/stat.js:67-72](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L67-L72 "Source code on GitHub")
 
 Compute the mean value into a numeric column.
 
 **Parameters**
 
--   `columnName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The column to evaluate, containing Numbers.
+-   `columnName` **[String](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)** The column to evaluate,isNumber(n.get(columnName)) ? p + Number( containing Numbers.
 
 **Examples**
 
@@ -107,7 +107,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### average
 
-[src/modules/stat.js:77-79](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L77-L79 "Source code on GitHub")
+[src/modules/stat.js:82-84](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L82-L84 "Source code on GitHub")
 
 Compute the mean value into a numeric column.
 Alias from mean.
@@ -126,7 +126,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### var
 
-[src/modules/stat.js:89-95](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L89-L95 "Source code on GitHub")
+[src/modules/stat.js:94-100](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L94-L100 "Source code on GitHub")
 
 Compute the variance into a numeric column.
 
@@ -145,7 +145,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### sd
 
-[src/modules/stat.js:105-107](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L105-L107 "Source code on GitHub")
+[src/modules/stat.js:110-112](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L110-L112 "Source code on GitHub")
 
 Compute the standard deviation into a numeric column.
 
@@ -164,7 +164,7 @@ Returns **[Number](https://developer.mozilla.org/docs/Web/JavaScript/Reference/G
 
 ### stats
 
-[src/modules/stat.js:116-127](https://github.com/Gmousse/dataframe-js/blob/634cee77f453c7158bf8857e42e53926b536cd98/src/modules/stat.js#L116-L127 "Source code on GitHub")
+[src/modules/stat.js:121-132](https://github.com/Gmousse/dataframe-js/blob/8a9b7e074e26a88e1026451b85d965049ba49d6b/src/modules/stat.js#L121-L132 "Source code on GitHub")
 
 Compute all the stats available with the Stat module on a numeric column.
 

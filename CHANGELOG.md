@@ -2,6 +2,18 @@
 
 ---
 
+## v1.2.8
+
+
+**Author**: Guillaume Mousnier.
+
+**Type**: Hotfix
+
+**Changes**:
+- Resolve stat.max issue with negative values. See [](https://github.com/d3/d3-request/issues/46). Closes #46
+
+---
+
 ## v1.2.7
 
 
