@@ -13,6 +13,11 @@ class Stat {
         this.name = 'stat';
     }
 
+    _castAsNumber(columnName) {
+        return this.df.withColumn(columnName, row => Number(row.get(columnName)))
+            .filter(row => !Number.isNaN(row.get(columnName)));
+    }
+
     /**
     * Compute the sum of a numeric column.
     * @param {String} columnName The column to evaluate, containing Numbers.
@@ -34,9 +39,9 @@ class Stat {
      * df.stat.max('column1')
      */
     max(columnName) {
-        return Number(this.df.reduce(
-            (p, n) => isNumber(n.get(columnName)) && n.get(columnName) > p ? n.get(columnName) : p, 0
-        ));
+        return this._castAsNumber(columnName)
+            .reduce((p, n) => n.get(columnName) > p.get(columnName) ? n : p)
+            .get(columnName);
     }
 
     /**
@@ -46,15 +51,15 @@ class Stat {
      * @example
      * df.stat.min('column1')
      */
-    min(columnName) {
-        return Number(this.df.reduce(
-            (p, n) => isNumber(n.get(columnName)) && n.get(columnName) < p.get(columnName) ? n : p
-        ).get(columnName));
-    }
+     min(columnName) {
+         return this._castAsNumber(columnName)
+             .reduce((p, n) => p.get(columnName) > n.get(columnName) ? n : p)
+             .get(columnName);
+     }
 
     /**
      * Compute the mean value into a numeric column.
-     * @param {String} columnName The column to evaluate, containing Numbers.
+     * @param {String} columnName The column to evaluate,isNumber(n.get(columnName)) ? p + Number( containing Numbers.
      * @returns {Number} The mean value into the column.
      * @example
      * df.stat.mean('column1')
