@@ -23,7 +23,7 @@ export class DataFrame {
 
     drop(columnName: any): any;
 
-    dropDuplicates(): any;
+    dropDuplicates(...args: any[]): any;
 
     filter(condition: any): any;
 
@@ -220,7 +220,7 @@ export namespace DataFrame {
 
         function drop(columnName: any): any;
 
-        function dropDuplicates(): any;
+        function dropDuplicates(...args: any[]): any;
 
         function filter(condition: any): any;
 
