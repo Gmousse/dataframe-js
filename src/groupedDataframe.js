@@ -2,6 +2,7 @@ import DataFrame from "./dataframe";
 import { ArgumentTypeError } from "./errors";
 
 const __groups__ = Symbol("groups");
+const __hashes__ = Symbol("hashes");
 
 /**
  * Grouped DataFrame structure grouping DataFrame rows by column value.
@@ -19,43 +20,51 @@ export default class GroupedDataFrame {
     constructor(df, ...columnNames) {
         if (!(df instanceof DataFrame))
             throw new ArgumentTypeError(df, "DataFrame");
-        this[__groups__] = this._groupBy(df, columnNames);
+        [this[__groups__], this[__hashes__]] = this._groupBy(df, columnNames);
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
     }
 
     *[Symbol.iterator]() {
-        for (const group of Object.values(this[__groups__])) {
-            yield [group];
+        for (const hash of this[__hashes__]) {
+            yield this[__groups__][hash];
         }
     }
 
     _groupBy(df, columnNames) {
-        const sorted = new Array();
-        const hashes = {};
+        const rowsByGroup = {};
+        const hashes = [];
         for (const row of df.toCollection(true)) {
             const hash = row.select(...columnNames).hash();
-            const rows = hashes[hash] || new Array();
-            if (rows.length <= 0) {
-                hashes[hash] = rows;
-                sorted.push(hash);
+            if (!rowsByGroup[hash]) {
+                hashes.push(hash);
+                rowsByGroup[hash] = [];
             }
-            rows.push(row);
+            rowsByGroup[hash].push(row);
         }
-        console.log(sorted, hashes);
-        return sorted.map(hash => {
-            const rows = hashes[hash];
-            const group = new DataFrame(rows, df.listColumns());
-            return {
-                groupKey: rows[0].select(...columnNames).toDict(),
-                hash,
-                group
-            };
-        });
+        return [
+            hashes.reduce(
+                (groups, hash) => ({
+                    [hash]: {
+                        groupKey: rowsByGroup[hash][0]
+                            .select(...columnNames)
+                            .toDict(),
+                        hash,
+                        group: new DataFrame(
+                            rowsByGroup[hash],
+                            df.listColumns()
+                        )
+                    },
+                    ...groups
+                }),
+                {}
+            ),
+            hashes
+        ];
     }
 
     get(hash) {
-        return this.toCollection().find(group => group.hash === hash);
+        return this[__groups__][hash];
     }
 
     /**
@@ -104,7 +113,7 @@ export default class GroupedDataFrame {
      * gdf.listHashCodes()
      */
     listHashs() {
-        return [...this].map(({ hash }) => hash);
+        return this[__hashes__];
     }
 
     /**
@@ -201,7 +210,13 @@ export default class GroupedDataFrame {
                         [gk[columnToPivot]]: func(gp, gk)
                     }))
                     .toArray("aggregation")
-                    .reduce((p, n) => ({ ...p, ...n }), {})
+                    .reduce(
+                        (p, n) => ({
+                            ...p,
+                            ...n
+                        }),
+                        {}
+                    )
             )
                 .toCollection()
                 .map(({ aggregation, ...rest }) => ({
@@ -248,7 +263,10 @@ export default class GroupedDataFrame {
                 .reduce(
                     (p, { aggregation, ...rest }) => [
                         ...p,
-                        ...aggregation.map(x => ({ ...rest, ...x }))
+                        ...aggregation.map(x => ({
+                            ...rest,
+                            ...x
+                        }))
                     ],
                     []
                 ),

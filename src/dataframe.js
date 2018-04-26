@@ -167,7 +167,7 @@ class DataFrame {
      * Create a new DataFrame.
      * @param {Array | Object | DataFrame} data The data of the DataFrame.
      * @param {Array} columns The DataFrame column names.
-     * @param {...Object} [modules] Additional modules.
+     * @param {Object} options Additional options. Example: modules.
      * @example
      * new DataFrame({
      *      'column1': [3, 6, 8],
@@ -187,13 +187,16 @@ class DataFrame {
      * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
      *
      * new DataFrame(df);
+     *
+     * new DataFrame(yourData, yourColumns, {modules: [MyOwnModule, MyOtherModule]})
      */
     constructor(data, columns, options = {}) {
         [this[__rows__], this[__columns__]] = this._build(data, columns);
         this.options = options;
-        this.options.modules = this.options.modules
-            ? this.options.modules
-            : DataFrame.defaultModules;
+        this.options.modules = [
+            ...DataFrame.defaultModules,
+            ...(this.options.modules || [])
+        ];
         Object.assign(
             this,
             ...this.__instanciateModules__(this.options.modules)

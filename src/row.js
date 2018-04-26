@@ -1,9 +1,9 @@
-import { match, arrayEqual } from './reusables';
-import { ArgumentTypeError, NoSuchColumnError } from './errors';
-import { hashCode } from './reusables';
+import { match, arrayEqual } from "./reusables";
+import { ArgumentTypeError, NoSuchColumnError } from "./errors";
+import { hashCode } from "./reusables";
 
-const __columns__ = Symbol('columns');
-const __values__ = Symbol('values');
+const __columns__ = Symbol("columns");
+const __values__ = Symbol("values");
 
 /**
  * Row data structure used into the dataframe-js.
@@ -24,12 +24,12 @@ class Row {
      * new Row(Row, ['column1', 'column3'])
      */
     constructor(data, columns) {
-        if (!data) throw new ArgumentTypeError(data, 'Row | Array | Object');
+        if (!data) throw new ArgumentTypeError(data, "Row | Array | Object");
         this[__columns__] = columns ? columns : Object.keys(data);
         this[__values__] = Object.freeze(this._build(data));
     }
 
-    * [Symbol.iterator]() {
+    *[Symbol.iterator]() {
         for (const value of Object.values(this[__values__])) {
             yield value;
         }
@@ -39,26 +39,47 @@ class Row {
         if (!arrayEqual(this[__columns__], columns)) {
             return new Row(data, columns);
         }
-        return Object.assign(
-            Object.create(Object.getPrototypeOf(this)), this, {[__values__]: data, [__columns__]: [...columns]}
-        );
+        return Object.assign(Object.create(Object.getPrototypeOf(this)), this, {
+            [__values__]: data,
+            [__columns__]: [...columns]
+        });
     }
 
     _build(data) {
-        return match(data,
-                [(value) => (value instanceof Array), () => this._fromArray(data)],
-                [(value) => (value instanceof Row), () => this._fromObject(data[__values__])],
-                [(value) => (value instanceof Object && value !== null), () => this._fromObject(data)],
-                [() => true, (value) => {throw new ArgumentTypeError(value, 'Row | Array | Object');}]
-            );
+        return match(
+            data,
+            [value => value instanceof Array, () => this._fromArray(data)],
+            [
+                value => value instanceof Row,
+                () => this._fromObject(data[__values__])
+            ],
+            [
+                value => value instanceof Object && value !== null,
+                () => this._fromObject(data)
+            ],
+            [
+                () => true,
+                value => {
+                    throw new ArgumentTypeError(value, "Row | Array | Object");
+                }
+            ]
+        );
     }
 
     _fromObject(object) {
-        return Object.assign({}, ...this[__columns__].map(column => ({[column]: object[column]})));
+        return Object.assign(
+            {},
+            ...this[__columns__].map(column => ({ [column]: object[column] }))
+        );
     }
 
     _fromArray(array) {
-        return Object.assign({}, ...Object.entries(this[__columns__]).map(column => ({[column[1]]: array[column[0]]})));
+        return Object.assign(
+            {},
+            ...Object.entries(this[__columns__]).map(column => ({
+                [column[1]]: array[column[0]]
+            }))
+        );
     }
 
     /**
@@ -121,9 +142,13 @@ class Row {
      */
     select(...columnNames) {
         return this.__newInstance__(
-            Object.assign({}, ...columnNames.map(column => {
-                return {[column]: this.get(column)};
-            })), columnNames
+            Object.assign(
+                {},
+                ...columnNames.map(column => {
+                    return { [column]: this.get(column) };
+                })
+            ),
+            columnNames
         );
     }
 
@@ -135,7 +160,9 @@ class Row {
      * row.get('column1')
      */
     get(columnToGet) {
-        if (!this.has(columnToGet)) {throw new NoSuchColumnError(columnToGet, this[__columns__]);}
+        if (!this.has(columnToGet)) {
+            throw new NoSuchColumnError(columnToGet, this[__columns__]);
+        }
         return this[__values__][columnToGet];
     }
 
@@ -147,7 +174,9 @@ class Row {
      * row.set('column1', 6)
      */
     set(columnToSet, value) {
-        const newRow = Object.assign({}, this[__values__], {[columnToSet]: value});
+        const newRow = Object.assign({}, this[__values__], {
+            [columnToSet]: value
+        });
         return this.__newInstance__(newRow, Object.keys(newRow));
     }
 
@@ -159,8 +188,12 @@ class Row {
      * row.delete('column1')
      */
     delete(columnToDel) {
-        if (!this.has(columnToDel)) {throw new NoSuchColumnError(columnToDel, this[__columns__]);}
-        return this.select(...this[__columns__].filter(column => column !== columnToDel));
+        if (!this.has(columnToDel)) {
+            throw new NoSuchColumnError(columnToDel, this[__columns__]);
+        }
+        return this.select(
+            ...this[__columns__].filter(column => column !== columnToDel)
+        );
     }
 }
 

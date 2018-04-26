@@ -45,7 +45,7 @@ var dfjs =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 	exports.Errors = exports.Row = exports.DataFrame = undefined;
@@ -76,17 +76,17 @@ var dfjs =
 
 	var _sql2 = _interopRequireDefault(_sql);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj['default'] = obj; return newObj; } }
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj["default"] = obj; return newObj; } }
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	_dataframe2['default'].setDefaultModules(_stat2['default'], _matrix2['default'], _sql2['default']);
-	_dataframe2['default'].sql = _sql2['default'];
+	_dataframe2["default"].setDefaultModules(_stat2["default"], _matrix2["default"], _sql2["default"]);
+	_dataframe2["default"].sql = _sql2["default"];
 
-	exports.DataFrame = _dataframe2['default'];
-	exports.Row = _row2['default'];
+	exports.DataFrame = _dataframe2["default"];
+	exports.Row = _row2["default"];
 	exports.Errors = Errors;
-	exports['default'] = _dataframe2['default'];
+	exports["default"] = _dataframe2["default"];
 
 /***/ }),
 /* 1 */
@@ -663,7 +663,7 @@ var dfjs =
 /* 9 */
 /***/ (function(module, exports) {
 
-	var core = module.exports = { version: '2.5.3' };
+	var core = module.exports = { version: '2.5.5' };
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -2751,7 +2751,6 @@ var dfjs =
 	var $export = __webpack_require__(8);
 	var redefine = __webpack_require__(18);
 	var hide = __webpack_require__(10);
-	var has = __webpack_require__(5);
 	var Iterators = __webpack_require__(129);
 	var $iterCreate = __webpack_require__(130);
 	var setToStringTag = __webpack_require__(24);
@@ -2778,7 +2777,7 @@ var dfjs =
 	  var VALUES_BUG = false;
 	  var proto = Base.prototype;
 	  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-	  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
+	  var $default = $native || getMethod(DEFAULT);
 	  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
 	  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
 	  var methods, key, IteratorPrototype;
@@ -2789,7 +2788,7 @@ var dfjs =
 	      // Set @@toStringTag to native iterators
 	      setToStringTag(IteratorPrototype, TAG, true);
 	      // fix for some old engines
-	      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+	      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
 	    }
 	  }
 	  // fix Array#{values, @@iterator}.name in V8 / FF
@@ -4377,7 +4376,7 @@ var dfjs =
 	      var resolve = reaction.resolve;
 	      var reject = reaction.reject;
 	      var domain = reaction.domain;
-	      var result, then;
+	      var result, then, exited;
 	      try {
 	        if (handler) {
 	          if (!ok) {
@@ -4387,8 +4386,11 @@ var dfjs =
 	          if (handler === true) result = value;
 	          else {
 	            if (domain) domain.enter();
-	            result = handler(value);
-	            if (domain) domain.exit();
+	            result = handler(value); // may throw
+	            if (domain) {
+	              domain.exit();
+	              exited = true;
+	            }
 	          }
 	          if (result === reaction.promise) {
 	            reject(TypeError('Promise-chain cycle'));
@@ -4397,6 +4399,7 @@ var dfjs =
 	          } else resolve(result);
 	        } else reject(value);
 	      } catch (e) {
+	        if (domain && !exited) domain.exit();
 	        reject(e);
 	      }
 	    };
@@ -6653,9 +6656,11 @@ var dfjs =
 	  }
 	  if (has(ownDesc, 'value')) {
 	    if (ownDesc.writable === false || !isObject(receiver)) return false;
-	    existingDescriptor = gOPD.f(receiver, propertyKey) || createDesc(0);
-	    existingDescriptor.value = V;
-	    dP.f(receiver, propertyKey, existingDescriptor);
+	    if (existingDescriptor = gOPD.f(receiver, propertyKey)) {
+	      if (existingDescriptor.get || existingDescriptor.set || existingDescriptor.writable === false) return false;
+	      existingDescriptor.value = V;
+	      dP.f(receiver, propertyKey, existingDescriptor);
+	    } else dP.f(receiver, propertyKey, createDesc(0, V));
 	    return true;
 	  }
 	  return ownDesc.set === undefined ? false : (ownDesc.set.call(receiver, V), true);
@@ -8922,7 +8927,7 @@ var dfjs =
 /* 327 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -9020,17 +9025,17 @@ var dfjs =
 
 	var _groupedDataframe2 = _interopRequireDefault(_groupedDataframe);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var __columns__ = (0, _symbol2['default'])('columns');
-	var __rows__ = (0, _symbol2['default'])('rows');
+	var __columns__ = (0, _symbol2["default"])("columns");
+	var __rows__ = (0, _symbol2["default"])("rows");
 
 	/**
 	 * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 	 */
 	var DataFrame = (_temp = _class = function () {
-	    (0, _createClass3['default'])(DataFrame, null, [{
-	        key: 'setDefaultModules',
+	    (0, _createClass3["default"])(DataFrame, null, [{
+	        key: "setDefaultModules",
 
 
 	        /**
@@ -9062,19 +9067,19 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromDSV',
+	        key: "fromDSV",
 	        value: function fromDSV(pathOrFile) {
-	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ';';
+	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ";";
 	            var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
 	            var parser = (0, _d3Dsv.dsvFormat)(sep);
-	            return new _promise2['default'](function (resolve) {
+	            return new _promise2["default"](function (resolve) {
 	                var parseText = function parseText(fileContent) {
-	                    if (fileContent.includes('Error: ENOENT')) return resolve(null);
+	                    if (fileContent.includes("Error: ENOENT")) return resolve(null);
 	                    var data = header ? parser.parse(fileContent) : parser.parseRows(fileContent);
 	                    return resolve(data);
 	                };
-	                return typeof pathOrFile === 'string' ? (0, _d3Request.text)((0, _reusables.addFileProtocol)(pathOrFile), parseText) : (0, _reusables.loadTextFile)(pathOrFile, parseText);
+	                return typeof pathOrFile === "string" ? (0, _d3Request.text)((0, _reusables.addFileProtocol)(pathOrFile), parseText) : (0, _reusables.loadTextFile)(pathOrFile, parseText);
 	            }).then(function (fileContent) {
 	                if (fileContent === null) {
 	                    throw new _errors.FileNotFoundError(pathOrFile);
@@ -9098,9 +9103,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromText',
+	        key: "fromText",
 	        value: function fromText(pathOrFile) {
-	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ';';
+	            var sep = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ";";
 	            var header = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
 
 	            return DataFrame.fromDSV(pathOrFile, sep, header);
@@ -9120,11 +9125,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromCSV',
+	        key: "fromCSV",
 	        value: function fromCSV(pathOrFile) {
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-	            return DataFrame.fromDSV(pathOrFile, ',', header);
+	            return DataFrame.fromDSV(pathOrFile, ",", header);
 	        }
 
 	        /**
@@ -9141,11 +9146,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromTSV',
+	        key: "fromTSV",
 	        value: function fromTSV(pathOrFile) {
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-	            return DataFrame.fromDSV(pathOrFile, '\t', header);
+	            return DataFrame.fromDSV(pathOrFile, "\t", header);
 	        }
 
 	        /**
@@ -9162,11 +9167,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromPSV',
+	        key: "fromPSV",
 	        value: function fromPSV(pathOrFile) {
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 
-	            return DataFrame.fromDSV(pathOrFile, '|', header);
+	            return DataFrame.fromDSV(pathOrFile, "|", header);
 	        }
 
 	        /**
@@ -9181,10 +9186,10 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fromJSON',
+	        key: "fromJSON",
 	        value: function fromJSON(pathOrFile) {
-	            return new _promise2['default'](function (resolve) {
-	                return typeof pathOrFile === 'string' ? (0, _d3Request.json)((0, _reusables.addFileProtocol)(pathOrFile), resolve) : (0, _reusables.loadTextFile)(pathOrFile, function (txt) {
+	            return new _promise2["default"](function (resolve) {
+	                return typeof pathOrFile === "string" ? (0, _d3Request.json)((0, _reusables.addFileProtocol)(pathOrFile), resolve) : (0, _reusables.loadTextFile)(pathOrFile, function (txt) {
 	                    return resolve(JSON.parse(txt));
 	                });
 	            }).then(function (fileContent) {
@@ -9199,7 +9204,7 @@ var dfjs =
 	         * Create a new DataFrame.
 	         * @param {Array | Object | DataFrame} data The data of the DataFrame.
 	         * @param {Array} columns The DataFrame column names.
-	         * @param {...Object} [modules] Additional modules.
+	         * @param {Object} options Additional options. Example: modules.
 	         * @example
 	         * new DataFrame({
 	         *      'column1': [3, 6, 8],
@@ -9219,32 +9224,34 @@ var dfjs =
 	         * ], ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'])
 	         *
 	         * new DataFrame(df);
+	         *
+	         * new DataFrame(yourData, yourColumns, {modules: [MyOwnModule, MyOtherModule]})
 	         */
 
 	    }]);
 
 	    function DataFrame(data, columns) {
 	        var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	        (0, _classCallCheck3['default'])(this, DataFrame);
+	        (0, _classCallCheck3["default"])(this, DataFrame);
 
 	        var _build2 = this._build(data, columns);
 
-	        var _build3 = (0, _slicedToArray3['default'])(_build2, 2);
+	        var _build3 = (0, _slicedToArray3["default"])(_build2, 2);
 
 	        this[__rows__] = _build3[0];
 	        this[__columns__] = _build3[1];
 
 	        this.options = options;
-	        this.options.modules = this.options.modules ? this.options.modules : DataFrame.defaultModules;
-	        _assign2['default'].apply(Object, [this].concat((0, _toConsumableArray3['default'])(this.__instanciateModules__(this.options.modules))));
+	        this.options.modules = [].concat((0, _toConsumableArray3["default"])(DataFrame.defaultModules), (0, _toConsumableArray3["default"])(this.options.modules || []));
+	        _assign2["default"].apply(Object, [this].concat((0, _toConsumableArray3["default"])(this.__instanciateModules__(this.options.modules))));
 	    }
 
-	    (0, _createClass3['default'])(DataFrame, [{
-	        key: _iterator4['default'],
-	        value: /*#__PURE__*/_regenerator2['default'].mark(function value() {
+	    (0, _createClass3["default"])(DataFrame, [{
+	        key: _iterator4["default"],
+	        value: /*#__PURE__*/_regenerator2["default"].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, row;
 
-	            return _regenerator2['default'].wrap(function value$(_context) {
+	            return _regenerator2["default"].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -9252,7 +9259,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3['default'])(this[__rows__]);
+	                            _iterator = (0, _getIterator3["default"])(this[__rows__]);
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -9275,7 +9282,7 @@ var dfjs =
 
 	                        case 14:
 	                            _context.prev = 14;
-	                            _context.t0 = _context['catch'](3);
+	                            _context.t0 = _context["catch"](3);
 	                            _didIteratorError = true;
 	                            _iteratorError = _context.t0;
 
@@ -9283,8 +9290,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator['return']) {
-	                                _iterator['return']();
+	                            if (!_iteratorNormalCompletion && _iterator["return"]) {
+	                                _iterator["return"]();
 	                            }
 
 	                        case 21:
@@ -9304,14 +9311,14 @@ var dfjs =
 	                            return _context.finish(18);
 
 	                        case 26:
-	                        case 'end':
+	                        case "end":
 	                            return _context.stop();
 	                    }
 	                }
 	            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
 	        })
 	    }, {
-	        key: '_columnsAreEquals',
+	        key: "_columnsAreEquals",
 	        value: function _columnsAreEquals(columns) {
 	            var columns2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this[__columns__];
 	            var _iteratorNormalCompletion2 = true;
@@ -9319,7 +9326,7 @@ var dfjs =
 	            var _iteratorError2 = undefined;
 
 	            try {
-	                for (var _iterator2 = (0, _getIterator3['default'])((0, _keys2['default'])(columns)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                for (var _iterator2 = (0, _getIterator3["default"])((0, _keys2["default"])(columns)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	                    var key = _step2.value;
 
 	                    if (columns[key] !== columns2[key]) return false;
@@ -9329,8 +9336,8 @@ var dfjs =
 	                _iteratorError2 = err;
 	            } finally {
 	                try {
-	                    if (!_iteratorNormalCompletion2 && _iterator2['return']) {
-	                        _iterator2['return']();
+	                    if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+	                        _iterator2["return"]();
 	                    }
 	                } finally {
 	                    if (_didIteratorError2) {
@@ -9342,24 +9349,24 @@ var dfjs =
 	            return true;
 	        }
 	    }, {
-	        key: '__newInstance__',
+	        key: "__newInstance__",
 	        value: function __newInstance__(data, columns) {
-	            if (!this._columnsAreEquals(columns) || !(data[0] instanceof _row2['default'])) {
+	            if (!this._columnsAreEquals(columns) || !(data[0] instanceof _row2["default"])) {
 	                return new DataFrame(data, columns, this.options);
 	            }
 
-	            var firstRowColumns = (0, _keys2['default'])(data[0].toDict());
+	            var firstRowColumns = (0, _keys2["default"])(data[0].toDict());
 	            if (!(0, _reusables.arrayEqual)(firstRowColumns, this[__columns__], true)) {
 	                return new DataFrame(data, firstRowColumns, this.options);
 	            }
 
 	            var newInstance = new DataFrame([], [], this.options);
-	            newInstance[__rows__] = [].concat((0, _toConsumableArray3['default'])(data));
-	            newInstance[__columns__] = [].concat((0, _toConsumableArray3['default'])(columns));
+	            newInstance[__rows__] = [].concat((0, _toConsumableArray3["default"])(data));
+	            newInstance[__columns__] = [].concat((0, _toConsumableArray3["default"])(columns));
 	            return newInstance;
 	        }
 	    }, {
-	        key: '__instanciateModules__',
+	        key: "__instanciateModules__",
 	        value: function __instanciateModules__(modules) {
 	            var _this = this;
 
@@ -9367,25 +9374,25 @@ var dfjs =
 
 	            return modules.map(function (Plugin) {
 	                var pluginInstance = new Plugin(df ? df : _this);
-	                return (0, _defineProperty3['default'])({}, pluginInstance.name, pluginInstance);
+	                return (0, _defineProperty3["default"])({}, pluginInstance.name, pluginInstance);
 	            });
 	        }
 	    }, {
-	        key: '_build',
+	        key: "_build",
 	        value: function _build(data, columns) {
 	            var _this2 = this;
 
 	            return (0, _reusables.match)(data, [function (value) {
 	                return value instanceof DataFrame;
 	            }, function () {
-	                return _this2._fromArray([].concat((0, _toConsumableArray3['default'])(data[__rows__])), columns ? columns : data[__columns__]);
+	                return _this2._fromArray([].concat((0, _toConsumableArray3["default"])(data[__rows__])), columns ? columns : data[__columns__]);
 	            }], [function (value) {
 	                return value instanceof Array && value.length !== 0;
 	            }, function () {
-	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3['default'])(new _set2['default']([].concat((0, _toConsumableArray3['default'])(data.slice(0, 10)), (0, _toConsumableArray3['default'])(data.slice(-10, -1))).map(function (row) {
-	                    return (0, _keys2['default'])(row);
+	                return _this2._fromArray(data, columns ? columns : [].concat((0, _toConsumableArray3["default"])(new _set2["default"]([].concat((0, _toConsumableArray3["default"])(data.slice(0, 10)), (0, _toConsumableArray3["default"])(data.slice(-10, -1))).map(function (row) {
+	                    return (0, _keys2["default"])(row);
 	                }).reduce(function (p, n) {
-	                    return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
+	                    return [].concat((0, _toConsumableArray3["default"])(p), (0, _toConsumableArray3["default"])(n));
 	                })))));
 	            }], [function (value) {
 	                return value instanceof Array && value.length === 0;
@@ -9394,29 +9401,29 @@ var dfjs =
 	            }], [function (value) {
 	                return value instanceof Object;
 	            }, function () {
-	                return _this2._fromDict(data, columns ? columns : (0, _keys2['default'])(data));
+	                return _this2._fromDict(data, columns ? columns : (0, _keys2["default"])(data));
 	            }], [function () {
 	                return true;
 	            }, function () {
-	                throw new _errors.ArgumentTypeError(data, 'DataFrame | Array | Object');
+	                throw new _errors.ArgumentTypeError(data, "DataFrame | Array | Object");
 	            }]);
 	        }
 	    }, {
-	        key: '_fromDict',
+	        key: "_fromDict",
 	        value: function _fromDict(dict, columns) {
-	            return [(0, _reusables.transpose)((0, _values2['default'])(dict)).map(function (row) {
-	                return new _row2['default'](row, columns);
+	            return [(0, _reusables.transpose)((0, _values2["default"])(dict)).map(function (row) {
+	                return new _row2["default"](row, columns);
 	            }), columns];
 	        }
 	    }, {
-	        key: '_fromArray',
+	        key: "_fromArray",
 	        value: function _fromArray(array, columns) {
 	            return [array.map(function (row) {
-	                return new _row2['default'](row, columns);
+	                return new _row2["default"](row, columns);
 	            }), columns];
 	        }
 	    }, {
-	        key: '_joinByType',
+	        key: "_joinByType",
 	        value: function _joinByType(gdf1, gdf2, type, newColumns) {
 	            var _this3 = this;
 
@@ -9431,40 +9438,40 @@ var dfjs =
 	                    var gdf2Collection = gdf2.get(hash).group.toCollection();
 	                    var combinedGroup = group.toCollection().map(function (row) {
 	                        return gdf2Collection.map(function (row2) {
-	                            return (0, _assign2['default'])({}, row2, row);
+	                            return (0, _assign2["default"])({}, row2, row);
 	                        });
 	                    }).reduce(function (p, n) {
-	                        return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
+	                        return [].concat((0, _toConsumableArray3["default"])(p), (0, _toConsumableArray3["default"])(n));
 	                    }, []);
 	                    modifiedGroup = _this3.__newInstance__(combinedGroup, newColumns);
 	                }
 	                var filterCondition = function filterCondition(bool) {
 	                    return bool ? modifiedGroup : false;
 	                };
-	                if (type === 'full') return modifiedGroup;
-	                return type === 'out' ? filterCondition(!isContained) : filterCondition(isContained);
+	                if (type === "full") return modifiedGroup;
+	                return type === "out" ? filterCondition(!isContained) : filterCondition(isContained);
 	            }).filter(function (group) {
 	                return group;
 	            });
 	        }
 	    }, {
-	        key: '_join',
+	        key: "_join",
 	        value: function _join(dfToJoin, columnNames, types) {
-	            if (!(dfToJoin instanceof DataFrame)) throw new _errors.ArgumentTypeError(dfToJoin, 'DataFrame');
-	            var newColumns = [].concat((0, _toConsumableArray3['default'])(new _set2['default']([].concat((0, _toConsumableArray3['default'])(this.listColumns()), (0, _toConsumableArray3['default'])(dfToJoin.listColumns())))));
+	            if (!(dfToJoin instanceof DataFrame)) throw new _errors.ArgumentTypeError(dfToJoin, "DataFrame");
+	            var newColumns = [].concat((0, _toConsumableArray3["default"])(new _set2["default"]([].concat((0, _toConsumableArray3["default"])(this.listColumns()), (0, _toConsumableArray3["default"])(dfToJoin.listColumns())))));
 	            var columns = Array.isArray(columnNames) ? columnNames : [columnNames];
-	            var gdf = this.groupBy.apply(this, (0, _toConsumableArray3['default'])(columns));
-	            var gdfToJoin = dfToJoin.groupBy.apply(dfToJoin, (0, _toConsumableArray3['default'])(columns));
-	            return [this.__newInstance__([], newColumns)].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)([].concat((0, _toConsumableArray3['default'])(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []), (0, _toConsumableArray3['default'])(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : [])), function (group) {
+	            var gdf = this.groupBy.apply(this, (0, _toConsumableArray3["default"])(columns));
+	            var gdfToJoin = dfToJoin.groupBy.apply(dfToJoin, (0, _toConsumableArray3["default"])(columns));
+	            return [this.__newInstance__([], newColumns)].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)([].concat((0, _toConsumableArray3["default"])(types[0] ? this._joinByType(gdf, gdfToJoin, types[0], newColumns) : []), (0, _toConsumableArray3["default"])(types[1] ? this._joinByType(gdfToJoin, gdf, types[1], newColumns) : [])), function (group) {
 	                return group.restructure(newColumns);
 	            }))).reduce(function (p, n) {
 	                return p.union(n);
 	            }).dropDuplicates();
 	        }
 	    }, {
-	        key: '_cleanSavePath',
+	        key: "_cleanSavePath",
 	        value: function _cleanSavePath(path) {
-	            return path.replace('file://', '/');
+	            return path.replace("file://", "/");
 	        }
 
 	        /**
@@ -9475,16 +9482,16 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toDict',
+	        key: "toDict",
 	        value: function toDict() {
 	            var _this4 = this;
 
-	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])((0, _entries2['default'])(this.transpose().toArray()).map(function (_ref3) {
-	                var _ref4 = (0, _slicedToArray3['default'])(_ref3, 2),
+	            return _assign2["default"].apply(Object, [{}].concat((0, _toConsumableArray3["default"])((0, _entries2["default"])(this.transpose().toArray()).map(function (_ref3) {
+	                var _ref4 = (0, _slicedToArray3["default"])(_ref3, 2),
 	                    index = _ref4[0],
 	                    column = _ref4[1];
 
-	                return (0, _defineProperty3['default'])({}, _this4[__columns__][index], column);
+	                return (0, _defineProperty3["default"])({}, _this4[__columns__][index], column);
 	            }))));
 	        }
 
@@ -9497,11 +9504,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toArray',
+	        key: "toArray",
 	        value: function toArray(columnName) {
-	            return columnName ? [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
+	            return columnName ? [].concat((0, _toConsumableArray3["default"])(this)).map(function (row) {
 	                return row.get(columnName);
-	            }) : [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
+	            }) : [].concat((0, _toConsumableArray3["default"])(this)).map(function (row) {
 	                return row.toArray();
 	            });
 	        }
@@ -9515,9 +9522,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toCollection',
+	        key: "toCollection",
 	        value: function toCollection(ofRows) {
-	            return ofRows ? [].concat((0, _toConsumableArray3['default'])(this)) : [].concat((0, _toConsumableArray3['default'])(this)).map(function (row) {
+	            return ofRows ? [].concat((0, _toConsumableArray3["default"])(this)) : [].concat((0, _toConsumableArray3["default"])(this)).map(function (row) {
 	                return row.toDict();
 	            });
 	        }
@@ -9538,9 +9545,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toDSV',
+	        key: "toDSV",
 	        value: function toDSV() {
-	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ';';
+	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ";";
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 	            var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
@@ -9568,9 +9575,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toText',
+	        key: "toText",
 	        value: function toText() {
-	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ';';
+	            var sep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ";";
 	            var header = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
 	            var path = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
 
@@ -9591,12 +9598,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toCSV',
+	        key: "toCSV",
 	        value: function toCSV() {
 	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            return this.toDSV(',', header, path);
+	            return this.toDSV(",", header, path);
 	        }
 
 	        /**
@@ -9613,12 +9620,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toTSV',
+	        key: "toTSV",
 	        value: function toTSV() {
 	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            return this.toDSV('\t', header, path);
+	            return this.toDSV("\t", header, path);
 	        }
 
 	        /**
@@ -9635,12 +9642,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toPSV',
+	        key: "toPSV",
 	        value: function toPSV() {
 	            var header = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
 	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            return this.toDSV('|', header, path);
+	            return this.toDSV("|", header, path);
 	        }
 
 	        /**
@@ -9655,12 +9662,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toJSON',
+	        key: "toJSON",
 	        value: function toJSON() {
 	            var asCollection = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 	            var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
 
-	            var jsonContent = (0, _stringify2['default'])(asCollection ? this.toCollection() : this.toDict());
+	            var jsonContent = (0, _stringify2["default"])(asCollection ? this.toCollection() : this.toDict());
 	            if (path) {
 	                (0, _reusables.saveFile)(this._cleanSavePath(path), jsonContent);
 	            }
@@ -9679,24 +9686,25 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'show',
+	        key: "show",
 	        value: function show() {
 	            var rows = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
 	            var quiet = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            var makeRow = function makeRow(row) {
-	                return '| ' + row.map(function (column) {
+	                return "| " + row.map(function (column) {
 	                    var columnAsString = String(column);
-	                    return columnAsString.length > 9 ? columnAsString.substring(0, 6) + '...' : columnAsString + Array(10 - columnAsString.length).join(' ');
-	                }).join(' | ') + ' |';
+	                    return columnAsString.length > 9 ? columnAsString.substring(0, 6) + "..." : columnAsString + Array(10 - columnAsString.length).join(" ");
+	                }).join(" | ") + " |";
 	            };
 	            var header = makeRow(this[__columns__]);
 	            var token = 0;
-	            var toShow = [header, Array(header.length).join('-')].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row) {
-	                token++;return makeRow(row.toArray());
+	            var toShow = [header, Array(header.length).join("-")].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(this[__rows__], function (row) {
+	                token++;
+	                return makeRow(row.toArray());
 	            }, function () {
 	                return token >= rows;
-	            }))).join('\n');
+	            }))).join("\n");
 	            if (!quiet) {
 	                console.log(toShow);
 	            }
@@ -9711,7 +9719,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'dim',
+	        key: "dim",
 	        value: function dim() {
 	            return [this.count(), this[__columns__].length];
 	        }
@@ -9725,9 +9733,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'transpose',
+	        key: "transpose",
 	        value: function transpose(tranposeColumnNames) {
-	            var newColumns = [].concat((0, _toConsumableArray3['default'])(tranposeColumnNames ? ['rowNames'] : []), (0, _toConsumableArray3['default'])([].concat((0, _toConsumableArray3['default'])(Array(this.count()).keys())).reverse()));
+	            var newColumns = [].concat((0, _toConsumableArray3["default"])(tranposeColumnNames ? ["rowNames"] : []), (0, _toConsumableArray3["default"])([].concat((0, _toConsumableArray3["default"])(Array(this.count()).keys())).reverse()));
 	            var transposedRows = (0, _reusables.transpose)((tranposeColumnNames ? this.push(this[__columns__]) : this).toArray());
 	            return this.__newInstance__(transposedRows, newColumns.reverse()).restructure(newColumns);
 	        }
@@ -9740,7 +9748,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'count',
+	        key: "count",
 	        value: function count() {
 	            return this[__rows__].length;
 	        }
@@ -9751,12 +9759,12 @@ var dfjs =
 	         * @param {String} [columnName=this.listColumns()[0]] The column to count the value.
 	         * @returns {Int} The number of times the selected value appears.
 	         * @example
-	          * df.countValue(5, 'column2')
-	          * df.select('column1').countValue(5)
+	         * df.countValue(5, 'column2')
+	         * df.select('column1').countValue(5)
 	         */
 
 	    }, {
-	        key: 'countValue',
+	        key: "countValue",
 	        value: function countValue(valueToCount) {
 	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this[__columns__][0];
 
@@ -9770,11 +9778,11 @@ var dfjs =
 	         * @param {Array | Row} rows The rows to add.
 	         * @returns {DataFrame} A new DataFrame with the new rows.
 	         * @example
-	          * df.push([1,2,3], [1,4,9])
+	         * df.push([1,2,3], [1,4,9])
 	         */
 
 	    }, {
-	        key: 'push',
+	        key: "push",
 	        value: function push() {
 	            for (var _len2 = arguments.length, rows = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	                rows[_key2] = arguments[_key2];
@@ -9794,7 +9802,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'replace',
+	        key: "replace",
 	        value: function replace(value, replacement, columnNames) {
 	            var _this5 = this;
 
@@ -9815,9 +9823,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'distinct',
+	        key: "distinct",
 	        value: function distinct(columnName) {
-	            return this.__newInstance__((0, _defineProperty3['default'])({}, columnName, [].concat((0, _toConsumableArray3['default'])(new _set2['default'](this.toArray(columnName))))), [columnName]);
+	            return this.__newInstance__((0, _defineProperty3["default"])({}, columnName, [].concat((0, _toConsumableArray3["default"])(new _set2["default"](this.toArray(columnName))))), [columnName]);
 	        }
 
 	        /**
@@ -9830,7 +9838,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'unique',
+	        key: "unique",
 	        value: function unique(columnName) {
 	            return this.distinct(columnName);
 	        }
@@ -9843,9 +9851,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'listColumns',
+	        key: "listColumns",
 	        value: function listColumns() {
-	            return [].concat((0, _toConsumableArray3['default'])(this[__columns__]));
+	            return [].concat((0, _toConsumableArray3["default"])(this[__columns__]));
 	        }
 
 	        /**
@@ -9857,7 +9865,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'select',
+	        key: "select",
 	        value: function select() {
 	            for (var _len3 = arguments.length, columnNames = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
 	                columnNames[_key3] = arguments[_key3];
@@ -9879,7 +9887,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'withColumn',
+	        key: "withColumn",
 	        value: function withColumn(columnName) {
 	            var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
 	                return undefined;
@@ -9887,7 +9895,7 @@ var dfjs =
 
 	            return this.__newInstance__(this[__rows__].map(function (row, index) {
 	                return row.set(columnName, func(row, index));
-	            }), this[__columns__].includes(columnName) ? this[__columns__] : [].concat((0, _toConsumableArray3['default'])(this[__columns__]), [columnName]));
+	            }), this[__columns__].includes(columnName) ? this[__columns__] : [].concat((0, _toConsumableArray3["default"])(this[__columns__]), [columnName]));
 	        }
 
 	        /**
@@ -9901,7 +9909,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'restructure',
+	        key: "restructure",
 	        value: function restructure(newColumnNames) {
 	            return this.__newInstance__(this[__rows__], newColumnNames);
 	        }
@@ -9915,7 +9923,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'renameAll',
+	        key: "renameAll",
 	        value: function renameAll(newColumnNames) {
 	            if (newColumnNames.length !== this[__columns__].length) {
 	                throw new _errors.WrongSchemaError(newColumnNames, this[__columns__]);
@@ -9933,7 +9941,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'rename',
+	        key: "rename",
 	        value: function rename(columnName, replacement) {
 	            var newColumnNames = this[__columns__].map(function (column) {
 	                return column === columnName ? replacement : column;
@@ -9950,7 +9958,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'castAll',
+	        key: "castAll",
 	        value: function castAll(typeFunctions) {
 	            var _this6 = this;
 
@@ -9958,7 +9966,7 @@ var dfjs =
 	                throw new _errors.WrongSchemaError(typeFunctions, this[__columns__]);
 	            }
 	            return this.map(function (row) {
-	                return new _row2['default'](row.toArray().map(function (column, index) {
+	                return new _row2["default"](row.toArray().map(function (column, index) {
 	                    return typeFunctions[index](column);
 	                }), _this6[__columns__]);
 	            });
@@ -9975,7 +9983,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'cast',
+	        key: "cast",
 	        value: function cast(columnName, typeFunction) {
 	            return this.withColumn(columnName, function (row) {
 	                return typeFunction(row.get(columnName));
@@ -9991,10 +9999,10 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'drop',
+	        key: "drop",
 	        value: function drop(columnName) {
 	            return this.__newInstance__(this[__rows__].map(function (row) {
-	                return row['delete'](columnName);
+	                return row["delete"](columnName);
 	            }), this[__columns__].filter(function (column) {
 	                return column !== columnName;
 	            }));
@@ -10015,13 +10023,13 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'chain',
+	        key: "chain",
 	        value: function chain() {
 	            for (var _len4 = arguments.length, funcs = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
 	                funcs[_key4] = arguments[_key4];
 	            }
 
-	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])(_reusables.chain.apply(undefined, [this[__rows__]].concat(funcs)))), this[__columns__]);
+	            return this.__newInstance__([].concat((0, _toConsumableArray3["default"])(_reusables.chain.apply(undefined, [this[__rows__]].concat(funcs)))), this[__columns__]);
 	        }
 
 	        /**
@@ -10034,20 +10042,20 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'filter',
+	        key: "filter",
 	        value: function filter(condition) {
-	            var func = (typeof condition === 'undefined' ? 'undefined' : (0, _typeof3['default'])(condition)) === 'object' ? function (row) {
-	                return (0, _entries2['default'])(condition).map(function (_ref6) {
-	                    var _ref7 = (0, _slicedToArray3['default'])(_ref6, 2),
+	            var func = (typeof condition === "undefined" ? "undefined" : (0, _typeof3["default"])(condition)) === "object" ? function (row) {
+	                return (0, _entries2["default"])(condition).map(function (_ref6) {
+	                    var _ref7 = (0, _slicedToArray3["default"])(_ref6, 2),
 	                        column = _ref7[0],
 	                        value = _ref7[1];
 
-	                    return (0, _is2['default'])(row.get(column), value);
+	                    return (0, _is2["default"])(row.get(column), value);
 	                }).reduce(function (p, n) {
 	                    return p && n;
 	                });
 	            } : condition;
-	            var filteredRows = [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row, i) {
+	            var filteredRows = [].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(this[__rows__], function (row, i) {
 	                return func(row, i) ? row : false;
 	            })));
 	            return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__]) : this.__newInstance__([], []);
@@ -10064,7 +10072,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'where',
+	        key: "where",
 	        value: function where(condition) {
 	            return this.filter(condition);
 	        }
@@ -10079,7 +10087,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'find',
+	        key: "find",
 	        value: function find(condition) {
 	            return this.filter(condition)[__rows__][0];
 	        }
@@ -10093,9 +10101,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'map',
+	        key: "map",
 	        value: function map(func) {
-	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this[__rows__], function (row, i) {
+	            return this.__newInstance__([].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(this[__rows__], function (row, i) {
 	                return func(row, i);
 	            }))), this[__columns__]);
 	        }
@@ -10114,9 +10122,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'reduce',
+	        key: "reduce",
 	        value: function reduce(func, init) {
-	            return typeof init === 'undefined' ? this[__rows__].reduce(function (p, n) {
+	            return typeof init === "undefined" ? this[__rows__].reduce(function (p, n) {
 	                return func(p, n);
 	            }) : this[__rows__].reduce(function (p, n) {
 	                return func(p, n);
@@ -10133,9 +10141,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'reduceRight',
+	        key: "reduceRight",
 	        value: function reduceRight(func, init) {
-	            return typeof init === 'undefined' ? this[__rows__].reduceRight(function (p, n) {
+	            return typeof init === "undefined" ? this[__rows__].reduceRight(function (p, n) {
 	                return func(p, n);
 	            }) : this[__rows__].reduceRight(function (p, n) {
 	                return func(p, n);
@@ -10151,14 +10159,14 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'dropDuplicates',
+	        key: "dropDuplicates",
 	        value: function dropDuplicates() {
 	            for (var _len5 = arguments.length, columnNames = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
 	                columnNames[_key5] = arguments[_key5];
 	            }
 
 	            var groupCols = columnNames && columnNames.length > 0 ? columnNames : this[__columns__];
-	            return this.groupBy.apply(this, (0, _toConsumableArray3['default'])(groupCols)).filter(function (row, i) {
+	            return this.groupBy.apply(this, (0, _toConsumableArray3["default"])(groupCols)).filter(function (row, i) {
 	                return i === 0;
 	            });
 	        }
@@ -10171,11 +10179,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'shuffle',
+	        key: "shuffle",
 	        value: function shuffle() {
 	            return this.__newInstance__(this.reduce(function (p, n) {
 	                var index = Math.floor(Math.random() * (p.length - 1) + 1);
-	                return Array.isArray(p) ? [].concat((0, _toConsumableArray3['default'])(p.slice(index, p.length + 1)), [n], (0, _toConsumableArray3['default'])(p.slice(0, index))) : [p, n];
+	                return Array.isArray(p) ? [].concat((0, _toConsumableArray3["default"])(p.slice(index, p.length + 1)), [n], (0, _toConsumableArray3["default"])(p.slice(0, index))) : [p, n];
 	            }), this[__columns__]);
 	        }
 
@@ -10188,11 +10196,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'sample',
+	        key: "sample",
 	        value: function sample(percentage) {
 	            var nRows = this.count() * percentage;
 	            var token = 0;
-	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
+	            return this.__newInstance__([].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
 	                token++;
 	                return row;
 	            }, function () {
@@ -10209,12 +10217,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'bisect',
+	        key: "bisect",
 	        value: function bisect(percentage) {
 	            var nRows = this.count() * percentage;
 	            var token = 0;
 	            var restRows = [];
-	            return [this.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
+	            return [this.__newInstance__([].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(this.shuffle()[__rows__], function (row) {
 	                if (token < nRows) {
 	                    token++;
 	                    return row;
@@ -10236,13 +10244,13 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'groupBy',
+	        key: "groupBy",
 	        value: function groupBy() {
 	            for (var _len6 = arguments.length, columnNames = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
 	                columnNames[_key6] = arguments[_key6];
 	            }
 
-	            return new (Function.prototype.bind.apply(_groupedDataframe2['default'], [null].concat([this], columnNames)))();
+	            return new (Function.prototype.bind.apply(_groupedDataframe2["default"], [null].concat([this], columnNames)))();
 	        }
 
 	        /**
@@ -10254,15 +10262,15 @@ var dfjs =
 	         * df.sortBy('id')
 	         * df.sortBy(['id1', 'id2'])
 	         * df.sortBy(['id1'], true)
-	        */
+	         */
 
 	    }, {
-	        key: 'sortBy',
+	        key: "sortBy",
 	        value: function sortBy(columnNames) {
 	            var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
 	            // ensure unique columns
-	            var _columnNames = (0, _from2['default'])(new _set2['default']((0, _reusables.asArray)(columnNames)));
+	            var _columnNames = (0, _from2["default"])(new _set2["default"]((0, _reusables.asArray)(columnNames)));
 
 	            var sortedRows = this[__rows__].sort(function (p, n) {
 	                return _columnNames.map(function (col) {
@@ -10270,7 +10278,7 @@ var dfjs =
 	                        pValue = _ref8[0],
 	                        nValue = _ref8[1];
 
-	                    if ((typeof pValue === 'undefined' ? 'undefined' : (0, _typeof3['default'])(pValue)) !== (typeof nValue === 'undefined' ? 'undefined' : (0, _typeof3['default'])(nValue))) {
+	                    if ((typeof pValue === "undefined" ? "undefined" : (0, _typeof3["default"])(pValue)) !== (typeof nValue === "undefined" ? "undefined" : (0, _typeof3["default"])(nValue))) {
 	                        throw new _errors.MixedTypeError();
 	                    }
 	                    return (0, _reusables.compare)(pValue, nValue, reverse);
@@ -10291,13 +10299,13 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'union',
+	        key: "union",
 	        value: function union(dfToUnion) {
-	            if (!(dfToUnion instanceof DataFrame)) throw new _errors.ArgumentTypeError(dfToUnion, 'DataFrame');
+	            if (!(dfToUnion instanceof DataFrame)) throw new _errors.ArgumentTypeError(dfToUnion, "DataFrame");
 	            if (!(0, _reusables.arrayEqual)(this[__columns__], dfToUnion[__columns__])) {
 	                throw new _errors.WrongSchemaError(dfToUnion[__columns__], this[__columns__]);
 	            }
-	            return this.__newInstance__([].concat((0, _toConsumableArray3['default'])(this), (0, _toConsumableArray3['default'])(dfToUnion.restructure(this[__columns__]))), this[__columns__]);
+	            return this.__newInstance__([].concat((0, _toConsumableArray3["default"])(this), (0, _toConsumableArray3["default"])(dfToUnion.restructure(this[__columns__]))), this[__columns__]);
 	        }
 
 	        /**
@@ -10311,11 +10319,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'join',
+	        key: "join",
 	        value: function join(dfToJoin, columnNames) {
 	            var _this7 = this;
 
-	            var how = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'inner';
+	            var how = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "inner";
 
 	            var joinMethods = {
 	                inner: function inner() {
@@ -10349,9 +10357,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'innerJoin',
+	        key: "innerJoin",
 	        value: function innerJoin(dfToJoin, columnNames) {
-	            return this._join(dfToJoin, columnNames, ['in']);
+	            return this._join(dfToJoin, columnNames, ["in"]);
 	        }
 
 	        /**
@@ -10365,9 +10373,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'fullJoin',
+	        key: "fullJoin",
 	        value: function fullJoin(dfToJoin, columnNames) {
-	            return this._join(dfToJoin, columnNames, ['full', 'full']);
+	            return this._join(dfToJoin, columnNames, ["full", "full"]);
 	        }
 
 	        /**
@@ -10381,7 +10389,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'outerJoin',
+	        key: "outerJoin",
 	        value: function outerJoin(dfToJoin, columnNames) {
 	            return this.fullJoin(dfToJoin, columnNames);
 	        }
@@ -10397,9 +10405,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'leftJoin',
+	        key: "leftJoin",
 	        value: function leftJoin(dfToJoin, columnNames) {
-	            return this._join(dfToJoin, columnNames, ['full', 'in']);
+	            return this._join(dfToJoin, columnNames, ["full", "in"]);
 	        }
 
 	        /**
@@ -10413,9 +10421,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'rightJoin',
+	        key: "rightJoin",
 	        value: function rightJoin(dfToJoin, columnNames) {
-	            return this._join(dfToJoin, columnNames, ['in', 'full']);
+	            return this._join(dfToJoin, columnNames, ["in", "full"]);
 	        }
 
 	        /**
@@ -10428,14 +10436,14 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'diff',
+	        key: "diff",
 	        value: function diff(dfToDiff, columnNames) {
-	            return this._join(dfToDiff, columnNames, ['out', 'out']);
+	            return this._join(dfToDiff, columnNames, ["out", "out"]);
 	        }
 	    }]);
 	    return DataFrame;
 	}(), _class.defaultModules = [], _temp);
-	exports['default'] = DataFrame;
+	exports["default"] = DataFrame;
 
 /***/ }),
 /* 328 */
@@ -10528,9 +10536,8 @@ var dfjs =
 	'use strict';
 	var LIBRARY = __webpack_require__(335);
 	var $export = __webpack_require__(336);
-	var redefine = __webpack_require__(351);
+	var redefine = __webpack_require__(352);
 	var hide = __webpack_require__(341);
-	var has = __webpack_require__(352);
 	var Iterators = __webpack_require__(353);
 	var $iterCreate = __webpack_require__(354);
 	var setToStringTag = __webpack_require__(370);
@@ -10557,7 +10564,7 @@ var dfjs =
 	  var VALUES_BUG = false;
 	  var proto = Base.prototype;
 	  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-	  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
+	  var $default = $native || getMethod(DEFAULT);
 	  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
 	  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
 	  var methods, key, IteratorPrototype;
@@ -10568,7 +10575,7 @@ var dfjs =
 	      // Set @@toStringTag to native iterators
 	      setToStringTag(IteratorPrototype, TAG, true);
 	      // fix for some old engines
-	      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
+	      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
 	    }
 	  }
 	  // fix Array#{values, @@iterator}.name in V8 / FF
@@ -10612,6 +10619,7 @@ var dfjs =
 	var core = __webpack_require__(338);
 	var ctx = __webpack_require__(339);
 	var hide = __webpack_require__(341);
+	var has = __webpack_require__(351);
 	var PROTOTYPE = 'prototype';
 
 	var $export = function (type, name, source) {
@@ -10629,7 +10637,7 @@ var dfjs =
 	  for (key in source) {
 	    // contains in native
 	    own = !IS_FORCED && target && target[key] !== undefined;
-	    if (own && key in exports) continue;
+	    if (own && has(exports, key)) continue;
 	    // export native or passed
 	    out = own ? target[key] : source[key];
 	    // prevent global pollution for namespaces
@@ -10687,7 +10695,7 @@ var dfjs =
 /* 338 */
 /***/ (function(module, exports) {
 
-	var core = module.exports = { version: '2.5.3' };
+	var core = module.exports = { version: '2.5.5' };
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -10862,19 +10870,19 @@ var dfjs =
 
 /***/ }),
 /* 351 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(341);
-
-
-/***/ }),
-/* 352 */
 /***/ (function(module, exports) {
 
 	var hasOwnProperty = {}.hasOwnProperty;
 	module.exports = function (it, key) {
 	  return hasOwnProperty.call(it, key);
 	};
+
+
+/***/ }),
+/* 352 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(341);
 
 
 /***/ }),
@@ -10986,7 +10994,7 @@ var dfjs =
 /* 358 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var toIObject = __webpack_require__(359);
 	var arrayIndexOf = __webpack_require__(362)(false);
 	var IE_PROTO = __webpack_require__(365)('IE_PROTO');
@@ -11151,7 +11159,7 @@ var dfjs =
 /***/ (function(module, exports, __webpack_require__) {
 
 	var def = __webpack_require__(342).f;
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var TAG = __webpack_require__(371)('toStringTag');
 
 	module.exports = function (it, tag, stat) {
@@ -11181,7 +11189,7 @@ var dfjs =
 /***/ (function(module, exports, __webpack_require__) {
 
 	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var toObject = __webpack_require__(373);
 	var IE_PROTO = __webpack_require__(365)('IE_PROTO');
 	var ObjectProto = Object.prototype;
@@ -11553,10 +11561,10 @@ var dfjs =
 	'use strict';
 	// ECMAScript 6 symbols shim
 	var global = __webpack_require__(337);
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var DESCRIPTORS = __webpack_require__(346);
 	var $export = __webpack_require__(336);
-	var redefine = __webpack_require__(351);
+	var redefine = __webpack_require__(352);
 	var META = __webpack_require__(396).KEY;
 	var $fails = __webpack_require__(347);
 	var shared = __webpack_require__(366);
@@ -11792,7 +11800,7 @@ var dfjs =
 
 	var META = __webpack_require__(367)('meta');
 	var isObject = __webpack_require__(344);
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var setDesc = __webpack_require__(342).f;
 	var id = 0;
 	var isExtensible = Object.isExtensible || function () {
@@ -11952,7 +11960,7 @@ var dfjs =
 	var createDesc = __webpack_require__(350);
 	var toIObject = __webpack_require__(359);
 	var toPrimitive = __webpack_require__(349);
-	var has = __webpack_require__(352);
+	var has = __webpack_require__(351);
 	var IE8_DOM_DEFINE = __webpack_require__(345);
 	var gOPD = Object.getOwnPropertyDescriptor;
 
@@ -13778,7 +13786,7 @@ var dfjs =
 	      var resolve = reaction.resolve;
 	      var reject = reaction.reject;
 	      var domain = reaction.domain;
-	      var result, then;
+	      var result, then, exited;
 	      try {
 	        if (handler) {
 	          if (!ok) {
@@ -13788,8 +13796,11 @@ var dfjs =
 	          if (handler === true) result = value;
 	          else {
 	            if (domain) domain.enter();
-	            result = handler(value);
-	            if (domain) domain.exit();
+	            result = handler(value); // may throw
+	            if (domain) {
+	              domain.exit();
+	              exited = true;
+	            }
 	          }
 	          if (result === reaction.promise) {
 	            reject(TypeError('Promise-chain cycle'));
@@ -13798,6 +13809,7 @@ var dfjs =
 	          } else resolve(result);
 	        } else reject(value);
 	      } catch (e) {
+	        if (domain && !exited) domain.exit();
 	        reject(e);
 	      }
 	    };
@@ -15061,7 +15073,7 @@ var dfjs =
 /* 478 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -15103,10 +15115,10 @@ var dfjs =
 	exports.compare = compare;
 	exports.hashCode = hashCode;
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var _marked = /*#__PURE__*/_regenerator2['default'].mark(makeGenerator),
-	    _marked2 = /*#__PURE__*/_regenerator2['default'].mark(iter);
+	var _marked = /*#__PURE__*/_regenerator2["default"].mark(makeGenerator),
+	    _marked2 = /*#__PURE__*/_regenerator2["default"].mark(iter);
 
 	function asArray(x) {
 	    if (!x) return [];
@@ -15116,7 +15128,7 @@ var dfjs =
 	function isArrayOfType(value, ofType) {
 	    var index = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
 
-	    return value instanceof Array && value.hasOwnProperty(index) && (ofType === String ? typeof value[index] === 'string' : value[index] instanceof ofType) ? true : false;
+	    return value instanceof Array && value.hasOwnProperty(index) && (ofType === String ? typeof value[index] === "string" : value[index] instanceof ofType) ? true : false;
 	}
 
 	function isNumber(x) {
@@ -15126,12 +15138,12 @@ var dfjs =
 	function arrayEqual(a, b) {
 	    var byOrder = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-	    return byOrder ? (0, _keys2['default'])(a).map(function (x) {
+	    return byOrder ? (0, _keys2["default"])(a).map(function (x) {
 	        return a[x] === b[x];
 	    }).reduce(function (p, n) {
 	        return p ? n : p;
-	    }, true) : [].concat((0, _toConsumableArray3['default'])(new _set2['default'](a.filter(function (x) {
-	        return !new _set2['default'](b).has(x);
+	    }, true) : [].concat((0, _toConsumableArray3["default"])(new _set2["default"](a.filter(function (x) {
+	        return !new _set2["default"](b).has(x);
 	    })))).length === 0;
 	}
 
@@ -15141,7 +15153,7 @@ var dfjs =
 	    }).reduce(function (p, n) {
 	        return Math.max(p, n);
 	    }, 0);
-	    return [].concat((0, _toConsumableArray3['default'])(Array(tableSize).keys())).map(function (index) {
+	    return [].concat((0, _toConsumableArray3["default"])(Array(tableSize).keys())).map(function (index) {
 	        return table.map(function (row) {
 	            return row[index];
 	        });
@@ -15149,14 +15161,14 @@ var dfjs =
 	}
 
 	function makeGenerator(x) {
-	    return _regenerator2['default'].wrap(function makeGenerator$(_context) {
+	    return _regenerator2["default"].wrap(function makeGenerator$(_context) {
 	        while (1) {
 	            switch (_context.prev = _context.next) {
 	                case 0:
-	                    return _context.delegateYield(x, 't0', 1);
+	                    return _context.delegateYield(x, "t0", 1);
 
 	                case 1:
-	                case 'end':
+	                case "end":
 	                    return _context.stop();
 	            }
 	        }
@@ -15182,7 +15194,7 @@ var dfjs =
 
 	    var i, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, iteration, modifiedRow;
 
-	    return _regenerator2['default'].wrap(function iter$(_context2) {
+	    return _regenerator2["default"].wrap(function iter$(_context2) {
 	        while (1) {
 	            switch (_context2.prev = _context2.next) {
 	                case 0:
@@ -15191,7 +15203,7 @@ var dfjs =
 	                    _didIteratorError = false;
 	                    _iteratorError = undefined;
 	                    _context2.prev = 4;
-	                    _iterator = (0, _getIterator3['default'])(data);
+	                    _iterator = (0, _getIterator3["default"])(data);
 
 	                case 6:
 	                    if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -15206,7 +15218,7 @@ var dfjs =
 	                        break;
 	                    }
 
-	                    return _context2.abrupt('return');
+	                    return _context2.abrupt("return");
 
 	                case 10:
 	                    modifiedRow = func(iteration, i++);
@@ -15230,7 +15242,7 @@ var dfjs =
 
 	                case 19:
 	                    _context2.prev = 19;
-	                    _context2.t0 = _context2['catch'](4);
+	                    _context2.t0 = _context2["catch"](4);
 	                    _didIteratorError = true;
 	                    _iteratorError = _context2.t0;
 
@@ -15238,8 +15250,8 @@ var dfjs =
 	                    _context2.prev = 23;
 	                    _context2.prev = 24;
 
-	                    if (!_iteratorNormalCompletion && _iterator['return']) {
-	                        _iterator['return']();
+	                    if (!_iteratorNormalCompletion && _iterator["return"]) {
+	                        _iterator["return"]();
 	                    }
 
 	                case 26:
@@ -15259,7 +15271,7 @@ var dfjs =
 	                    return _context2.finish(23);
 
 	                case 31:
-	                case 'end':
+	                case "end":
 	                    return _context2.stop();
 	            }
 	        }
@@ -15286,7 +15298,7 @@ var dfjs =
 	    try {
 	        __webpack_require__(479).writeFileSync(path, content);
 	    } catch (e) {
-	        console.warn('File system module is not available.');
+	        console.warn("File system module is not available.");
 	    }
 	}
 
@@ -15301,7 +15313,7 @@ var dfjs =
 	}
 
 	function addFileProtocol(path) {
-	    return path.startsWith('/') || path.startsWith('./') ? 'file://' + path : path;
+	    return path.startsWith("/") || path.startsWith("./") ? "file://" + path : path;
 	}
 
 	function xSplit(stringToSplit) {
@@ -15313,7 +15325,7 @@ var dfjs =
 	        return prev.map(function (str) {
 	            return str.split(next);
 	        }).reduce(function (p, n) {
-	            return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(n));
+	            return [].concat((0, _toConsumableArray3["default"])(p), (0, _toConsumableArray3["default"])(n));
 	        }, []);
 	    }, [stringToSplit]);
 	}
@@ -15371,7 +15383,7 @@ var dfjs =
 /* 480 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 	exports.WrongTableNameError = exports.TableAlreadyExistsError = exports.SQLParseError = exports.ArgumentTypeError = exports.WrongSchemaError = exports.NoSuchColumnError = exports.MixedTypeError = exports.FileNotFoundError = undefined;
@@ -15396,18 +15408,18 @@ var dfjs =
 
 	var _inherits3 = _interopRequireDefault(_inherits2);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	var FileNotFoundError = exports.FileNotFoundError = function (_Error) {
-	    (0, _inherits3['default'])(FileNotFoundError, _Error);
+	    (0, _inherits3["default"])(FileNotFoundError, _Error);
 
 	    function FileNotFoundError(fileName) {
-	        (0, _classCallCheck3['default'])(this, FileNotFoundError);
+	        (0, _classCallCheck3["default"])(this, FileNotFoundError);
 
-	        var _this = (0, _possibleConstructorReturn3['default'])(this, (FileNotFoundError.__proto__ || (0, _getPrototypeOf2['default'])(FileNotFoundError)).call(this, Error));
+	        var _this = (0, _possibleConstructorReturn3["default"])(this, (FileNotFoundError.__proto__ || (0, _getPrototypeOf2["default"])(FileNotFoundError)).call(this, Error));
 
-	        _this.message = fileName + ' not found. You maybe use a wrong path or url. Be sure you use absolute path, relative one being not supported.';
-	        _this.name = 'FileNotFoundError';
+	        _this.message = fileName + " not found. You maybe use a wrong path or url. Be sure you use absolute path, relative one being not supported.";
+	        _this.name = "FileNotFoundError";
 	        return _this;
 	    }
 
@@ -15415,19 +15427,19 @@ var dfjs =
 	}(Error);
 
 	var MixedTypeError = exports.MixedTypeError = function (_TypeError) {
-	    (0, _inherits3['default'])(MixedTypeError, _TypeError);
+	    (0, _inherits3["default"])(MixedTypeError, _TypeError);
 
 	    function MixedTypeError() {
-	        (0, _classCallCheck3['default'])(this, MixedTypeError);
+	        (0, _classCallCheck3["default"])(this, MixedTypeError);
 
-	        var _this2 = (0, _possibleConstructorReturn3['default'])(this, (MixedTypeError.__proto__ || (0, _getPrototypeOf2['default'])(MixedTypeError)).call(this, TypeError));
+	        var _this2 = (0, _possibleConstructorReturn3["default"])(this, (MixedTypeError.__proto__ || (0, _getPrototypeOf2["default"])(MixedTypeError)).call(this, TypeError));
 
 	        for (var _len = arguments.length, types = Array(_len), _key = 0; _key < _len; _key++) {
 	            types[_key] = arguments[_key];
 	        }
 
-	        _this2.message = 'can\'t work with multiple variable types: [' + types.join(',') + '].';
-	        _this2.name = 'MixedTypeError';
+	        _this2.message = "can't work with multiple variable types: [" + types.join(",") + "].";
+	        _this2.name = "MixedTypeError";
 	        return _this2;
 	    }
 
@@ -15435,15 +15447,15 @@ var dfjs =
 	}(TypeError);
 
 	var NoSuchColumnError = exports.NoSuchColumnError = function (_Error2) {
-	    (0, _inherits3['default'])(NoSuchColumnError, _Error2);
+	    (0, _inherits3["default"])(NoSuchColumnError, _Error2);
 
 	    function NoSuchColumnError(column, columns) {
-	        (0, _classCallCheck3['default'])(this, NoSuchColumnError);
+	        (0, _classCallCheck3["default"])(this, NoSuchColumnError);
 
-	        var _this3 = (0, _possibleConstructorReturn3['default'])(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2['default'])(NoSuchColumnError)).call(this, Error));
+	        var _this3 = (0, _possibleConstructorReturn3["default"])(this, (NoSuchColumnError.__proto__ || (0, _getPrototypeOf2["default"])(NoSuchColumnError)).call(this, Error));
 
-	        _this3.message = column + ' not found in [' + columns.join(', ') + '].';
-	        _this3.name = 'NoSuchColumnError';
+	        _this3.message = column + " not found in [" + columns.join(", ") + "].";
+	        _this3.name = "NoSuchColumnError";
 	        return _this3;
 	    }
 
@@ -15451,15 +15463,15 @@ var dfjs =
 	}(Error);
 
 	var WrongSchemaError = exports.WrongSchemaError = function (_Error3) {
-	    (0, _inherits3['default'])(WrongSchemaError, _Error3);
+	    (0, _inherits3["default"])(WrongSchemaError, _Error3);
 
 	    function WrongSchemaError(columns, expected) {
-	        (0, _classCallCheck3['default'])(this, WrongSchemaError);
+	        (0, _classCallCheck3["default"])(this, WrongSchemaError);
 
-	        var _this4 = (0, _possibleConstructorReturn3['default'])(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2['default'])(WrongSchemaError)).call(this, Error));
+	        var _this4 = (0, _possibleConstructorReturn3["default"])(this, (WrongSchemaError.__proto__ || (0, _getPrototypeOf2["default"])(WrongSchemaError)).call(this, Error));
 
-	        _this4.message = '[' + columns.join(', ') + '] while expecting [' + expected.join(', ') + '].';
-	        _this4.name = 'WrongSchemaError';
+	        _this4.message = "[" + columns.join(", ") + "] while expecting [" + expected.join(", ") + "].";
+	        _this4.name = "WrongSchemaError";
 	        return _this4;
 	    }
 
@@ -15467,15 +15479,15 @@ var dfjs =
 	}(Error);
 
 	var ArgumentTypeError = exports.ArgumentTypeError = function (_TypeError2) {
-	    (0, _inherits3['default'])(ArgumentTypeError, _TypeError2);
+	    (0, _inherits3["default"])(ArgumentTypeError, _TypeError2);
 
 	    function ArgumentTypeError(input, expected) {
-	        (0, _classCallCheck3['default'])(this, ArgumentTypeError);
+	        (0, _classCallCheck3["default"])(this, ArgumentTypeError);
 
-	        var _this5 = (0, _possibleConstructorReturn3['default'])(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2['default'])(ArgumentTypeError)).call(this, TypeError));
+	        var _this5 = (0, _possibleConstructorReturn3["default"])(this, (ArgumentTypeError.__proto__ || (0, _getPrototypeOf2["default"])(ArgumentTypeError)).call(this, TypeError));
 
-	        _this5.message = (input && input.constructor ? input.constructor.name : typeof input === 'undefined' ? 'undefined' : (0, _typeof3['default'])(input)) + ' while expecting ' + expected + '.';
-	        _this5.name = 'ArgumentTypeError';
+	        _this5.message = (input && input.constructor ? input.constructor.name : typeof input === "undefined" ? "undefined" : (0, _typeof3["default"])(input)) + " while expecting " + expected + ".";
+	        _this5.name = "ArgumentTypeError";
 	        return _this5;
 	    }
 
@@ -15483,15 +15495,15 @@ var dfjs =
 	}(TypeError);
 
 	var SQLParseError = exports.SQLParseError = function (_Error4) {
-	    (0, _inherits3['default'])(SQLParseError, _Error4);
+	    (0, _inherits3["default"])(SQLParseError, _Error4);
 
 	    function SQLParseError(message) {
-	        (0, _classCallCheck3['default'])(this, SQLParseError);
+	        (0, _classCallCheck3["default"])(this, SQLParseError);
 
-	        var _this6 = (0, _possibleConstructorReturn3['default'])(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2['default'])(SQLParseError)).call(this, Error));
+	        var _this6 = (0, _possibleConstructorReturn3["default"])(this, (SQLParseError.__proto__ || (0, _getPrototypeOf2["default"])(SQLParseError)).call(this, Error));
 
-	        _this6.message = message + '.';
-	        _this6.name = 'SQLParseError';
+	        _this6.message = message + ".";
+	        _this6.name = "SQLParseError";
 	        return _this6;
 	    }
 
@@ -15499,15 +15511,15 @@ var dfjs =
 	}(Error);
 
 	var TableAlreadyExistsError = exports.TableAlreadyExistsError = function (_Error5) {
-	    (0, _inherits3['default'])(TableAlreadyExistsError, _Error5);
+	    (0, _inherits3["default"])(TableAlreadyExistsError, _Error5);
 
 	    function TableAlreadyExistsError(tableName) {
-	        (0, _classCallCheck3['default'])(this, TableAlreadyExistsError);
+	        (0, _classCallCheck3["default"])(this, TableAlreadyExistsError);
 
-	        var _this7 = (0, _possibleConstructorReturn3['default'])(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2['default'])(TableAlreadyExistsError)).call(this, Error));
+	        var _this7 = (0, _possibleConstructorReturn3["default"])(this, (TableAlreadyExistsError.__proto__ || (0, _getPrototypeOf2["default"])(TableAlreadyExistsError)).call(this, Error));
 
-	        _this7.message = 'The SQL temporary table ' + tableName + ' already exits. Use overwrite = true to overwrite it.';
-	        _this7.name = 'TableAlreadyExistsError';
+	        _this7.message = "The SQL temporary table " + tableName + " already exits. Use overwrite = true to overwrite it.";
+	        _this7.name = "TableAlreadyExistsError";
 	        return _this7;
 	    }
 
@@ -15515,15 +15527,15 @@ var dfjs =
 	}(Error);
 
 	var WrongTableNameError = exports.WrongTableNameError = function (_Error6) {
-	    (0, _inherits3['default'])(WrongTableNameError, _Error6);
+	    (0, _inherits3["default"])(WrongTableNameError, _Error6);
 
 	    function WrongTableNameError(tableName) {
-	        (0, _classCallCheck3['default'])(this, WrongTableNameError);
+	        (0, _classCallCheck3["default"])(this, WrongTableNameError);
 
-	        var _this8 = (0, _possibleConstructorReturn3['default'])(this, (WrongTableNameError.__proto__ || (0, _getPrototypeOf2['default'])(WrongTableNameError)).call(this, Error));
+	        var _this8 = (0, _possibleConstructorReturn3["default"])(this, (WrongTableNameError.__proto__ || (0, _getPrototypeOf2["default"])(WrongTableNameError)).call(this, Error));
 
-	        _this8.message = 'The SQL temporary table ' + tableName + ' is not allowed. Avoid to use Spaces, quotes, tabs....';
-	        _this8.name = 'WrongTableNameError';
+	        _this8.message = "The SQL temporary table " + tableName + " is not allowed. Avoid to use Spaces, quotes, tabs....";
+	        _this8.name = "WrongTableNameError";
 	        return _this8;
 	    }
 
@@ -15703,7 +15715,7 @@ var dfjs =
 /* 493 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -15775,10 +15787,10 @@ var dfjs =
 
 	var _errors = __webpack_require__(480);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var __columns__ = (0, _symbol2['default'])('columns');
-	var __values__ = (0, _symbol2['default'])('values');
+	var __columns__ = (0, _symbol2["default"])("columns");
+	var __values__ = (0, _symbol2["default"])("values");
 
 	/**
 	 * Row data structure used into the dataframe-js.
@@ -15800,19 +15812,19 @@ var dfjs =
 	     * new Row(Row, ['column1', 'column3'])
 	     */
 	    function Row(data, columns) {
-	        (0, _classCallCheck3['default'])(this, Row);
+	        (0, _classCallCheck3["default"])(this, Row);
 
-	        if (!data) throw new _errors.ArgumentTypeError(data, 'Row | Array | Object');
-	        this[__columns__] = columns ? columns : (0, _keys2['default'])(data);
-	        this[__values__] = (0, _freeze2['default'])(this._build(data));
+	        if (!data) throw new _errors.ArgumentTypeError(data, "Row | Array | Object");
+	        this[__columns__] = columns ? columns : (0, _keys2["default"])(data);
+	        this[__values__] = (0, _freeze2["default"])(this._build(data));
 	    }
 
-	    (0, _createClass3['default'])(Row, [{
-	        key: _iterator3['default'],
-	        value: /*#__PURE__*/_regenerator2['default'].mark(function value() {
+	    (0, _createClass3["default"])(Row, [{
+	        key: _iterator3["default"],
+	        value: /*#__PURE__*/_regenerator2["default"].mark(function value() {
 	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, value;
 
-	            return _regenerator2['default'].wrap(function value$(_context) {
+	            return _regenerator2["default"].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -15820,7 +15832,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3['default'])((0, _values2['default'])(this[__values__]));
+	                            _iterator = (0, _getIterator3["default"])((0, _values2["default"])(this[__values__]));
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -15843,7 +15855,7 @@ var dfjs =
 
 	                        case 14:
 	                            _context.prev = 14;
-	                            _context.t0 = _context['catch'](3);
+	                            _context.t0 = _context["catch"](3);
 	                            _didIteratorError = true;
 	                            _iteratorError = _context.t0;
 
@@ -15851,8 +15863,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator['return']) {
-	                                _iterator['return']();
+	                            if (!_iteratorNormalCompletion && _iterator["return"]) {
+	                                _iterator["return"]();
 	                            }
 
 	                        case 21:
@@ -15872,24 +15884,24 @@ var dfjs =
 	                            return _context.finish(18);
 
 	                        case 26:
-	                        case 'end':
+	                        case "end":
 	                            return _context.stop();
 	                    }
 	                }
 	            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
 	        })
 	    }, {
-	        key: '__newInstance__',
+	        key: "__newInstance__",
 	        value: function __newInstance__(data, columns) {
 	            var _Object$assign2;
 
 	            if (!(0, _reusables.arrayEqual)(this[__columns__], columns)) {
 	                return new Row(data, columns);
 	            }
-	            return (0, _assign2['default'])((0, _create2['default'])((0, _getPrototypeOf2['default'])(this)), this, (_Object$assign2 = {}, (0, _defineProperty3['default'])(_Object$assign2, __values__, data), (0, _defineProperty3['default'])(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3['default'])(columns))), _Object$assign2));
+	            return (0, _assign2["default"])((0, _create2["default"])((0, _getPrototypeOf2["default"])(this)), this, (_Object$assign2 = {}, (0, _defineProperty3["default"])(_Object$assign2, __values__, data), (0, _defineProperty3["default"])(_Object$assign2, __columns__, [].concat((0, _toConsumableArray3["default"])(columns))), _Object$assign2));
 	        }
 	    }, {
-	        key: '_build',
+	        key: "_build",
 	        value: function _build(data) {
 	            var _this = this;
 
@@ -15908,21 +15920,21 @@ var dfjs =
 	            }], [function () {
 	                return true;
 	            }, function (value) {
-	                throw new _errors.ArgumentTypeError(value, 'Row | Array | Object');
+	                throw new _errors.ArgumentTypeError(value, "Row | Array | Object");
 	            }]);
 	        }
 	    }, {
-	        key: '_fromObject',
+	        key: "_fromObject",
 	        value: function _fromObject(object) {
-	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])(this[__columns__].map(function (column) {
-	                return (0, _defineProperty3['default'])({}, column, object[column]);
+	            return _assign2["default"].apply(Object, [{}].concat((0, _toConsumableArray3["default"])(this[__columns__].map(function (column) {
+	                return (0, _defineProperty3["default"])({}, column, object[column]);
 	            }))));
 	        }
 	    }, {
-	        key: '_fromArray',
+	        key: "_fromArray",
 	        value: function _fromArray(array) {
-	            return _assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])((0, _entries2['default'])(this[__columns__]).map(function (column) {
-	                return (0, _defineProperty3['default'])({}, column[1], array[column[0]]);
+	            return _assign2["default"].apply(Object, [{}].concat((0, _toConsumableArray3["default"])((0, _entries2["default"])(this[__columns__]).map(function (column) {
+	                return (0, _defineProperty3["default"])({}, column[1], array[column[0]]);
 	            }))));
 	        }
 
@@ -15934,9 +15946,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toDict',
+	        key: "toDict",
 	        value: function toDict() {
-	            return (0, _assign2['default'])({}, this[__values__]);
+	            return (0, _assign2["default"])({}, this[__values__]);
 	        }
 
 	        /**
@@ -15947,9 +15959,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toArray',
+	        key: "toArray",
 	        value: function toArray() {
-	            return [].concat((0, _toConsumableArray3['default'])(this));
+	            return [].concat((0, _toConsumableArray3["default"])(this));
 	        }
 
 	        /**
@@ -15960,7 +15972,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'size',
+	        key: "size",
 	        value: function size() {
 	            return this[__columns__].length;
 	        }
@@ -15973,9 +15985,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'hash',
+	        key: "hash",
 	        value: function hash() {
-	            return (0, _reusables.hashCode)((0, _stringify2['default'])(this[__values__]));
+	            return (0, _reusables.hashCode)((0, _stringify2["default"])(this[__values__]));
 	        }
 
 	        /**
@@ -15987,7 +15999,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'has',
+	        key: "has",
 	        value: function has(columnName) {
 	            return this[__columns__].includes(columnName);
 	        }
@@ -16001,7 +16013,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'select',
+	        key: "select",
 	        value: function select() {
 	            var _this2 = this;
 
@@ -16009,8 +16021,8 @@ var dfjs =
 	                columnNames[_key] = arguments[_key];
 	            }
 
-	            return this.__newInstance__(_assign2['default'].apply(Object, [{}].concat((0, _toConsumableArray3['default'])(columnNames.map(function (column) {
-	                return (0, _defineProperty3['default'])({}, column, _this2.get(column));
+	            return this.__newInstance__(_assign2["default"].apply(Object, [{}].concat((0, _toConsumableArray3["default"])(columnNames.map(function (column) {
+	                return (0, _defineProperty3["default"])({}, column, _this2.get(column));
 	            })))), columnNames);
 	        }
 
@@ -16023,7 +16035,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'get',
+	        key: "get",
 	        value: function get(columnToGet) {
 	            if (!this.has(columnToGet)) {
 	                throw new _errors.NoSuchColumnError(columnToGet, this[__columns__]);
@@ -16040,10 +16052,10 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'set',
+	        key: "set",
 	        value: function set(columnToSet, value) {
-	            var newRow = (0, _assign2['default'])({}, this[__values__], (0, _defineProperty3['default'])({}, columnToSet, value));
-	            return this.__newInstance__(newRow, (0, _keys2['default'])(newRow));
+	            var newRow = (0, _assign2["default"])({}, this[__values__], (0, _defineProperty3["default"])({}, columnToSet, value));
+	            return this.__newInstance__(newRow, (0, _keys2["default"])(newRow));
 	        }
 
 	        /**
@@ -16055,12 +16067,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'delete',
+	        key: "delete",
 	        value: function _delete(columnToDel) {
 	            if (!this.has(columnToDel)) {
 	                throw new _errors.NoSuchColumnError(columnToDel, this[__columns__]);
 	            }
-	            return this.select.apply(this, (0, _toConsumableArray3['default'])(this[__columns__].filter(function (column) {
+	            return this.select.apply(this, (0, _toConsumableArray3["default"])(this[__columns__].filter(function (column) {
 	                return column !== columnToDel;
 	            })));
 	        }
@@ -16068,7 +16080,7 @@ var dfjs =
 	    return Row;
 	}();
 
-	exports['default'] = Row;
+	exports["default"] = Row;
 
 /***/ }),
 /* 494 */
@@ -16103,14 +16115,10 @@ var dfjs =
 /* 497 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
-	exports['default'] = undefined;
-
-	var _slicedToArray2 = __webpack_require__(456);
-
-	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	exports["default"] = undefined;
 
 	var _entries = __webpack_require__(410);
 
@@ -16120,21 +16128,21 @@ var dfjs =
 
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 
-	var _defineProperty2 = __webpack_require__(437);
-
-	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
-	var _extends3 = __webpack_require__(499);
-
-	var _extends4 = _interopRequireDefault(_extends3);
-
 	var _stringify = __webpack_require__(408);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
+	var _defineProperty2 = __webpack_require__(437);
+
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
 	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+	var _extends4 = __webpack_require__(499);
+
+	var _extends5 = _interopRequireDefault(_extends4);
 
 	var _regenerator = __webpack_require__(445);
 
@@ -16144,9 +16152,13 @@ var dfjs =
 
 	var _getIterator3 = _interopRequireDefault(_getIterator2);
 
-	var _iterator2 = __webpack_require__(386);
+	var _iterator3 = __webpack_require__(386);
 
-	var _iterator3 = _interopRequireDefault(_iterator2);
+	var _iterator4 = _interopRequireDefault(_iterator3);
+
+	var _slicedToArray2 = __webpack_require__(456);
+
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
 	var _classCallCheck2 = __webpack_require__(472);
 
@@ -16166,16 +16178,16 @@ var dfjs =
 
 	var _errors = __webpack_require__(480);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var __groups__ = (0, _symbol2['default'])('groups');
+	var __groups__ = (0, _symbol2["default"])("groups");
+	var __hashes__ = (0, _symbol2["default"])("hashes");
 
 	/**
 	 * Grouped DataFrame structure grouping DataFrame rows by column value.
 	 */
 
 	var GroupedDataFrame = function () {
-
 	    /**
 	     * Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
 	     * @param {DataFrame} df The DataFrame to group by.
@@ -16186,25 +16198,31 @@ var dfjs =
 	     * new GroupedDataFrame(df, 'column1');
 	     */
 	    function GroupedDataFrame(df) {
-	        (0, _classCallCheck3['default'])(this, GroupedDataFrame);
+	        (0, _classCallCheck3["default"])(this, GroupedDataFrame);
 
-	        if (!(df instanceof _dataframe2['default'])) throw new _errors.ArgumentTypeError(df, 'DataFrame');
+	        if (!(df instanceof _dataframe2["default"])) throw new _errors.ArgumentTypeError(df, "DataFrame");
 
 	        for (var _len = arguments.length, columnNames = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
 	            columnNames[_key - 1] = arguments[_key];
 	        }
 
-	        this[__groups__] = this._groupBy(df, columnNames);
+	        var _groupBy2 = this._groupBy(df, columnNames);
+
+	        var _groupBy3 = (0, _slicedToArray3["default"])(_groupBy2, 2);
+
+	        this[__groups__] = _groupBy3[0];
+	        this[__hashes__] = _groupBy3[1];
+
 	        this.df = df;
 	        this.on = columnNames.length > 0 ? columnNames : df.listColumns();
 	    }
 
-	    (0, _createClass3['default'])(GroupedDataFrame, [{
-	        key: _iterator3['default'],
-	        value: /*#__PURE__*/_regenerator2['default'].mark(function value() {
-	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, group;
+	    (0, _createClass3["default"])(GroupedDataFrame, [{
+	        key: _iterator4["default"],
+	        value: /*#__PURE__*/_regenerator2["default"].mark(function value() {
+	            var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, hash;
 
-	            return _regenerator2['default'].wrap(function value$(_context) {
+	            return _regenerator2["default"].wrap(function value$(_context) {
 	                while (1) {
 	                    switch (_context.prev = _context.next) {
 	                        case 0:
@@ -16212,7 +16230,7 @@ var dfjs =
 	                            _didIteratorError = false;
 	                            _iteratorError = undefined;
 	                            _context.prev = 3;
-	                            _iterator = (0, _getIterator3['default'])(this[__groups__]);
+	                            _iterator = (0, _getIterator3["default"])(this[__hashes__]);
 
 	                        case 5:
 	                            if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -16220,9 +16238,9 @@ var dfjs =
 	                                break;
 	                            }
 
-	                            group = _step.value;
+	                            hash = _step.value;
 	                            _context.next = 9;
-	                            return group;
+	                            return this[__groups__][hash];
 
 	                        case 9:
 	                            _iteratorNormalCompletion = true;
@@ -16235,7 +16253,7 @@ var dfjs =
 
 	                        case 14:
 	                            _context.prev = 14;
-	                            _context.t0 = _context['catch'](3);
+	                            _context.t0 = _context["catch"](3);
 	                            _didIteratorError = true;
 	                            _iteratorError = _context.t0;
 
@@ -16243,8 +16261,8 @@ var dfjs =
 	                            _context.prev = 18;
 	                            _context.prev = 19;
 
-	                            if (!_iteratorNormalCompletion && _iterator['return']) {
-	                                _iterator['return']();
+	                            if (!_iteratorNormalCompletion && _iterator["return"]) {
+	                                _iterator["return"]();
 	                            }
 
 	                        case 21:
@@ -16264,40 +16282,61 @@ var dfjs =
 	                            return _context.finish(18);
 
 	                        case 26:
-	                        case 'end':
+	                        case "end":
 	                            return _context.stop();
 	                    }
 	                }
 	            }, value, this, [[3, 14, 18, 26], [19,, 21, 25]]);
 	        })
 	    }, {
-	        key: '_groupBy',
+	        key: "_groupBy",
 	        value: function _groupBy(df, columnNames) {
-	            var hashedDF = df.withColumn('hash', function (row) {
-	                return row.select.apply(row, (0, _toConsumableArray3['default'])(columnNames)).hash();
-	            });
-	            return hashedDF.distinct('hash').toArray('hash').map(function (hash) {
-	                var _group$toCollection$;
+	            var rowsByGroup = {};
+	            var hashes = [];
+	            var _iteratorNormalCompletion2 = true;
+	            var _didIteratorError2 = false;
+	            var _iteratorError2 = undefined;
 
-	                var group = hashedDF.filter(function (row) {
-	                    return row.get('hash') === hash;
-	                }).drop('hash');
-	                return {
-	                    groupKey: (_group$toCollection$ = group.toCollection(true)[0]).select.apply(_group$toCollection$, (0, _toConsumableArray3['default'])(columnNames)).toDict(),
+	            try {
+	                for (var _iterator2 = (0, _getIterator3["default"])(df.toCollection(true)), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	                    var row = _step2.value;
+
+	                    var hash = row.select.apply(row, (0, _toConsumableArray3["default"])(columnNames)).hash();
+	                    if (!rowsByGroup[hash]) {
+	                        hashes.push(hash);
+	                        rowsByGroup[hash] = [];
+	                    }
+	                    rowsByGroup[hash].push(row);
+	                }
+	            } catch (err) {
+	                _didIteratorError2 = true;
+	                _iteratorError2 = err;
+	            } finally {
+	                try {
+	                    if (!_iteratorNormalCompletion2 && _iterator2["return"]) {
+	                        _iterator2["return"]();
+	                    }
+	                } finally {
+	                    if (_didIteratorError2) {
+	                        throw _iteratorError2;
+	                    }
+	                }
+	            }
+
+	            return [hashes.reduce(function (groups, hash) {
+	                var _rowsByGroup$hash$;
+
+	                return (0, _extends5["default"])((0, _defineProperty3["default"])({}, hash, {
+	                    groupKey: (_rowsByGroup$hash$ = rowsByGroup[hash][0]).select.apply(_rowsByGroup$hash$, (0, _toConsumableArray3["default"])(columnNames)).toDict(),
 	                    hash: hash,
-	                    group: group
-	                };
-	            }).filter(function (_ref) {
-	                var group = _ref.group;
-	                return group.count() > 0;
-	            });
+	                    group: new _dataframe2["default"](rowsByGroup[hash], df.listColumns())
+	                }), groups);
+	            }, {}), hashes];
 	        }
 	    }, {
-	        key: 'get',
+	        key: "get",
 	        value: function get(hash) {
-	            return this.toCollection().find(function (group) {
-	                return group.hash === hash;
-	            });
+	            return this[__groups__][hash];
 	        }
 
 	        /**
@@ -16308,35 +16347,35 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'toCollection',
+	        key: "toCollection",
 	        value: function toCollection() {
-	            return [].concat((0, _toConsumableArray3['default'])(this));
+	            return [].concat((0, _toConsumableArray3["default"])(this));
 	        }
 
 	        /**
-	        * Display the GroupedDataFrame as String Table.
-	        * @param {Boolean} [quiet=false] Quiet mode. If true, it doesn't trigger console.log().
-	        * @returns {String} The GroupedDataFrame as String Table.
-	        * @example
-	        * groupedDf.show()
-	        */
+	         * Display the GroupedDataFrame as String Table.
+	         * @param {Boolean} [quiet=false] Quiet mode. If true, it doesn't trigger console.log().
+	         * @returns {String} The GroupedDataFrame as String Table.
+	         * @example
+	         * groupedDf.show()
+	         */
 
 	    }, {
-	        key: 'show',
+	        key: "show",
 	        value: function show() {
 	            var quiet = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
-	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref2) {
-	                var group = _ref2.group,
-	                    groupKey = _ref2.groupKey;
+	            return [].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref) {
+	                var group = _ref.group,
+	                    groupKey = _ref.groupKey;
 
-	                var groupLog = '--\n[' + (0, _stringify2['default'])(groupKey) + ']\n--';
+	                var groupLog = "--\n[" + (0, _stringify2["default"])(groupKey) + "]\n--";
 	                if (!quiet) {
 	                    console.log(groupLog);
 	                }
-	                return groupLog + '\n' + group.show(10, quiet);
+	                return groupLog + "\n" + group.show(10, quiet);
 	            }).reduce(function (p, n) {
-	                return p + '\n' + n;
+	                return p + "\n" + n;
 	            });
 	        }
 
@@ -16348,10 +16387,10 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'listGroups',
+	        key: "listGroups",
 	        value: function listGroups() {
-	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref3) {
-	                var groupKey = _ref3.groupKey;
+	            return [].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref2) {
+	                var groupKey = _ref2.groupKey;
 	                return groupKey;
 	            });
 	        }
@@ -16364,12 +16403,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'listHashs',
+	        key: "listHashs",
 	        value: function listHashs() {
-	            return [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref4) {
-	                var hash = _ref4.hash;
-	                return hash;
-	            });
+	            return this[__hashes__];
 	        }
 
 	        /**
@@ -16381,15 +16417,15 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'map',
+	        key: "map",
 	        value: function map(func) {
-	            var _ref6;
+	            var _ref4;
 
-	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref5) {
-	                var group = _ref5.group;
+	            var mapped = [].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref3) {
+	                var group = _ref3.group;
 	                return group.map(func);
 	            });
-	            return this.df.__newInstance__((_ref6 = []).concat.apply(_ref6, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	            return this.df.__newInstance__((_ref4 = []).concat.apply(_ref4, (0, _toConsumableArray3["default"])(mapped.map(function (group) {
 	                return group.toCollection();
 	            }))), mapped[0].listColumns());
 	        }
@@ -16403,17 +16439,17 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'filter',
+	        key: "filter",
 	        value: function filter(condition) {
-	            var _ref8;
+	            var _ref6;
 
-	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref7) {
-	                var group = _ref7.group;
+	            var mapped = [].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref5) {
+	                var group = _ref5.group;
 	                return group.filter(condition);
 	            }).filter(function (group) {
 	                return group.listColumns().length > 0;
 	            });
-	            return mapped.length === 0 ? [] : this.df.__newInstance__((_ref8 = []).concat.apply(_ref8, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	            return mapped.length === 0 ? [] : this.df.__newInstance__((_ref6 = []).concat.apply(_ref6, (0, _toConsumableArray3["default"])(mapped.map(function (group) {
 	                return group.toCollection();
 	            }))), mapped[0].listColumns());
 	        }
@@ -16433,19 +16469,19 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'chain',
+	        key: "chain",
 	        value: function chain() {
-	            var _ref10;
+	            var _ref8;
 
 	            for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
 	                funcs[_key2] = arguments[_key2];
 	            }
 
-	            var mapped = [].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref9) {
-	                var group = _ref9.group;
+	            var mapped = [].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref7) {
+	                var group = _ref7.group;
 	                return group.chain.apply(group, funcs);
 	            });
-	            return this.df.__newInstance__((_ref10 = []).concat.apply(_ref10, (0, _toConsumableArray3['default'])(mapped.map(function (group) {
+	            return this.df.__newInstance__((_ref8 = []).concat.apply(_ref8, (0, _toConsumableArray3["default"])(mapped.map(function (group) {
 	                return group.toCollection();
 	            }))), mapped[0].listColumns());
 	        }
@@ -16460,15 +16496,15 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'aggregate',
+	        key: "aggregate",
 	        value: function aggregate(func) {
-	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'aggregation';
+	            var columnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "aggregation";
 
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])(this)).map(function (_ref11) {
-	                var group = _ref11.group,
-	                    groupKey = _ref11.groupKey;
-	                return (0, _extends4['default'])({}, groupKey, (0, _defineProperty3['default'])({}, columnName, func(group, groupKey)));
-	            }), [].concat((0, _toConsumableArray3['default'])(this.on), [columnName]));
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref9) {
+	                var group = _ref9.group,
+	                    groupKey = _ref9.groupKey;
+	                return (0, _extends5["default"])({}, groupKey, (0, _defineProperty3["default"])({}, columnName, func(group, groupKey)));
+	            }), [].concat((0, _toConsumableArray3["default"])(this.on), [columnName]));
 	        }
 
 	        /**
@@ -16481,23 +16517,23 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'pivot',
+	        key: "pivot",
 	        value: function pivot(columnToPivot) {
 	            var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (gdf) {
 	                return gdf.count();
 	            };
 
-	            var columns = [].concat((0, _toConsumableArray3['default'])(this.on), (0, _toConsumableArray3['default'])(this.df.distinct(columnToPivot).toArray(columnToPivot)));
+	            var columns = [].concat((0, _toConsumableArray3["default"])(this.on), (0, _toConsumableArray3["default"])(this.df.distinct(columnToPivot).toArray(columnToPivot)));
 	            return this.df.__newInstance__(this.aggregate(function (group) {
 	                return group.groupBy(columnToPivot).aggregate(function (gp, gk) {
-	                    return (0, _defineProperty3['default'])({}, gk[columnToPivot], func(gp, gk));
-	                }).toArray('aggregation').reduce(function (p, n) {
-	                    return (0, _extends4['default'])({}, p, n);
+	                    return (0, _defineProperty3["default"])({}, gk[columnToPivot], func(gp, gk));
+	                }).toArray("aggregation").reduce(function (p, n) {
+	                    return (0, _extends5["default"])({}, p, n);
 	                }, {});
-	            }).toCollection().map(function (_ref13) {
-	                var aggregation = _ref13.aggregation,
-	                    rest = (0, _objectWithoutProperties3['default'])(_ref13, ['aggregation']);
-	                return (0, _extends4['default'])({}, rest, aggregation);
+	            }).toCollection().map(function (_ref11) {
+	                var aggregation = _ref11.aggregation,
+	                    rest = (0, _objectWithoutProperties3["default"])(_ref11, ["aggregation"]);
+	                return (0, _extends5["default"])({}, rest, aggregation);
 	            }), columns);
 	        }
 
@@ -16511,31 +16547,31 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'melt',
+	        key: "melt",
 	        value: function melt() {
 	            var _this = this;
 
-	            var variableColumnName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'variable';
-	            var valueColumnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'value';
+	            var variableColumnName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "variable";
+	            var valueColumnName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "value";
 
-	            var columns = [].concat((0, _toConsumableArray3['default'])(this.on), [variableColumnName, valueColumnName]);
+	            var columns = [].concat((0, _toConsumableArray3["default"])(this.on), [variableColumnName, valueColumnName]);
 	            return this.df.__newInstance__(this.aggregate(function (group) {
-	                return (0, _entries2['default'])(group.toDict()).reduce(function (tidy, _ref14) {
-	                    var _ref15 = (0, _slicedToArray3['default'])(_ref14, 2),
-	                        key = _ref15[0],
-	                        value = _ref15[1];
+	                return (0, _entries2["default"])(group.toDict()).reduce(function (tidy, _ref12) {
+	                    var _ref13 = (0, _slicedToArray3["default"])(_ref12, 2),
+	                        key = _ref13[0],
+	                        value = _ref13[1];
 
-	                    return [].concat((0, _toConsumableArray3['default'])(tidy), (0, _toConsumableArray3['default'])(value.reduce(function (p, n) {
-	                        var _ref16;
+	                    return [].concat((0, _toConsumableArray3["default"])(tidy), (0, _toConsumableArray3["default"])(value.reduce(function (p, n) {
+	                        var _ref14;
 
-	                        return !_this.on.includes(key) ? [].concat((0, _toConsumableArray3['default'])(p), [(_ref16 = {}, (0, _defineProperty3['default'])(_ref16, variableColumnName, key), (0, _defineProperty3['default'])(_ref16, valueColumnName, n), _ref16)]) : p;
+	                        return !_this.on.includes(key) ? [].concat((0, _toConsumableArray3["default"])(p), [(_ref14 = {}, (0, _defineProperty3["default"])(_ref14, variableColumnName, key), (0, _defineProperty3["default"])(_ref14, valueColumnName, n), _ref14)]) : p;
 	                    }, [])));
 	                }, []);
-	            }).toCollection().reduce(function (p, _ref17) {
-	                var aggregation = _ref17.aggregation,
-	                    rest = (0, _objectWithoutProperties3['default'])(_ref17, ['aggregation']);
-	                return [].concat((0, _toConsumableArray3['default'])(p), (0, _toConsumableArray3['default'])(aggregation.map(function (x) {
-	                    return (0, _extends4['default'])({}, rest, x);
+	            }).toCollection().reduce(function (p, _ref15) {
+	                var aggregation = _ref15.aggregation,
+	                    rest = (0, _objectWithoutProperties3["default"])(_ref15, ["aggregation"]);
+	                return [].concat((0, _toConsumableArray3["default"])(p), (0, _toConsumableArray3["default"])(aggregation.map(function (x) {
+	                    return (0, _extends5["default"])({}, rest, x);
 	                })));
 	            }, []), columns);
 	        }
@@ -16543,7 +16579,7 @@ var dfjs =
 	    return GroupedDataFrame;
 	}();
 
-	exports['default'] = GroupedDataFrame;
+	exports["default"] = GroupedDataFrame;
 
 /***/ }),
 /* 498 */
@@ -16597,7 +16633,7 @@ var dfjs =
 /* 500 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -16615,10 +16651,10 @@ var dfjs =
 
 	var _reusables = __webpack_require__(478);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	/**
-	* Stat module for DataFrame, providing basic statistical metrics for numeric columns.
+	 * Stat module for DataFrame, providing basic statistical metrics for numeric columns.
 	 */
 	var Stat = function () {
 	    /**
@@ -16626,32 +16662,32 @@ var dfjs =
 	     * @param {DataFrame} df An instance of DataFrame.
 	     */
 	    function Stat(df) {
-	        (0, _classCallCheck3['default'])(this, Stat);
+	        (0, _classCallCheck3["default"])(this, Stat);
 
 	        this.df = df;
-	        this.name = 'stat';
+	        this.name = "stat";
 	    }
 
-	    (0, _createClass3['default'])(Stat, [{
-	        key: '_castAsNumber',
+	    (0, _createClass3["default"])(Stat, [{
+	        key: "_castAsNumber",
 	        value: function _castAsNumber(columnName) {
 	            return this.df.withColumn(columnName, function (row) {
 	                return Number(row.get(columnName));
 	            }).filter(function (row) {
-	                return !(0, _isNan2['default'])(row.get(columnName));
+	                return !(0, _isNan2["default"])(row.get(columnName));
 	            });
 	        }
 
 	        /**
-	        * Compute the sum of a numeric column.
-	        * @param {String} columnName The column to evaluate, containing Numbers.
-	        * @returns {Number} The sum of the column.
-	        * @example
-	        * df.stat.sum('column1')
-	        */
+	         * Compute the sum of a numeric column.
+	         * @param {String} columnName The column to evaluate, containing Numbers.
+	         * @returns {Number} The sum of the column.
+	         * @example
+	         * df.stat.sum('column1')
+	         */
 
 	    }, {
-	        key: 'sum',
+	        key: "sum",
 	        value: function sum(columnName) {
 	            return Number(this.df.reduce(function (p, n) {
 	                return (0, _reusables.isNumber)(n.get(columnName)) ? p + Number(n.get(columnName)) : p;
@@ -16667,7 +16703,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'max',
+	        key: "max",
 	        value: function max(columnName) {
 	            return this._castAsNumber(columnName).reduce(function (p, n) {
 	                return n.get(columnName) > p.get(columnName) ? n : p;
@@ -16683,7 +16719,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'min',
+	        key: "min",
 	        value: function min(columnName) {
 	            return this._castAsNumber(columnName).reduce(function (p, n) {
 	                return p.get(columnName) > n.get(columnName) ? n : p;
@@ -16699,7 +16735,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'mean',
+	        key: "mean",
 	        value: function mean(columnName) {
 	            var numericDF = this.df.filter(function (row) {
 	                return (0, _reusables.isNumber)(row.get(columnName));
@@ -16719,7 +16755,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'average',
+	        key: "average",
 	        value: function average(columnName) {
 	            return this.mean(columnName);
 	        }
@@ -16734,7 +16770,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'var',
+	        key: "var",
 	        value: function _var(columnName) {
 	            var population = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -16757,11 +16793,11 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'sd',
+	        key: "sd",
 	        value: function sd(columnName) {
 	            var population = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-	            return Math.sqrt(this['var'](columnName, population));
+	            return Math.sqrt(this["var"](columnName, population));
 	        }
 
 	        /**
@@ -16773,15 +16809,15 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'stats',
+	        key: "stats",
 	        value: function stats(columnName) {
 	            return {
 	                sum: this.sum(columnName),
 	                mean: this.mean(columnName),
 	                min: this.min(columnName),
 	                max: this.max(columnName),
-	                'var': this['var'](columnName),
-	                varpop: this['var'](columnName, true),
+	                "var": this["var"](columnName),
+	                varpop: this["var"](columnName, true),
 	                sd: this.sd(columnName),
 	                sdpop: this.sd(columnName, true)
 	            };
@@ -16790,7 +16826,7 @@ var dfjs =
 	    return Stat;
 	}();
 
-	exports['default'] = Stat;
+	exports["default"] = Stat;
 
 /***/ }),
 /* 501 */
@@ -16825,7 +16861,7 @@ var dfjs =
 /* 504 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -16853,10 +16889,10 @@ var dfjs =
 
 	var _reusables = __webpack_require__(478);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	/**
-	* Matrix module for DataFrame, providing basic mathematical matrix computations.
+	 * Matrix module for DataFrame, providing basic mathematical matrix computations.
 	 */
 	var Matrix = function () {
 	    /**
@@ -16864,10 +16900,10 @@ var dfjs =
 	     * @param {DataFrame} df An instance of DataFrame.
 	     */
 	    function Matrix(df) {
-	        (0, _classCallCheck3['default'])(this, Matrix);
+	        (0, _classCallCheck3["default"])(this, Matrix);
 
 	        this.df = df;
-	        this.name = 'matrix';
+	        this.name = "matrix";
 	    }
 
 	    /**
@@ -16880,12 +16916,12 @@ var dfjs =
 	     */
 
 
-	    (0, _createClass3['default'])(Matrix, [{
-	        key: 'isCommutative',
+	    (0, _createClass3["default"])(Matrix, [{
+	        key: "isCommutative",
 	        value: function isCommutative(df) {
 	            var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-	            if (!(df instanceof _dataframe2['default'])) throw new _errors.ArgumentTypeError(df, 'DataFrame');
+	            if (!(df instanceof _dataframe2["default"])) throw new _errors.ArgumentTypeError(df, "DataFrame");
 	            return (0, _reusables.arrayEqual)(this.df.dim(), reverse ? df.dim().reverse() : df.dim(), true);
 	        }
 
@@ -16898,17 +16934,17 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'add',
+	        key: "add",
 	        value: function add(df) {
 	            var _this = this;
 
 	            if (!this.isCommutative(df)) {
 	                throw new _errors.WrongSchemaError(this.df.dim(), df.dim());
 	            }
-	            var columns = [].concat((0, _toConsumableArray3['default'])(Array(this.df.dim()[1]).keys()));
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)((0, _keys2['default'])([].concat((0, _toConsumableArray3['default'])(this.df))), function (rowKey) {
-	                var a = [].concat((0, _toConsumableArray3['default'])(_this.df))[rowKey].toArray();
-	                var b = [].concat((0, _toConsumableArray3['default'])(df))[rowKey].toArray();
+	            var columns = [].concat((0, _toConsumableArray3["default"])(Array(this.df.dim()[1]).keys()));
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)((0, _keys2["default"])([].concat((0, _toConsumableArray3["default"])(this.df))), function (rowKey) {
+	                var a = [].concat((0, _toConsumableArray3["default"])(_this.df))[rowKey].toArray();
+	                var b = [].concat((0, _toConsumableArray3["default"])(df))[rowKey].toArray();
 	                return columns.map(function (column) {
 	                    return a[column] + b[column];
 	                });
@@ -16924,9 +16960,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'product',
+	        key: "product",
 	        value: function product(number) {
-	            if (!(typeof number === 'number')) throw new _errors.ArgumentTypeError(number, 'Number');
+	            if (!(typeof number === "number")) throw new _errors.ArgumentTypeError(number, "Number");
 	            return this.df.map(function (row) {
 	                return row.toArray().map(function (column) {
 	                    return column * number;
@@ -16943,19 +16979,19 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'dot',
+	        key: "dot",
 	        value: function dot(df) {
 	            var _this2 = this;
 
 	            if (!this.isCommutative(df, true)) {
 	                throw new _errors.WrongSchemaError(this.df.dim(), df.dim().reverse());
 	            }
-	            var columns = [].concat((0, _toConsumableArray3['default'])(Array(this.df.dim()[0]).keys()));
-	            return this.df.__newInstance__([].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)((0, _keys2['default'])([].concat((0, _toConsumableArray3['default'])(this.df))), function (rowKey) {
-	                var a = [].concat((0, _toConsumableArray3['default'])(_this2.df))[rowKey].toArray();
-	                return [].concat((0, _toConsumableArray3['default'])((0, _reusables.iter)(columns, function (column) {
-	                    var b = [].concat((0, _toConsumableArray3['default'])(df.transpose()))[column].toArray();
-	                    return (0, _keys2['default'])(b).reduce(function (p, n) {
+	            var columns = [].concat((0, _toConsumableArray3["default"])(Array(this.df.dim()[0]).keys()));
+	            return this.df.__newInstance__([].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)((0, _keys2["default"])([].concat((0, _toConsumableArray3["default"])(this.df))), function (rowKey) {
+	                var a = [].concat((0, _toConsumableArray3["default"])(_this2.df))[rowKey].toArray();
+	                return [].concat((0, _toConsumableArray3["default"])((0, _reusables.iter)(columns, function (column) {
+	                    var b = [].concat((0, _toConsumableArray3["default"])(df.transpose()))[column].toArray();
+	                    return (0, _keys2["default"])(b).reduce(function (p, n) {
 	                        return p + b[n] * a[n];
 	                    }, 0);
 	                })));
@@ -16965,13 +17001,13 @@ var dfjs =
 	    return Matrix;
 	}();
 
-	exports['default'] = Matrix;
+	exports["default"] = Matrix;
 
 /***/ }),
 /* 505 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -16997,15 +17033,14 @@ var dfjs =
 
 	var _errors = __webpack_require__(480);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 	/**
-	* SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
+	 * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
 	 */
 	var SQL = function () {
-	    (0, _createClass3['default'])(SQL, null, [{
-	        key: 'request',
-
+	    (0, _createClass3["default"])(SQL, null, [{
+	        key: "request",
 
 	        /**
 	         * Request on a SQL query.
@@ -17015,8 +17050,8 @@ var dfjs =
 	         * DataFrame.request('SELECT * FROM tmp');
 	         */
 	        value: function request(query) {
-	            if (!(typeof query === 'string')) throw new _errors.ArgumentTypeError(query, 'Stri g');
-	            return (0, _sqlEngine2['default'])(query, SQL.tables);
+	            if (!(typeof query === "string")) throw new _errors.ArgumentTypeError(query, "Stri g");
+	            return (0, _sqlEngine2["default"])(query, SQL.tables);
 	        }
 
 	        /**
@@ -17026,7 +17061,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'dropTables',
+	        key: "dropTables",
 	        value: function dropTables() {
 	            SQL.tables = {};
 	        }
@@ -17039,7 +17074,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'dropTable',
+	        key: "dropTable",
 	        value: function dropTable(tableName) {
 	            delete SQL.tables[tableName];
 	        }
@@ -17054,7 +17089,7 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'renameTable',
+	        key: "renameTable",
 	        value: function renameTable(tableName, replacement) {
 	            var overwrite = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
@@ -17070,9 +17105,9 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'listTables',
+	        key: "listTables",
 	        value: function listTables() {
-	            return (0, _keys2['default'])(SQL.tables);
+	            return (0, _keys2["default"])(SQL.tables);
 	        }
 
 	        /**
@@ -17085,12 +17120,12 @@ var dfjs =
 	         */
 
 	    }, {
-	        key: 'registerTable',
+	        key: "registerTable",
 	        value: function registerTable(df, tableName) {
 	            var overwrite = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
 
-	            if (!(df instanceof _dataframe2['default'])) throw new _errors.ArgumentTypeError(df, 'DataFrame');
-	            var validation = new RegExp('^[a-zA-Z_][a-zA-Z0-9_]*$');
+	            if (!(df instanceof _dataframe2["default"])) throw new _errors.ArgumentTypeError(df, "DataFrame");
+	            var validation = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");
 	            if (!validation.test(tableName)) {
 	                throw new _errors.WrongTableNameError(tableName);
 	            }
@@ -17108,10 +17143,10 @@ var dfjs =
 	    }]);
 
 	    function SQL(df) {
-	        (0, _classCallCheck3['default'])(this, SQL);
+	        (0, _classCallCheck3["default"])(this, SQL);
 
 	        this.df = df;
-	        this.name = 'sql';
+	        this.name = "sql";
 	    }
 
 	    /**
@@ -17123,8 +17158,8 @@ var dfjs =
 	     */
 
 
-	    (0, _createClass3['default'])(SQL, [{
-	        key: 'register',
+	    (0, _createClass3["default"])(SQL, [{
+	        key: "register",
 	        value: function register(tableName) {
 	            var overwrite = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
@@ -17137,13 +17172,13 @@ var dfjs =
 
 	SQL.tables = {};
 
-	exports['default'] = SQL;
+	exports["default"] = SQL;
 
 /***/ }),
 /* 506 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	exports.__esModule = true;
 
@@ -17159,74 +17194,74 @@ var dfjs =
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-	exports['default'] = sqlParser;
+	exports["default"] = sqlParser;
 
 	var _reusables = __webpack_require__(478);
 
 	var _errors = __webpack_require__(480);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-	var REPLACMENTS = [['INNER JOIN', 'INNERJOIN'], ['LEFT JOIN', 'LEFTJOIN'], ['RIGHT JOIN', 'RIGHTJOIN'], ['FULL JOIN', 'FULLJOIN'], ['GROUP BY', 'GROUPBY']];
+	var REPLACMENTS = [["INNER JOIN", "INNERJOIN"], ["LEFT JOIN", "LEFTJOIN"], ["RIGHT JOIN", "RIGHTJOIN"], ["FULL JOIN", "FULLJOIN"], ["GROUP BY", "GROUPBY"]];
 
 	var WHERE_OPERATORS = {
-	    'IN': function IN(a, b) {
+	    IN: function IN(a, b) {
 	        return b.includes(a);
 	    },
-	    'LIKE': function LIKE(a, b) {
+	    LIKE: function LIKE(a, b) {
 	        return b.includes(a) || a.includes(b);
 	    },
-	    '>=': function _(a, b) {
+	    ">=": function _(a, b) {
 	        return a >= b;
 	    },
-	    '<=': function _(a, b) {
+	    "<=": function _(a, b) {
 	        return a <= b;
 	    },
-	    '!=': function _(a, b) {
+	    "!=": function _(a, b) {
 	        return a !== b;
 	    },
-	    '<': function _(a, b) {
+	    "<": function _(a, b) {
 	        return a < b;
 	    },
-	    '>': function _(a, b) {
+	    ">": function _(a, b) {
 	        return a > b;
 	    },
-	    '=': function _(a, b) {
+	    "=": function _(a, b) {
 	        return a === b;
 	    },
-	    'AND': function AND(a, b) {
+	    AND: function AND(a, b) {
 	        return a && b;
 	    },
-	    'OR': function OR(a, b) {
+	    OR: function OR(a, b) {
 	        return a || b;
 	    }
 	};
 
 	var SELECT_FUNCTIONS = {
-	    'COUNT': function COUNT(df) {
+	    COUNT: function COUNT(df) {
 	        return df.count();
 	    },
-	    'SUM': function SUM(df, column) {
+	    SUM: function SUM(df, column) {
 	        return df.stat.sum(column);
 	    },
-	    'MAX': function MAX(df, column) {
+	    MAX: function MAX(df, column) {
 	        return df.stat.max(column);
 	    },
-	    'MIN': function MIN(df, column) {
+	    MIN: function MIN(df, column) {
 	        return df.stat.min(column);
 	    },
-	    'AVG': function AVG(df, column) {
+	    AVG: function AVG(df, column) {
 	        return df.stat.mean(column);
 	    }
 	};
 
 	function sqlArgsToArray(args) {
-	    return (0, _reusables.xReplace)(args.join(' '), [' ', '']).split(',');
+	    return (0, _reusables.xReplace)(args.join(" "), [" ", ""]).split(",");
 	}
 
 	function joinHandler(operation, tables, type) {
 	    var ONKeywordLocation = operation.findIndex(function (word) {
-	        return word.toUpperCase() === 'ON';
+	        return word.toUpperCase() === "ON";
 	    }) + 1;
 	    return function (df) {
 	        return df.join(tables[operation[0]], sqlArgsToArray(operation.filter(function (word, loc) {
@@ -17236,51 +17271,51 @@ var dfjs =
 	}
 
 	var OPERATIONS_HANDLER = {
-	    'WHERE': function WHERE(operation) {
-	        var operationalTerms = (0, _reusables.xSplit)(operation.join(' '), ' AND ', ' OR ');
+	    WHERE: function WHERE(operation) {
+	        var operationalTerms = (0, _reusables.xSplit)(operation.join(" "), " AND ", " OR ");
 	        return function (df) {
 	            return df.filter(function (row) {
 	                var conditionalOperators = operation.filter(function (term) {
-	                    return ['AND', 'OR'].includes(term.toUpperCase());
+	                    return ["AND", "OR"].includes(term.toUpperCase());
 	                });
 	                return operationalTerms.map(function (operationalTerm) {
-	                    var operatorToApply = _reusables.xContains.apply(undefined, [operationalTerm].concat((0, _toConsumableArray3['default'])((0, _keys2['default'])(WHERE_OPERATORS))))[0];
+	                    var operatorToApply = _reusables.xContains.apply(undefined, [operationalTerm].concat((0, _toConsumableArray3["default"])((0, _keys2["default"])(WHERE_OPERATORS))))[0];
 	                    var terms = operationalTerm.split(operatorToApply).map(function (term) {
 	                        return term.trim();
 	                    });
 	                    if (!row.has(terms[0]) && row.has(terms[1])) {
-	                        return WHERE_OPERATORS[operatorToApply]((0, _reusables.xReplace)(terms[0].trim(), ['\"', ''], ['\'', ''], ['\`', '']), String(row.get(terms[1])));
+	                        return WHERE_OPERATORS[operatorToApply]((0, _reusables.xReplace)(terms[0].trim(), ['"', ""], ["'", ""], ["`", ""]), String(row.get(terms[1])));
 	                    }
-	                    return WHERE_OPERATORS[operatorToApply](String(row.get(terms[0])), (0, _reusables.xReplace)(terms[1].trim(), ['\"', ''], ['\'', ''], ['\`', '']));
+	                    return WHERE_OPERATORS[operatorToApply](String(row.get(terms[0])), (0, _reusables.xReplace)(terms[1].trim(), ['"', ""], ["'", ""], ["`", ""]));
 	                }).reduce(function (prev, next) {
 	                    return WHERE_OPERATORS[conditionalOperators.shift()](prev, next);
 	                });
 	            });
 	        };
 	    },
-	    'JOIN': function JOIN(operation, tables) {
-	        return joinHandler(operation, tables, 'inner');
+	    JOIN: function JOIN(operation, tables) {
+	        return joinHandler(operation, tables, "inner");
 	    },
-	    'INNERJOIN': function INNERJOIN(operation, tables) {
-	        return joinHandler(operation, tables, 'inner');
+	    INNERJOIN: function INNERJOIN(operation, tables) {
+	        return joinHandler(operation, tables, "inner");
 	    },
-	    'LEFTJOIN': function LEFTJOIN(operation, tables) {
-	        return joinHandler(operation, tables, 'left');
+	    LEFTJOIN: function LEFTJOIN(operation, tables) {
+	        return joinHandler(operation, tables, "left");
 	    },
-	    'RIGHTJOIN': function RIGHTJOIN(operation, tables) {
-	        return joinHandler(operation, tables, 'right');
+	    RIGHTJOIN: function RIGHTJOIN(operation, tables) {
+	        return joinHandler(operation, tables, "right");
 	    },
-	    'FULLJOIN': function FULLJOIN(operation, tables) {
-	        return joinHandler(operation, tables, 'full');
+	    FULLJOIN: function FULLJOIN(operation, tables) {
+	        return joinHandler(operation, tables, "full");
 	    },
-	    'UNION': function UNION(operation, tables) {
+	    UNION: function UNION(operation, tables) {
 	        return function (df) {
-	            return df.union(operation[0].toUpperCase().includes('SELECT') ? sqlParser(operation.join(' '), tables) : tables[operation[0]]);
+	            return df.union(operation[0].toUpperCase().includes("SELECT") ? sqlParser(operation.join(" "), tables) : tables[operation[0]]);
 	        };
 	    },
-	    'GROUPBY': function GROUPBY(operation) {
+	    GROUPBY: function GROUPBY(operation) {
 	        return function (df) {
-	            return df.groupBy.apply(df, (0, _toConsumableArray3['default'])(sqlArgsToArray(operation)));
+	            return df.groupBy.apply(df, (0, _toConsumableArray3["default"])(sqlArgsToArray(operation)));
 	        };
 	    }
 	};
@@ -17288,7 +17323,7 @@ var dfjs =
 	function replaceTermsInQuery(query) {
 	    var replacedQuery = query;
 	    REPLACMENTS.forEach(function (_ref) {
-	        var _ref2 = (0, _slicedToArray3['default'])(_ref, 2),
+	        var _ref2 = (0, _slicedToArray3["default"])(_ref, 2),
 	            joinType = _ref2[0],
 	            replacment = _ref2[1];
 
@@ -17298,12 +17333,12 @@ var dfjs =
 	}
 
 	function sqlSplitter(query) {
-	    var splittedQuery = replaceTermsInQuery(query).split(' ');
+	    var splittedQuery = replaceTermsInQuery(query).split(" ");
 	    var fromLoc = splittedQuery.findIndex(function (word) {
-	        return word.toUpperCase() === 'FROM';
+	        return word.toUpperCase() === "FROM";
 	    });
 	    if (fromLoc === -1) {
-	        throw new _errors.SQLParseError('Your query should contains FROM keyword');
+	        throw new _errors.SQLParseError("Your query should contains FROM keyword");
 	    }
 	    return {
 	        selections: splittedQuery.slice(0, fromLoc),
@@ -17314,7 +17349,7 @@ var dfjs =
 
 	function parseOperations(operations, tables) {
 	    var operationsLoc = operations.map(function (word, index) {
-	        return (0, _keys2['default'])(OPERATIONS_HANDLER).includes(word.toUpperCase()) ? index : undefined;
+	        return (0, _keys2["default"])(OPERATIONS_HANDLER).includes(word.toUpperCase()) ? index : undefined;
 	    }).filter(function (loc) {
 	        return loc !== undefined;
 	    });
@@ -17331,34 +17366,34 @@ var dfjs =
 	}
 
 	function parseSelections(selections) {
-	    if (selections[0].toUpperCase() !== 'SELECT') {
-	        throw new _errors.SQLParseError('Your query should begin with SELECT keyword');
+	    if (selections[0].toUpperCase() !== "SELECT") {
+	        throw new _errors.SQLParseError("Your query should begin with SELECT keyword");
 	    }
 	    selections.shift();
-	    return (0, _reusables.match)(selections.join(' ').split(',').map(function (selection) {
+	    return (0, _reusables.match)(selections.join(" ").split(",").map(function (selection) {
 	        return selection.trim();
 	    }), [function (value) {
-	        return (0, _reusables.xReplace)(value[0], [' ', '']) === '*';
+	        return (0, _reusables.xReplace)(value[0], [" ", ""]) === "*";
 	    }, function () {
 	        return function (df) {
 	            return df;
 	        };
 	    }], [function (value) {
-	        return value[0].toUpperCase().includes('DISTINCT');
+	        return value[0].toUpperCase().includes("DISTINCT");
 	    }, function (value) {
-	        var columnName = (0, _reusables.xReplace)(value[0].split(' AS ')[0], ['DISTINCT', ''], ['distinct', ''], [' ', '']);
+	        var columnName = (0, _reusables.xReplace)(value[0].split(" AS ")[0], ["DISTINCT", ""], ["distinct", ""], [" ", ""]);
 	        return function (df) {
-	            return df.distinct(columnName).rename(columnName, value[0].includes('AS') ? value[0].split('AS')[1].replace(' ', '') : columnName);
+	            return df.distinct(columnName).rename(columnName, value[0].includes("AS") ? value[0].split("AS")[1].replace(" ", "") : columnName);
 	        };
 	    }], [function (value) {
-	        return _reusables.xContains.apply(undefined, [value[0].toUpperCase()].concat((0, _toConsumableArray3['default'])((0, _keys2['default'])(SELECT_FUNCTIONS))))[0];
+	        return _reusables.xContains.apply(undefined, [value[0].toUpperCase()].concat((0, _toConsumableArray3["default"])((0, _keys2["default"])(SELECT_FUNCTIONS))))[0];
 	    }, function (value) {
 	        return function (df) {
-	            var functionToApply = (0, _keys2['default'])(SELECT_FUNCTIONS).find(function (func) {
+	            var functionToApply = (0, _keys2["default"])(SELECT_FUNCTIONS).find(function (func) {
 	                return value[0].toUpperCase().includes(func);
 	            });
 	            var applyFunction = function applyFunction(dfToImpact) {
-	                return SELECT_FUNCTIONS[functionToApply](dfToImpact, (0, _reusables.xReplace)(value[0], [functionToApply.toLowerCase() + '(', ''], [functionToApply + '(', ''], ['(', ''], [')', '']));
+	                return SELECT_FUNCTIONS[functionToApply](dfToImpact, (0, _reusables.xReplace)(value[0], [functionToApply.toLowerCase() + "(", ""], [functionToApply + "(", ""], ["(", ""], [")", ""]));
 	            };
 	            return df.on && df.df ? df.aggregate(applyFunction) : applyFunction(df);
 	        };
@@ -17366,10 +17401,10 @@ var dfjs =
 	        return true;
 	    }, function (value) {
 	        return function (df) {
-	            return df.select.apply(df, (0, _toConsumableArray3['default'])(value.map(function (column) {
-	                return column.split(' AS ')[0].replace(' ', '');
+	            return df.select.apply(df, (0, _toConsumableArray3["default"])(value.map(function (column) {
+	                return column.split(" AS ")[0].replace(" ", "");
 	            }))).renameAll(value.map(function (column) {
-	                return column.includes('AS') ? column.split('AS')[1].replace(' ', '') : column;
+	                return column.includes("AS") ? column.split("AS")[1].replace(" ", "") : column;
 	            }));
 	        };
 	    }]);
@@ -17381,8 +17416,8 @@ var dfjs =
 	        table = _sqlSplitter.table,
 	        operations = _sqlSplitter.operations;
 
-	    if (!table || !(0, _keys2['default'])(tables).includes(table)) {
-	        throw new _errors.SQLParseError('Wrong table name in your query: ' + table);
+	    if (!table || !(0, _keys2["default"])(tables).includes(table)) {
+	        throw new _errors.SQLParseError("Wrong table name in your query: " + table);
 	    }
 	    var applyOperations = parseOperations(operations, tables);
 	    var applySelections = parseSelections(selections);

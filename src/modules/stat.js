@@ -1,7 +1,7 @@
-import { isNumber } from '../reusables';
+import { isNumber } from "../reusables";
 
 /**
-* Stat module for DataFrame, providing basic statistical metrics for numeric columns.
+ * Stat module for DataFrame, providing basic statistical metrics for numeric columns.
  */
 class Stat {
     /**
@@ -10,25 +10,32 @@ class Stat {
      */
     constructor(df) {
         this.df = df;
-        this.name = 'stat';
+        this.name = "stat";
     }
 
     _castAsNumber(columnName) {
-        return this.df.withColumn(columnName, row => Number(row.get(columnName)))
+        return this.df
+            .withColumn(columnName, row => Number(row.get(columnName)))
             .filter(row => !Number.isNaN(row.get(columnName)));
     }
 
     /**
-    * Compute the sum of a numeric column.
-    * @param {String} columnName The column to evaluate, containing Numbers.
-    * @returns {Number} The sum of the column.
-    * @example
-    * df.stat.sum('column1')
-    */
+     * Compute the sum of a numeric column.
+     * @param {String} columnName The column to evaluate, containing Numbers.
+     * @returns {Number} The sum of the column.
+     * @example
+     * df.stat.sum('column1')
+     */
     sum(columnName) {
-        return Number(this.df.reduce(
-            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
-        ));
+        return Number(
+            this.df.reduce(
+                (p, n) =>
+                    isNumber(n.get(columnName))
+                        ? p + Number(n.get(columnName))
+                        : p,
+                0
+            )
+        );
     }
 
     /**
@@ -40,7 +47,7 @@ class Stat {
      */
     max(columnName) {
         return this._castAsNumber(columnName)
-            .reduce((p, n) => n.get(columnName) > p.get(columnName) ? n : p)
+            .reduce((p, n) => (n.get(columnName) > p.get(columnName) ? n : p))
             .get(columnName);
     }
 
@@ -51,11 +58,11 @@ class Stat {
      * @example
      * df.stat.min('column1')
      */
-     min(columnName) {
-         return this._castAsNumber(columnName)
-             .reduce((p, n) => p.get(columnName) > n.get(columnName) ? n : p)
-             .get(columnName);
-     }
+    min(columnName) {
+        return this._castAsNumber(columnName)
+            .reduce((p, n) => (p.get(columnName) > n.get(columnName) ? n : p))
+            .get(columnName);
+    }
 
     /**
      * Compute the mean value into a numeric column.
@@ -66,9 +73,17 @@ class Stat {
      */
     mean(columnName) {
         const numericDF = this.df.filter(row => isNumber(row.get(columnName)));
-        return Number(numericDF.reduce(
-            (p, n) => isNumber(n.get(columnName)) ? p + Number(n.get(columnName)) : p, 0
-        )) / numericDF.count();
+        return (
+            Number(
+                numericDF.reduce(
+                    (p, n) =>
+                        isNumber(n.get(columnName))
+                            ? p + Number(n.get(columnName))
+                            : p,
+                    0
+                )
+            ) / numericDF.count()
+        );
     }
 
     /**
@@ -94,9 +109,15 @@ class Stat {
     var(columnName, population = false) {
         const numericDF = this.df.filter(row => isNumber(row.get(columnName)));
         const mean = this.mean(columnName);
-        return Number(numericDF.reduce(
-            (p, n) => p + Math.pow(n.get(columnName) - mean, 2), 0
-        )) / (numericDF.count() - (population ? 0 : 1));
+        return (
+            Number(
+                numericDF.reduce(
+                    (p, n) => p + Math.pow(n.get(columnName) - mean, 2),
+                    0
+                )
+            ) /
+            (numericDF.count() - (population ? 0 : 1))
+        );
     }
 
     /**
@@ -127,7 +148,7 @@ class Stat {
             var: this.var(columnName),
             varpop: this.var(columnName, true),
             sd: this.sd(columnName),
-            sdpop: this.sd(columnName, true),
+            sdpop: this.sd(columnName, true)
         };
     }
 }

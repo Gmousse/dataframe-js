@@ -47,7 +47,7 @@
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.2",
         "babel-eslint": "^8.2.3",
-        "babel-loader": "^7.1.4",
+        "babel-loader": "^6.2.0",
         "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
         "babel-plugin-transform-es3-member-expression-literals": "^6.22.0",
         "babel-plugin-transform-es3-modules-literals": "^0.0.3",
@@ -72,7 +72,7 @@
     },
     "dependencies": {
         "babel-polyfill": "^6.26.0",
-        "d3-dsv": "^1.0.8",
-        "d3-request": "^1.0.6"
+        "d3-dsv": "^1.0.3",
+        "d3-request": "1.0.2"
     }
 }

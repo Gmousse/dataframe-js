@@ -4,12 +4,14 @@
 
 // Here we import the lib.
 // You can also: import { DataFrame } from 'dataframe-js';
-const DataFrame = require('dataframe-js').DataFrame;
+const DataFrame = require("dataframe-js").DataFrame;
 
 // Here we load the titanic data set from the well known Rdatasets (http://vincentarelbundock.github.io/Rdatasets/datasets.html).
 // We get the result via a Promise, as a new DataFrame. We rename it 'df'.
-DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titanic.csv').then(
-    df => {
+DataFrame.fromCSV(
+    "http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titanic.csv"
+)
+    .then(df => {
         // Let's go to display quicly our table.
         df.show();
         // It looks like that, with one passenger by line.
@@ -27,23 +29,30 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // | 10        | 1st class | adults    | man       | yes       |
 
         // Ok, in the csv, the first column was row index named as ''. We will rename this column.
-        const cleanDF = df.rename('', 'id');
+        const cleanDF = df.rename("", "id");
 
         // If we look at columnNames, the row index is replaced by the 'id' column name.
         console.log(cleanDF.listColumns());
         // [ 'id', 'Class', 'Sex', 'Age', 'Survived', 'Freq' ]
 
         // Now, our DataFrame is 'clean' with. Let's go to a quick analysis.
-        console.log('Total passengers:', cleanDF.count()); // We have 1316 passengers in the Titanic.
-        console.log('Survivors:', cleanDF.filter({survived: 'yes'}).count()); // We have 499 survivors.
-        console.log('Died:', cleanDF.filter(row => row.get('survived') === 'no').count()); // and 817 died passengers.
+        console.log("Total passengers:", cleanDF.count()); // We have 1316 passengers in the Titanic.
+        console.log("Survivors:", cleanDF.filter({ survived: "yes" }).count()); // We have 499 survivors.
+        console.log(
+            "Died:",
+            cleanDF.filter(row => row.get("survived") === "no").count()
+        ); // and 817 died passengers.
 
         // Ok now we will count the number of passengers by class + age + sex + survived by using groupBy and aggregation.
-        const countByGroup = cleanDF.groupBy('class', 'age', 'sex', 'survived').aggregate(group => group.count());
+        const countByGroup = cleanDF
+            .groupBy("class", "age", "sex", "survived")
+            .aggregate(group => group.count());
 
         // Ok, now we have the repartition of passengers by class + age + sex + survived.
         // But it could be easier to read if we rename the aggregation and sort rows by passengers.
-        const cleanCountByGroup = countByGroup.rename('aggregation', 'passengers').sortBy('passengers', true);
+        const cleanCountByGroup = countByGroup
+            .rename("aggregation", "passengers")
+            .sortBy("passengers", true);
 
         // And now show the result
         cleanCountByGroup.show(300);
@@ -65,15 +74,20 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // To resume this fact, it could be interesting to compute the % of survival for each group of passengers.
         // We can do this by this way:
         // First we compute the total number of passengers by class + age + sex.
-        const passengersByGroup = cleanDF.groupBy('class', 'age', 'sex')
+        const passengersByGroup = cleanDF
+            .groupBy("class", "age", "sex")
             .aggregate(group => group.count())
-            .rename('aggregation', 'totalPassengers');
+            .rename("aggregation", "totalPassengers");
         // Then we have to join with the cleanCountByGroup table.
         // And we compute a new Column, survival, to expose the percentage of survivors.
         // Then, we drop totalPassengers column which is now useless.
-        const informationsByGroup = cleanCountByGroup.innerJoin(passengersByGroup, ['class', 'age', 'sex'])
-            .withColumn('survival', (row) => row.get('passengers') / row.get('totalPassengers'))
-            .drop('totalPassengers');
+        const informationsByGroup = cleanCountByGroup
+            .innerJoin(passengersByGroup, ["class", "age", "sex"])
+            .withColumn(
+                "survival",
+                row => row.get("passengers") / row.get("totalPassengers")
+            )
+            .drop("totalPassengers");
 
         informationsByGroup.show(100);
         // | class     | age       | sex       | survived  | passen... | survival  |
@@ -100,8 +114,16 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // | 1st class | child     | women     | yes       | 1         | 1         |
 
         // If we want to have an overview of the gender effects on survival we can use the DataFrame.stat module:
-        informationsByGroup.groupBy('sex').aggregate(group => group.stat.mean('survival')).rename('aggregation', 'mean').show();
-        informationsByGroup.groupBy('sex').aggregate(group => group.stat.sd('survival')).rename('aggregation', 'standard_deviation').show();
+        informationsByGroup
+            .groupBy("sex")
+            .aggregate(group => group.stat.mean("survival"))
+            .rename("aggregation", "mean")
+            .show();
+        informationsByGroup
+            .groupBy("sex")
+            .aggregate(group => group.stat.sd("survival"))
+            .rename("aggregation", "standard_deviation")
+            .show();
         // | sex       | mean      |
         // ------------------------
         // | man       | 0.6       |
@@ -113,8 +135,14 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // | women     | 0.3517... |
 
         // Gender effects seem not obvious. What about the age effects on survival ?
-        const survivalMeanByAge = informationsByGroup.groupBy('age').aggregate(group => group.stat.mean('survival')).rename('aggregation', 'mean');
-        const survivalSDByAge = informationsByGroup.groupBy('age').aggregate(group => group.stat.sd('survival')).rename('aggregation', 'standard_deviation');
+        const survivalMeanByAge = informationsByGroup
+            .groupBy("age")
+            .aggregate(group => group.stat.mean("survival"))
+            .rename("aggregation", "mean");
+        const survivalSDByAge = informationsByGroup
+            .groupBy("age")
+            .aggregate(group => group.stat.sd("survival"))
+            .rename("aggregation", "standard_deviation");
 
         survivalMeanByAge.show();
         survivalSDByAge.show();
@@ -136,23 +164,23 @@ DataFrame.fromCSV('http://vincentarelbundock.github.io/Rdatasets/csv/COUNT/titan
         // | sd     | 0.3496... | 0.2951... |
 
         // First we join our results.
-        const ageEffect = survivalMeanByAge.innerJoin(survivalSDByAge, 'age');
+        const ageEffect = survivalMeanByAge.innerJoin(survivalSDByAge, "age");
         ageEffect.show();
         // We now remove age column (you will understand why in few lines) and transpose the table (with columnNames);
-        const transposedAgeEffect = ageEffect.drop('age').transpose(true);
+        const transposedAgeEffect = ageEffect.drop("age").transpose(true);
         // It's magical, and it looks like that:
         transposedAgeEffect.show();
         // Now we will use the previously removed age column as columnNames.
         // Then we reorganize columns order.
         const transposedAgeEffectWithColumnNames = transposedAgeEffect
-            .renameAll([...ageEffect.toArray('age'), ''])
-            .restructure(['', 'adults', 'child']); // you can also .select('', 'adults', 'child');
+            .renameAll([...ageEffect.toArray("age"), ""])
+            .restructure(["", "adults", "child"]); // you can also .select('', 'adults', 'child');
         // Which gives the good table:
         transposedAgeEffectWithColumnNames.show();
 
         // Now you have just to export it as a csv:
-        transposedAgeEffectWithColumnNames.toCSV(true, 'yourReport.csv');
-    }
-).catch(err => {
-    console.log(err);
-});
+        transposedAgeEffectWithColumnNames.toCSV(true, "yourReport.csv");
+    })
+    .catch(err => {
+        console.log(err);
+    });
