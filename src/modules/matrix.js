@@ -1,9 +1,9 @@
-import DataFrame from '../dataframe';
-import { ArgumentTypeError, WrongSchemaError } from '../errors';
-import { arrayEqual, iter } from '../reusables';
+import DataFrame from "../dataframe";
+import { ArgumentTypeError, WrongSchemaError } from "../errors";
+import { arrayEqual, iter } from "../reusables";
 
 /**
-* Matrix module for DataFrame, providing basic mathematical matrix computations.
+ * Matrix module for DataFrame, providing basic mathematical matrix computations.
  */
 class Matrix {
     /**
@@ -12,7 +12,7 @@ class Matrix {
      */
     constructor(df) {
         this.df = df;
-        this.name = 'matrix';
+        this.name = "matrix";
     }
 
     /**
@@ -24,8 +24,13 @@ class Matrix {
      * df.matrix.isCommutative(df2)
      */
     isCommutative(df, reverse = false) {
-        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
-        return arrayEqual(this.df.dim(), reverse ? df.dim().reverse() : df.dim(), true);
+        if (!(df instanceof DataFrame))
+            throw new ArgumentTypeError(df, "DataFrame");
+        return arrayEqual(
+            this.df.dim(),
+            reverse ? df.dim().reverse() : df.dim(),
+            true
+        );
     }
 
     /**
@@ -40,14 +45,16 @@ class Matrix {
             throw new WrongSchemaError(this.df.dim(), df.dim());
         }
         const columns = [...Array(this.df.dim()[1]).keys()];
-        return this.df.__newInstance__([...iter(
-            Object.keys([...this.df]),
-            rowKey => {
-                const a = [...this.df][rowKey].toArray();
-                const b = [...df][rowKey].toArray();
-                return columns.map(column => a[column] + b[column]);
-            }
-        )], this.df.listColumns());
+        return this.df.__newInstance__(
+            [
+                ...iter(Object.keys([...this.df]), rowKey => {
+                    const a = [...this.df][rowKey].toArray();
+                    const b = [...df][rowKey].toArray();
+                    return columns.map(column => a[column] + b[column]);
+                })
+            ],
+            this.df.listColumns()
+        );
     }
 
     /**
@@ -58,7 +65,8 @@ class Matrix {
      * df.matrix.product(6)
      */
     product(number) {
-        if (!(typeof number === 'number')) throw new ArgumentTypeError(number, 'Number');
+        if (!(typeof number === "number"))
+            throw new ArgumentTypeError(number, "Number");
         return this.df.map(row => row.toArray().map(column => column * number));
     }
 
@@ -74,19 +82,23 @@ class Matrix {
             throw new WrongSchemaError(this.df.dim(), df.dim().reverse());
         }
         const columns = [...Array(this.df.dim()[0]).keys()];
-        return this.df.__newInstance__([...iter(
-            Object.keys([...this.df]),
-            rowKey => {
-                const a = [...this.df][rowKey].toArray();
-                return [...iter(
-                    columns,
-                    column => {
-                        const b = [...df.transpose()][column].toArray();
-                        return Object.keys(b).reduce((p, n) => p + b[n] * a[n], 0);
-                    }
-                )];
-            }
-        )], columns);
+        return this.df.__newInstance__(
+            [
+                ...iter(Object.keys([...this.df]), rowKey => {
+                    const a = [...this.df][rowKey].toArray();
+                    return [
+                        ...iter(columns, column => {
+                            const b = [...df.transpose()][column].toArray();
+                            return Object.keys(b).reduce(
+                                (p, n) => p + b[n] * a[n],
+                                0
+                            );
+                        })
+                    ];
+                })
+            ],
+            columns
+        );
     }
 }
 

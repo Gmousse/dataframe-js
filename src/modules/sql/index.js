@@ -1,12 +1,15 @@
-import sqlParser from './sqlEngine';
-import DataFrame from '../../dataframe';
-import { ArgumentTypeError, TableAlreadyExistsError, WrongTableNameError } from '../../errors';
+import sqlParser from "./sqlEngine";
+import DataFrame from "../../dataframe";
+import {
+    ArgumentTypeError,
+    TableAlreadyExistsError,
+    WrongTableNameError
+} from "../../errors";
 
 /**
-* SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
+ * SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
  */
 class SQL {
-
     /**
      * Request on a SQL query.
      * @param {String} query A SQL query to request.
@@ -15,7 +18,8 @@ class SQL {
      * DataFrame.request('SELECT * FROM tmp');
      */
     static request(query) {
-        if (!(typeof query === 'string')) throw new ArgumentTypeError(query, 'Stri g');
+        if (!(typeof query === "string"))
+            throw new ArgumentTypeError(query, "Stri g");
         return sqlParser(query, SQL.tables);
     }
 
@@ -70,8 +74,9 @@ class SQL {
      * DataFrame.registerTable('tmp', df);
      */
     static registerTable(df, tableName, overwrite = false) {
-        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
-        const validation = new RegExp('^[a-zA-Z_][a-zA-Z0-9_]*$');
+        if (!(df instanceof DataFrame))
+            throw new ArgumentTypeError(df, "DataFrame");
+        const validation = new RegExp("^[a-zA-Z_][a-zA-Z0-9_]*$");
         if (!validation.test(tableName)) {
             throw new WrongTableNameError(tableName);
         }
@@ -87,7 +92,7 @@ class SQL {
      */
     constructor(df) {
         this.df = df;
-        this.name = 'sql';
+        this.name = "sql";
     }
 
     /**
@@ -101,10 +106,8 @@ class SQL {
         SQL.registerTable(this.df, tableName, overwrite);
         return this.df;
     }
-
 }
 
 SQL.tables = {};
-
 
 export default SQL;

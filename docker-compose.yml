@@ -1,0 +1,18 @@
+version: "3"
+services:
+    dev:
+        image: "node:8.9"
+        environment:
+            - NODE_ENV=development
+        volumes:
+            - ./:/dataframe-js
+        working_dir: /dataframe-js
+        command: bash
+    test:
+        image: "node:8.9"
+        environment:
+            - NODE_ENV=test
+        volumes:
+            - ./:/dataframe-js
+        working_dir: /dataframe-js
+        command: npm test
