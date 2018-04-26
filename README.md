@@ -5,7 +5,9 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.2.8](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.3.0](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+
+A ton of new features is available in 1.3.0 !! Look at the [1.3.0](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html) changelog !!
 
 **Compatibility**:
 
