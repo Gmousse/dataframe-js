@@ -2,6 +2,30 @@
 
 ---
 
+## v1.3.0
+
+**Author**: Guillaume Mousnier, @rjrivero, @martinv13, @Jefftopia
+
+**Type**: Feature
+
+**Changes**:
+
+*   dataframe-js can now be used in TypeScript (typing is automatically generated, but it works). Thanks to @willkara.
+*   A new options parameter is available as DataFrame constructor third parameter.
+*   You can add new modules to your DataFrame via the DataFrame constructor by using the options `new DataFrame(yourData, yourColumns, {modules: [YourModule]}).
+*   Pass Modules directly in DataFrame constructor is no more possible
+*   Row index is now available in DataFrame .map, .filter, .chain thanks to @martinv13.
+*   DataFrame.dropDuplicates now works on a subset of columns (new parameter), thanks to @martinv13.
+*   DataFrame.sortBy can now sort rows by multiple columns thanks to @Jefftopia.
+*   DataFrame.groupBy is now faster thanks to @rjrivero.
+*   DataFrame can now be created from empty Array without throwing an error.
+*   DataFrame column inference during creation is faster.
+*   Other minor optimizations.
+*   Updating dev dependencies.
+*   Adding prettier in dev.
+
+---
+
 ## v1.2.8
 
 **Author**: Guillaume Mousnier.
