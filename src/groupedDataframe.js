@@ -1,13 +1,12 @@
-import DataFrame from './dataframe';
-import { ArgumentTypeError } from './errors';
+import DataFrame from "./dataframe";
+import { ArgumentTypeError } from "./errors";
 
-const __groups__ = Symbol('groups');
+const __groups__ = Symbol("groups");
 
 /**
  * Grouped DataFrame structure grouping DataFrame rows by column value.
  */
 export default class GroupedDataFrame {
-
     /**
      * Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
      * @param {DataFrame} df The DataFrame to group by.
@@ -18,32 +17,41 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
-        if (!(df instanceof DataFrame)) throw new ArgumentTypeError(df, 'DataFrame');
+        if (!(df instanceof DataFrame))
+            throw new ArgumentTypeError(df, "DataFrame");
         this[__groups__] = this._groupBy(df, columnNames);
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
     }
 
-    * [Symbol.iterator]() {
-        for (const group of this[__groups__]) {
-            yield group;
+    *[Symbol.iterator]() {
+        for (const group of Object.values(this[__groups__])) {
+            yield [group];
         }
     }
 
     _groupBy(df, columnNames) {
-        const hashedDF = df.withColumn('hash', row => row.select(...columnNames).hash());
-        return hashedDF.distinct('hash').toArray('hash').map(
-            hash => {
-                const group = hashedDF
-                    .filter((row) => row.get('hash') === hash)
-                    .drop('hash');
-                return ({
-                    groupKey: group.toCollection(true)[0].select(...columnNames).toDict(),
-                    hash,
-                    group,
-                });
+        const sorted = new Array();
+        const hashes = {};
+        for (const row of df.toCollection(true)) {
+            const hash = row.select(...columnNames).hash();
+            const rows = hashes[hash] || new Array();
+            if (rows.length <= 0) {
+                hashes[hash] = rows;
+                sorted.push(hash);
             }
-        ).filter(({group}) => group.count() > 0);
+            rows.push(row);
+        }
+        console.log(sorted, hashes);
+        return sorted.map(hash => {
+            const rows = hashes[hash];
+            const group = new DataFrame(rows, df.listColumns());
+            return {
+                groupKey: rows[0].select(...columnNames).toDict(),
+                hash,
+                group
+            };
+        });
     }
 
     get(hash) {
@@ -61,20 +69,22 @@ export default class GroupedDataFrame {
     }
 
     /**
-    * Display the GroupedDataFrame as String Table.
-    * @param {Boolean} [quiet=false] Quiet mode. If true, it doesn't trigger console.log().
-    * @returns {String} The GroupedDataFrame as String Table.
-    * @example
-    * groupedDf.show()
-    */
+     * Display the GroupedDataFrame as String Table.
+     * @param {Boolean} [quiet=false] Quiet mode. If true, it doesn't trigger console.log().
+     * @returns {String} The GroupedDataFrame as String Table.
+     * @example
+     * groupedDf.show()
+     */
     show(quiet = false) {
-        return [...this].map(({group, groupKey}) => {
-            const groupLog = `--\n[${JSON.stringify(groupKey)}]\n--`;
-            if (!quiet) {
-                console.log(groupLog);
-            }
-            return groupLog + '\n' + group.show(10, quiet);
-        }).reduce((p, n) => p + '\n' + n);
+        return [...this]
+            .map(({ group, groupKey }) => {
+                const groupLog = `--\n[${JSON.stringify(groupKey)}]\n--`;
+                if (!quiet) {
+                    console.log(groupLog);
+                }
+                return groupLog + "\n" + group.show(10, quiet);
+            })
+            .reduce((p, n) => p + "\n" + n);
     }
 
     /**
@@ -84,7 +94,7 @@ export default class GroupedDataFrame {
      * gdf.listGroups()
      */
     listGroups() {
-        return [...this].map(({groupKey}) => groupKey);
+        return [...this].map(({ groupKey }) => groupKey);
     }
 
     /**
@@ -94,7 +104,7 @@ export default class GroupedDataFrame {
      * gdf.listHashCodes()
      */
     listHashs() {
-        return [...this].map(({hash}) => hash);
+        return [...this].map(({ hash }) => hash);
     }
 
     /**
@@ -105,7 +115,7 @@ export default class GroupedDataFrame {
      * groupedDF.map((row,i) => row.set('b', row.get('a')*i));
      */
     map(func) {
-        const mapped = [...this].map(({group}) => group.map(func));
+        const mapped = [...this].map(({ group }) => group.map(func));
         return this.df.__newInstance__(
             [].concat(...mapped.map(group => group.toCollection())),
             mapped[0].listColumns()
@@ -120,11 +130,15 @@ export default class GroupedDataFrame {
      * groupedDF.filter((row,i) => (i === 0));
      */
     filter(condition) {
-        const mapped = [...this].map(({group}) => group.filter(condition)).filter(group => group.listColumns().length > 0);
-        return mapped.length === 0 ? [] : this.df.__newInstance__(
-            [].concat(...mapped.map(group => group.toCollection())),
-            mapped[0].listColumns()
-        );
+        const mapped = [...this]
+            .map(({ group }) => group.filter(condition))
+            .filter(group => group.listColumns().length > 0);
+        return mapped.length === 0
+            ? []
+            : this.df.__newInstance__(
+                  [].concat(...mapped.map(group => group.toCollection())),
+                  mapped[0].listColumns()
+              );
     }
 
     /**
@@ -141,7 +155,7 @@ export default class GroupedDataFrame {
      * )
      */
     chain(...funcs) {
-        const mapped = [...this].map(({group}) => group.chain(...funcs));
+        const mapped = [...this].map(({ group }) => group.chain(...funcs));
         return this.df.__newInstance__(
             [].concat(...mapped.map(group => group.toCollection())),
             mapped[0].listColumns()
@@ -156,9 +170,12 @@ export default class GroupedDataFrame {
      * @example
      * groupedDF.aggregate(group => group.stat.sum('column1'));
      */
-    aggregate(func, columnName = 'aggregation') {
+    aggregate(func, columnName = "aggregation") {
         return this.df.__newInstance__(
-            [...this].map(({group, groupKey}) => ({...groupKey, [columnName]: func(group, groupKey)})),
+            [...this].map(({ group, groupKey }) => ({
+                ...groupKey,
+                [columnName]: func(group, groupKey)
+            })),
             [...this.on, columnName]
         );
     }
@@ -171,14 +188,26 @@ export default class GroupedDataFrame {
      * @example
      * df.groupBy('carType').pivot('carModel', values => values.stat.sum('kms'))
      */
-    pivot(columnToPivot, func = (gdf) => gdf.count()) {
-        const columns = [...this.on, ...this.df.distinct(columnToPivot).toArray(columnToPivot)];
+    pivot(columnToPivot, func = gdf => gdf.count()) {
+        const columns = [
+            ...this.on,
+            ...this.df.distinct(columnToPivot).toArray(columnToPivot)
+        ];
         return this.df.__newInstance__(
-            this.aggregate((group) => (
-                group.groupBy(columnToPivot)
-                     .aggregate((gp, gk) => ({[gk[columnToPivot]]: func(gp, gk)}))
-                     .toArray('aggregation').reduce((p, n) => ({...p, ...n}), {})
-            )).toCollection().map(({aggregation, ...rest}) => ({...rest, ...aggregation})),
+            this.aggregate(group =>
+                group
+                    .groupBy(columnToPivot)
+                    .aggregate((gp, gk) => ({
+                        [gk[columnToPivot]]: func(gp, gk)
+                    }))
+                    .toArray("aggregation")
+                    .reduce((p, n) => ({ ...p, ...n }), {})
+            )
+                .toCollection()
+                .map(({ aggregation, ...rest }) => ({
+                    ...rest,
+                    ...aggregation
+                })),
             columns
         );
     }
@@ -191,26 +220,38 @@ export default class GroupedDataFrame {
      * @example
      * df.groupBy('carType').melt('kms')
      */
-    melt(variableColumnName = 'variable', valueColumnName = 'value') {
+    melt(variableColumnName = "variable", valueColumnName = "value") {
         const columns = [...this.on, variableColumnName, valueColumnName];
         return this.df.__newInstance__(
-            this.aggregate((group) => (
-                Object.entries(group.toDict())
-                      .reduce(
-                          (tidy, [key, value]) => (
-                              [
-                                  ...tidy,
-                                  ...value.reduce((p, n) => !this.on.includes(key) ?
-                                    [...p, {[variableColumnName]: key, [valueColumnName]: n}] : p, []),
-                              ]
-                          ),
-                          []
-                      )
-            ))
-            .toCollection()
-            .reduce(
-                (p, {aggregation, ...rest}) => [...p, ...aggregation.map(x => ({...rest, ...x}))], []
-            ),
+            this.aggregate(group =>
+                Object.entries(group.toDict()).reduce(
+                    (tidy, [key, value]) => [
+                        ...tidy,
+                        ...value.reduce(
+                            (p, n) =>
+                                !this.on.includes(key)
+                                    ? [
+                                          ...p,
+                                          {
+                                              [variableColumnName]: key,
+                                              [valueColumnName]: n
+                                          }
+                                      ]
+                                    : p,
+                            []
+                        )
+                    ],
+                    []
+                )
+            )
+                .toCollection()
+                .reduce(
+                    (p, { aggregation, ...rest }) => [
+                        ...p,
+                        ...aggregation.map(x => ({ ...rest, ...x }))
+                    ],
+                    []
+                ),
             columns
         );
     }
