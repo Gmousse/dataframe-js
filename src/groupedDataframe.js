@@ -31,19 +31,28 @@ export default class GroupedDataFrame {
     }
 
     _groupBy(df, columnNames) {
-        const hashedDF = df.withColumn('hash', row => row.select(...columnNames).hash());
-        return hashedDF.distinct('hash').toArray('hash').map(
+        const sorted = new Array();
+        const hashes = {};
+        for (const row of df.toCollection(true)) {
+            const hash = row.select(...columnNames).hash();
+            const rows = hashes[hash] || new Array();
+            if (rows.length <= 0) {
+                hashes[hash] = rows;
+                sorted.push(hash);
+            }
+            rows.push(row);
+        }
+        return sorted.map(
             hash => {
-                const group = hashedDF
-                    .filter((row) => row.get('hash') === hash)
-                    .drop('hash');
+                const rows = hashes[hash];
+                const group = new DataFrame(rows, df.listColumns());
                 return ({
-                    groupKey: group.toCollection(true)[0].select(...columnNames).toDict(),
+                    groupKey: rows[0].select(...columnNames).toDict(),
                     hash,
                     group,
                 });
             }
-        ).filter(({group}) => group.count() > 0);
+        );
     }
 
     get(hash) {
