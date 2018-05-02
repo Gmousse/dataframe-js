@@ -44,8 +44,8 @@ export default class GroupedDataFrame {
         }
         return [
             hashes.reduce(
-                (groups, hash) => ({
-                    [hash]: {
+                (groups, hash) => {
+                    groups[hash] = {
                         groupKey: rowsByGroup[hash][0]
                             .select(...columnNames)
                             .toDict(),
@@ -54,9 +54,9 @@ export default class GroupedDataFrame {
                             rowsByGroup[hash],
                             df.listColumns()
                         )
-                    },
-                    ...groups
-                }),
+                    };
+                    return groups;
+                },
                 {}
             ),
             hashes
