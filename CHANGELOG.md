@@ -2,6 +2,18 @@
 
 ---
 
+## v1.3.1
+
+**Author**: @rjrivero
+
+**Type**: Hotfix
+
+**Changes**:
+
+*   Correction of a performance regression on groupBy (get in 1.3.0). Thanks to @rjrivero.
+
+---
+
 ## v1.3.0
 
 **Author**: Guillaume Mousnier, @rjrivero, @martinv13, @Jefftopia

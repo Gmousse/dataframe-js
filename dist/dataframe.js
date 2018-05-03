@@ -16128,21 +16128,21 @@ var dfjs =
 
 	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
 
-	var _stringify = __webpack_require__(408);
-
-	var _stringify2 = _interopRequireDefault(_stringify);
-
 	var _defineProperty2 = __webpack_require__(437);
 
 	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
+	var _extends3 = __webpack_require__(499);
+
+	var _extends4 = _interopRequireDefault(_extends3);
+
+	var _stringify = __webpack_require__(408);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
 	var _toConsumableArray2 = __webpack_require__(455);
 
 	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-	var _extends4 = __webpack_require__(499);
-
-	var _extends5 = _interopRequireDefault(_extends4);
 
 	var _regenerator = __webpack_require__(445);
 
@@ -16326,11 +16326,12 @@ var dfjs =
 	            return [hashes.reduce(function (groups, hash) {
 	                var _rowsByGroup$hash$;
 
-	                return (0, _extends5["default"])((0, _defineProperty3["default"])({}, hash, {
+	                groups[hash] = {
 	                    groupKey: (_rowsByGroup$hash$ = rowsByGroup[hash][0]).select.apply(_rowsByGroup$hash$, (0, _toConsumableArray3["default"])(columnNames)).toDict(),
 	                    hash: hash,
 	                    group: new _dataframe2["default"](rowsByGroup[hash], df.listColumns())
-	                }), groups);
+	                };
+	                return groups;
 	            }, {}), hashes];
 	        }
 	    }, {
@@ -16503,7 +16504,7 @@ var dfjs =
 	            return this.df.__newInstance__([].concat((0, _toConsumableArray3["default"])(this)).map(function (_ref9) {
 	                var group = _ref9.group,
 	                    groupKey = _ref9.groupKey;
-	                return (0, _extends5["default"])({}, groupKey, (0, _defineProperty3["default"])({}, columnName, func(group, groupKey)));
+	                return (0, _extends4["default"])({}, groupKey, (0, _defineProperty3["default"])({}, columnName, func(group, groupKey)));
 	            }), [].concat((0, _toConsumableArray3["default"])(this.on), [columnName]));
 	        }
 
@@ -16528,12 +16529,12 @@ var dfjs =
 	                return group.groupBy(columnToPivot).aggregate(function (gp, gk) {
 	                    return (0, _defineProperty3["default"])({}, gk[columnToPivot], func(gp, gk));
 	                }).toArray("aggregation").reduce(function (p, n) {
-	                    return (0, _extends5["default"])({}, p, n);
+	                    return (0, _extends4["default"])({}, p, n);
 	                }, {});
 	            }).toCollection().map(function (_ref11) {
 	                var aggregation = _ref11.aggregation,
 	                    rest = (0, _objectWithoutProperties3["default"])(_ref11, ["aggregation"]);
-	                return (0, _extends5["default"])({}, rest, aggregation);
+	                return (0, _extends4["default"])({}, rest, aggregation);
 	            }), columns);
 	        }
 
@@ -16571,7 +16572,7 @@ var dfjs =
 	                var aggregation = _ref15.aggregation,
 	                    rest = (0, _objectWithoutProperties3["default"])(_ref15, ["aggregation"]);
 	                return [].concat((0, _toConsumableArray3["default"])(p), (0, _toConsumableArray3["default"])(aggregation.map(function (x) {
-	                    return (0, _extends5["default"])({}, rest, x);
+	                    return (0, _extends4["default"])({}, rest, x);
 	                })));
 	            }, []), columns);
 	        }
