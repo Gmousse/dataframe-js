@@ -757,11 +757,11 @@ test("Empty DataFrame", assert => {
         "can be joined with another empty DataFrame."
     );
 
-    // assert.deepEqual(
-    //     emptyDF.shuffle() instanceof DataFrame,
-    //     true,
-    //     "can be shuffled."
-    // );
+    assert.deepEqual(
+        emptyDF.shuffle() instanceof DataFrame,
+        true,
+        "can be shuffled."
+    );
 
     assert.end();
 });
