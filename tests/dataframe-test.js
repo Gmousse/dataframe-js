@@ -757,6 +757,12 @@ test("Empty DataFrame", assert => {
         "can be joined with another empty DataFrame."
     );
 
+    assert.equal(
+        emptyDF.union(emptyDF) instanceof DataFrame,
+        true,
+        "can be unioned with another empty DataFrame."
+    );
+
     assert.deepEqual(
         emptyDF.shuffle() instanceof DataFrame,
         true,
