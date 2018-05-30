@@ -10181,6 +10181,7 @@ var dfjs =
 	    }, {
 	        key: "shuffle",
 	        value: function shuffle() {
+	            if (this.count() < 2) return this;
 	            return this.__newInstance__(this.reduce(function (p, n) {
 	                var index = Math.floor(Math.random() * (p.length - 1) + 1);
 	                return Array.isArray(p) ? [].concat((0, _toConsumableArray3["default"])(p.slice(index, p.length + 1)), [n], (0, _toConsumableArray3["default"])(p.slice(0, index))) : [p, n];
@@ -16450,9 +16451,9 @@ var dfjs =
 	            }).filter(function (group) {
 	                return group.listColumns().length > 0;
 	            });
-	            return mapped.length === 0 ? [] : this.df.__newInstance__((_ref6 = []).concat.apply(_ref6, (0, _toConsumableArray3["default"])(mapped.map(function (group) {
+	            return mapped.length === 0 ? this.df.__newInstance__([], this.df.listColumns()) : this.df.__newInstance__((_ref6 = []).concat.apply(_ref6, (0, _toConsumableArray3["default"])(mapped.map(function (group) {
 	                return group.toCollection();
-	            }))), mapped[0].listColumns());
+	            }))), this.df.listColumns());
 	        }
 
 	        /**
