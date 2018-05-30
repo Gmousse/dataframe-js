@@ -2,6 +2,18 @@
 
 ---
 
+## v1.3.2
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+*   Correction of bugs related to .reduce on empty or one length array.
+
+---
+
 ## v1.3.1
 
 **Author**: @rjrivero

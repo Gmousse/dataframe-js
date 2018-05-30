@@ -567,20 +567,6 @@ test("DataFrame rows can be ", assert => {
         ["id", "id2", "value"]
     );
 
-    const df7 = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
-
-    assert.isNotDeepEqual(
-        df7.shuffle().toArray(),
-        df7.toArray(),
-        "randomly shuffled."
-    );
-
-    assert.equal(
-        df7.shuffle().count(),
-        df7.count(),
-        "randomly shuffled and get the same length."
-    );
-
     const df8 = new DataFrame([...Array(5000).keys()].map(row => [row]), [
         "c1"
     ]);
@@ -746,6 +732,65 @@ test("DataFrame stay immutable when", assert => {
         Object.is(df.map(row => row), df),
         false,
         "modified, even if nothing have changed."
+    );
+
+    assert.end();
+});
+
+test("Empty DataFrame", assert => {
+    const df = new DataFrame(
+        [[1, 6, 9, 10, 12], [1, 2], [6, 6, 9, 8, 9, 12]],
+        ["c1", "c2", "c3", "c4", "c5", "c6"]
+    );
+
+    const emptyDF = new DataFrame([]);
+
+    assert.equal(
+        emptyDF.join(df, "c1") instanceof DataFrame,
+        true,
+        "can be joined with another DataFrame."
+    );
+
+    assert.equal(
+        emptyDF.join(emptyDF, "col1") instanceof DataFrame,
+        true,
+        "can be joined with another empty DataFrame."
+    );
+
+    assert.equal(
+        emptyDF.union(emptyDF) instanceof DataFrame,
+        true,
+        "can be unioned with another empty DataFrame."
+    );
+
+    assert.deepEqual(
+        emptyDF.shuffle() instanceof DataFrame,
+        true,
+        "can be shuffled."
+    );
+
+    assert.end();
+});
+
+test("DataFrame can be shuffled", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.isNotDeepEqual(
+        df.shuffle().toArray(),
+        df.toArray(),
+        "randomly shuffled."
+    );
+
+    assert.equal(
+        df.shuffle().count(),
+        df.count(),
+        "randomly shuffled and get the same length."
+    );
+
+    assert.equal(
+        new DataFrame([{ c1: "x" }], ["c1"]).shuffle().count(),
+        1,
+        "randomly shuffled and get the same length when having one row."
     );
 
     assert.end();

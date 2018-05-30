@@ -16,7 +16,7 @@
 
 ## GroupedDataFrame
 
-[src/groupedDataframe.js:10-276][12]
+[src/groupedDataframe.js:10-270][12]
 
 Grouped DataFrame structure grouping DataFrame rows by column value.
 
@@ -28,7 +28,7 @@ Grouped DataFrame structure grouping DataFrame rows by column value.
 
 ### toCollection
 
-[src/groupedDataframe.js:76-78][14]
+[src/groupedDataframe.js:70-72][14]
 
 Convert GroupedDataFrame into collection (Array) of dictionnaries (Object).
 
@@ -42,7 +42,7 @@ Returns **[Array][15]** An Array containing group: {groupKey, group}.
 
 ### show
 
-[src/groupedDataframe.js:87-97][16]
+[src/groupedDataframe.js:81-91][16]
 
 Display the GroupedDataFrame as String Table.
 
@@ -60,7 +60,7 @@ Returns **[String][13]** The GroupedDataFrame as String Table.
 
 ### listGroups
 
-[src/groupedDataframe.js:105-107][18]
+[src/groupedDataframe.js:99-101][18]
 
 List GroupedDataFrame groups.
 
@@ -74,7 +74,7 @@ Returns **[Array][15]** An Array containing GroupedDataFrame group names.
 
 ### listHashs
 
-[src/groupedDataframe.js:115-117][19]
+[src/groupedDataframe.js:109-111][19]
 
 List GroupedDataFrame groups as a hashCode.
 
@@ -88,7 +88,7 @@ Returns **[Array][15]** An Array containing GroupedDataFrame hash codes.
 
 ### map
 
-[src/groupedDataframe.js:126-132][20]
+[src/groupedDataframe.js:120-126][20]
 
 Map on DataFrame groups.
 
@@ -106,7 +106,7 @@ Returns **DataFrame** A new DataFrame containing the result.
 
 ### filter
 
-[src/groupedDataframe.js:141-151][22]
+[src/groupedDataframe.js:135-145][22]
 
 Filter a grouped DataFrame.
 
@@ -124,7 +124,7 @@ Returns **DataFrame** A new filtered DataFrame.
 
 ### chain
 
-[src/groupedDataframe.js:166-172][23]
+[src/groupedDataframe.js:160-166][23]
 
 Chain maps and filters functions on DataFrame by optimizing their executions.
 If a function returns boolean, it's a filter. Else it's a map.
@@ -148,7 +148,7 @@ Returns **DataFrame** A new DataFrame with modified rows.
 
 ### aggregate
 
-[src/groupedDataframe.js:182-190][24]
+[src/groupedDataframe.js:176-184][24]
 
 Create an aggregation from a function.
 
@@ -167,7 +167,7 @@ Returns **DataFrame** A new DataFrame with a column 'aggregation' containing the
 
 ### pivot
 
-[src/groupedDataframe.js:200-228][25]
+[src/groupedDataframe.js:194-222][25]
 
 Pivot a GroupedDataFrame.
 
@@ -186,7 +186,7 @@ Returns **DataFrame** The pivot DataFrame.
 
 ### melt
 
-[src/groupedDataframe.js:238-275][26]
+[src/groupedDataframe.js:232-269][26]
 
 Melt a DataFrame to make it tidy. It's the reverse of GroupedDataFrame.pivot().
 
@@ -225,32 +225,32 @@ Returns **DataFrame** The tidy DataFrame.
 
 [11]: #melt
 
-[12]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L10-L276 "Source code on GitHub"
+[12]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L10-L270 "Source code on GitHub"
 
 [13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[14]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L76-L78 "Source code on GitHub"
+[14]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L70-L72 "Source code on GitHub"
 
 [15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[16]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L87-L97 "Source code on GitHub"
+[16]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L81-L91 "Source code on GitHub"
 
 [17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[18]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L105-L107 "Source code on GitHub"
+[18]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L99-L101 "Source code on GitHub"
 
-[19]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L115-L117 "Source code on GitHub"
+[19]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L109-L111 "Source code on GitHub"
 
-[20]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L126-L132 "Source code on GitHub"
+[20]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L120-L126 "Source code on GitHub"
 
 [21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[22]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L141-L151 "Source code on GitHub"
+[22]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L135-L145 "Source code on GitHub"
 
-[23]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L166-L172 "Source code on GitHub"
+[23]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L160-L166 "Source code on GitHub"
 
-[24]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L182-L190 "Source code on GitHub"
+[24]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L176-L184 "Source code on GitHub"
 
-[25]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L200-L228 "Source code on GitHub"
+[25]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L194-L222 "Source code on GitHub"
 
-[26]: https://github.com/Gmousse/dataframe-js/blob/8afbca16d5cc1a6ea70c1eab1d7b53c89700d64a/src/groupedDataframe.js#L238-L275 "Source code on GitHub"
+[26]: https://github.com/Gmousse/dataframe-js/blob/804832188ca1286815ef57092480b3d3b2b56de6/src/groupedDataframe.js#L232-L269 "Source code on GitHub"

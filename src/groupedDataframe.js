@@ -43,22 +43,16 @@ export default class GroupedDataFrame {
             rowsByGroup[hash].push(row);
         }
         return [
-            hashes.reduce(
-                (groups, hash) => {
-                    groups[hash] = {
-                        groupKey: rowsByGroup[hash][0]
-                            .select(...columnNames)
-                            .toDict(),
-                        hash,
-                        group: new DataFrame(
-                            rowsByGroup[hash],
-                            df.listColumns()
-                        )
-                    };
-                    return groups;
-                },
-                {}
-            ),
+            hashes.reduce((groups, hash) => {
+                groups[hash] = {
+                    groupKey: rowsByGroup[hash][0]
+                        .select(...columnNames)
+                        .toDict(),
+                    hash,
+                    group: new DataFrame(rowsByGroup[hash], df.listColumns())
+                };
+                return groups;
+            }, {}),
             hashes
         ];
     }
@@ -143,10 +137,10 @@ export default class GroupedDataFrame {
             .map(({ group }) => group.filter(condition))
             .filter(group => group.listColumns().length > 0);
         return mapped.length === 0
-            ? []
+            ? this.df.__newInstance__([], this.df.listColumns())
             : this.df.__newInstance__(
                   [].concat(...mapped.map(group => group.toCollection())),
-                  mapped[0].listColumns()
+                  this.df.listColumns()
               );
     }
 
