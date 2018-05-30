@@ -945,6 +945,7 @@ class DataFrame {
      * df.shuffle()
      */
     shuffle() {
+        if (this.count() < 2) return this;
         return this.__newInstance__(
             this.reduce((p, n) => {
                 const index = Math.floor(Math.random() * (p.length - 1) + 1);
