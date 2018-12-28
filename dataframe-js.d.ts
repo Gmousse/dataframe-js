@@ -33,6 +33,8 @@ export class DataFrame {
 
     groupBy(...args: any[]): any;
 
+    head(...args: any[]): any;
+
     innerJoin(dfToJoin: any, columnNames: any): any;
 
     join(dfToJoin: any, columnNames: any, ...args: any[]): any;
@@ -69,7 +71,11 @@ export class DataFrame {
 
     shuffle(): any;
 
+    slice(startIndex: any, endIndex: any): any;
+
     sortBy(columnNames: any, ...args: any[]): any;
+
+    tail(...args: any[]): any;
 
     toArray(columnName: any): any;
 
@@ -230,6 +236,8 @@ export namespace DataFrame {
 
         function groupBy(...args: any[]): any;
 
+        function head(...args: any[]): any;
+
         function innerJoin(dfToJoin: any, columnNames: any): any;
 
         function join(dfToJoin: any, columnNames: any, ...args: any[]): any;
@@ -266,7 +274,11 @@ export namespace DataFrame {
 
         function shuffle(): any;
 
+        function slice(startIndex: any, endIndex: any): any;
+
         function sortBy(columnNames: any, ...args: any[]): any;
+
+        function tail(...args: any[]): any;
 
         function toArray(columnName: any): any;
 
@@ -386,6 +398,12 @@ export namespace DataFrame {
 
         }
 
+        namespace head {
+            const prototype: {
+            };
+
+        }
+
         namespace innerJoin {
             const prototype: {
             };
@@ -494,7 +512,19 @@ export namespace DataFrame {
 
         }
 
+        namespace slice {
+            const prototype: {
+            };
+
+        }
+
         namespace sortBy {
+            const prototype: {
+            };
+
+        }
+
+        namespace tail {
             const prototype: {
             };
 
