@@ -84,9 +84,8 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .withColumn(
-                "c4",
-                row => (row.get("c2") ? row.get("c2") - 2 : 0 - 2)
+            .withColumn("c4", row =>
+                row.get("c2") ? row.get("c2") - 2 : 0 - 2
             )
             .toDict(),
         {
@@ -365,9 +364,8 @@ test("DataFrame rows can be ", assert => {
         "filtered and modified and filtered (again) by chains."
     );
 
-    const df2 = df1.withColumn(
-        "column1",
-        row => (row.get("column1") ? row.get("column1") : 0)
+    const df2 = df1.withColumn("column1", row =>
+        row.get("column1") ? row.get("column1") : 0
     );
 
     assert.equal(
@@ -791,6 +789,92 @@ test("DataFrame can be shuffled", assert => {
         new DataFrame([{ c1: "x" }], ["c1"]).shuffle().count(),
         1,
         "randomly shuffled and get the same length when having one row."
+    );
+
+    assert.end();
+});
+
+test("DataFrame can be subsetted", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.deepEqual(
+        df.slice(0, 10).toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "slicing the dataframe between 0 and 10 index."
+    );
+
+    assert.deepEqual(
+        df.slice(0, 10).toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "slicing the dataframe out of index."
+    );
+
+    assert.deepEqual(
+        df.head().toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "getting a new dataframe with the first 10 elements."
+    );
+
+    assert.deepEqual(
+        df.head(2).toCollection(),
+        [{ c1: 0 }, { c1: 1 }],
+        "getting a new dataframe with the first 2 elements."
+    );
+
+    assert.deepEqual(
+        df.tail().toCollection(),
+        [
+            { c1: 10 },
+            { c1: 11 },
+            { c1: 12 },
+            { c1: 13 },
+            { c1: 14 },
+            { c1: 15 },
+            { c1: 16 },
+            { c1: 17 },
+            { c1: 18 },
+            { c1: 19 }
+        ],
+        "getting a new dataframe with the last 10 elements."
+    );
+
+    assert.deepEqual(
+        df.tail(2).toCollection(),
+        [{ c1: 18 }, { c1: 19 }],
+        "getting a new dataframe with the last 2 elements."
     );
 
     assert.end();

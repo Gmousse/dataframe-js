@@ -749,8 +749,8 @@ class DataFrame {
      * df.rename('column1', 'columnRenamed')
      */
     rename(columnName, replacement) {
-        const newColumnNames = this[__columns__].map(
-            column => (column === columnName ? replacement : column)
+        const newColumnNames = this[__columns__].map(column =>
+            column === columnName ? replacement : column
         );
         return this.renameAll(newColumnNames);
     }
@@ -1174,6 +1174,51 @@ class DataFrame {
      */
     diff(dfToDiff, columnNames) {
         return this._join(dfToDiff, columnNames, ["out", "out"]);
+    }
+
+    /**
+     * Create a new subset DataFrame based on the first rows.
+     * @param {Number} [nRows=10] The number of first rows to get.
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.head()
+     * df2.head(5)
+     */
+    head(nRows = 10) {
+        return this.slice(0, nRows);
+    }
+
+    /**
+     * Create a new subset DataFrame based on the last rows.
+     * @param {Number} [nRows=10] The number of last rows to get.
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.tail()
+     * df2.tail(5)
+     */
+    tail(nRows = 10) {
+        return this.slice(-nRows);
+    }
+
+    /**
+     * Create a new subset DataFrame based on given indexs. Similar to Array.slice.
+     * @param {Number} [startIndex=0] The index to start the slice (included).
+     * @param {Number} [endIndex=this.count()] The index to end the slice (excluded).
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.slice()
+     * df2.slice(0)
+     * df2.slice(0, 20)
+     * df2.slice(10, 30)
+     */
+    slice(startIndex, endIndex) {
+        return this.__newInstance__(
+            this[__rows__].slice(
+                startIndex || undefined,
+                endIndex || undefined
+            ),
+            this[__columns__]
+        );
     }
 }
 
