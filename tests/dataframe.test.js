@@ -856,6 +856,4 @@ test("DataFrame can be subsetted", assert => {
         [{ c1: 18 }, { c1: 19 }],
         "getting a new dataframe with the last 2 elements."
     );
-
-    assert.end();
 });

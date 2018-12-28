@@ -6497,6 +6497,53 @@ var dfjs = (function (exports) {
 	    value: function diff(dfToDiff, columnNames) {
 	      return this._join(dfToDiff, columnNames, ["out", "out"]);
 	    }
+	    /**
+	     * Create a new subset DataFrame based on the first rows.
+	     * @param {Number} [nRows=10] The number of first rows to get.
+	     * @returns {DataFrame} The subset DataFrame.
+	     * @example
+	     * df2.head()
+	     * df2.head(5)
+	     */
+
+	  }, {
+	    key: "head",
+	    value: function head() {
+	      var nRows = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+	      return this.slice(0, nRows);
+	    }
+	    /**
+	     * Create a new subset DataFrame based on the last rows.
+	     * @param {Number} [nRows=10] The number of last rows to get.
+	     * @returns {DataFrame} The subset DataFrame.
+	     * @example
+	     * df2.tail()
+	     * df2.tail(5)
+	     */
+
+	  }, {
+	    key: "tail",
+	    value: function tail() {
+	      var nRows = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+	      return this.slice(-nRows);
+	    }
+	    /**
+	     * Create a new subset DataFrame based on given indexs. Similar to Array.slice.
+	     * @param {Number} [startIndex=0] The index to start the slice (included).
+	     * @param {Number} [endIndex=this.count()] The index to end the slice (excluded).
+	     * @returns {DataFrame} The subset DataFrame.
+	     * @example
+	     * df2.slice()
+	     * df2.slice(0)
+	     * df2.slice(0, 20)
+	     * df2.slice(10, 30)
+	     */
+
+	  }, {
+	    key: "slice",
+	    value: function slice(startIndex, endIndex) {
+	      return this.__newInstance__(this[__rows__].slice(startIndex || undefined, endIndex || undefined), this[__columns__$1]);
+	    }
 	  }]);
 
 	  return DataFrame;
