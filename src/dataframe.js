@@ -29,8 +29,6 @@ const __rows__ = Symbol("rows");
  * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
  */
 class DataFrame {
-    static defaultModules = [];
-
     /**
      * Set the default modules used in DataFrame instances.
      * @param {...Object} defaultModules DataFrame modules used by default.
@@ -749,8 +747,8 @@ class DataFrame {
      * df.rename('column1', 'columnRenamed')
      */
     rename(columnName, replacement) {
-        const newColumnNames = this[__columns__].map(
-            column => (column === columnName ? replacement : column)
+        const newColumnNames = this[__columns__].map(column =>
+            column === columnName ? replacement : column
         );
         return this.renameAll(newColumnNames);
     }
@@ -1176,5 +1174,7 @@ class DataFrame {
         return this._join(dfToDiff, columnNames, ["out", "out"]);
     }
 }
+
+DataFrame.defaultModules = [];
 
 export default DataFrame;

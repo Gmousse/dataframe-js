@@ -1,3 +1,5 @@
+import "@babel/polyfill";
+
 export function asArray(x) {
     if (!x) return [];
     return Array.isArray(x) ? x : [x];

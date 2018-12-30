@@ -1,9 +1,7 @@
-import tape from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("DataFrame sql module can ", assert => {
     const df1 = new DataFrame(
@@ -251,24 +249,22 @@ test("DataFrame sql module can ", assert => {
         df3.filter(row => row.get("column 1").includes("hello world")).toDict(),
         "filter on column name having space with a string having space."
     );
-
-    assert.end();
 });
 
 test("DataFrame sql module can't ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() => DataFrame.sql.registerTable([], "tmp3")).name,
         "ArgumentTypeError",
         "register a table which is not a DataFrame."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => DataFrame.sql.request()).name,
         "ArgumentTypeError",
         "execute a query which is not a String, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() =>
             DataFrame.sql.registerTable(new DataFrame([{ c1: 1 }]), "tmp")
         ).name,
@@ -276,7 +272,7 @@ test("DataFrame sql module can't ", assert => {
         "register a table when the name already exists without using overwrite mode, throwing TableAlreadyExistsError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => DataFrame.sql.renameTable("tmp2", "tmp")).name,
         "TableAlreadyExistsError",
         "rename a table by using a table name already used without using overwrite mode, throwing TableAlreadyExistsError."
@@ -334,6 +330,4 @@ test("DataFrame sql module can't ", assert => {
         "WrongTableNameError",
         "rename a bad formatted table name, throwing WrongTableNameError."
     );
-
-    assert.end();
 });

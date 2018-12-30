@@ -1,9 +1,15 @@
 {
-    "presets": ["es2015", "stage-0"],
-    "plugins": [
-        "transform-decorators-legacy", "transform-decorators", "transform-runtime",
-        ["transform-es2015-modules-commonjs", {"loose": true}],
-        "transform-es3-member-expression-literals",
-        "transform-es3-property-literals"
-     ]
+    "presets": [
+        [
+            "@babel/preset-env",
+            {
+                "targets": {
+                    "node": "0.12",
+                    "browsers": ["> 1%"]
+                },
+                "useBuiltIns": "entry"
+            }
+        ]
+    ],
+    "plugins": ["@babel/plugin-proposal-class-properties"]
 }
