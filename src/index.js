@@ -1,5 +1,3 @@
-import "@babel/polyfill";
-
 import DataFrame from "./dataframe";
 import Row from "./row";
 import * as Errors from "./errors";

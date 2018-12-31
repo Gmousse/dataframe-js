@@ -26,17 +26,16 @@
         "test:watch": "npm run test --watch",
         "posttest": "npm run lint",
         "coverage": "nyc report --reporter=text-lcov | coveralls",
-        "doc": "babel-node doc/doc.js",
-        "checkes3": "check-es3-syntax lib/ --kill --print",
+        "doc": "node doc/doc.js",
         "predts": "mkdir -p ../tmp-dfjs && cd ../tmp-dfjs && npm i ../dataframe-js",
         "dts": "cd ../tmp-dfjs && dts-gen -m dataframe-js --overwrite -f ../dataframe-js/dataframe-js.d.ts",
         "postdts": "rm -rf ../tmp-dfjs",
         "build:commonjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
         "build:umd": "NODE_ENV=production rollup -c",
         "build:umd:min": "NODE_ENV=production rollup -c rollup.config.min.js",
-        "prebuild": "npm run test && rm -rf lib dist",
+        "prebuild": "npm run test && rm -rf build",
         "build": "npm run build:umd && npm run build:umd:min",
-        "postbuild": "npm run checkes3 && npm run doc && npm run dts"
+        "postbuild": "npm run doc && npm run dts"
     },
     "author": {
         "name": "Guillaume Mousnier",
@@ -47,9 +46,10 @@
     "devDependencies": {
         "@babel/cli": "~7.2.3",
         "@babel/core": "~7.2.2",
-        "@babel/plugin-proposal-class-properties": "~7.2.3",
         "@babel/preset-env": "~7.2.3",
         "@babel/register": "~7.0.0",
+        "@babel/plugin-proposal-class-properties": "~7.2.3",
+        "@babel/plugin-transform-regenerator": "~7.0.0",
         "ava": "~1.0.1",
         "check-es3-syntax-cli": "~0.2.1",
         "check-node-version": "~3.2.0",
@@ -60,7 +60,9 @@
         "nyc": "^11.7.1",
         "rollup": "~1.0.0",
         "rollup-plugin-babel": "^4.2.0",
-        "rollup-plugin-uglify": "^6.0.0"
+        "rollup-plugin-uglify": "^6.0.0",
+        "rollup-plugin-node-resolve": "~4.0.0",
+        "rollup-plugin-commonjs": "~9.2.0"
     },
     "dependencies": {
         "@babel/polyfill": "~7.2.5",

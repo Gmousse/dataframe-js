@@ -15,6 +15,7 @@
 -   Drop useless babel dependencies.
 -   Replace webpack by rollup (easier to configure).
 -   Drop webpack completely
+-   Drop support for es3. You can add it by following the guide.
 
 ---
 
