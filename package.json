@@ -18,7 +18,7 @@
         "type": "git",
         "url": "https://github.com/Gmousse/dataframe-js.git"
     },
-    "main": "./build/dataframe.js",
+    "main": "./lib/index.js",
     "scripts": {
         "lint": "check-node-version --node '>= 4' && eslint -c .eslintrc ./src || check-node-version --node '< 4'",
         "prettier": "prettier --write 'src/**/*'",
@@ -30,11 +30,10 @@
         "predts": "mkdir -p ../tmp-dfjs && cd ../tmp-dfjs && npm i ../dataframe-js",
         "dts": "cd ../tmp-dfjs && dts-gen -m dataframe-js --overwrite -f ../dataframe-js/dataframe-js.d.ts",
         "postdts": "rm -rf ../tmp-dfjs",
-        "build:commonjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
-        "build:umd": "NODE_ENV=production rollup -c",
-        "build:umd:min": "NODE_ENV=production rollup -c rollup.config.min.js",
-        "prebuild": "npm run test && rm -rf build",
-        "build": "npm run build:umd && npm run build:umd:min",
+        "build:cjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
+        "build:iife": "NODE_ENV=production rollup -c",
+        "prebuild": "npm run test && rm -rf dist lib",
+        "build": "npm run build:cjs && npm run build:iife",
         "postbuild": "npm run doc && npm run dts"
     },
     "author": {
