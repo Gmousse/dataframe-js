@@ -12,6 +12,9 @@
         "datascience",
         "browser"
     ],
+    "browser": {
+        "fs": false
+    },
     "homepage": "https://gmousse.gitbooks.io/dataframe-js/",
     "bugs": "https://github.com/Gmousse/dataframe-js/issues",
     "repository": {
