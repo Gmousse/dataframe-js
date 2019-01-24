@@ -52,10 +52,7 @@ via npm: `npm install dataframe-js`
 
 via yarn: `yarn add dataframe-js`
 
-in the browser:
-
--   not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
--   minified (production): `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>`
+in the browser: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.min.js"></script>`
 
 ## Usage
 

@@ -132,14 +132,6 @@ test("GroupedDataFrame can be ", assert => {
     );
 });
 
-test("GroupedDataFrame can't be ", assert => {
-    assert.is(
-        tryCatch(() => new GroupedDataFrame()).name,
-        "ArgumentTypeError",
-        "created without DataFrame."
-    );
-});
-
 test("GroupedDataFrame groups can be ", assert => {
     const df = new DataFrame(
         [
