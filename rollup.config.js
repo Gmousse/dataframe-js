@@ -6,7 +6,11 @@ import { uglify } from "rollup-plugin-uglify";
 export default {
     input: "./src/index.js",
     output: {
-        file: "./dist/dataframe.min.js",
+        exports: "named",
+        file:
+            process.env.NODE_ENV === "production"
+                ? "./dist/dataframe-min.js"
+                : "./dist/dataframe.js",
         name: "dfjs",
         format: "iife"
     },
@@ -17,7 +21,6 @@ export default {
         }),
         babel({
             exclude: "node_modules/**"
-        }),
-        uglify()
-    ]
+        })
+    ].concat(process.env.NODE_ENV === "production" ? [uglify()] : [])
 };

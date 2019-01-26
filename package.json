@@ -34,9 +34,10 @@
         "dts": "cd ../tmp-dfjs && dts-gen -m dataframe-js --overwrite -f ../dataframe-js/dataframe-js.d.ts",
         "postdts": "rm -rf ../tmp-dfjs",
         "build:cjs": "NODE_ENV=production babel src/ -d lib/ --no-comments",
-        "build:iife": "NODE_ENV=production rollup -c",
+        "build:iife": "rollup -c",
+        "build:iife:min": "NODE_ENV=production rollup -c",
         "prebuild": "npm run test && rm -rf dist lib",
-        "build": "npm run build:cjs && npm run build:iife",
+        "build": "npm run build:cjs && npm run build:iife && npm run build:iife:min",
         "postbuild": "npm run doc && npm run dts"
     },
     "author": {
