@@ -11,8 +11,8 @@ A ton of new features is available in 1.3.0 !! Look at the [1.3.0](https://gmous
 
 **Compatibility**:
 
-*   Browsers (IE > 8, Edge, Firefox, Chrome...)
-*   NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x, 8.x.x
+-   Browsers (IE > 8, Edge, Firefox, Chrome...)
+-   NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x, 8.x.x
 
 **License**: MIT
 
@@ -22,7 +22,7 @@ DataFrame-js provides an immutable data structure for javascript and datascience
 
 With the DataFrame, you can easily do a ton of complex stuff such as join, groupby, exploration tasks, machine learning...
 
-It works both in browser and server-side (node.js).
+It's mainly designed to work on server-side (with node) but it also works in the browser (without file system related features).
 
 Example:
 
@@ -54,8 +54,8 @@ via yarn: `yarn add dataframe-js`
 
 in the browser:
 
-*   not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
-*   minified (production): `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>`
+-   for production `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>` (~ 80ko)
+-   for development `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>` (~ 300ko)
 
 ## Usage
 

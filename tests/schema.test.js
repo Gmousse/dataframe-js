@@ -1,4 +1,4 @@
-import test from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
 
@@ -44,8 +44,6 @@ test("DataFrame can be empty", assert => {
     } catch (e) {
         assert.fail("without throwing error while passing empty columns");
     }
-
-    assert.end();
 });
 
 test("DataFrame can detect schema changes", assert => {
@@ -133,6 +131,4 @@ test("DataFrame can detect schema changes", assert => {
         [[1, "A", 2.144, 2, 8], [2, "B", 5.6, 4, 8], [0, "A", 0, 0, 8]],
         "with multiple column added using Row.set() without changing structure."
     );
-
-    assert.end();
 });

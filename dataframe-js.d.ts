@@ -666,14 +666,6 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
-
         namespace prototype {
             const message: string;
 
@@ -689,14 +681,6 @@ export namespace Errors {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
 
         namespace prototype {
             const message: string;
@@ -714,14 +698,6 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
-
         namespace prototype {
             const message: string;
 
@@ -737,14 +713,6 @@ export namespace Errors {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
 
         namespace prototype {
             const message: string;
@@ -762,14 +730,6 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
-
         namespace prototype {
             const message: string;
 
@@ -785,14 +745,6 @@ export namespace Errors {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
 
         namespace prototype {
             const message: string;
@@ -810,14 +762,6 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
-
         namespace prototype {
             const message: string;
 
@@ -833,14 +777,6 @@ export namespace Errors {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        function isError(p0: any): any;
-
-        namespace isError {
-            const prototype: {
-            };
-
-        }
 
         namespace prototype {
             const message: string;

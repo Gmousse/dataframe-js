@@ -1,9 +1,7 @@
-import tape from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("DataFrame matrix module can ", assert => {
     const df1 = new DataFrame(
@@ -33,13 +31,13 @@ test("DataFrame matrix module can ", assert => {
         ["column1", "column2", "column3"]
     );
 
-    assert.equal(
+    assert.is(
         df1.matrix.isCommutative(df2),
         true,
         "check if two DataFrames have the same structure."
     );
 
-    assert.equal(
+    assert.is(
         df1.matrix.isCommutative(df2, true),
         true,
         "check if two DataFrames have the same transposed structure."
@@ -83,8 +81,6 @@ test("DataFrame matrix module can ", assert => {
         },
         "realize a non-commutative matrix multiplication between 2 DataFrames."
     );
-
-    assert.end();
 });
 
 test("DataFrame matrix module can't", assert => {
@@ -105,35 +101,33 @@ test("DataFrame matrix module can't", assert => {
         ["column1", "column2"]
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => df1.matrix.add(df2).toDict()).name,
         "WrongSchemaError",
         "realize a pairwise sum between 2 DataFrames with different structure, throwing WrongSchemaError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => df1.matrix.add().toDict()).name,
         "ArgumentTypeError",
         "realize a pairwise sum between a DataFrame and another type, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => df1.matrix.isCommutative().toDict()).name,
         "ArgumentTypeError",
         "realize a commutative check between a DataFrame and another type, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => df1.matrix.product("yolo").toDict()).name,
         "ArgumentTypeError",
         "realize a scalar product between a DataFrame and not a Number, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => df1.matrix.dot().toDict()).name,
         "ArgumentTypeError",
         "realize a matrix multiplication between a DataFrame and another type, throwing ArgumentTypeError."
     );
-
-    assert.end();
 });

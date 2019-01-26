@@ -1,6 +1,3 @@
-import DataFrame from "./dataframe";
-import { ArgumentTypeError } from "./errors";
-
 const __groups__ = Symbol("groups");
 const __hashes__ = Symbol("hashes");
 
@@ -18,8 +15,6 @@ export default class GroupedDataFrame {
      * new GroupedDataFrame(df, 'column1');
      */
     constructor(df, ...columnNames) {
-        if (!(df instanceof DataFrame))
-            throw new ArgumentTypeError(df, "DataFrame");
         [this[__groups__], this[__hashes__]] = this._groupBy(df, columnNames);
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
@@ -49,7 +44,10 @@ export default class GroupedDataFrame {
                         .select(...columnNames)
                         .toDict(),
                     hash,
-                    group: new DataFrame(rowsByGroup[hash], df.listColumns())
+                    group: new df.constructor(
+                        rowsByGroup[hash],
+                        df.listColumns()
+                    )
                 };
                 return groups;
             }, {}),

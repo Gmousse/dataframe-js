@@ -1,10 +1,8 @@
-import tape from "tape";
+import test from "ava";
 
 import GroupedDataFrame from "../src/groupedDataframe";
 import DataFrame from "../src/dataframe";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("GroupedDataFrame can be ", assert => {
     const df = new DataFrame(
@@ -132,18 +130,6 @@ test("GroupedDataFrame can be ", assert => {
         ],
         "filtered based on index"
     );
-
-    assert.end();
-});
-
-test("GroupedDataFrame can't be ", assert => {
-    assert.equal(
-        tryCatch(() => new GroupedDataFrame()).name,
-        "ArgumentTypeError",
-        "created without DataFrame."
-    );
-
-    assert.end();
 });
 
 test("GroupedDataFrame groups can be ", assert => {
@@ -178,6 +164,4 @@ test("GroupedDataFrame groups can be ", assert => {
         { column3: undefined, column2: "On the road", aggregation: 2 },
         "aggregated, rendering a DataFrame with a column aggregation."
     );
-
-    assert.end();
 });

@@ -1,24 +1,22 @@
-import tape from "tape";
+import test from "ava";
 
 import { Row } from "../src/index";
 import { tryCatch } from "./utils";
 
-const test = tape;
-
 test("Row can be ", assert => {
-    assert.equal(
+    assert.is(
         new Row([1, 3, 6], ["c1", "c2", "c3"]).constructor.name,
         "Row",
         "created from an Array."
     );
 
-    assert.equal(
+    assert.is(
         new Row({ c1: 2, c2: 2, c3: 4 }, ["c1", "c2", "c3"]).constructor.name,
         "Row",
         "created from a dictionnary."
     );
 
-    assert.equal(
+    assert.is(
         new Row(new Row({ c1: 2, c3: 4 }, ["c1", "c2"]), ["c1", "c2", "c3"])
             .constructor.name,
         "Row",
@@ -36,30 +34,26 @@ test("Row can be ", assert => {
         [1, 3, 6],
         "converted into an Array."
     );
-
-    assert.end();
 });
 
 test("Row can't be ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() => new Row()).name,
         "ArgumentTypeError",
         "created from nothing, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new Row(1, ["c1", "c2", "c3"])).name,
         "ArgumentTypeError",
         "created from a wrong type, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new Row(null, ["c1", "c2", "c3"])).name,
         "ArgumentTypeError",
         "created from a wrong type (2), throwing ArgumentTypeError."
     );
-
-    assert.end();
 });
 
 test("Row columns can be ", assert => {
@@ -83,7 +77,7 @@ test("Row columns can be ", assert => {
         "deleted."
     );
 
-    assert.equal(row.get("c2"), "yo", "get.");
+    assert.is(row.get("c2"), "yo", "get.");
 
     assert.deepEqual(
         row.set("c4", 18).toDict(),
@@ -104,8 +98,6 @@ test("Row columns can be ", assert => {
         false,
         "verified, to see if they don't exist."
     );
-
-    assert.end();
 });
 
 test("Row columns can't be ", assert => {
@@ -114,23 +106,21 @@ test("Row columns can't be ", assert => {
         [["c1", Number], ["c2", String], ["c3", Number], ["c4", Array]]
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => row.get("c#")).name,
         "NoSuchColumnError",
         "get when a column doesn't exist, throwing NoSuchColumnError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => row.select("c4", "c#").toDict()).name,
         "NoSuchColumnError",
         "selected when a column doesn't exist, throwing NoSuchColumnError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => row.delete("c#").toDict()).name,
         "NoSuchColumnError",
         "deleted when a column doesn't exist, throwing NoSuchColumnError."
     );
-
-    assert.end();
 });

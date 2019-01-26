@@ -1,10 +1,8 @@
-import tape from "tape";
+import test from "ava";
 
 import path from "path";
 import { DataFrame } from "../src/index";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("DataFrame can be", assert => {
     const df1 = new DataFrame(
@@ -88,55 +86,55 @@ test("DataFrame can be", assert => {
         "converted into an Array."
     );
 
-    assert.equal(
+    assert.is(
         df1.toDSV(),
         "c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12",
         "converted into a dsv with header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toText(),
         "c1;c2;c3;c4;c5;c6\n1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12",
         "converted into a text (or dsv) with header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toDSV(";", false),
         "1;6;9;10;12;\n1;2;;;;\n6;6;9;8;9;12",
         "converted into a dsv without header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toCSV(false),
         "1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12",
         "converted into a csv without header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toCSV(),
         "c1,c2,c3,c4,c5,c6\n1,6,9,10,12,\n1,2,,,,\n6,6,9,8,9,12",
         "converted into a csv with header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toPSV(),
         "c1|c2|c3|c4|c5|c6\n1|6|9|10|12|\n1|2||||\n6|6|9|8|9|12",
         "converted into a psv with header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toTSV(),
         "c1\tc2\tc3\tc4\tc5\tc6\n1\t6\t9\t10\t12\t\n1\t2\t\t\t\t\n6\t6\t9\t8\t9\t12",
         "converted into a tsv with header."
     );
 
-    assert.equal(
+    assert.is(
         df1.toJSON(),
         '{"c1":[1,1,6],"c2":[6,2,6],"c3":[9,null,9],"c4":[10,null,8],"c5":[12,null,9],"c6":[null,null,12]}',
         "converted into a json."
     );
 
-    assert.equal(
+    assert.is(
         df1.toJSON(true),
         '[{"c1":1,"c2":6,"c3":9,"c4":10,"c5":12},{"c1":1,"c2":2},{"c1":6,"c2":6,"c3":9,"c4":8,"c5":9,"c6":12}]',
         "converted into a json as a collection of Object."
@@ -160,12 +158,10 @@ test("DataFrame can be", assert => {
         "| undefined | 6         | undefined |"
     ].join("\n");
 
-    assert.equal(df2.show(10, true), expectedShow, "showed as a String table.");
-
-    assert.end();
+    assert.is(df2.show(10, true), expectedShow, "showed as a String table.");
 });
 
-test("DataFrame can be created from", assert => {
+test.cb("DataFrame can be created from", assert => {
     assert.plan(15);
 
     const dict = {
@@ -197,13 +193,13 @@ test("DataFrame can be created from", assert => {
         }
     ];
 
-    assert.equal(
+    assert.is(
         new DataFrame(dict, ["column1", "column2"]).constructor.name,
         "DataFrame",
         "Object of Arrays."
     );
 
-    assert.equal(
+    assert.is(
         new DataFrame(dict).constructor.name,
         "DataFrame",
         "Object of Arrays by infering columns."
@@ -362,24 +358,26 @@ test("DataFrame can be created from", assert => {
             "a JSON from relative import."
         )
     );
+
+    setTimeout(assert.end, 400);
 });
 
-test("DataFrame can't be created from", assert => {
+test.cb("DataFrame can't be created from", assert => {
     assert.plan(6);
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame("")).name,
         "ArgumentTypeError",
         "a String, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame()).name,
         "ArgumentTypeError",
         "a nothing, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame(445)).name,
         "ArgumentTypeError",
         "a Number, throwing ArgumentTypeError."
@@ -388,7 +386,7 @@ test("DataFrame can't be created from", assert => {
     DataFrame.fromText(`./data/Titanic_2.csv`, "", false)
         .then(() => assert.fail())
         .catch(err => {
-            assert.equal(
+            assert.is(
                 err.name,
                 "FileNotFoundError",
                 "a wrong text path (or relative), throwing a FileNotFoundError."
@@ -398,7 +396,7 @@ test("DataFrame can't be created from", assert => {
     DataFrame.fromCSV(`./data/Titanic_2.csv`, false)
         .then(() => assert.fail())
         .catch(err => {
-            assert.equal(
+            assert.is(
                 err.name,
                 "FileNotFoundError",
                 "a wrong csv path (or relative), throwing a FileNotFoundError."
@@ -408,10 +406,12 @@ test("DataFrame can't be created from", assert => {
     DataFrame.fromJSON("./data/Titanic_2.json")
         .then(() => assert.fail())
         .catch(err => {
-            assert.equal(
+            assert.is(
                 err.name,
                 "FileNotFoundError",
                 "a wrong JSON path (or relative), throwing a FileNotFoundError."
             );
         });
+
+    setTimeout(assert.end, 400);
 });

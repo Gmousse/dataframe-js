@@ -1,9 +1,7 @@
-import tape from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("DataFrame columns can be", assert => {
     const df2 = new DataFrame(
@@ -49,7 +47,7 @@ test("DataFrame columns can be", assert => {
         "listed."
     );
 
-    assert.equal(df.listColumns().length, 6, "counted.");
+    assert.is(df.listColumns().length, 6, "counted.");
 
     assert.deepEqual(
         df.select("c2", "c3", "c4").toDict(),
@@ -84,9 +82,8 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .withColumn(
-                "c4",
-                row => (row.get("c2") ? row.get("c2") - 2 : 0 - 2)
+            .withColumn("c4", row =>
+                row.get("c2") ? row.get("c2") - 2 : 0 - 2
             )
             .toDict(),
         {
@@ -136,16 +133,14 @@ test("DataFrame columns can be", assert => {
         "renamed individually."
     );
 
-    class CustomClass {
-        constructor(valueToConvert) {
-            this.value = String(Number(valueToConvert) * 10);
-        }
+    function customFormat(valueToConvert) {
+        return { value: String(Number(valueToConvert) * 10) };
     }
 
     assert.deepEqual(
         df
             .select("c1", "c2", "c3")
-            .castAll([String, Number, val => new CustomClass(val)])
+            .castAll([String, Number, customFormat])
             .toArray()[0],
         ["1", 6, { value: "90" }],
         "cast."
@@ -213,19 +208,15 @@ test("DataFrame columns can be", assert => {
     );
 
     assert.deepEqual(df.toArray("c2"), [6, 2, 6], "converted into Array.");
-
-    assert.end();
 });
 
 test("DataFrame columns can't be ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).renameAll(["c1"]))
             .name,
         "WrongSchemaError",
         "renamed when providing different columns number, throwing WrongSchemaError."
     );
-
-    assert.end();
 });
 
 test("DataFrame rows can be ", assert => {
@@ -238,15 +229,15 @@ test("DataFrame rows can be ", assert => {
         ["column1", "column2", "column3"]
     );
 
-    assert.equal(df1.count(), 4, "counted.");
+    assert.is(df1.count(), 4, "counted.");
 
-    assert.equal(
+    assert.is(
         df1.countValue("4", "column2"),
         1,
         "counted based on a specific value in a column."
     );
 
-    assert.equal(
+    assert.is(
         df1.countValue(9, "column1"),
         0,
         "counted based on a specific value in a selected column."
@@ -365,12 +356,11 @@ test("DataFrame rows can be ", assert => {
         "filtered and modified and filtered (again) by chains."
     );
 
-    const df2 = df1.withColumn(
-        "column1",
-        row => (row.get("column1") ? row.get("column1") : 0)
+    const df2 = df1.withColumn("column1", row =>
+        row.get("column1") ? row.get("column1") : 0
     );
 
-    assert.equal(
+    assert.is(
         df2.reduce((p, n) => n.get("column1") + p, 0),
         17,
         "reduced to obtain a value."
@@ -571,7 +561,7 @@ test("DataFrame rows can be ", assert => {
         "c1"
     ]);
 
-    assert.equal(df8.sample(0.2).count(), 1000, "randomly sampled.");
+    assert.is(df8.sample(0.2).count(), 1000, "randomly sampled.");
 
     assert.deepEqual(
         df8.bisect(0.2).map(splittedDF => splittedDF.count()),
@@ -611,12 +601,10 @@ test("DataFrame rows can be ", assert => {
         ],
         "melted."
     );
-
-    assert.end();
 });
 
 test("DataFrame rows can't be ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() =>
             new DataFrame([{ c1: 1, c2: 3 }]).union(
                 new DataFrame([{ c1: 1, c4: 3 }])
@@ -626,19 +614,19 @@ test("DataFrame rows can't be ", assert => {
         "concatenated when providing different columns, throwing WrongSchemaError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).union([])).name,
         "ArgumentTypeError",
         "concatened with not a DataFrame, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).innerJoin([])).name,
         "ArgumentTypeError",
         "joined with not a DataFrame, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() =>
             new DataFrame([
                 { c1: 1, c2: 3 },
@@ -648,8 +636,6 @@ test("DataFrame rows can't be ", assert => {
         "MixedTypeError",
         "sortBy on a mixed types column, throwing MixedTypeError."
     );
-
-    assert.end();
 });
 
 test("DataFrame modules can be ", assert => {
@@ -674,25 +660,25 @@ test("DataFrame modules can be ", assert => {
         { modules: [FakeModule] }
     );
 
-    assert.equal(
+    assert.is(
         df.fakemodule.test(4),
         8,
         "registered in an DataFrame instance and used."
     );
 
-    assert.equal(
+    assert.is(
         df.options.modules.length,
         DataFrame.defaultModules.length + 1,
         "listed from an instance where modules are changed from options."
     );
 
-    assert.equal(
+    assert.is(
         new DataFrame([], []).options.modules.length,
         3,
         "listed from an instance where modules are default modules."
     );
 
-    assert.equal(
+    assert.is(
         DataFrame.defaultModules.length,
         3,
         "listed from the default DataFrame static properties and counted."
@@ -700,7 +686,7 @@ test("DataFrame modules can be ", assert => {
 
     DataFrame.setDefaultModules(...DataFrame.defaultModules, FakeModule);
 
-    assert.equal(
+    assert.is(
         new DataFrame(
             {
                 column1: [3, 6, 8],
@@ -712,8 +698,6 @@ test("DataFrame modules can be ", assert => {
         12,
         "registered as default DataFrame static properties and used."
     );
-
-    assert.end();
 });
 
 test("DataFrame stay immutable when", assert => {
@@ -722,19 +706,17 @@ test("DataFrame stay immutable when", assert => {
         ["c1", "c2", "c3", "c4", "c5", "c6"]
     );
 
-    assert.equal(
+    assert.is(
         Object.is(df.map(row => row.set("c1", 18)), df),
         false,
         "modified."
     );
 
-    assert.equal(
+    assert.is(
         Object.is(df.map(row => row), df),
         false,
         "modified, even if nothing have changed."
     );
-
-    assert.end();
 });
 
 test("Empty DataFrame", assert => {
@@ -745,19 +727,19 @@ test("Empty DataFrame", assert => {
 
     const emptyDF = new DataFrame([]);
 
-    assert.equal(
+    assert.is(
         emptyDF.join(df, "c1") instanceof DataFrame,
         true,
         "can be joined with another DataFrame."
     );
 
-    assert.equal(
+    assert.is(
         emptyDF.join(emptyDF, "col1") instanceof DataFrame,
         true,
         "can be joined with another empty DataFrame."
     );
 
-    assert.equal(
+    assert.is(
         emptyDF.union(emptyDF) instanceof DataFrame,
         true,
         "can be unioned with another empty DataFrame."
@@ -768,30 +750,26 @@ test("Empty DataFrame", assert => {
         true,
         "can be shuffled."
     );
-
-    assert.end();
 });
 
 test("DataFrame can be shuffled", assert => {
     const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
 
-    assert.isNotDeepEqual(
+    assert.notDeepEqual(
         df.shuffle().toArray(),
         df.toArray(),
         "randomly shuffled."
     );
 
-    assert.equal(
+    assert.is(
         df.shuffle().count(),
         df.count(),
         "randomly shuffled and get the same length."
     );
 
-    assert.equal(
+    assert.is(
         new DataFrame([{ c1: "x" }], ["c1"]).shuffle().count(),
         1,
         "randomly shuffled and get the same length when having one row."
     );
-
-    assert.end();
 });
