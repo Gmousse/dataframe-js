@@ -1173,6 +1173,75 @@ class DataFrame {
     diff(dfToDiff, columnNames) {
         return this._join(dfToDiff, columnNames, ["out", "out"]);
     }
+
+    /**
+     * Create a new subset DataFrame based on the first rows.
+     * @param {Number} [nRows=10] The number of first rows to get.
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.head()
+     * df2.head(5)
+     */
+    head(nRows = 10) {
+        return this.slice(0, nRows);
+    }
+
+    /**
+     * Create a new subset DataFrame based on the last rows.
+     * @param {Number} [nRows=10] The number of last rows to get.
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.tail()
+     * df2.tail(5)
+     */
+    tail(nRows = 10) {
+        return this.slice(-nRows);
+    }
+
+    /**
+     * Create a new subset DataFrame based on given indexs. Similar to Array.slice.
+     * @param {Number} [startIndex=0] The index to start the slice (included).
+     * @param {Number} [endIndex=this.count()] The index to end the slice (excluded).
+     * @returns {DataFrame} The subset DataFrame.
+     * @example
+     * df2.slice()
+     * df2.slice(0)
+     * df2.slice(0, 20)
+     * df2.slice(10, 30)
+     */
+    slice(startIndex, endIndex) {
+        return this.__newInstance__(
+            this[__rows__].slice(
+                startIndex || undefined,
+                endIndex || undefined
+            ),
+            this[__columns__]
+        );
+    }
+
+    /**
+     * Return a Row by its index.
+     * @param {Number} [index=0] The index to select the row.
+     * @returns {Row} The Row.
+     * @example
+     * df2.getRow(1)
+     */
+    getRow(index) {
+        return this[__rows__][index];
+    }
+
+    /**
+     * Modify a Row a the given index.
+     * @param {Number} [index=0] The index to select the row.
+     * @returns {DataFrame} A new DataFrame with the modified Row.
+     * @example
+     * df2.setRowByIndex(1, row => row.set("column1", 33))
+     */
+    setRow(index, func = row => row) {
+        const newRows = Array.from(this[__rows__]);
+        newRows[index] = func(newRows[index]);
+        return this.__newInstance__(newRows, this[__columns__]);
+    }
 }
 
 DataFrame.defaultModules = [];

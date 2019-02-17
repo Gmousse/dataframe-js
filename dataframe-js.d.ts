@@ -31,7 +31,11 @@ export class DataFrame {
 
     fullJoin(dfToJoin: any, columnNames: any): any;
 
+    getRow(index: any): any;
+
     groupBy(...args: any[]): any;
+
+    head(...args: any[]): any;
 
     innerJoin(dfToJoin: any, columnNames: any): any;
 
@@ -65,11 +69,17 @@ export class DataFrame {
 
     select(...args: any[]): any;
 
+    setRow(index: any, ...args: any[]): any;
+
     show(...args: any[]): any;
 
     shuffle(): any;
 
+    slice(startIndex: any, endIndex: any): any;
+
     sortBy(columnNames: any, ...args: any[]): any;
+
+    tail(...args: any[]): any;
 
     toArray(columnName: any): any;
 
@@ -228,7 +238,11 @@ export namespace DataFrame {
 
         function fullJoin(dfToJoin: any, columnNames: any): any;
 
+        function getRow(index: any): any;
+
         function groupBy(...args: any[]): any;
+
+        function head(...args: any[]): any;
 
         function innerJoin(dfToJoin: any, columnNames: any): any;
 
@@ -262,11 +276,17 @@ export namespace DataFrame {
 
         function select(...args: any[]): any;
 
+        function setRow(index: any, ...args: any[]): any;
+
         function show(...args: any[]): any;
 
         function shuffle(): any;
 
+        function slice(startIndex: any, endIndex: any): any;
+
         function sortBy(columnNames: any, ...args: any[]): any;
+
+        function tail(...args: any[]): any;
 
         function toArray(columnName: any): any;
 
@@ -380,7 +400,19 @@ export namespace DataFrame {
 
         }
 
+        namespace getRow {
+            const prototype: {
+            };
+
+        }
+
         namespace groupBy {
+            const prototype: {
+            };
+
+        }
+
+        namespace head {
             const prototype: {
             };
 
@@ -482,6 +514,12 @@ export namespace DataFrame {
 
         }
 
+        namespace setRow {
+            const prototype: {
+            };
+
+        }
+
         namespace show {
             const prototype: {
             };
@@ -494,7 +532,19 @@ export namespace DataFrame {
 
         }
 
+        namespace slice {
+            const prototype: {
+            };
+
+        }
+
         namespace sortBy {
+            const prototype: {
+            };
+
+        }
+
+        namespace tail {
             const prototype: {
             };
 

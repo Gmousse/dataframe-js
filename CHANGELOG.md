@@ -18,6 +18,7 @@
 -   Drop support for es3. You can add it by following the guide.
 -   Correct a warning about fs module for front-end builds.
 -   Remove a circle dependency (dataframe.js -> groupedDataframe.js -> dataframe.js)
+-   Add .tail, .head, .slice, .getRow, .setRow methods.
 
 ---
 
