@@ -6130,7 +6130,7 @@ var dfjs = (function (exports) {
 	        return func(row, i) ? row : false;
 	      }));
 
-	      return filteredRows.length > 0 ? this.__newInstance__(filteredRows, this[__columns__$1]) : this.__newInstance__([], []);
+	      return this.__newInstance__(filteredRows, this[__columns__$1]);
 	    }
 	    /**
 	     * Filter DataFrame rows.

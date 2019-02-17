@@ -845,9 +845,7 @@ class DataFrame {
         const filteredRows = [
             ...iter(this[__rows__], (row, i) => (func(row, i) ? row : false))
         ];
-        return filteredRows.length > 0
-            ? this.__newInstance__(filteredRows, this[__columns__])
-            : this.__newInstance__([], []);
+        return this.__newInstance__(filteredRows, this[__columns__]);
     }
 
     /**

@@ -899,3 +899,13 @@ test("DataFrame row", assert => {
         "can be modified by its index."
     );
 });
+
+test("DataFrame filter with empty result", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.deepEqual(
+        df.filter(row => row.get("c1") === 999).listColumns(),
+        ["c1"],
+        "should return an empty DataFrame with the same columns."
+    );
+});
