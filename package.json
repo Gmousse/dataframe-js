@@ -26,7 +26,7 @@
         "lint": "check-node-version --node '>= 4' && eslint -c .eslintrc ./src || check-node-version --node '< 4'",
         "prettier": "prettier --write 'src/**/*'",
         "test": "NODE_ENV=production nyc ava 'tests/*.test.js'",
-        "test:watch": "npm run test --watch",
+        "test:watch": "NODE_ENV=production nyc ava --watch 'tests/*.test.js'",
         "posttest": "npm run lint",
         "coverage": "nyc report --reporter=text-lcov | coveralls",
         "doc": "node doc/doc.js",

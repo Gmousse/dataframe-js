@@ -31,6 +31,8 @@ export class DataFrame {
 
     fullJoin(dfToJoin: any, columnNames: any): any;
 
+    getRow(index: any): any;
+
     groupBy(...args: any[]): any;
 
     head(...args: any[]): any;
@@ -66,6 +68,8 @@ export class DataFrame {
     sample(percentage: any): any;
 
     select(...args: any[]): any;
+
+    setRow(index: any, ...args: any[]): any;
 
     show(...args: any[]): any;
 
@@ -234,6 +238,8 @@ export namespace DataFrame {
 
         function fullJoin(dfToJoin: any, columnNames: any): any;
 
+        function getRow(index: any): any;
+
         function groupBy(...args: any[]): any;
 
         function head(...args: any[]): any;
@@ -269,6 +275,8 @@ export namespace DataFrame {
         function sample(percentage: any): any;
 
         function select(...args: any[]): any;
+
+        function setRow(index: any, ...args: any[]): any;
 
         function show(...args: any[]): any;
 
@@ -392,6 +400,12 @@ export namespace DataFrame {
 
         }
 
+        namespace getRow {
+            const prototype: {
+            };
+
+        }
+
         namespace groupBy {
             const prototype: {
             };
@@ -495,6 +509,12 @@ export namespace DataFrame {
         }
 
         namespace select {
+            const prototype: {
+            };
+
+        }
+
+        namespace setRow {
             const prototype: {
             };
 

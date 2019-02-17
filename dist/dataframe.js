@@ -6544,6 +6544,37 @@ var dfjs = (function (exports) {
 	    value: function slice(startIndex, endIndex) {
 	      return this.__newInstance__(this[__rows__].slice(startIndex || undefined, endIndex || undefined), this[__columns__$1]);
 	    }
+	    /**
+	     * Return a Row by its index.
+	     * @param {Number} [index=0] The index to select the row.
+	     * @returns {Row} The Row.
+	     * @example
+	     * df2.getRow(1)
+	     */
+
+	  }, {
+	    key: "getRow",
+	    value: function getRow(index) {
+	      return this[__rows__][index];
+	    }
+	    /**
+	     * Modify a Row a the given index.
+	     * @param {Number} [index=0] The index to select the row.
+	     * @returns {DataFrame} A new DataFrame with the modified Row.
+	     * @example
+	     * df2.setRowByIndex(1, row => row.set("column1", 33))
+	     */
+
+	  }, {
+	    key: "setRow",
+	    value: function setRow(index) {
+	      var func = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function (row) {
+	        return row;
+	      };
+	      var newRows = Array.from(this[__rows__]);
+	      newRows[index] = func(newRows[index]);
+	      return this.__newInstance__(newRows, this[__columns__$1]);
+	    }
 	  }]);
 
 	  return DataFrame;

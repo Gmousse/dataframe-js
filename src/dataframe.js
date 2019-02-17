@@ -1218,6 +1218,30 @@ class DataFrame {
             this[__columns__]
         );
     }
+
+    /**
+     * Return a Row by its index.
+     * @param {Number} [index=0] The index to select the row.
+     * @returns {Row} The Row.
+     * @example
+     * df2.getRow(1)
+     */
+    getRow(index) {
+        return this[__rows__][index];
+    }
+
+    /**
+     * Modify a Row a the given index.
+     * @param {Number} [index=0] The index to select the row.
+     * @returns {DataFrame} A new DataFrame with the modified Row.
+     * @example
+     * df2.setRowByIndex(1, row => row.set("column1", 33))
+     */
+    setRow(index, func = row => row) {
+        const newRows = Array.from(this[__rows__]);
+        newRows[index] = func(newRows[index]);
+        return this.__newInstance__(newRows, this[__columns__]);
+    }
 }
 
 DataFrame.defaultModules = [];
