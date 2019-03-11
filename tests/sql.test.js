@@ -109,6 +109,26 @@ test("DataFrame sql module can ", assert => {
     );
 
     assert.deepEqual(
+        DataFrame.sql
+            .request("SELECT * FROM tmp WHERE column1 IN (2, 3, 4)")
+            .toDict(),
+        df1.filter(row => [2, 3, 4].includes(row.get("column1"))).toDict(),
+        "select everything from a table and filter rows with numbers."
+    );
+
+    assert.deepEqual(
+        DataFrame.sql
+            .request("SELECT * FROM tmp WHERE column1 >= 2 AND column1 <= 1138")
+            .toDict(),
+        df1
+            .filter(
+                row => row.get("column1") >= 2 && row.get("column1") <= 1138
+            )
+            .toDict(),
+        "select everything from a table and filter rows with numbers (2)."
+    );
+
+    assert.deepEqual(
         DataFrame.sql.request("SELECT * FROM tmp JOIN tmp2 ON id").toDict(),
         df1.innerJoin(df2, "id").toDict(),
         "select everything from a join (inner) between 2 tables."

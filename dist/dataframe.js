@@ -7190,7 +7190,8 @@ var dfjs = (function (exports) {
 	            return WHERE_OPERATORS[operatorToApply](xReplace(terms[0].trim(), ['"', ""], ["'", ""], ["`", ""]), String(row.get(terms[1])));
 	          }
 
-	          return WHERE_OPERATORS[operatorToApply](String(row.get(terms[0])), xReplace(terms[1].trim(), ['"', ""], ["'", ""], ["`", ""]));
+	          var lastTermAsNumber = Number(terms[1]);
+	          return WHERE_OPERATORS[operatorToApply](String(row.get(terms[0])), Number.isNaN(lastTermAsNumber) ? xReplace(terms[1].trim(), ['"', ""], ["'", ""], ["`", ""]) : lastTermAsNumber);
 	        }).reduce(function (prev, next) {
 	          return WHERE_OPERATORS[conditionalOperators.shift()](prev, next);
 	        });

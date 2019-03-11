@@ -75,14 +75,18 @@ const OPERATIONS_HANDLER = {
                                 String(row.get(terms[1]))
                             );
                         }
+                        const lastTermAsNumber = Number(terms[1]);
+
                         return WHERE_OPERATORS[operatorToApply](
                             String(row.get(terms[0])),
-                            xReplace(
-                                terms[1].trim(),
-                                ['"', ""],
-                                ["'", ""],
-                                ["`", ""]
-                            )
+                            Number.isNaN(lastTermAsNumber)
+                                ? xReplace(
+                                      terms[1].trim(),
+                                      ['"', ""],
+                                      ["'", ""],
+                                      ["`", ""]
+                                  )
+                                : lastTermAsNumber
                         );
                     })
                     .reduce((prev, next) =>
@@ -136,11 +140,10 @@ function sqlSplitter(query) {
 
 function parseOperations(operations, tables) {
     const operationsLoc = operations
-        .map(
-            (word, index) =>
-                Object.keys(OPERATIONS_HANDLER).includes(word.toUpperCase())
-                    ? index
-                    : undefined
+        .map((word, index) =>
+            Object.keys(OPERATIONS_HANDLER).includes(word.toUpperCase())
+                ? index
+                : undefined
         )
         .filter(loc => loc !== undefined);
 
@@ -226,11 +229,10 @@ function parseSelections(selections) {
                         )
                     )
                     .renameAll(
-                        value.map(
-                            column =>
-                                column.includes("AS")
-                                    ? column.split("AS")[1].replace(" ", "")
-                                    : column
+                        value.map(column =>
+                            column.includes("AS")
+                                ? column.split("AS")[1].replace(" ", "")
+                                : column
                         )
                     )
         ]
