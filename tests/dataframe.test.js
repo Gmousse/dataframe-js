@@ -197,6 +197,58 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
+            .replace([undefined, null, NaN], 0)
+            .toDict(),
+        {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, 0, 8]
+        },
+        "modified, replacing a value in a choice by another."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .dropMissingValues()
+            .toDict(),
+        {
+            c2: [6, 6],
+            c3: [9, 9],
+            c4: [10, 8]
+        },
+        "modified, dropping missing values."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .dropMissingValues(["c3", "c2"])
+            .toDict(),
+        {
+            c2: [6, 6],
+            c3: [9, 9],
+            c4: [10, 8]
+        },
+        "modified, dropping missing values in few columns."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .fillMissingValues(0)
+            .toDict(),
+        {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, 0, 8]
+        },
+        "modified, replacing missing values."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
             .replace(undefined, 0, ["c2", "c3"])
             .toDict(),
         {
@@ -461,13 +513,29 @@ test("DataFrame rows can be ", assert => {
     );
 
     assert.deepEqual(
-        df3.sortBy("id").toArray(),
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .sortBy("id")
+            .toArray(),
         [[1, 1], [1, 1], [3, 1], [3, 2], [6, 0], [8, 1], [8, 4]],
         "sorted by a column."
     );
 
     assert.deepEqual(
-        df3.sortBy("id", true).toArray(),
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .sortBy("id", true)
+            .toArray(),
         [[8, 1], [8, 4], [6, 0], [3, 1], [3, 2], [1, 1], [1, 1]],
         "sorted and reverse by a column."
     );
@@ -482,7 +550,7 @@ test("DataFrame rows can be ", assert => {
             ["Jess", 95, 90, 75, true],
             ["William", 95, 95, 76, false]
         ],
-        "sorted by three columns."
+        "sorted by multiple columns."
     );
 
     assert.deepEqual(
@@ -495,57 +563,110 @@ test("DataFrame rows can be ", assert => {
             ["John", 94, 98, 77, false],
             ["Barbara", 94, 94, 99, true]
         ],
-        "sorted and reverse by three columns."
-    );
-
-    const df5 = new DataFrame(
-        {
-            id: [3, 1, 8],
-            value: [1, 0, 1]
-        },
-        ["id", "value"]
+        "sorted and reverse by multiple columns."
     );
 
     assert.deepEqual(
-        df3.union(df5).toArray(),
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 95, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1"], false, "first")
+            .toArray(),
         [
-            [8, 1],
-            [8, 4],
-            [6, 0],
+            ["Henry", NaN, 90, 76],
+            ["William", null, 95, 76],
+            ["John", undefined, 98, 77],
+            ["Barbara", 94, 94, 99],
+            ["Jess", 95, 90, NaN],
+            ["Clair", 95, undefined, 76]
+        ],
+        "sorted with missing values placed first."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 95, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1"], false, "last")
+            .toArray(),
+        [
+            ["Barbara", 94, 94, 99],
+            ["Jess", 95, 90, NaN],
+            ["Clair", 95, undefined, 76],
+            ["John", undefined, 98, 77],
+            ["William", null, 95, 76],
+            ["Henry", NaN, 90, 76]
+        ],
+        "sorted with missing values placed first."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 95, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1", "test2"], false, "first")
+            .toArray(),
+        [
+            ["Henry", NaN, 90, 76],
+            ["William", null, 95, 76],
+            ["John", undefined, 98, 77],
+            ["Clair", 95, undefined, 76],
+            ["Barbara", 94, 94, 99],
+            ["Jess", 95, 90, NaN]
+        ],
+        "sorted by multiple columns with missing values placed first."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .union(
+                new DataFrame(
+                    {
+                        id: [3, 1, 8],
+                        value: [1, 0, 1]
+                    },
+                    ["id", "value"]
+                )
+            )
+            .sortBy("id")
+            .toArray(),
+        [
+            [1, 1],
+            [1, 1],
+            [1, 0],
             [3, 1],
             [3, 2],
-            [1, 1],
-            [1, 1],
             [3, 1],
-            [1, 0],
+            [6, 0],
+            [8, 1],
+            [8, 4],
             [8, 1]
         ],
         "concatenated with another DataFrame."
-    );
-
-    const df5b = new DataFrame(
-        {
-            id: [3, 1, 8],
-            value: [1, 0, 1]
-        },
-        ["value", "id"]
-    );
-
-    assert.deepEqual(
-        df3.union(df5b).toArray(),
-        [
-            [8, 1],
-            [8, 4],
-            [6, 0],
-            [3, 1],
-            [3, 2],
-            [1, 1],
-            [1, 1],
-            [1, 3],
-            [0, 1],
-            [1, 8]
-        ],
-        "concatenated with another DataFrame, with columns not in the same order."
     );
 
     const df6 = new DataFrame(
@@ -628,10 +749,9 @@ test("DataFrame rows can't be ", assert => {
 
     assert.is(
         tryCatch(() =>
-            new DataFrame([
-                { c1: 1, c2: 3 },
-                { c1: undefined, c2: "4" }
-            ]).sortBy("c1")
+            new DataFrame([{ c1: 1, c2: 3 }, { c1: "test", c2: "4" }]).sortBy(
+                "c1"
+            )
         ).name,
         "MixedTypeError",
         "sortBy on a mixed types column, throwing MixedTypeError."

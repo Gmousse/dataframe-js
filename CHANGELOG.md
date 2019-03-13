@@ -20,6 +20,8 @@
 -   Remove a circle dependency (dataframe.js -> groupedDataframe.js -> dataframe.js)
 -   Add .tail, .head, .slice, .getRow, .setRow methods.
 -   A filtered DataFrame with empty rows will now returns its columns.
+-   Add .fillMissingValues, dropMissingValues
+-   Add a new parameter to sortBy in order to place missing values.
 
 ---
 
