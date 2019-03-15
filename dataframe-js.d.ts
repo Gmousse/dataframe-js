@@ -25,6 +25,10 @@ export class DataFrame {
 
     dropDuplicates(...args: any[]): any;
 
+    dropMissingValues(columnNames: any): any;
+
+    fillMissingValues(replacement: any, columnNames: any): any;
+
     filter(condition: any): any;
 
     find(condition: any): any;
@@ -232,6 +236,10 @@ export namespace DataFrame {
 
         function dropDuplicates(...args: any[]): any;
 
+        function dropMissingValues(columnNames: any): any;
+
+        function fillMissingValues(replacement: any, columnNames: any): any;
+
         function filter(condition: any): any;
 
         function find(condition: any): any;
@@ -377,6 +385,18 @@ export namespace DataFrame {
         }
 
         namespace dropDuplicates {
+            const prototype: {
+            };
+
+        }
+
+        namespace dropMissingValues {
+            const prototype: {
+            };
+
+        }
+
+        namespace fillMissingValues {
             const prototype: {
             };
 

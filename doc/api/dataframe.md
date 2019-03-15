@@ -38,47 +38,49 @@
     -   [reduce][34]
     -   [reduceRight][35]
     -   [dropDuplicates][36]
-    -   [shuffle][37]
-    -   [sample][38]
-    -   [bisect][39]
-    -   [groupBy][40]
-    -   [sortBy][41]
-    -   [union][42]
-    -   [join][43]
-    -   [innerJoin][44]
-    -   [fullJoin][45]
-    -   [outerJoin][46]
-    -   [leftJoin][47]
-    -   [rightJoin][48]
-    -   [diff][49]
-    -   [head][50]
-    -   [tail][51]
-    -   [slice][52]
-    -   [getRow][53]
-    -   [setRow][54]
-    -   [setDefaultModules][55]
-    -   [fromDSV][56]
-    -   [fromText][57]
-    -   [fromCSV][58]
-    -   [fromTSV][59]
-    -   [fromPSV][60]
-    -   [fromJSON][61]
+    -   [dropMissingValues][37]
+    -   [fillMissingValues][38]
+    -   [shuffle][39]
+    -   [sample][40]
+    -   [bisect][41]
+    -   [groupBy][42]
+    -   [sortBy][43]
+    -   [union][44]
+    -   [join][45]
+    -   [innerJoin][46]
+    -   [fullJoin][47]
+    -   [outerJoin][48]
+    -   [leftJoin][49]
+    -   [rightJoin][50]
+    -   [diff][51]
+    -   [head][52]
+    -   [tail][53]
+    -   [slice][54]
+    -   [getRow][55]
+    -   [setRow][56]
+    -   [setDefaultModules][57]
+    -   [fromDSV][58]
+    -   [fromText][59]
+    -   [fromCSV][60]
+    -   [fromTSV][61]
+    -   [fromPSV][62]
+    -   [fromJSON][63]
 
 ## DataFrame
 
-[src/dataframe.js:31-1243][62]
+[src/dataframe.js:30-1326][64]
 
 DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
 
 **Parameters**
 
--   `data` **([Array][63] \| [Object][64] \| [DataFrame][65])** The data of the DataFrame.
--   `columns` **[Array][63]** The DataFrame column names.
--   `options` **[Object][64]** Additional options. Example: modules. (optional, default `{}`)
+-   `data` **([Array][65] \| [Object][66] \| [DataFrame][67])** The data of the DataFrame.
+-   `columns` **[Array][65]** The DataFrame column names.
+-   `options` **[Object][66]** Additional options. Example: modules. (optional, default `{}`)
 
 ### toDict
 
-[src/dataframe.js:372-379][66]
+[src/dataframe.js:371-378][68]
 
 Convert DataFrame into dict / hash / object.
 
@@ -88,17 +90,17 @@ Convert DataFrame into dict / hash / object.
 df.toDict()
 ```
 
-Returns **[Object][64]** The DataFrame converted into dict.
+Returns **[Object][66]** The DataFrame converted into dict.
 
 ### toArray
 
-[src/dataframe.js:388-392][67]
+[src/dataframe.js:387-391][69]
 
 Convert DataFrame into Array of Arrays. You can also extract only one column as Array.
 
 **Parameters**
 
--   `columnName` **[String][68]?** Column Name to extract. By default, all columns are transformed.
+-   `columnName` **[String][70]?** Column Name to extract. By default, all columns are transformed.
 
 **Examples**
 
@@ -106,17 +108,17 @@ Convert DataFrame into Array of Arrays. You can also extract only one column as 
 df.toArray()
 ```
 
-Returns **[Array][63]** The DataFrame (or the column) converted into Array.
+Returns **[Array][65]** The DataFrame (or the column) converted into Array.
 
 ### toCollection
 
-[src/dataframe.js:401-403][69]
+[src/dataframe.js:400-402][71]
 
 Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
 
 **Parameters**
 
--   `ofRows` **[Boolean][70]?** Return a collection of Rows instead of dictionnaries.
+-   `ofRows` **[Boolean][72]?** Return a collection of Rows instead of dictionnaries.
 
 **Examples**
 
@@ -124,20 +126,20 @@ Convert DataFrame into Array of dictionnaries. You can also return Rows instead 
 df.toCollection()
 ```
 
-Returns **[Array][63]** The DataFrame converted into Array of dictionnaries (or Rows).
+Returns **[Array][65]** The DataFrame converted into Array of dictionnaries (or Rows).
 
 ### toDSV
 
-[src/dataframe.js:419-428][71]
+[src/dataframe.js:418-427][73]
 
 Convert the DataFrame into a text delimiter separated values.
 You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `sep` **[String][68]** Column separator. (optional, default `' '`)
--   `header` **[Boolean][70]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `sep` **[String][70]** Column separator. (optional, default `' '`)
+-   `header` **[Boolean][72]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -149,20 +151,20 @@ df.toDSV(';', true)
 df.toDSV(';', true, '/my/absolute/path/dataframe.txt')
 ```
 
-Returns **[String][68]** The text file in raw string.
+Returns **[String][70]** The text file in raw string.
 
 ### toText
 
-[src/dataframe.js:444-446][72]
+[src/dataframe.js:443-445][74]
 
 Convert the DataFrame into a text delimiter separated values. Alias for .toDSV.
 You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `sep` **[String][68]** Column separator. (optional, default `' '`)
--   `header` **[Boolean][70]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `sep` **[String][70]** Column separator. (optional, default `' '`)
+-   `header` **[Boolean][72]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -174,19 +176,19 @@ df.toText(';', true)
 df.toText(';', true, '/my/absolute/path/dataframe.txt')
 ```
 
-Returns **[String][68]** The text file in raw string.
+Returns **[String][70]** The text file in raw string.
 
 ### toCSV
 
-[src/dataframe.js:460-462][73]
+[src/dataframe.js:459-461][75]
 
 Convert the DataFrame into a comma separated values string.
 You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `header` **[Boolean][70]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `header` **[Boolean][72]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -197,19 +199,19 @@ df.toCSV(true)
 df.toCSV(true, '/my/absolute/path/dataframe.csv')
 ```
 
-Returns **[String][68]** The csv file in raw string.
+Returns **[String][70]** The csv file in raw string.
 
 ### toTSV
 
-[src/dataframe.js:476-478][74]
+[src/dataframe.js:475-477][76]
 
 Convert the DataFrame into a tab separated values string.
 You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `header` **[Boolean][70]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `header` **[Boolean][72]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -220,19 +222,19 @@ df.toCSV(true)
 df.toCSV(true, '/my/absolute/path/dataframe.csv')
 ```
 
-Returns **[String][68]** The csv file in raw string.
+Returns **[String][70]** The csv file in raw string.
 
 ### toPSV
 
-[src/dataframe.js:492-494][75]
+[src/dataframe.js:491-493][77]
 
 Convert the DataFrame into a pipe separated values string.
 You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `header` **[Boolean][70]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `header` **[Boolean][72]** Writing the header in the first line. If false, there will be no header. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -243,18 +245,18 @@ df.toPSV(true)
 df.toPSV(true, '/my/absolute/path/dataframe.csv')
 ```
 
-Returns **[String][68]** The csv file in raw string.
+Returns **[String][70]** The csv file in raw string.
 
 ### toJSON
 
-[src/dataframe.js:506-514][76]
+[src/dataframe.js:505-513][78]
 
 Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
 
 **Parameters**
 
--   `asCollection` **[Boolean][70]** Writing the JSON as collection of Object. (optional, default `true`)
--   `path` **[String][68]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
+-   `asCollection` **[Boolean][72]** Writing the JSON as collection of Object. (optional, default `true`)
+-   `path` **[String][70]?** The path to save the file. /!\\ Works only on node.js, not into the browser. (optional, default `undefined`)
 
 **Examples**
 
@@ -264,18 +266,18 @@ df.toJSON()
 df.toJSON('/my/absolute/path/dataframe.json')
 ```
 
-Returns **[String][68]** The json file in raw string.
+Returns **[String][70]** The json file in raw string.
 
 ### show
 
-[src/dataframe.js:526-555][77]
+[src/dataframe.js:525-554][79]
 
 Display the DataFrame as String Table. Can only return a sring instead of displaying the DataFrame.
 
 **Parameters**
 
--   `rows` **[Number][78]** The number of lines to display. (optional, default `10`)
--   `quiet` **[Boolean][70]** Quiet mode. If true, only returns a string instead of console.log(). (optional, default `false`)
+-   `rows` **[Number][80]** The number of lines to display. (optional, default `10`)
+-   `quiet` **[Boolean][72]** Quiet mode. If true, only returns a string instead of console.log(). (optional, default `false`)
 
 **Examples**
 
@@ -285,11 +287,11 @@ df.show(10)
 const stringDF = df.show(10, true)
 ```
 
-Returns **[String][68]** The DataFrame as String Table.
+Returns **[String][70]** The DataFrame as String Table.
 
 ### dim
 
-[src/dataframe.js:563-565][79]
+[src/dataframe.js:562-564][81]
 
 Get the DataFrame dimensions.
 
@@ -299,18 +301,18 @@ Get the DataFrame dimensions.
 const [height, weight] = df.dim()
 ```
 
-Returns **[Array][63]** The DataFrame dimensions. [height, weight]
+Returns **[Array][65]** The DataFrame dimensions. [height, weight]
 
 ### transpose
 
-[src/dataframe.js:574-589][80]
+[src/dataframe.js:573-588][82]
 
 Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
 
 **Parameters**
 
 -   `tranposeColumnNames`  
--   `transposeColumnNames` **[Boolean][70]** An option to transpose columnNames in a rowNames column. (optional, default `false`)
+-   `transposeColumnNames` **[Boolean][72]** An option to transpose columnNames in a rowNames column. (optional, default `false`)
 
 **Examples**
 
@@ -322,7 +324,7 @@ Returns **ÐataFrame** A new transposed DataFrame.
 
 ### count
 
-[src/dataframe.js:597-599][81]
+[src/dataframe.js:596-598][83]
 
 Get the rows number.
 
@@ -336,14 +338,14 @@ Returns **Int** The number of DataFrame rows.
 
 ### countValue
 
-[src/dataframe.js:610-612][82]
+[src/dataframe.js:609-611][84]
 
 Get the count of a value into a column.
 
 **Parameters**
 
 -   `valueToCount`  The value to count into the selected column.
--   `columnName` **[String][68]** The column to count the value. (optional, default `this.listColumns()[0]`)
+-   `columnName` **[String][70]** The column to count the value. (optional, default `this.listColumns()[0]`)
 
 **Examples**
 
@@ -356,13 +358,13 @@ Returns **Int** The number of times the selected value appears.
 
 ### push
 
-[src/dataframe.js:621-623][83]
+[src/dataframe.js:620-622][85]
 
 Push new rows into the DataFrame.
 
 **Parameters**
 
--   `rows` **([Array][63] | Row)** The rows to add.
+-   `rows` **([Array][65] | Row)** The rows to add.
 
 **Examples**
 
@@ -370,11 +372,11 @@ Push new rows into the DataFrame.
 df.push([1,2,3], [1,4,9])
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the new rows.
+Returns **[DataFrame][67]** A new DataFrame with the new rows.
 
 ### replace
 
-[src/dataframe.js:634-642][84]
+[src/dataframe.js:633-646][86]
 
 Replace a value by another in all the DataFrame or in a column.
 
@@ -382,7 +384,7 @@ Replace a value by another in all the DataFrame or in a column.
 
 -   `value`  The value to replace.
 -   `replacement`  The new value.
--   `columnNames` **([String][68] \| [Array][63])** The columns to apply the replacement. (optional, default `this.listColumns()`)
+-   `columnNames` **([String][70] \| [Array][65])** The columns to apply the replacement. (optional, default `this.listColumns()`)
 
 **Examples**
 
@@ -390,17 +392,17 @@ Replace a value by another in all the DataFrame or in a column.
 df.replace(undefined, 0, 'column1', 'column2')
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with replaced values.
+Returns **[DataFrame][67]** A new DataFrame with replaced values.
 
 ### distinct
 
-[src/dataframe.js:651-656][85]
+[src/dataframe.js:655-660][87]
 
 Compute unique values into a column.
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to distinct.
+-   `columnName` **[String][70]** The column to distinct.
 
 **Examples**
 
@@ -408,18 +410,18 @@ Compute unique values into a column.
 df.distinct('column1')
 ```
 
-Returns **[DataFrame][65]** A DataFrame containing the column with distinct values.
+Returns **[DataFrame][67]** A DataFrame containing the column with distinct values.
 
 ### unique
 
-[src/dataframe.js:666-668][86]
+[src/dataframe.js:670-672][88]
 
 Compute unique values into a column.
 Alias from .distinct()
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to distinct.
+-   `columnName` **[String][70]** The column to distinct.
 
 **Examples**
 
@@ -427,11 +429,11 @@ Alias from .distinct()
 df.unique('column1')
 ```
 
-Returns **[DataFrame][65]** A DataFrame containing the column with distinct values.
+Returns **[DataFrame][67]** A DataFrame containing the column with distinct values.
 
 ### listColumns
 
-[src/dataframe.js:676-678][87]
+[src/dataframe.js:680-682][89]
 
 List DataFrame columns.
 
@@ -441,17 +443,17 @@ List DataFrame columns.
 df.listColumns()
 ```
 
-Returns **[Array][63]** An Array containing DataFrame columnNames.
+Returns **[Array][65]** An Array containing DataFrame columnNames.
 
 ### select
 
-[src/dataframe.js:687-692][88]
+[src/dataframe.js:691-696][90]
 
 Select columns in the DataFrame.
 
 **Parameters**
 
--   `columnNames` **...[String][68]** The columns to select.
+-   `columnNames` **...[String][70]** The columns to select.
 
 **Examples**
 
@@ -459,18 +461,18 @@ Select columns in the DataFrame.
 df.select('column1', 'column3')
 ```
 
-Returns **[DataFrame][65]** A new DataFrame containing selected columns.
+Returns **[DataFrame][67]** A new DataFrame containing selected columns.
 
 ### withColumn
 
-[src/dataframe.js:703-712][89]
+[src/dataframe.js:707-716][91]
 
 Add a new column or set an existing one.
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to modify or to create.
--   `func` **[Function][90]** The function to create the column. (optional, default `(row,index)=>undefined`)
+-   `columnName` **[String][70]** The column to modify or to create.
+-   `func` **[Function][92]** The function to create the column. (optional, default `(row,index)=>undefined`)
 
 **Examples**
 
@@ -479,17 +481,17 @@ df.withColumn('column4', () => 2)
 df.withColumn('column2', (row) => row.get('column2') * 2)
 ```
 
-Returns **[DataFrame][65]** A new DataFrame containing the new or modified column.
+Returns **[DataFrame][67]** A new DataFrame containing the new or modified column.
 
 ### restructure
 
-[src/dataframe.js:723-725][91]
+[src/dataframe.js:727-729][93]
 
 Modify the structure of the DataFrame by changing columns order, creating new columns or removing some columns.
 
 **Parameters**
 
--   `newColumnNames` **[Array][63]** The new columns of the DataFrame.
+-   `newColumnNames` **[Array][65]** The new columns of the DataFrame.
 
 **Examples**
 
@@ -499,17 +501,17 @@ df.restructure(['column1', 'column4'])
 df.restructure(['column1', 'newColumn', 'column4'])
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with restructured columns (renamed, add or deleted).
+Returns **[DataFrame][67]** A new DataFrame with restructured columns (renamed, add or deleted).
 
 ### renameAll
 
-[src/dataframe.js:734-739][92]
+[src/dataframe.js:738-743][94]
 
 Rename each column.
 
 **Parameters**
 
--   `newColumnNames` **[Array][63]** The new column names of the DataFrame.
+-   `newColumnNames` **[Array][65]** The new column names of the DataFrame.
 
 **Examples**
 
@@ -517,18 +519,18 @@ Rename each column.
 df.renameAll(['column1', 'column3', 'column4'])
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the new column names.
+Returns **[DataFrame][67]** A new DataFrame with the new column names.
 
 ### rename
 
-[src/dataframe.js:749-754][93]
+[src/dataframe.js:753-758][95]
 
 Rename a column.
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to rename.
--   `replacement` **[String][68]** The new name for the column.
+-   `columnName` **[String][70]** The column to rename.
+-   `replacement` **[String][70]** The new name for the column.
 
 **Examples**
 
@@ -536,17 +538,17 @@ Rename a column.
 df.rename('column1', 'columnRenamed')
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the new column name.
+Returns **[DataFrame][67]** A new DataFrame with the new column name.
 
 ### castAll
 
-[src/dataframe.js:763-776][94]
+[src/dataframe.js:767-780][96]
 
 Cast each column into a given type.
 
 **Parameters**
 
--   `typeFunctions` **[Array][63]** The functions used to cast columns.
+-   `typeFunctions` **[Array][65]** The functions used to cast columns.
 
 **Examples**
 
@@ -554,19 +556,19 @@ Cast each column into a given type.
 df.castAll([Number, String, (val) => new CustomClass(val)])
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the columns having new types.
+Returns **[DataFrame][67]** A new DataFrame with the columns having new types.
 
 ### cast
 
-[src/dataframe.js:787-791][95]
+[src/dataframe.js:791-795][97]
 
 Cast a column into a given type.
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to cast.
+-   `columnName` **[String][70]** The column to cast.
 -   `typeFunction`  
--   `ObjectType` **[Function][90]** The function used to cast the column.
+-   `ObjectType` **[Function][92]** The function used to cast the column.
 
 **Examples**
 
@@ -575,17 +577,17 @@ df.cast('column1', Number)
 df.cast('column1', (val) => new MyCustomClass(val))
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the column having a new type.
+Returns **[DataFrame][67]** A new DataFrame with the column having a new type.
 
 ### drop
 
-[src/dataframe.js:800-805][96]
+[src/dataframe.js:804-809][98]
 
 Remove a single column.
 
 **Parameters**
 
--   `columnName` **[String][68]** The column to drop.
+-   `columnName` **[String][70]** The column to drop.
 
 **Examples**
 
@@ -593,11 +595,11 @@ Remove a single column.
 df.drop('column2')
 ```
 
-Returns **[DataFrame][65]** A new DataFrame without the dropped column.
+Returns **[DataFrame][67]** A new DataFrame without the dropped column.
 
 ### chain
 
-[src/dataframe.js:820-825][97]
+[src/dataframe.js:824-829][99]
 
 Chain maps and filters functions on DataFrame by optimizing their executions.
 If a function returns boolean, it's a filter. Else it's a map.
@@ -605,7 +607,7 @@ It can be 10 - 100 x faster than standard chains of .map() and .filter().
 
 **Parameters**
 
--   `funcs` **...[Function][90]** Functions to apply on the DataFrame rows taking the row as parameter.
+-   `funcs` **...[Function][92]** Functions to apply on the DataFrame rows taking the row as parameter.
 
 **Examples**
 
@@ -617,17 +619,17 @@ df.chain(
 )
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with modified rows.
+Returns **[DataFrame][67]** A new DataFrame with modified rows.
 
 ### filter
 
-[src/dataframe.js:835-849][98]
+[src/dataframe.js:839-853][100]
 
 Filter DataFrame rows.
 
 **Parameters**
 
--   `condition` **([Function][90] \| [Object][64])** A filter function or a column/value object.
+-   `condition` **([Function][92] \| [Object][66])** A filter function or a column/value object.
 
 **Examples**
 
@@ -636,18 +638,18 @@ df.filter(row => row.get('column1') >= 3)
 df.filter({'column2': 5, 'column1': 3}))
 ```
 
-Returns **[DataFrame][65]** A new filtered DataFrame.
+Returns **[DataFrame][67]** A new filtered DataFrame.
 
 ### where
 
-[src/dataframe.js:860-862][99]
+[src/dataframe.js:864-866][101]
 
 Filter DataFrame rows.
 Alias of .filter()
 
 **Parameters**
 
--   `condition` **([Function][90] \| [Object][64])** A filter function or a column/value object.
+-   `condition` **([Function][92] \| [Object][66])** A filter function or a column/value object.
 
 **Examples**
 
@@ -656,17 +658,17 @@ df.where(row => row.get('column1') >= 3)
 df.where({'column2': 5, 'column1': 3}))
 ```
 
-Returns **[DataFrame][65]** A new filtered DataFrame.
+Returns **[DataFrame][67]** A new filtered DataFrame.
 
 ### find
 
-[src/dataframe.js:872-874][100]
+[src/dataframe.js:876-878][102]
 
 Find a row (the first met) based on a condition.
 
 **Parameters**
 
--   `condition` **([Function][90] \| [Object][64])** A filter function or a column/value object.
+-   `condition` **([Function][92] \| [Object][66])** A filter function or a column/value object.
 
 **Examples**
 
@@ -679,13 +681,13 @@ Returns **Row** The targeted Row.
 
 ### map
 
-[src/dataframe.js:883-888][101]
+[src/dataframe.js:887-892][103]
 
 Map on DataFrame rows. /!\\ Prefer to use .chain().
 
 **Parameters**
 
--   `func` **[Function][90]** A function to apply on each row taking the row as parameter.
+-   `func` **[Function][92]** A function to apply on each row taking the row as parameter.
 
 **Examples**
 
@@ -693,17 +695,17 @@ Map on DataFrame rows. /!\\ Prefer to use .chain().
 df.map(row => row.set('column1', row.get('column1') * 2))
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with modified rows.
+Returns **[DataFrame][67]** A new DataFrame with modified rows.
 
 ### reduce
 
-[src/dataframe.js:902-906][102]
+[src/dataframe.js:906-910][104]
 
 Reduce DataFrame into a value.
 
 **Parameters**
 
--   `func` **[Function][90]** The reduce function taking 2 parameters, previous and next.
+-   `func` **[Function][92]** The reduce function taking 2 parameters, previous and next.
 -   `init`  The initial value of the reducer.
 
 **Examples**
@@ -720,13 +722,13 @@ Returns **any** A reduced value.
 
 ### reduceRight
 
-[src/dataframe.js:916-920][103]
+[src/dataframe.js:920-924][105]
 
 Reduce DataFrame into a value, starting from the last row (see .reduce()).
 
 **Parameters**
 
--   `func` **[Function][90]** The reduce function taking 2 parameters, previous and next.
+-   `func` **[Function][92]** The reduce function taking 2 parameters, previous and next.
 -   `init`  The initial value of the reducer.
 
 **Examples**
@@ -739,13 +741,13 @@ Returns **any** A reduced value.
 
 ### dropDuplicates
 
-[src/dataframe.js:929-935][104]
+[src/dataframe.js:933-939][106]
 
 Return a DataFrame without duplicated columns.
 
 **Parameters**
 
--   `columnNames` **...[String][68]** The columns used to check unicity of rows. If omitted, unicity is checked on all columns.
+-   `columnNames` **...[String][70]** The columns used to check unicity of rows. If omitted, unicity is checked on all columns.
 
 **Examples**
 
@@ -753,11 +755,48 @@ Return a DataFrame without duplicated columns.
 df.dropDuplicates('id', 'name')
 ```
 
-Returns **[DataFrame][65]** A DataFrame without duplicated rows.
+Returns **[DataFrame][67]** A DataFrame without duplicated rows.
+
+### dropMissingValues
+
+[src/dataframe.js:948-962][107]
+
+Return a DataFrame without rows containing missing values (undefined, NaN, null).
+
+**Parameters**
+
+-   `columnNames` **[Array][65]** The columns to consider. All columns are considered by default.
+
+**Examples**
+
+```javascript
+df.dropMissingValues(['id', 'name'])
+```
+
+Returns **[DataFrame][67]** A DataFrame without rows containing missing values.
+
+### fillMissingValues
+
+[src/dataframe.js:972-974][108]
+
+Return a DataFrame with missing values (undefined, NaN, null) fill with default value.
+
+**Parameters**
+
+-   `replacement`  The new value.
+-   `columnNames` **[Array][65]** The columns to consider. All columns are considered by default.
+
+**Examples**
+
+```javascript
+df.fillMissingValues(0, ['id', 'name'])
+```
+
+Returns **[DataFrame][67]** A DataFrame with missing values replaced.
 
 ### shuffle
 
-[src/dataframe.js:943-954][105]
+[src/dataframe.js:982-993][109]
 
 Return a shuffled DataFrame rows.
 
@@ -767,17 +806,17 @@ Return a shuffled DataFrame rows.
 df.shuffle()
 ```
 
-Returns **[DataFrame][65]** A shuffled DataFrame.
+Returns **[DataFrame][67]** A shuffled DataFrame.
 
 ### sample
 
-[src/dataframe.js:963-979][106]
+[src/dataframe.js:1002-1018][110]
 
 Return a random sample of rows.
 
 **Parameters**
 
--   `percentage` **[Number][78]** A percentage of the orignal DataFrame giving the sample size.
+-   `percentage` **[Number][80]** A percentage of the orignal DataFrame giving the sample size.
 
 **Examples**
 
@@ -785,17 +824,17 @@ Return a random sample of rows.
 df.sample(0.3)
 ```
 
-Returns **[DataFrame][65]** A sample DataFrame
+Returns **[DataFrame][67]** A sample DataFrame
 
 ### bisect
 
-[src/dataframe.js:988-1007][107]
+[src/dataframe.js:1027-1046][111]
 
 Randomly split a DataFrame into 2 DataFrames.
 
 **Parameters**
 
--   `percentage` **[Number][78]** A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest.
+-   `percentage` **[Number][80]** A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest.
 
 **Examples**
 
@@ -803,17 +842,17 @@ Randomly split a DataFrame into 2 DataFrames.
 const [30DF, 70DF] = df.bisect(0.3)
 ```
 
-Returns **[Array][63]** An Array containing the two DataFrames. First, the X% DataFrame then the rest DataFrame.
+Returns **[Array][65]** An Array containing the two DataFrames. First, the X% DataFrame then the rest DataFrame.
 
 ### groupBy
 
-[src/dataframe.js:1020-1022][108]
+[src/dataframe.js:1059-1061][112]
 
 Group DataFrame rows by columns giving a GroupedDataFrame object. See its doc for more examples.
 
 **Parameters**
 
--   `columnNames` **...[String][68]** The columns used for the groupBy.
+-   `columnNames` **...[String][70]** The columns used for the groupBy.
 
 **Examples**
 
@@ -829,14 +868,15 @@ Returns **GroupedDataFrame** A GroupedDataFrame object.
 
 ### sortBy
 
-[src/dataframe.js:1034-1053][109]
+[src/dataframe.js:1074-1136][113]
 
 Sort DataFrame rows based on column values. The row should contains only one variable type. Columns are sorted left-to-right.
 
 **Parameters**
 
--   `columnNames` **([String][68] \| [Array][63]&lt;[string][68]>)** The columns giving order.
--   `reverse` **[Boolean][70]** Reverse mode. Reverse the order if true. (optional, default `false`)
+-   `columnNames` **([String][70] \| [Array][65]&lt;[string][70]>)** The columns giving order.
+-   `reverse` **[Boolean][72]** Reverse mode. Reverse the order if true. (optional, default `false`)
+-   `missingValuesPosition` **[String][70]** Define the position of missing values (undefined, nulls and NaN) in the order. (optional, default `'first'`)
 
 **Examples**
 
@@ -846,17 +886,17 @@ df.sortBy(['id1', 'id2'])
 df.sortBy(['id1'], true)
 ```
 
-Returns **[DataFrame][65]** An ordered DataFrame.
+Returns **[DataFrame][67]** An ordered DataFrame.
 
 ### union
 
-[src/dataframe.js:1062-1075][110]
+[src/dataframe.js:1145-1158][114]
 
 Concat two DataFrames.
 
 **Parameters**
 
--   `dfToUnion` **[DataFrame][65]** The DataFrame to concat.
+-   `dfToUnion` **[DataFrame][67]** The DataFrame to concat.
 
 **Examples**
 
@@ -864,19 +904,19 @@ Concat two DataFrames.
 df.union(df2)
 ```
 
-Returns **[DataFrame][65]** A new concatenated DataFrame resulting of the union.
+Returns **[DataFrame][67]** A new concatenated DataFrame resulting of the union.
 
 ### join
 
-[src/dataframe.js:1086-1095][111]
+[src/dataframe.js:1169-1178][115]
 
 Join two DataFrames.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
--   `how` **[String][68]** The join mode. Can be: full, inner, outer, left, right. (optional, default `'inner'`)
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
+-   `how` **[String][70]** The join mode. Can be: full, inner, outer, left, right. (optional, default `'inner'`)
 
 **Examples**
 
@@ -884,18 +924,18 @@ Join two DataFrames.
 df.join(df2, 'column1', 'full')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### innerJoin
 
-[src/dataframe.js:1107-1109][112]
+[src/dataframe.js:1190-1192][116]
 
 Join two DataFrames with inner mode.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
 
 **Examples**
 
@@ -905,18 +945,18 @@ df.join(df2, 'id')
 df.join(df2, 'id', 'inner')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### fullJoin
 
-[src/dataframe.js:1120-1122][113]
+[src/dataframe.js:1203-1205][117]
 
 Join two DataFrames with full mode.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
 
 **Examples**
 
@@ -925,18 +965,18 @@ df.fullJoin(df2, 'id')
 df.join(df2, 'id', 'full')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### outerJoin
 
-[src/dataframe.js:1133-1135][114]
+[src/dataframe.js:1216-1218][118]
 
 Join two DataFrames with outer mode.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
 
 **Examples**
 
@@ -945,18 +985,18 @@ df2.outerJoin(df2, 'id')
 df2.join(df2, 'id', 'outer')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### leftJoin
 
-[src/dataframe.js:1146-1148][115]
+[src/dataframe.js:1229-1231][119]
 
 Join two DataFrames with left mode.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
 
 **Examples**
 
@@ -965,18 +1005,18 @@ df.leftJoin(df2, 'id')
 df.join(df2, 'id', 'left')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### rightJoin
 
-[src/dataframe.js:1159-1161][116]
+[src/dataframe.js:1242-1244][120]
 
 Join two DataFrames with right mode.
 
 **Parameters**
 
--   `dfToJoin` **[DataFrame][65]** The DataFrame to join.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the join.
+-   `dfToJoin` **[DataFrame][67]** The DataFrame to join.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the join.
 
 **Examples**
 
@@ -985,18 +1025,18 @@ df.rightJoin(df2, 'id')
 df.join(df2, 'id', 'right')
 ```
 
-Returns **[DataFrame][65]** The joined DataFrame.
+Returns **[DataFrame][67]** The joined DataFrame.
 
 ### diff
 
-[src/dataframe.js:1171-1173][117]
+[src/dataframe.js:1254-1256][121]
 
 Find the differences between two DataFrames (reverse of join).
 
 **Parameters**
 
--   `dfToDiff` **[DataFrame][65]** The DataFrame to diff.
--   `columnNames` **([String][68] \| [Array][63])** The selected columns for the diff.
+-   `dfToDiff` **[DataFrame][67]** The DataFrame to diff.
+-   `columnNames` **([String][70] \| [Array][65])** The selected columns for the diff.
 
 **Examples**
 
@@ -1004,17 +1044,17 @@ Find the differences between two DataFrames (reverse of join).
 df2.diff(df2, 'id')
 ```
 
-Returns **[DataFrame][65]** The differences DataFrame.
+Returns **[DataFrame][67]** The differences DataFrame.
 
 ### head
 
-[src/dataframe.js:1183-1185][118]
+[src/dataframe.js:1266-1268][122]
 
 Create a new subset DataFrame based on the first rows.
 
 **Parameters**
 
--   `nRows` **[Number][78]** The number of first rows to get. (optional, default `10`)
+-   `nRows` **[Number][80]** The number of first rows to get. (optional, default `10`)
 
 **Examples**
 
@@ -1023,17 +1063,17 @@ df2.head()
 df2.head(5)
 ```
 
-Returns **[DataFrame][65]** The subset DataFrame.
+Returns **[DataFrame][67]** The subset DataFrame.
 
 ### tail
 
-[src/dataframe.js:1195-1197][119]
+[src/dataframe.js:1278-1280][123]
 
 Create a new subset DataFrame based on the last rows.
 
 **Parameters**
 
--   `nRows` **[Number][78]** The number of last rows to get. (optional, default `10`)
+-   `nRows` **[Number][80]** The number of last rows to get. (optional, default `10`)
 
 **Examples**
 
@@ -1042,18 +1082,18 @@ df2.tail()
 df2.tail(5)
 ```
 
-Returns **[DataFrame][65]** The subset DataFrame.
+Returns **[DataFrame][67]** The subset DataFrame.
 
 ### slice
 
-[src/dataframe.js:1210-1218][120]
+[src/dataframe.js:1293-1301][124]
 
 Create a new subset DataFrame based on given indexs. Similar to Array.slice.
 
 **Parameters**
 
--   `startIndex` **[Number][78]** The index to start the slice (included). (optional, default `0`)
--   `endIndex` **[Number][78]** The index to end the slice (excluded). (optional, default `this.count()`)
+-   `startIndex` **[Number][80]** The index to start the slice (included). (optional, default `0`)
+-   `endIndex` **[Number][80]** The index to end the slice (excluded). (optional, default `this.count()`)
 
 **Examples**
 
@@ -1064,17 +1104,17 @@ df2.slice(0, 20)
 df2.slice(10, 30)
 ```
 
-Returns **[DataFrame][65]** The subset DataFrame.
+Returns **[DataFrame][67]** The subset DataFrame.
 
 ### getRow
 
-[src/dataframe.js:1227-1229][121]
+[src/dataframe.js:1310-1312][125]
 
 Return a Row by its index.
 
 **Parameters**
 
--   `index` **[Number][78]** The index to select the row. (optional, default `0`)
+-   `index` **[Number][80]** The index to select the row. (optional, default `0`)
 
 **Examples**
 
@@ -1086,13 +1126,13 @@ Returns **Row** The Row.
 
 ### setRow
 
-[src/dataframe.js:1238-1242][122]
+[src/dataframe.js:1321-1325][126]
 
 Modify a Row a the given index.
 
 **Parameters**
 
--   `index` **[Number][78]** The index to select the row. (optional, default `0`)
+-   `index` **[Number][80]** The index to select the row. (optional, default `0`)
 -   `func`   (optional, default `row=>row`)
 
 **Examples**
@@ -1101,17 +1141,17 @@ Modify a Row a the given index.
 df2.setRowByIndex(1, row => row.set("column1", 33))
 ```
 
-Returns **[DataFrame][65]** A new DataFrame with the modified Row.
+Returns **[DataFrame][67]** A new DataFrame with the modified Row.
 
 ### setDefaultModules
 
-[src/dataframe.js:38-40][123]
+[src/dataframe.js:37-39][127]
 
 Set the default modules used in DataFrame instances.
 
 **Parameters**
 
--   `defaultModules` **...[Object][64]** DataFrame modules used by default.
+-   `defaultModules` **...[Object][66]** DataFrame modules used by default.
 
 **Examples**
 
@@ -1121,15 +1161,15 @@ DataFrame.setDefaultModules(SQL, Stat)
 
 ### fromDSV
 
-[src/dataframe.js:55-74][124]
+[src/dataframe.js:54-73][128]
 
 Create a DataFrame from a delimiter separated values text file. It returns a Promise.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
--   `sep` **[String][68]** The separator used to parse the file. (optional, default `";"`)
--   `header` **[Boolean][70]** A boolean indicating if the text has a header or not. (optional, default `true`)
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
+-   `sep` **[String][70]** The separator used to parse the file. (optional, default `";"`)
+-   `header` **[Boolean][72]** A boolean indicating if the text has a header or not. (optional, default `true`)
 
 **Examples**
 
@@ -1144,15 +1184,15 @@ DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show()
 
 ### fromText
 
-[src/dataframe.js:89-91][125]
+[src/dataframe.js:88-90][129]
 
 Create a DataFrame from a delimiter separated values text file. It returns a Promise. Alias of DataFrame.fromDSV.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
--   `sep` **[String][68]** The separator used to parse the file. (optional, default `";"`)
--   `header` **[Boolean][70]** A boolean indicating if the text has a header or not. (optional, default `true`)
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
+-   `sep` **[String][70]** The separator used to parse the file. (optional, default `";"`)
+-   `header` **[Boolean][72]** A boolean indicating if the text has a header or not. (optional, default `true`)
 
 **Examples**
 
@@ -1167,14 +1207,14 @@ DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show(
 
 ### fromCSV
 
-[src/dataframe.js:105-107][126]
+[src/dataframe.js:104-106][130]
 
 Create a DataFrame from a comma separated values file. It returns a Promise.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
--   `header` **[Boolean][70]** A boolean indicating if the csv has a header or not. (optional, default `true`)
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
+-   `header` **[Boolean][72]** A boolean indicating if the csv has a header or not. (optional, default `true`)
 
 **Examples**
 
@@ -1189,14 +1229,14 @@ DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
 
 ### fromTSV
 
-[src/dataframe.js:121-123][127]
+[src/dataframe.js:120-122][131]
 
 Create a DataFrame from a tab separated values file. It returns a Promise.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
--   `header` **[Boolean][70]** A boolean indicating if the tsv has a header or not. (optional, default `true`)
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
+-   `header` **[Boolean][72]** A boolean indicating if the tsv has a header or not. (optional, default `true`)
 
 **Examples**
 
@@ -1211,14 +1251,14 @@ DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
 
 ### fromPSV
 
-[src/dataframe.js:137-139][128]
+[src/dataframe.js:136-138][132]
 
 Create a DataFrame from a pipe separated values file. It returns a Promise.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
--   `header` **[Boolean][70]** A boolean indicating if the psv has a header or not. (optional, default `true`)
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
+-   `header` **[Boolean][72]** A boolean indicating if the psv has a header or not. (optional, default `true`)
 
 **Examples**
 
@@ -1233,13 +1273,13 @@ DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
 
 ### fromJSON
 
-[src/dataframe.js:151-162][129]
+[src/dataframe.js:150-161][133]
 
 Create a DataFrame from a JSON file. It returns a Promise.
 
 **Parameters**
 
--   `pathOrFile` **([String][68] | File)** A path to the file (url or local) or a browser File object.
+-   `pathOrFile` **([String][70] | File)** A path to the file (url or local) or a browser File object.
 
 **Examples**
 
@@ -1323,188 +1363,196 @@ DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
 
 [36]: #dropduplicates
 
-[37]: #shuffle
+[37]: #dropmissingvalues
 
-[38]: #sample
+[38]: #fillmissingvalues
 
-[39]: #bisect
+[39]: #shuffle
 
-[40]: #groupby
+[40]: #sample
 
-[41]: #sortby
+[41]: #bisect
 
-[42]: #union
+[42]: #groupby
 
-[43]: #join
+[43]: #sortby
 
-[44]: #innerjoin
+[44]: #union
 
-[45]: #fulljoin
+[45]: #join
 
-[46]: #outerjoin
+[46]: #innerjoin
 
-[47]: #leftjoin
+[47]: #fulljoin
 
-[48]: #rightjoin
+[48]: #outerjoin
 
-[49]: #diff
+[49]: #leftjoin
 
-[50]: #head
+[50]: #rightjoin
 
-[51]: #tail
+[51]: #diff
 
-[52]: #slice
+[52]: #head
 
-[53]: #getrow
+[53]: #tail
 
-[54]: #setrow
+[54]: #slice
 
-[55]: #setdefaultmodules
+[55]: #getrow
 
-[56]: #fromdsv
+[56]: #setrow
 
-[57]: #fromtext
+[57]: #setdefaultmodules
 
-[58]: #fromcsv
+[58]: #fromdsv
 
-[59]: #fromtsv
+[59]: #fromtext
 
-[60]: #frompsv
+[60]: #fromcsv
 
-[61]: #fromjson
+[61]: #fromtsv
 
-[62]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L31-L1243 "Source code on GitHub"
+[62]: #frompsv
 
-[63]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[63]: #fromjson
 
-[64]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[64]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L30-L1326 "Source code on GitHub"
 
-[65]: #dataframe
+[65]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[66]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L372-L379 "Source code on GitHub"
+[66]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
 
-[67]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L388-L392 "Source code on GitHub"
+[67]: #dataframe
 
-[68]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[68]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L371-L378 "Source code on GitHub"
 
-[69]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L401-L403 "Source code on GitHub"
+[69]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L387-L391 "Source code on GitHub"
 
-[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[71]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L419-L428 "Source code on GitHub"
+[71]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L400-L402 "Source code on GitHub"
 
-[72]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L444-L446 "Source code on GitHub"
+[72]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[73]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L460-L462 "Source code on GitHub"
+[73]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L418-L427 "Source code on GitHub"
 
-[74]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L476-L478 "Source code on GitHub"
+[74]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L443-L445 "Source code on GitHub"
 
-[75]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L492-L494 "Source code on GitHub"
+[75]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L459-L461 "Source code on GitHub"
 
-[76]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L506-L514 "Source code on GitHub"
+[76]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L475-L477 "Source code on GitHub"
 
-[77]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L526-L555 "Source code on GitHub"
+[77]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L491-L493 "Source code on GitHub"
 
-[78]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[78]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L505-L513 "Source code on GitHub"
 
-[79]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L563-L565 "Source code on GitHub"
+[79]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L525-L554 "Source code on GitHub"
 
-[80]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L574-L589 "Source code on GitHub"
+[80]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[81]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L597-L599 "Source code on GitHub"
+[81]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L562-L564 "Source code on GitHub"
 
-[82]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L610-L612 "Source code on GitHub"
+[82]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L573-L588 "Source code on GitHub"
 
-[83]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L621-L623 "Source code on GitHub"
+[83]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L596-L598 "Source code on GitHub"
 
-[84]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L634-L642 "Source code on GitHub"
+[84]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L609-L611 "Source code on GitHub"
 
-[85]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L651-L656 "Source code on GitHub"
+[85]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L620-L622 "Source code on GitHub"
 
-[86]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L666-L668 "Source code on GitHub"
+[86]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L633-L646 "Source code on GitHub"
 
-[87]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L676-L678 "Source code on GitHub"
+[87]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L655-L660 "Source code on GitHub"
 
-[88]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L687-L692 "Source code on GitHub"
+[88]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L670-L672 "Source code on GitHub"
 
-[89]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L703-L712 "Source code on GitHub"
+[89]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L680-L682 "Source code on GitHub"
 
-[90]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[90]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L691-L696 "Source code on GitHub"
 
-[91]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L723-L725 "Source code on GitHub"
+[91]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L707-L716 "Source code on GitHub"
 
-[92]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L734-L739 "Source code on GitHub"
+[92]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[93]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L749-L754 "Source code on GitHub"
+[93]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L727-L729 "Source code on GitHub"
 
-[94]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L763-L776 "Source code on GitHub"
+[94]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L738-L743 "Source code on GitHub"
 
-[95]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L787-L791 "Source code on GitHub"
+[95]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L753-L758 "Source code on GitHub"
 
-[96]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L800-L805 "Source code on GitHub"
+[96]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L767-L780 "Source code on GitHub"
 
-[97]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L820-L825 "Source code on GitHub"
+[97]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L791-L795 "Source code on GitHub"
 
-[98]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L835-L849 "Source code on GitHub"
+[98]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L804-L809 "Source code on GitHub"
 
-[99]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L860-L862 "Source code on GitHub"
+[99]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L824-L829 "Source code on GitHub"
 
-[100]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L872-L874 "Source code on GitHub"
+[100]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L839-L853 "Source code on GitHub"
 
-[101]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L883-L888 "Source code on GitHub"
+[101]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L864-L866 "Source code on GitHub"
 
-[102]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L902-L906 "Source code on GitHub"
+[102]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L876-L878 "Source code on GitHub"
 
-[103]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L916-L920 "Source code on GitHub"
+[103]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L887-L892 "Source code on GitHub"
 
-[104]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L929-L935 "Source code on GitHub"
+[104]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L906-L910 "Source code on GitHub"
 
-[105]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L943-L954 "Source code on GitHub"
+[105]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L920-L924 "Source code on GitHub"
 
-[106]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L963-L979 "Source code on GitHub"
+[106]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L933-L939 "Source code on GitHub"
 
-[107]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L988-L1007 "Source code on GitHub"
+[107]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L948-L962 "Source code on GitHub"
 
-[108]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1020-L1022 "Source code on GitHub"
+[108]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L972-L974 "Source code on GitHub"
 
-[109]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1034-L1053 "Source code on GitHub"
+[109]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L982-L993 "Source code on GitHub"
 
-[110]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1062-L1075 "Source code on GitHub"
+[110]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1002-L1018 "Source code on GitHub"
 
-[111]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1086-L1095 "Source code on GitHub"
+[111]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1027-L1046 "Source code on GitHub"
 
-[112]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1107-L1109 "Source code on GitHub"
+[112]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1059-L1061 "Source code on GitHub"
 
-[113]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1120-L1122 "Source code on GitHub"
+[113]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1074-L1136 "Source code on GitHub"
 
-[114]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1133-L1135 "Source code on GitHub"
+[114]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1145-L1158 "Source code on GitHub"
 
-[115]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1146-L1148 "Source code on GitHub"
+[115]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1169-L1178 "Source code on GitHub"
 
-[116]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1159-L1161 "Source code on GitHub"
+[116]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1190-L1192 "Source code on GitHub"
 
-[117]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1171-L1173 "Source code on GitHub"
+[117]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1203-L1205 "Source code on GitHub"
 
-[118]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1183-L1185 "Source code on GitHub"
+[118]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1216-L1218 "Source code on GitHub"
 
-[119]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1195-L1197 "Source code on GitHub"
+[119]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1229-L1231 "Source code on GitHub"
 
-[120]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1210-L1218 "Source code on GitHub"
+[120]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1242-L1244 "Source code on GitHub"
 
-[121]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1227-L1229 "Source code on GitHub"
+[121]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1254-L1256 "Source code on GitHub"
 
-[122]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L1238-L1242 "Source code on GitHub"
+[122]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1266-L1268 "Source code on GitHub"
 
-[123]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L38-L40 "Source code on GitHub"
+[123]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1278-L1280 "Source code on GitHub"
 
-[124]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L55-L74 "Source code on GitHub"
+[124]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1293-L1301 "Source code on GitHub"
 
-[125]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L89-L91 "Source code on GitHub"
+[125]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1310-L1312 "Source code on GitHub"
 
-[126]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L105-L107 "Source code on GitHub"
+[126]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L1321-L1325 "Source code on GitHub"
 
-[127]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L121-L123 "Source code on GitHub"
+[127]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L37-L39 "Source code on GitHub"
 
-[128]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L137-L139 "Source code on GitHub"
+[128]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L54-L73 "Source code on GitHub"
 
-[129]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/dataframe.js#L151-L162 "Source code on GitHub"
+[129]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L88-L90 "Source code on GitHub"
+
+[130]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L104-L106 "Source code on GitHub"
+
+[131]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L120-L122 "Source code on GitHub"
+
+[132]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L136-L138 "Source code on GitHub"
+
+[133]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/dataframe.js#L150-L161 "Source code on GitHub"

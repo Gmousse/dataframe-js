@@ -570,21 +570,19 @@ test("DataFrame rows can be ", assert => {
         new DataFrame(
             {
                 name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
-                test1: [NaN, 95, null, 95, 94, undefined],
+                test1: [NaN, 96, null, 95, 94, undefined],
                 test2: [90, 90, 95, undefined, 94, 98],
                 test3: [76, NaN, 76, 76, 99, 77]
             },
             ["name", "test1", "test2", "test3"]
         )
             .sortBy(["test1"], false, "first")
-            .toArray(),
+            .toArray()
+            .slice(3, 6),
         [
-            ["Henry", NaN, 90, 76],
-            ["William", null, 95, 76],
-            ["John", undefined, 98, 77],
             ["Barbara", 94, 94, 99],
-            ["Jess", 95, 90, NaN],
-            ["Clair", 95, undefined, 76]
+            ["Clair", 95, undefined, 76],
+            ["Jess", 96, 90, NaN]
         ],
         "sorted with missing values placed first."
     );
@@ -593,23 +591,21 @@ test("DataFrame rows can be ", assert => {
         new DataFrame(
             {
                 name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
-                test1: [NaN, 95, null, 95, 94, undefined],
+                test1: [NaN, 96, null, 95, 94, undefined],
                 test2: [90, 90, 95, undefined, 94, 98],
                 test3: [76, NaN, 76, 76, 99, 77]
             },
             ["name", "test1", "test2", "test3"]
         )
             .sortBy(["test1"], false, "last")
-            .toArray(),
+            .toArray()
+            .slice(0, 3),
         [
             ["Barbara", 94, 94, 99],
-            ["Jess", 95, 90, NaN],
             ["Clair", 95, undefined, 76],
-            ["John", undefined, 98, 77],
-            ["William", null, 95, 76],
-            ["Henry", NaN, 90, 76]
+            ["Jess", 96, 90, NaN]
         ],
-        "sorted with missing values placed first."
+        "sorted with missing values placed last."
     );
 
     assert.deepEqual(
@@ -623,11 +619,9 @@ test("DataFrame rows can be ", assert => {
             ["name", "test1", "test2", "test3"]
         )
             .sortBy(["test1", "test2"], false, "first")
-            .toArray(),
+            .toArray()
+            .slice(3, 6),
         [
-            ["Henry", NaN, 90, 76],
-            ["William", null, 95, 76],
-            ["John", undefined, 98, 77],
             ["Clair", 95, undefined, 76],
             ["Barbara", 94, 94, 99],
             ["Jess", 95, 90, NaN]

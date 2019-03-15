@@ -191,7 +191,7 @@ Returns **[Row][14]** A new Row without the deleted value.
 
 [10]: #delete
 
-[11]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L11-L198 "Source code on GitHub"
+[11]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L11-L198 "Source code on GitHub"
 
 [12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
@@ -199,24 +199,24 @@ Returns **[Row][14]** A new Row without the deleted value.
 
 [14]: #row
 
-[15]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L91-L93 "Source code on GitHub"
+[15]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L91-L93 "Source code on GitHub"
 
-[16]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L101-L103 "Source code on GitHub"
+[16]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L101-L103 "Source code on GitHub"
 
-[17]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L111-L113 "Source code on GitHub"
+[17]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L111-L113 "Source code on GitHub"
 
-[18]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L121-L123 "Source code on GitHub"
+[18]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L121-L123 "Source code on GitHub"
 
-[19]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L132-L134 "Source code on GitHub"
+[19]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L132-L134 "Source code on GitHub"
 
 [20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[22]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L143-L153 "Source code on GitHub"
+[22]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L143-L153 "Source code on GitHub"
 
-[23]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L162-L167 "Source code on GitHub"
+[23]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L162-L167 "Source code on GitHub"
 
-[24]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L176-L181 "Source code on GitHub"
+[24]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L176-L181 "Source code on GitHub"
 
-[25]: https://github.com/Gmousse/dataframe-js/blob/e69bbe4cc329b29b583858b47e8d87f8d390b0bc/src/row.js#L190-L197 "Source code on GitHub"
+[25]: https://github.com/Gmousse/dataframe-js/blob/2c3510a052a46f7c2885a3d803e51af9b1d95c85/src/row.js#L190-L197 "Source code on GitHub"
