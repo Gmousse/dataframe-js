@@ -9,7 +9,7 @@ export default {
         exports: "named",
         file:
             process.env.NODE_ENV === "production"
-                ? "./dist/dataframe-min.js"
+                ? "./dist/dataframe.min.js"
                 : "./dist/dataframe.js",
         name: "dfjs",
         format: "iife"
