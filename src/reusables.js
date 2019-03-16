@@ -113,15 +113,6 @@ export function xContains(stringToFilter, ...patterns) {
     return patterns.filter(pattern => stringToFilter.includes(pattern));
 }
 
-export function compare(firstElem, secondElem, reverse = false) {
-    if (firstElem > secondElem) {
-        return reverse ? -1 : 1;
-    } else if (firstElem < secondElem) {
-        return reverse ? 1 : -1;
-    }
-    return 0;
-}
-
 export function hashCode(str) {
     let hash = 0;
     let char;

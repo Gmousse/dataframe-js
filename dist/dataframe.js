@@ -4293,17 +4293,6 @@ var dfjs = (function (exports) {
 	    return stringToFilter.includes(pattern);
 	  });
 	}
-	function compare(firstElem, secondElem) {
-	  var reverse = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
-
-	  if (firstElem > secondElem) {
-	    return reverse ? -1 : 1;
-	  } else if (firstElem < secondElem) {
-	    return reverse ? 1 : -1;
-	  }
-
-	  return 0;
-	}
 	function hashCode(str) {
 	  var hash = 0;
 	  var char;
@@ -5887,10 +5876,11 @@ var dfjs = (function (exports) {
 	    value: function replace(value, replacement, columnNames) {
 	      var _this5 = this;
 
-	      var columns = asArray(columnNames);
+	      var columns = columnNames && columnNames.length > 0 ? columnNames : this[__columns__$1];
+	      var values = Array.isArray(value) ? value : [value];
 	      return this.map(function (row) {
 	        return (columns.length > 0 ? columns : _this5[__columns__$1]).reduce(function (p, n) {
-	          return p.get(n) === value ? p.set(n, replacement) : p;
+	          return values.includes(p.get(n)) ? p.set(n, replacement) : p;
 	        }, row);
 	      });
 	    }
@@ -6237,6 +6227,63 @@ var dfjs = (function (exports) {
 	      });
 	    }
 	    /**
+	     * Return a DataFrame without rows containing missing values (undefined, NaN, null).
+	     * @param {Array} columnNames The columns to consider. All columns are considered by default.
+	     * @returns {DataFrame} A DataFrame without rows containing missing values.
+	     * @example
+	     * df.dropMissingValues(['id', 'name'])
+	     */
+
+	  }, {
+	    key: "dropMissingValues",
+	    value: function dropMissingValues(columnNames) {
+	      var cols = columnNames && columnNames.length > 0 ? columnNames : this[__columns__$1];
+	      return this.filter(function (row) {
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+
+	        try {
+	          for (var _iterator2 = cols[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            var col = _step2.value;
+
+	            if ([NaN, undefined, null].includes(row.get(col))) {
+	              return false;
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError2 = true;
+	          _iteratorError2 = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+	              _iterator2.return();
+	            }
+	          } finally {
+	            if (_didIteratorError2) {
+	              throw _iteratorError2;
+	            }
+	          }
+	        }
+
+	        return true;
+	      });
+	    }
+	    /**
+	     * Return a DataFrame with missing values (undefined, NaN, null) fill with default value.
+	     * @param replacement The new value.
+	     * @param {Array} columnNames The columns to consider. All columns are considered by default.
+	     * @returns {DataFrame} A DataFrame with missing values replaced.
+	     * @example
+	     * df.fillMissingValues(0, ['id', 'name'])
+	     */
+
+	  }, {
+	    key: "fillMissingValues",
+	    value: function fillMissingValues(replacement, columnNames) {
+	      return this.replace([NaN, undefined, null], replacement, columnNames);
+	    }
+	    /**
 	     * Return a shuffled DataFrame rows.
 	     * @returns {DataFrame} A shuffled DataFrame.
 	     * @example
@@ -6320,6 +6367,7 @@ var dfjs = (function (exports) {
 	     * Sort DataFrame rows based on column values. The row should contains only one variable type. Columns are sorted left-to-right.
 	     * @param {String | Array<string>} columnNames The columns giving order.
 	     * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
+	     * @param {String} [missingValuesPosition='first'] Define the position of missing values (undefined, nulls and NaN) in the order.
 	     * @returns {DataFrame} An ordered DataFrame.
 	     * @example
 	     * df.sortBy('id')
@@ -6331,9 +6379,16 @@ var dfjs = (function (exports) {
 	    key: "sortBy",
 	    value: function sortBy(columnNames) {
 	      var reverse = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+	      var missingValuesPosition = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "first";
 
 	      // ensure unique columns
 	      var _columnNames = Array.from(new Set(asArray(columnNames)));
+
+	      var _missingValuesPosition = ["first", "last"].includes(missingValuesPosition) ? missingValuesPosition : "first";
+
+	      var _checkMissingValue = function _checkMissingValue(v) {
+	        return [NaN, null, undefined].includes(v);
+	      };
 
 	      var sortedRows = this[__rows__].sort(function (p, n) {
 	        return _columnNames.map(function (col) {
@@ -6341,15 +6396,41 @@ var dfjs = (function (exports) {
 	              pValue = _ref8[0],
 	              nValue = _ref8[1];
 
-	          if (_typeof(pValue) !== _typeof(nValue)) {
-	            throw new MixedTypeError();
+	          if (_checkMissingValue(pValue)) {
+	            return _missingValuesPosition === "last" ? 1 : -1;
+	          } else if (_checkMissingValue(nValue)) {
+	            return _missingValuesPosition === "last" ? -1 : 1;
+	          } else if (_typeof(pValue) !== _typeof(nValue)) {
+	            throw new MixedTypeError([_typeof(pValue), _typeof(nValue)]);
+	          } else if (pValue > nValue) {
+	            return reverse ? -1 : 1;
+	          } else if (pValue < nValue) {
+	            return reverse ? 1 : -1;
 	          }
 
-	          return compare(pValue, nValue, reverse);
+	          return 0;
 	        }).reduce(function (acc, curr) {
 	          return acc || curr;
 	        });
 	      });
+
+	      if (_columnNames.length > 1) {
+	        var sortedRowsWithMissingValues = [];
+	        var sortedRowsWithoutMissingValues = [];
+	        sortedRows.forEach(function (row) {
+	          for (var _i2 = 0; _i2 < _columnNames.length; _i2++) {
+	            var col = _columnNames[_i2];
+
+	            if (_checkMissingValue(row.get(col))) {
+	              sortedRowsWithMissingValues.push(row);
+	              return;
+	            }
+	          }
+
+	          sortedRowsWithoutMissingValues.push(row);
+	        });
+	        return this.__newInstance__(missingValuesPosition === "last" ? sortedRowsWithoutMissingValues.concat(sortedRowsWithMissingValues) : sortedRowsWithMissingValues.concat(sortedRowsWithoutMissingValues), this[__columns__$1]);
+	      }
 
 	      return this.__newInstance__(sortedRows, this[__columns__$1]);
 	    }

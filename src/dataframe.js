@@ -8,7 +8,6 @@ import {
     iter,
     arrayEqual,
     saveFile,
-    compare,
     asArray,
     loadTextFile,
     addFileProtocol
@@ -632,10 +631,15 @@ class DataFrame {
      * df.replace(undefined, 0, 'column1', 'column2')
      */
     replace(value, replacement, columnNames) {
-        const columns = asArray(columnNames);
+        const columns =
+            columnNames && columnNames.length > 0
+                ? columnNames
+                : this[__columns__];
+        const values = Array.isArray(value) ? value : [value];
         return this.map(row =>
             (columns.length > 0 ? columns : this[__columns__]).reduce(
-                (p, n) => (p.get(n) === value ? p.set(n, replacement) : p),
+                (p, n) =>
+                    values.includes(p.get(n)) ? p.set(n, replacement) : p,
                 row
             )
         );
@@ -935,6 +939,41 @@ class DataFrame {
     }
 
     /**
+     * Return a DataFrame without rows containing missing values (undefined, NaN, null).
+     * @param {Array} columnNames The columns to consider. All columns are considered by default.
+     * @returns {DataFrame} A DataFrame without rows containing missing values.
+     * @example
+     * df.dropMissingValues(['id', 'name'])
+     */
+    dropMissingValues(columnNames) {
+        const cols =
+            columnNames && columnNames.length > 0
+                ? columnNames
+                : this[__columns__];
+
+        return this.filter(row => {
+            for (const col of cols) {
+                if ([NaN, undefined, null].includes(row.get(col))) {
+                    return false;
+                }
+            }
+            return true;
+        });
+    }
+
+    /**
+     * Return a DataFrame with missing values (undefined, NaN, null) fill with default value.
+     * @param replacement The new value.
+     * @param {Array} columnNames The columns to consider. All columns are considered by default.
+     * @returns {DataFrame} A DataFrame with missing values replaced.
+     * @example
+     * df.fillMissingValues(0, ['id', 'name'])
+     */
+    fillMissingValues(replacement, columnNames) {
+        return this.replace([NaN, undefined, null], replacement, columnNames);
+    }
+
+    /**
      * Return a shuffled DataFrame rows.
      * @returns {DataFrame} A shuffled DataFrame.
      * @example
@@ -1025,29 +1064,73 @@ class DataFrame {
      * Sort DataFrame rows based on column values. The row should contains only one variable type. Columns are sorted left-to-right.
      * @param {String | Array<string>} columnNames The columns giving order.
      * @param {Boolean} [reverse=false] Reverse mode. Reverse the order if true.
+     * @param {String} [missingValuesPosition='first'] Define the position of missing values (undefined, nulls and NaN) in the order.
      * @returns {DataFrame} An ordered DataFrame.
      * @example
      * df.sortBy('id')
      * df.sortBy(['id1', 'id2'])
      * df.sortBy(['id1'], true)
      */
-    sortBy(columnNames, reverse = false) {
+    sortBy(columnNames, reverse = false, missingValuesPosition = "first") {
         // ensure unique columns
         const _columnNames = Array.from(new Set(asArray(columnNames)));
+        const _missingValuesPosition = ["first", "last"].includes(
+            missingValuesPosition
+        )
+            ? missingValuesPosition
+            : "first";
+
+        const _checkMissingValue = v => [NaN, null, undefined].includes(v);
 
         const sortedRows = this[__rows__].sort((p, n) => {
             return _columnNames
                 .map(col => {
                     const [pValue, nValue] = [p.get(col), n.get(col)];
-                    if (typeof pValue !== typeof nValue) {
-                        throw new MixedTypeError();
+                    if (_checkMissingValue(pValue)) {
+                        return _missingValuesPosition === "last" ? 1 : -1;
+                    } else if (_checkMissingValue(nValue)) {
+                        return _missingValuesPosition === "last" ? -1 : 1;
+                    } else if (typeof pValue !== typeof nValue) {
+                        throw new MixedTypeError([
+                            typeof pValue,
+                            typeof nValue
+                        ]);
+                    } else if (pValue > nValue) {
+                        return reverse ? -1 : 1;
+                    } else if (pValue < nValue) {
+                        return reverse ? 1 : -1;
                     }
-                    return compare(pValue, nValue, reverse);
+                    return 0;
                 })
                 .reduce((acc, curr) => {
                     return acc || curr;
                 });
         });
+
+        if (_columnNames.length > 1) {
+            const sortedRowsWithMissingValues = [];
+            const sortedRowsWithoutMissingValues = [];
+            sortedRows.forEach(row => {
+                for (const col of _columnNames) {
+                    if (_checkMissingValue(row.get(col))) {
+                        sortedRowsWithMissingValues.push(row);
+                        return;
+                    }
+                }
+                sortedRowsWithoutMissingValues.push(row);
+            });
+
+            return this.__newInstance__(
+                missingValuesPosition === "last"
+                    ? sortedRowsWithoutMissingValues.concat(
+                          sortedRowsWithMissingValues
+                      )
+                    : sortedRowsWithMissingValues.concat(
+                          sortedRowsWithoutMissingValues
+                      ),
+                this[__columns__]
+            );
+        }
 
         return this.__newInstance__(sortedRows, this[__columns__]);
     }
