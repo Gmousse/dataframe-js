@@ -5,14 +5,19 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.3.2](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.4.0](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
 
-A ton of new features is available in 1.3.0 !! Look at the [1.3.0](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html) changelog !!
+**Last Update**:
+
+-   Bugfixes and refactor
+-   Change build ecosystem (easier, smaller bundles)
+-   Add `tail`, `head`, `slice`, `getRow`, `setRow`, `fillMissingValues`, `dropMissingValues` methods
+-   `sortBy` now handles missing values.
 
 **Compatibility**:
 
-*   Browsers (IE > 8, Edge, Firefox, Chrome...)
-*   NodeJS 0.10, 0.11, 0.12, 4.x.x, 5.x.x, 6.x.x, 8.x.x
+-   Browsers (IE > 10, Edge, Firefox, Chrome...)
+-   NodeJS 4.x.x, 5.x.x, 6.x.x, 8.x.x
 
 **License**: MIT
 
@@ -22,7 +27,7 @@ DataFrame-js provides an immutable data structure for javascript and datascience
 
 With the DataFrame, you can easily do a ton of complex stuff such as join, groupby, exploration tasks, machine learning...
 
-It works both in browser and server-side (node.js).
+It's mainly designed to work on server-side (with node) but it also works in the browser (without file system related features).
 
 Example:
 
@@ -52,10 +57,12 @@ via npm: `npm install dataframe-js`
 
 via yarn: `yarn add dataframe-js`
 
-in the browser:
+**For the browser, we have change the script provider ([rawgit](https://rawgit.com/)) because it will close soon, consider to update the url!!!**
 
-*   not minified: `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>`
-*   minified (production): `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>`
+in the browser (1.4.0):
+
+-   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>` (~ 80ko)
+-   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>` (~ 300ko)
 
 ## Usage
 

@@ -1,8 +1,9 @@
-npm-debug.log*
+*.log*
 logs
 node_modules
 .nyc_output
-package-lock.json
+*lock*
 coverage
 report*.txt
 .vscode
+.tsbuild

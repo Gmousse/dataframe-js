@@ -1,9 +1,7 @@
-import tape from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
 import { tryCatch } from "./utils";
-
-const test = tape;
 
 test("DataFrame columns can be", assert => {
     const df2 = new DataFrame(
@@ -49,7 +47,7 @@ test("DataFrame columns can be", assert => {
         "listed."
     );
 
-    assert.equal(df.listColumns().length, 6, "counted.");
+    assert.is(df.listColumns().length, 6, "counted.");
 
     assert.deepEqual(
         df.select("c2", "c3", "c4").toDict(),
@@ -84,9 +82,8 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .withColumn(
-                "c4",
-                row => (row.get("c2") ? row.get("c2") - 2 : 0 - 2)
+            .withColumn("c4", row =>
+                row.get("c2") ? row.get("c2") - 2 : 0 - 2
             )
             .toDict(),
         {
@@ -136,16 +133,14 @@ test("DataFrame columns can be", assert => {
         "renamed individually."
     );
 
-    class CustomClass {
-        constructor(valueToConvert) {
-            this.value = String(Number(valueToConvert) * 10);
-        }
+    function customFormat(valueToConvert) {
+        return { value: String(Number(valueToConvert) * 10) };
     }
 
     assert.deepEqual(
         df
             .select("c1", "c2", "c3")
-            .castAll([String, Number, val => new CustomClass(val)])
+            .castAll([String, Number, customFormat])
             .toArray()[0],
         ["1", 6, { value: "90" }],
         "cast."
@@ -202,6 +197,58 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
+            .replace([undefined, null, NaN], 0)
+            .toDict(),
+        {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, 0, 8]
+        },
+        "modified, replacing a value in a choice by another."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .dropMissingValues()
+            .toDict(),
+        {
+            c2: [6, 6],
+            c3: [9, 9],
+            c4: [10, 8]
+        },
+        "modified, dropping missing values."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .dropMissingValues(["c3", "c2"])
+            .toDict(),
+        {
+            c2: [6, 6],
+            c3: [9, 9],
+            c4: [10, 8]
+        },
+        "modified, dropping missing values in few columns."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .fillMissingValues(0)
+            .toDict(),
+        {
+            c2: [6, 2, 6],
+            c3: [9, 0, 9],
+            c4: [10, 0, 8]
+        },
+        "modified, replacing missing values."
+    );
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
             .replace(undefined, 0, ["c2", "c3"])
             .toDict(),
         {
@@ -213,19 +260,15 @@ test("DataFrame columns can be", assert => {
     );
 
     assert.deepEqual(df.toArray("c2"), [6, 2, 6], "converted into Array.");
-
-    assert.end();
 });
 
 test("DataFrame columns can't be ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).renameAll(["c1"]))
             .name,
         "WrongSchemaError",
         "renamed when providing different columns number, throwing WrongSchemaError."
     );
-
-    assert.end();
 });
 
 test("DataFrame rows can be ", assert => {
@@ -238,15 +281,15 @@ test("DataFrame rows can be ", assert => {
         ["column1", "column2", "column3"]
     );
 
-    assert.equal(df1.count(), 4, "counted.");
+    assert.is(df1.count(), 4, "counted.");
 
-    assert.equal(
+    assert.is(
         df1.countValue("4", "column2"),
         1,
         "counted based on a specific value in a column."
     );
 
-    assert.equal(
+    assert.is(
         df1.countValue(9, "column1"),
         0,
         "counted based on a specific value in a selected column."
@@ -365,12 +408,11 @@ test("DataFrame rows can be ", assert => {
         "filtered and modified and filtered (again) by chains."
     );
 
-    const df2 = df1.withColumn(
-        "column1",
-        row => (row.get("column1") ? row.get("column1") : 0)
+    const df2 = df1.withColumn("column1", row =>
+        row.get("column1") ? row.get("column1") : 0
     );
 
-    assert.equal(
+    assert.is(
         df2.reduce((p, n) => n.get("column1") + p, 0),
         17,
         "reduced to obtain a value."
@@ -471,13 +513,29 @@ test("DataFrame rows can be ", assert => {
     );
 
     assert.deepEqual(
-        df3.sortBy("id").toArray(),
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .sortBy("id")
+            .toArray(),
         [[1, 1], [1, 1], [3, 1], [3, 2], [6, 0], [8, 1], [8, 4]],
         "sorted by a column."
     );
 
     assert.deepEqual(
-        df3.sortBy("id", true).toArray(),
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .sortBy("id", true)
+            .toArray(),
         [[8, 1], [8, 4], [6, 0], [3, 1], [3, 2], [1, 1], [1, 1]],
         "sorted and reverse by a column."
     );
@@ -492,7 +550,7 @@ test("DataFrame rows can be ", assert => {
             ["Jess", 95, 90, 75, true],
             ["William", 95, 95, 76, false]
         ],
-        "sorted by three columns."
+        "sorted by multiple columns."
     );
 
     assert.deepEqual(
@@ -505,57 +563,104 @@ test("DataFrame rows can be ", assert => {
             ["John", 94, 98, 77, false],
             ["Barbara", 94, 94, 99, true]
         ],
-        "sorted and reverse by three columns."
-    );
-
-    const df5 = new DataFrame(
-        {
-            id: [3, 1, 8],
-            value: [1, 0, 1]
-        },
-        ["id", "value"]
+        "sorted and reverse by multiple columns."
     );
 
     assert.deepEqual(
-        df3.union(df5).toArray(),
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 96, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1"], false, "first")
+            .toArray()
+            .slice(3, 6),
         [
-            [8, 1],
-            [8, 4],
-            [6, 0],
+            ["Barbara", 94, 94, 99],
+            ["Clair", 95, undefined, 76],
+            ["Jess", 96, 90, NaN]
+        ],
+        "sorted with missing values placed first."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 96, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1"], false, "last")
+            .toArray()
+            .slice(0, 3),
+        [
+            ["Barbara", 94, 94, 99],
+            ["Clair", 95, undefined, 76],
+            ["Jess", 96, 90, NaN]
+        ],
+        "sorted with missing values placed last."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                name: ["Henry", "Jess", "William", "Clair", "Barbara", "John"],
+                test1: [NaN, 95, null, 95, 94, undefined],
+                test2: [90, 90, 95, undefined, 94, 98],
+                test3: [76, NaN, 76, 76, 99, 77]
+            },
+            ["name", "test1", "test2", "test3"]
+        )
+            .sortBy(["test1", "test2"], false, "first")
+            .toArray()
+            .slice(3, 6),
+        [
+            ["Clair", 95, undefined, 76],
+            ["Barbara", 94, 94, 99],
+            ["Jess", 95, 90, NaN]
+        ],
+        "sorted by multiple columns with missing values placed first."
+    );
+
+    assert.deepEqual(
+        new DataFrame(
+            {
+                id: [3, 6, 8, 1, 1, 3, 8],
+                value: [1, 0, 1, 1, 1, 2, 4]
+            },
+            ["id", "value"]
+        )
+            .union(
+                new DataFrame(
+                    {
+                        id: [3, 1, 8],
+                        value: [1, 0, 1]
+                    },
+                    ["id", "value"]
+                )
+            )
+            .sortBy("id")
+            .toArray(),
+        [
+            [1, 1],
+            [1, 1],
+            [1, 0],
             [3, 1],
             [3, 2],
-            [1, 1],
-            [1, 1],
             [3, 1],
-            [1, 0],
+            [6, 0],
+            [8, 1],
+            [8, 4],
             [8, 1]
         ],
         "concatenated with another DataFrame."
-    );
-
-    const df5b = new DataFrame(
-        {
-            id: [3, 1, 8],
-            value: [1, 0, 1]
-        },
-        ["value", "id"]
-    );
-
-    assert.deepEqual(
-        df3.union(df5b).toArray(),
-        [
-            [8, 1],
-            [8, 4],
-            [6, 0],
-            [3, 1],
-            [3, 2],
-            [1, 1],
-            [1, 1],
-            [1, 3],
-            [0, 1],
-            [1, 8]
-        ],
-        "concatenated with another DataFrame, with columns not in the same order."
     );
 
     const df6 = new DataFrame(
@@ -571,7 +676,7 @@ test("DataFrame rows can be ", assert => {
         "c1"
     ]);
 
-    assert.equal(df8.sample(0.2).count(), 1000, "randomly sampled.");
+    assert.is(df8.sample(0.2).count(), 1000, "randomly sampled.");
 
     assert.deepEqual(
         df8.bisect(0.2).map(splittedDF => splittedDF.count()),
@@ -611,12 +716,10 @@ test("DataFrame rows can be ", assert => {
         ],
         "melted."
     );
-
-    assert.end();
 });
 
 test("DataFrame rows can't be ", assert => {
-    assert.equal(
+    assert.is(
         tryCatch(() =>
             new DataFrame([{ c1: 1, c2: 3 }]).union(
                 new DataFrame([{ c1: 1, c4: 3 }])
@@ -626,30 +729,27 @@ test("DataFrame rows can't be ", assert => {
         "concatenated when providing different columns, throwing WrongSchemaError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).union([])).name,
         "ArgumentTypeError",
         "concatened with not a DataFrame, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).innerJoin([])).name,
         "ArgumentTypeError",
         "joined with not a DataFrame, throwing ArgumentTypeError."
     );
 
-    assert.equal(
+    assert.is(
         tryCatch(() =>
-            new DataFrame([
-                { c1: 1, c2: 3 },
-                { c1: undefined, c2: "4" }
-            ]).sortBy("c1")
+            new DataFrame([{ c1: 1, c2: 3 }, { c1: "test", c2: "4" }]).sortBy(
+                "c1"
+            )
         ).name,
         "MixedTypeError",
         "sortBy on a mixed types column, throwing MixedTypeError."
     );
-
-    assert.end();
 });
 
 test("DataFrame modules can be ", assert => {
@@ -674,25 +774,25 @@ test("DataFrame modules can be ", assert => {
         { modules: [FakeModule] }
     );
 
-    assert.equal(
+    assert.is(
         df.fakemodule.test(4),
         8,
         "registered in an DataFrame instance and used."
     );
 
-    assert.equal(
+    assert.is(
         df.options.modules.length,
         DataFrame.defaultModules.length + 1,
         "listed from an instance where modules are changed from options."
     );
 
-    assert.equal(
+    assert.is(
         new DataFrame([], []).options.modules.length,
         3,
         "listed from an instance where modules are default modules."
     );
 
-    assert.equal(
+    assert.is(
         DataFrame.defaultModules.length,
         3,
         "listed from the default DataFrame static properties and counted."
@@ -700,7 +800,7 @@ test("DataFrame modules can be ", assert => {
 
     DataFrame.setDefaultModules(...DataFrame.defaultModules, FakeModule);
 
-    assert.equal(
+    assert.is(
         new DataFrame(
             {
                 column1: [3, 6, 8],
@@ -712,8 +812,6 @@ test("DataFrame modules can be ", assert => {
         12,
         "registered as default DataFrame static properties and used."
     );
-
-    assert.end();
 });
 
 test("DataFrame stay immutable when", assert => {
@@ -722,19 +820,17 @@ test("DataFrame stay immutable when", assert => {
         ["c1", "c2", "c3", "c4", "c5", "c6"]
     );
 
-    assert.equal(
+    assert.is(
         Object.is(df.map(row => row.set("c1", 18)), df),
         false,
         "modified."
     );
 
-    assert.equal(
+    assert.is(
         Object.is(df.map(row => row), df),
         false,
         "modified, even if nothing have changed."
     );
-
-    assert.end();
 });
 
 test("Empty DataFrame", assert => {
@@ -745,19 +841,19 @@ test("Empty DataFrame", assert => {
 
     const emptyDF = new DataFrame([]);
 
-    assert.equal(
+    assert.is(
         emptyDF.join(df, "c1") instanceof DataFrame,
         true,
         "can be joined with another DataFrame."
     );
 
-    assert.equal(
+    assert.is(
         emptyDF.join(emptyDF, "col1") instanceof DataFrame,
         true,
         "can be joined with another empty DataFrame."
     );
 
-    assert.equal(
+    assert.is(
         emptyDF.union(emptyDF) instanceof DataFrame,
         true,
         "can be unioned with another empty DataFrame."
@@ -768,30 +864,162 @@ test("Empty DataFrame", assert => {
         true,
         "can be shuffled."
     );
-
-    assert.end();
 });
 
 test("DataFrame can be shuffled", assert => {
     const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
 
-    assert.isNotDeepEqual(
+    assert.notDeepEqual(
         df.shuffle().toArray(),
         df.toArray(),
         "randomly shuffled."
     );
 
-    assert.equal(
+    assert.is(
         df.shuffle().count(),
         df.count(),
         "randomly shuffled and get the same length."
     );
 
-    assert.equal(
+    assert.is(
         new DataFrame([{ c1: "x" }], ["c1"]).shuffle().count(),
         1,
         "randomly shuffled and get the same length when having one row."
     );
+});
 
-    assert.end();
+test("DataFrame can be subsetted", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.deepEqual(
+        df.slice(0, 10).toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "slicing the dataframe between 0 and 10 index."
+    );
+
+    assert.deepEqual(
+        df.slice(0, 10).toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "slicing the dataframe out of index."
+    );
+
+    assert.deepEqual(
+        df.head().toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 2 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 }
+        ],
+        "getting a new dataframe with the first 10 elements."
+    );
+
+    assert.deepEqual(
+        df.head(2).toCollection(),
+        [{ c1: 0 }, { c1: 1 }],
+        "getting a new dataframe with the first 2 elements."
+    );
+
+    assert.deepEqual(
+        df.tail().toCollection(),
+        [
+            { c1: 10 },
+            { c1: 11 },
+            { c1: 12 },
+            { c1: 13 },
+            { c1: 14 },
+            { c1: 15 },
+            { c1: 16 },
+            { c1: 17 },
+            { c1: 18 },
+            { c1: 19 }
+        ],
+        "getting a new dataframe with the last 10 elements."
+    );
+
+    assert.deepEqual(
+        df.tail(2).toCollection(),
+        [{ c1: 18 }, { c1: 19 }],
+        "getting a new dataframe with the last 2 elements."
+    );
+});
+
+test("DataFrame row", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.deepEqual(
+        df.getRow(2).toDict(),
+        { c1: 2 },
+        "can be accessed by its index."
+    );
+    assert.deepEqual(
+        df.getRow(300),
+        undefined,
+        "can be accessed by its index."
+    );
+
+    assert.deepEqual(
+        df.setRow(2, row => row.set("c1", 656)).toCollection(),
+        [
+            { c1: 0 },
+            { c1: 1 },
+            { c1: 656 },
+            { c1: 3 },
+            { c1: 4 },
+            { c1: 5 },
+            { c1: 6 },
+            { c1: 7 },
+            { c1: 8 },
+            { c1: 9 },
+            { c1: 10 },
+            { c1: 11 },
+            { c1: 12 },
+            { c1: 13 },
+            { c1: 14 },
+            { c1: 15 },
+            { c1: 16 },
+            { c1: 17 },
+            { c1: 18 },
+            { c1: 19 }
+        ],
+        "can be modified by its index."
+    );
+});
+
+test("DataFrame filter with empty result", assert => {
+    const df = new DataFrame([...Array(20).keys()].map(row => [row]), ["c1"]);
+
+    assert.deepEqual(
+        df.filter(row => row.get("c1") === 999).listColumns(),
+        ["c1"],
+        "should return an empty DataFrame with the same columns."
+    );
 });

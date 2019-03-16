@@ -1,8 +1,6 @@
-import tape from "tape";
+import test from "ava";
 
 import { DataFrame } from "../src/index";
-
-const test = tape;
 
 test("DataFrame can be joined", assert => {
     const df = new DataFrame(
@@ -202,8 +200,6 @@ test("DataFrame can be joined", assert => {
         ],
         "right on multiple columns."
     );
-
-    assert.end();
 });
 
 test("DataFrame can be diff", assert => {
@@ -249,6 +245,4 @@ test("DataFrame can be diff", assert => {
         ],
         "on multiple columns."
     );
-
-    assert.end();
 });
