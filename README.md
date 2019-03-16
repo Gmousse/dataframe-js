@@ -52,7 +52,7 @@ via npm: `npm install dataframe-js`
 
 via yarn: `yarn add dataframe-js`
 
-**For the browser, we have change the script provider (rawgit) because it will close soon, consider to update your paths to the script!!!**
+**For the browser, we have change the script provider ([rawgit](https://rawgit.com/)) because it will close soon, consider to update the url!!!**
 
 in the browser (1.4.0):
 
@@ -61,8 +61,8 @@ in the browser (1.4.0):
 
 in the browser (< 1.4.0):
 
--   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>` (~ 80ko)
--   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>` (~ 300ko)
+-   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.old.min.js"></script>` (~ 80ko)
+-   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.old.js"></script>` (~ 300ko)
 
 ## Usage1
 
