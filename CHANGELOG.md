@@ -22,6 +22,7 @@
 -   A filtered DataFrame with empty rows will now returns its columns.
 -   Add .fillMissingValues, dropMissingValues
 -   Add a new parameter to sortBy in order to place missing values.
+-   Drop rawgit url to a github pages url.
 
 ---
 

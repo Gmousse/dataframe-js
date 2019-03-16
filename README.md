@@ -59,12 +59,7 @@ in the browser (1.4.0):
 -   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>` (~ 80ko)
 -   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>` (~ 300ko)
 
-in the browser (< 1.4.0):
-
--   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.old.min.js"></script>` (~ 80ko)
--   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.old.js"></script>` (~ 300ko)
-
-## Usage1
+## Usage
 
 [Basic Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/BASIC_USAGE.html)
 
