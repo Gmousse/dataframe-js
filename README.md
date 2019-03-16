@@ -52,12 +52,19 @@ via npm: `npm install dataframe-js`
 
 via yarn: `yarn add dataframe-js`
 
-in the browser:
+**For the browser, we have change the script provider (rawgit) because it will close soon, consider to update your paths to the script!!!**
 
--   for production `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe-min.js"></script>` (~ 80ko)
--   for development `<script src="https://cdn.rawgit.com/Gmousse/dataframe-js/master/dist/dataframe.js"></script>` (~ 300ko)
+in the browser (1.4.0):
 
-## Usage
+-   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>` (~ 80ko)
+-   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>` (~ 300ko)
+
+in the browser (< 1.4.0):
+
+-   for production `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.min.js"></script>` (~ 80ko)
+-   for development `<script src="https://gmousse.github.io/dataframe-js/dist/dataframe.js"></script>` (~ 300ko)
+
+## Usage1
 
 [Basic Usage](https://gmousse.gitbooks.io/dataframe-js/content/doc/BASIC_USAGE.html)
 
