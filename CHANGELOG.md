@@ -2,6 +2,18 @@
 
 ---
 
+## v1.4.1
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+-   Fix errors on IE11 thanks to [mbkupfer](https://github.com/mbkupfer) !!
+
+---
+
 ## v1.4.0
 
 **Author**: Guillaume Mousnier
