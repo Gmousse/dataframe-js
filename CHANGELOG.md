@@ -2,6 +2,19 @@
 
 ---
 
+## v1.4.1
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+-   Fix errors on IE11 thanks to [mbkupfer](https://github.com/mbkupfer) !!
+-   It's not necessary to update the version if you use it in nodejs.
+
+---
+
 ## v1.4.0
 
 **Author**: Guillaume Mousnier

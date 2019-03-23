@@ -846,9 +846,9 @@ class DataFrame {
                           )
                           .reduce((p, n) => p && n)
                 : condition;
-        const filteredRows = [
-            ...iter(this[__rows__], (row, i) => (func(row, i) ? row : false))
-        ];
+        const filteredRows = iter(this[__rows__], (row, i) =>
+            func(row, i) ? row : false
+        );
         return this.__newInstance__(filteredRows, this[__columns__]);
     }
 
@@ -886,7 +886,7 @@ class DataFrame {
      */
     map(func) {
         return this.__newInstance__(
-            [...iter(this[__rows__], (row, i) => func(row, i))],
+            iter(this[__rows__], (row, i) => func(row, i)),
             this[__columns__]
         );
     }
@@ -1003,16 +1003,14 @@ class DataFrame {
         const nRows = this.count() * percentage;
         let token = 0;
         return this.__newInstance__(
-            [
-                ...iter(
-                    this.shuffle()[__rows__],
-                    row => {
-                        token++;
-                        return row;
-                    },
-                    () => token >= nRows
-                )
-            ],
+            iter(
+                this.shuffle()[__rows__],
+                row => {
+                    token++;
+                    return row;
+                },
+                () => token >= nRows
+            ),
             this[__columns__]
         );
     }
@@ -1030,15 +1028,13 @@ class DataFrame {
         const restRows = [];
         return [
             this.__newInstance__(
-                [
-                    ...iter(this.shuffle()[__rows__], row => {
-                        if (token < nRows) {
-                            token++;
-                            return row;
-                        }
-                        restRows.push(row);
-                    })
-                ],
+                iter(this.shuffle()[__rows__], row => {
+                    if (token < nRows) {
+                        token++;
+                        return row;
+                    }
+                    restRows.push(row);
+                }),
                 this[__columns__]
             ),
             this.__newInstance__(restRows, this[__columns__])
