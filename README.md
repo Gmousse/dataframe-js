@@ -5,7 +5,7 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.4.0](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.4.1](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
 
 **Last Update**:
 
@@ -13,6 +13,7 @@
 -   Change build ecosystem (easier, smaller bundles)
 -   Add `tail`, `head`, `slice`, `getRow`, `setRow`, `fillMissingValues`, `dropMissingValues` methods
 -   `sortBy` now handles missing values.
+-   Fix bugs on IE !
 
 **Compatibility**:
 

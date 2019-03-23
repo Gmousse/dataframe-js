@@ -4070,7 +4070,7 @@ var dfjs = (function (exports) {
 	regeneratorRuntime.mark(makeGenerator),
 	    _marked2 =
 	/*#__PURE__*/
-	regeneratorRuntime.mark(iter);
+	regeneratorRuntime.mark(createIterGenerator);
 
 	function asArray(x) {
 	  if (!x) return [];
@@ -4128,7 +4128,8 @@ var dfjs = (function (exports) {
 
 	  return checker(casesGen.next().value);
 	}
-	function iter(data, func) {
+
+	function createIterGenerator(data, func) {
 	  var abort,
 	      i,
 	      _iteratorNormalCompletion,
@@ -4140,7 +4141,7 @@ var dfjs = (function (exports) {
 	      modifiedRow,
 	      _args2 = arguments;
 
-	  return regeneratorRuntime.wrap(function iter$(_context2) {
+	  return regeneratorRuntime.wrap(function createIterGenerator$(_context2) {
 	    while (1) {
 	      switch (_context2.prev = _context2.next) {
 	        case 0:
@@ -4226,12 +4227,19 @@ var dfjs = (function (exports) {
 	    }
 	  }, _marked2, this, [[5, 20, 24, 32], [25,, 27, 31]]);
 	}
+
+	function iter(data, func) {
+	  var abort = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function () {
+	    return false;
+	  };
+	  return Array.from(createIterGenerator(data, func, abort));
+	}
 	function chain(data) {
 	  for (var _len2 = arguments.length, operations = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
 	    operations[_key2 - 1] = arguments[_key2];
 	  }
 
-	  return iter(data, operations.reduce(function (p, n) {
+	  return Array.from(iter(data, operations.reduce(function (p, n) {
 	    return function (x, i) {
 	      var prev = p(x, i);
 	      var next = prev ? n(prev, i) : false;
@@ -4239,7 +4247,7 @@ var dfjs = (function (exports) {
 	    };
 	  }, function (x) {
 	    return x;
-	  }));
+	  })));
 	}
 	function saveFile(path, content) {
 	  try {
@@ -6115,11 +6123,9 @@ var dfjs = (function (exports) {
 	          return p && n;
 	        });
 	      } : condition;
-
-	      var filteredRows = _toConsumableArray(iter(this[__rows__], function (row, i) {
+	      var filteredRows = iter(this[__rows__], function (row, i) {
 	        return func(row, i) ? row : false;
-	      }));
-
+	      });
 	      return this.__newInstance__(filteredRows, this[__columns__$1]);
 	    }
 	    /**
@@ -6162,9 +6168,9 @@ var dfjs = (function (exports) {
 	  }, {
 	    key: "map",
 	    value: function map(func) {
-	      return this.__newInstance__(_toConsumableArray(iter(this[__rows__], function (row, i) {
+	      return this.__newInstance__(iter(this[__rows__], function (row, i) {
 	        return func(row, i);
-	      })), this[__columns__$1]);
+	      }), this[__columns__$1]);
 	    }
 	    /**
 	     * Reduce DataFrame into a value.
@@ -6312,12 +6318,12 @@ var dfjs = (function (exports) {
 	    value: function sample(percentage) {
 	      var nRows = this.count() * percentage;
 	      var token = 0;
-	      return this.__newInstance__(_toConsumableArray(iter(this.shuffle()[__rows__], function (row) {
+	      return this.__newInstance__(iter(this.shuffle()[__rows__], function (row) {
 	        token++;
 	        return row;
 	      }, function () {
 	        return token >= nRows;
-	      })), this[__columns__$1]);
+	      }), this[__columns__$1]);
 	    }
 	    /**
 	     * Randomly split a DataFrame into 2 DataFrames.
@@ -6333,14 +6339,14 @@ var dfjs = (function (exports) {
 	      var nRows = this.count() * percentage;
 	      var token = 0;
 	      var restRows = [];
-	      return [this.__newInstance__(_toConsumableArray(iter(this.shuffle()[__rows__], function (row) {
+	      return [this.__newInstance__(iter(this.shuffle()[__rows__], function (row) {
 	        if (token < nRows) {
 	          token++;
 	          return row;
 	        }
 
 	        restRows.push(row);
-	      })), this[__columns__$1]), this.__newInstance__(restRows, this[__columns__$1])];
+	      }), this[__columns__$1]), this.__newInstance__(restRows, this[__columns__$1])];
 	    }
 	    /**
 	     * Group DataFrame rows by columns giving a GroupedDataFrame object. See its doc for more examples.
