@@ -47,7 +47,7 @@ export function match(value, ...cases) {
     return checker(casesGen.next().value);
 }
 
-export function* iter(data, func, abort = () => false) {
+function* createIterGenerator(data, func, abort = () => false) {
     let i = 0;
     for (const iteration of data) {
         if (abort()) return;
@@ -58,16 +58,22 @@ export function* iter(data, func, abort = () => false) {
     }
 }
 
+export function iter(data, func, abort = () => false) {
+    return Array.from(createIterGenerator(data, func, abort));
+}
+
 export function chain(data, ...operations) {
-    return iter(
-        data,
-        operations.reduce(
-            (p, n) => (x, i) => {
-                const prev = p(x, i);
-                const next = prev ? n(prev, i) : false;
-                return next === true ? prev : next;
-            },
-            x => x
+    return Array.from(
+        iter(
+            data,
+            operations.reduce(
+                (p, n) => (x, i) => {
+                    const prev = p(x, i);
+                    const next = prev ? n(prev, i) : false;
+                    return next === true ? prev : next;
+                },
+                x => x
+            )
         )
     );
 }
