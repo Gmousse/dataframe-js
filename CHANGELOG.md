@@ -11,6 +11,7 @@
 **Changes**:
 
 -   Fix errors on IE11 thanks to [mbkupfer](https://github.com/mbkupfer) !!
+-   It's not necessary to update the version if you use it in nodejs.
 
 ---
 
