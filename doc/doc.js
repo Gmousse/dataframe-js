@@ -15,7 +15,7 @@ function clean() {
     return new Promise((resolve, reject) => {
         console.log("Cleaning the doc folder.");
         exec(
-            "rm -rf doc/md && mkdir doc/md && mkdir doc/md/modules",
+            "shx rm -rf doc/md && shx mkdir doc/md && mkdir doc/md/modules",
             (err, stdout, stderr) => {
                 if (stderr) {
                     console.error(stderr);

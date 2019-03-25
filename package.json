@@ -30,13 +30,13 @@
         "posttest": "npm run lint",
         "coverage": "nyc report --reporter=text-lcov | coveralls",
         "doc": "node doc/doc.js",
-        "predts": "mkdir -p ../tmp-dfjs && cd ../tmp-dfjs && npm i ../dataframe-js",
+        "predts": "shx mkdir -p ../tmp-dfjs && cd ../tmp-dfjs && npm i ../dataframe-js",
         "dts": "cd ../tmp-dfjs && dts-gen -m dataframe-js --overwrite -f ../dataframe-js/dataframe-js.d.ts",
-        "postdts": "rm -rf ../tmp-dfjs",
+        "postdts": "shx rm -rf ../tmp-dfjs",
         "build:cjs": "cross-env NODE_ENV=production babel src/ -d lib/ --no-comments",
         "build:iife": "rollup -c",
         "build:iife:min": "cross-env NODE_ENV=production rollup -c",
-        "prebuild": "npm run test && rm -rf dist lib",
+        "prebuild": "npm run test && shx rm -rf dist lib",
         "build": "npm run build:cjs && npm run build:iife && npm run build:iife:min",
         "postbuild": "npm run doc && npm run dts"
     },
@@ -67,6 +67,7 @@
         "rollup-plugin-uglify": "^6.0.0",
         "rollup-plugin-node-resolve": "~4.0.0",
         "rollup-plugin-commonjs": "~9.2.0"
+        "shx": "^0.3.2"
     },
     "dependencies": {
         "@babel/polyfill": "~7.2.5",
