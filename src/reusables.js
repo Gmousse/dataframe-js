@@ -95,7 +95,7 @@ export function loadTextFile(file, func) {
 }
 
 export function addFileProtocol(path) {
-    return path.startsWith("/") || path.startsWith("./")
+    return path.startsWith("/") || path.startsWith("./") || path.startsWith("C")
         ? `file://${path}`
         : path;
 }
