@@ -494,7 +494,7 @@ class DataFrame {
 
     /**
      * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
-     * @param {Boolean} [asCollection=true] Writing the JSON as collection of Object.
+     * @param {Boolean} [asCollection=false] Writing the JSON as collection of Object.
      * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
      * @returns {String} The json file in raw string.
      * @example
