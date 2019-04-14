@@ -1,28 +1,9 @@
-import { text, json } from "d3-request";
-import { dsvFormat } from "d3-dsv";
-
-import {
-    match,
-    transpose,
-    chain,
-    iter,
-    arrayEqual,
-    saveFile,
-    asArray,
-    loadTextFile,
-    addFileProtocol
-} from "./reusables";
-import {
-    ArgumentTypeError,
-    WrongSchemaError,
-    MixedTypeError,
-    FileNotFoundError
-} from "./errors";
+import { transpose, chain, iter, arrayEqual } from "./reusables";
+import { ArgumentTypeError, WrongSchemaError, MixedTypeError } from "./errors";
 import Row from "./row";
-import GroupedDataFrame from "./groupedDataframe";
-
-const __columns__ = Symbol("columns");
-const __rows__ = Symbol("rows");
+import { groupBy } from "./group";
+import { __columns__, __rows__ } from "./symbol";
+import * as io from "./io";
 
 /**
  * DataFrame data structure providing an immutable, flexible and powerfull way to manipulate data with columns and rows.
@@ -51,25 +32,8 @@ class DataFrame {
      * DataFrame.fromDSV('/my/absolue/path/myfile.txt').then(df => df.show())
      * DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
-    static fromDSV(pathOrFile, sep = ";", header = true) {
-        const parser = dsvFormat(sep);
-        return new Promise(resolve => {
-            const parseText = fileContent => {
-                if (fileContent.includes("Error: ENOENT")) return resolve(null);
-                const data = header
-                    ? parser.parse(fileContent)
-                    : parser.parseRows(fileContent);
-                return resolve(data);
-            };
-            return typeof pathOrFile === "string"
-                ? text(addFileProtocol(pathOrFile), parseText)
-                : loadTextFile(pathOrFile, parseText);
-        }).then(fileContent => {
-            if (fileContent === null) {
-                throw new FileNotFoundError(pathOrFile);
-            }
-            return new DataFrame(fileContent);
-        });
+    static fromDSV(...args) {
+        return io.fromDSV(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -85,8 +49,8 @@ class DataFrame {
      * DataFrame.fromText('/my/absolue/path/myfile.txt').then(df => df.show())
      * DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
-    static fromText(pathOrFile, sep = ";", header = true) {
-        return DataFrame.fromDSV(pathOrFile, sep, header);
+    static fromText(...args) {
+        return io.fromText(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -101,8 +65,8 @@ class DataFrame {
      * DataFrame.fromCSV('/my/absolue/path/myfile.csv').then(df => df.show())
      * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
      */
-    static fromCSV(pathOrFile, header = true) {
-        return DataFrame.fromDSV(pathOrFile, ",", header);
+    static fromCSV(...args) {
+        return io.fromCSV(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -117,8 +81,8 @@ class DataFrame {
      * DataFrame.fromTSV('/my/absolue/path/myfile.tsv').then(df => df.show())
      * DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
      */
-    static fromTSV(pathOrFile, header = true) {
-        return DataFrame.fromDSV(pathOrFile, "\t", header);
+    static fromTSV(...args) {
+        return io.fromTSV(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -133,8 +97,8 @@ class DataFrame {
      * DataFrame.fromPSV('/my/absolue/path/myfile.psv').then(df => df.show())
      * DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
      */
-    static fromPSV(pathOrFile, header = true) {
-        return DataFrame.fromDSV(pathOrFile, "|", header);
+    static fromPSV(...args) {
+        return io.fromPSV(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -147,17 +111,8 @@ class DataFrame {
      * // From node.js only
      * DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
      */
-    static fromJSON(pathOrFile) {
-        return new Promise(resolve => {
-            return typeof pathOrFile === "string"
-                ? json(addFileProtocol(pathOrFile), resolve)
-                : loadTextFile(pathOrFile, txt => resolve(JSON.parse(txt)));
-        }).then(fileContent => {
-            if (fileContent === null) {
-                throw new FileNotFoundError(pathOrFile);
-            }
-            return new DataFrame(fileContent);
-        });
+    static fromJSON(...args) {
+        return io.fromJSON(...args).then(content => new DataFrame(content));
     }
 
     /**
@@ -237,54 +192,34 @@ class DataFrame {
     }
 
     _build(data, columns) {
-        return match(
-            data,
-            [
-                value => value instanceof DataFrame,
-                () =>
-                    this._fromArray(
-                        [...data[__rows__]],
-                        columns ? columns : data[__columns__]
+        if (data instanceof DataFrame) {
+            return this._fromArray(
+                Array.from(data[__rows__]),
+                columns || data[__columns__]
+            );
+        }
+        if (data instanceof Array && data.length > 0) {
+            return this._fromArray(
+                data,
+                columns ||
+                    Array.from(
+                        new Set(
+                            data
+                                .slice(0, 10)
+                                .concat(data.slice(-10, -1))
+                                .map(row => Object.keys(row))
+                                .reduce((p, n) => p.concat(n))
+                        )
                     )
-            ],
-            [
-                value => value instanceof Array && value.length !== 0,
-                () =>
-                    this._fromArray(
-                        data,
-                        columns
-                            ? columns
-                            : [
-                                  ...new Set(
-                                      [
-                                          ...data.slice(0, 10),
-                                          ...data.slice(-10, -1)
-                                      ]
-                                          .map(row => Object.keys(row))
-                                          .reduce((p, n) => [...p, ...n])
-                                  )
-                              ]
-                    )
-            ],
-            [
-                value => value instanceof Array && value.length === 0,
-                () => this._fromArray(data, columns ? columns : [])
-            ],
-            [
-                value => value instanceof Object,
-                () =>
-                    this._fromDict(data, columns ? columns : Object.keys(data))
-            ],
-            [
-                () => true,
-                () => {
-                    throw new ArgumentTypeError(
-                        data,
-                        "DataFrame | Array | Object"
-                    );
-                }
-            ]
-        );
+            );
+        }
+        if (data instanceof Array && data.length === 0) {
+            return this._fromArray(data, columns ? columns : []);
+        }
+        if (data instanceof Object) {
+            return this._fromDict(data, columns || Object.keys(data));
+        }
+        throw new ArgumentTypeError(data, "DataFrame | Array | Object");
     }
 
     _fromDict(dict, columns) {
@@ -363,6 +298,99 @@ class DataFrame {
     }
 
     /**
+     * Convert the DataFrame into a text delimiter separated values. You can also save the file if you are using nodejs.
+     * @param {String} [sep=' '] Column separator.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The text file in raw string.
+     * @example
+     * df.toDSV()
+     * df.toDSV(';')
+     * df.toDSV(';', true)
+     * // From node.js only
+     * df.toDSV(';', true, '/my/absolute/path/dataframe.txt')
+     */
+    toDSV(...args) {
+        return io.toDSV(this, ...args);
+    }
+
+    /**
+     * Convert the DataFrame into a comma separated values string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     * @example
+     * df.toCSV()
+     * df.toCSV(true)
+     * // From node.js only
+     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
+     */
+    toCSV(...args) {
+        return io.toCSV(this, ...args);
+    }
+
+    /**
+     * Convert the DataFrame into a tab separated values string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     * @example
+     * df.toCSV()
+     * df.toCSV(true)
+     * // From node.js only
+     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
+     */
+    toTSV(...args) {
+        return io.toTSV(this, ...args);
+    }
+
+    /**
+     * Convert the DataFrame into a pipe separated values string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The csv file in raw string.
+     * @example
+     * df.toPSV()
+     * df.toPSV(true)
+     * // From node.js only
+     * df.toPSV(true, '/my/absolute/path/dataframe.csv')
+     */
+    toPSV(...args) {
+        return io.toPSV(this, ...args);
+    }
+
+    /**
+     * Convert the DataFrame into a text delimiter separated values. Alias for .toDSV. You can also save the file if you are using nodejs.
+     * @param {String} [sep=' '] Column separator.
+     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The text file in raw string.
+     * @example
+     * df.toText()
+     * df.toText(';')
+     * df.toText(';', true)
+     * // From node.js only
+     * df.toText(';', true, '/my/absolute/path/dataframe.txt')
+     */
+    toText(...args) {
+        return io.toText(this, ...args);
+    }
+
+    /**
+     * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
+     * @param {Boolean} [asCollection=false] Writing the JSON as collection of Object.
+     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
+     * @returns {String} The json file in raw string.
+     * @example
+     * df.toJSON()
+     * // From node.js only
+     * df.toJSON('/my/absolute/path/dataframe.json')
+     */
+    toJSON(...args) {
+        return io.toJSON(this, ...args);
+    }
+
+    /**
      * Convert DataFrame into dict / hash / object.
      * @returns {Object} The DataFrame converted into dict.
      * @example
@@ -386,8 +414,8 @@ class DataFrame {
      */
     toArray(columnName) {
         return columnName
-            ? [...this].map(row => row.get(columnName))
-            : [...this].map(row => row.toArray());
+            ? Array.from(this).map(row => row.get(columnName))
+            : Array.from(this).map(row => row.toArray());
     }
 
     /**
@@ -398,118 +426,9 @@ class DataFrame {
      * df.toCollection()
      */
     toCollection(ofRows) {
-        return ofRows ? [...this] : [...this].map(row => row.toDict());
-    }
-
-    /**
-     * Convert the DataFrame into a text delimiter separated values.
-     You can also save the file if you are using nodejs.
-     * @param {String} [sep=' '] Column separator.
-     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The text file in raw string.
-     * @example
-     * df.toDSV()
-     * df.toDSV(';')
-     * df.toDSV(';', true)
-     * // From node.js only
-     * df.toDSV(';', true, '/my/absolute/path/dataframe.txt')
-     */
-    toDSV(sep = ";", header = true, path = undefined) {
-        const parser = dsvFormat(sep);
-        const csvContent = header
-            ? parser.format(this.toCollection(), this[__columns__])
-            : parser.formatRows(this.toArray());
-        if (path) {
-            saveFile(this._cleanSavePath(path), csvContent);
-        }
-        return csvContent;
-    }
-
-    /**
-    * Convert the DataFrame into a text delimiter separated values. Alias for .toDSV.
-     You can also save the file if you are using nodejs.
-     * @param {String} [sep=' '] Column separator.
-     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The text file in raw string.
-     * @example
-     * df.toText()
-     * df.toText(';')
-     * df.toText(';', true)
-     * // From node.js only
-     * df.toText(';', true, '/my/absolute/path/dataframe.txt')
-     */
-    toText(sep = ";", header = true, path = undefined) {
-        return this.toDSV(sep, header, path);
-    }
-
-    /**
-     * Convert the DataFrame into a comma separated values string.
-     You can also save the file if you are using nodejs.
-     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The csv file in raw string.
-     * @example
-     * df.toCSV()
-     * df.toCSV(true)
-     * // From node.js only
-     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
-     */
-    toCSV(header = true, path = undefined) {
-        return this.toDSV(",", header, path);
-    }
-
-    /**
-     * Convert the DataFrame into a tab separated values string.
-     You can also save the file if you are using nodejs.
-     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The csv file in raw string.
-     * @example
-     * df.toCSV()
-     * df.toCSV(true)
-     * // From node.js only
-     * df.toCSV(true, '/my/absolute/path/dataframe.csv')
-     */
-    toTSV(header = true, path = undefined) {
-        return this.toDSV("\t", header, path);
-    }
-
-    /**
-     * Convert the DataFrame into a pipe separated values string.
-     You can also save the file if you are using nodejs.
-     * @param {Boolean} [header=true] Writing the header in the first line. If false, there will be no header.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The csv file in raw string.
-     * @example
-     * df.toPSV()
-     * df.toPSV(true)
-     * // From node.js only
-     * df.toPSV(true, '/my/absolute/path/dataframe.csv')
-     */
-    toPSV(header = true, path = undefined) {
-        return this.toDSV("|", header, path);
-    }
-
-    /**
-     * Convert the DataFrame into a json string. You can also save the file if you are using nodejs.
-     * @param {Boolean} [asCollection=false] Writing the JSON as collection of Object.
-     * @param {String} [path] The path to save the file. /!\ Works only on node.js, not into the browser.
-     * @returns {String} The json file in raw string.
-     * @example
-     * df.toJSON()
-     * // From node.js only
-     * df.toJSON('/my/absolute/path/dataframe.json')
-     */
-    toJSON(asCollection = false, path = undefined) {
-        const jsonContent = JSON.stringify(
-            asCollection ? this.toCollection() : this.toDict()
-        );
-        if (path) {
-            saveFile(this._cleanSavePath(path), jsonContent);
-        }
-        return jsonContent;
+        return ofRows
+            ? Array.from(this)
+            : Array.from(this).map(row => row.toDict());
     }
 
     /**
@@ -1052,8 +971,8 @@ class DataFrame {
      * df.groupBy('column1', 'column2').show()
      * df.groupBy('column1', 'column2').aggregate((group) => group.count())
      */
-    groupBy(...columnNames) {
-        return new GroupedDataFrame(this, ...columnNames);
+    groupBy(...args) {
+        return groupBy(this, args);
     }
 
     /**
@@ -1068,8 +987,10 @@ class DataFrame {
      * df.sortBy(['id1'], true)
      */
     sortBy(columnNames, reverse = false, missingValuesPosition = "first") {
-        // ensure unique columns
-        const _columnNames = Array.from(new Set(asArray(columnNames)));
+        if (!Array.isArray(columnNames)) {
+            columnNames = [columnNames];
+        }
+        const _columnNames = columnNames;
         const _missingValuesPosition = ["first", "last"].includes(
             missingValuesPosition
         )

@@ -1,8 +1,3 @@
-export function asArray(x) {
-    if (!x) return [];
-    return Array.isArray(x) ? x : [x];
-}
-
 export function isArrayOfType(value, ofType, index = 0) {
     return value instanceof Array &&
         value.hasOwnProperty(index) &&
@@ -38,15 +33,6 @@ export function* makeGenerator(x) {
     yield* x;
 }
 
-export function match(value, ...cases) {
-    const casesGen = makeGenerator(cases);
-    const checker = nextCase =>
-        nextCase[0](value)
-            ? nextCase[1](value)
-            : checker(casesGen.next().value);
-    return checker(casesGen.next().value);
-}
-
 function* createIterGenerator(data, func, abort = () => false) {
     let i = 0;
     for (const iteration of data) {
@@ -76,28 +62,6 @@ export function chain(data, ...operations) {
             )
         )
     );
-}
-
-export function saveFile(path, content) {
-    try {
-        require("fs").writeFileSync(path, content);
-    } catch (e) {
-        console.warn("File system module is not available.");
-    }
-}
-
-export function loadTextFile(file, func) {
-    if (FileReader && File) {
-        const reader = new FileReader();
-        reader.onload = event => func(event.target.result);
-        reader.readAsText(file);
-    }
-}
-
-export function addFileProtocol(path) {
-    return path.startsWith("/") || path.startsWith("./") || path.startsWith("C")
-        ? `file://${path}`
-        : path;
 }
 
 export function xSplit(stringToSplit, ...patterns) {

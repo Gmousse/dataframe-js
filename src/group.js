@@ -1,10 +1,9 @@
-const __groups__ = Symbol("groups");
-const __hashes__ = Symbol("hashes");
+import { __groups__, __hashes__ } from "./symbol";
 
 /**
  * Grouped DataFrame structure grouping DataFrame rows by column value.
  */
-export default class GroupedDataFrame {
+class GroupedDataFrame {
     /**
      * Create a GroupedDataFrame. Used in DataFrame.groupBy('columnName').
      * @param {DataFrame} df The DataFrame to group by.
@@ -12,10 +11,11 @@ export default class GroupedDataFrame {
      * @example
      * df.groupBy('column1');
      * //or
-     * new GroupedDataFrame(df, 'column1');
+     * groupBy(df, ['column1']);
      */
-    constructor(df, ...columnNames) {
-        [this[__groups__], this[__hashes__]] = this._groupBy(df, columnNames);
+    constructor(df, columnNames, groups, hashes) {
+        this[__groups__] = groups;
+        this[__hashes__] = hashes;
         this.df = df;
         this.on = columnNames.length > 0 ? columnNames : df.listColumns();
     }
@@ -24,35 +24,6 @@ export default class GroupedDataFrame {
         for (const hash of this[__hashes__]) {
             yield this[__groups__][hash];
         }
-    }
-
-    _groupBy(df, columnNames) {
-        const rowsByGroup = {};
-        const hashes = [];
-        for (const row of df.toCollection(true)) {
-            const hash = row.select(...columnNames).hash();
-            if (!rowsByGroup[hash]) {
-                hashes.push(hash);
-                rowsByGroup[hash] = [];
-            }
-            rowsByGroup[hash].push(row);
-        }
-        return [
-            hashes.reduce((groups, hash) => {
-                groups[hash] = {
-                    groupKey: rowsByGroup[hash][0]
-                        .select(...columnNames)
-                        .toDict(),
-                    hash,
-                    group: new df.constructor(
-                        rowsByGroup[hash],
-                        df.listColumns()
-                    )
-                };
-                return groups;
-            }, {}),
-            hashes
-        ];
     }
 
     get(hash) {
@@ -266,3 +237,29 @@ export default class GroupedDataFrame {
         );
     }
 }
+
+function groupBy(df, columnNames) {
+    const rowsByGroup = {};
+    const hashes = [];
+    for (const row of df.toCollection(true)) {
+        const hash = row.select(...columnNames).hash();
+        if (!rowsByGroup[hash]) {
+            hashes.push(hash);
+            rowsByGroup[hash] = [];
+        }
+        rowsByGroup[hash].push(row);
+    }
+
+    const groups = hashes.reduce((groups, hash) => {
+        groups[hash] = {
+            groupKey: rowsByGroup[hash][0].select(...columnNames).toDict(),
+            hash,
+            group: new df.constructor(rowsByGroup[hash], df.listColumns())
+        };
+        return groups;
+    }, {});
+
+    return new GroupedDataFrame(df, columnNames, groups, hashes);
+}
+
+export { groupBy, GroupedDataFrame };
