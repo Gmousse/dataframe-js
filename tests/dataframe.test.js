@@ -133,6 +133,35 @@ test("DataFrame columns can be", assert => {
         "renamed individually."
     );
 
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .renameSome({"c2":"c16", "c3":"c17", "c4":"c18"})
+            .listColumns(),
+        ["c16", "c17", "c18"],
+        "renamed selectively."
+    );
+
+
+
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .renameSome({"c2":"c16", "c3":"c17", "c4":"c18"})
+            .toArray()[0],
+        [6, 9, 10],
+        "renamed selectively without altering data."
+    );
+    
+    assert.deepEqual(
+        df
+            .select("c2", "c3", "c4")
+            .renameSome({})
+            .listColumns(),
+        ["c2", "c3", "c4"],
+        "renamed selectively"
+    );
+
     function customFormat(valueToConvert) {
         return { value: String(Number(valueToConvert) * 10) };
     }

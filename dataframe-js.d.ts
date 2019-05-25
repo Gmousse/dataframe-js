@@ -63,6 +63,8 @@ export class DataFrame {
 
     renameAll(newColumnNames: any): any;
 
+    renameSome(columnsMap: Map<any,any>): any;
+
     replace(value: any, replacement: any, columnNames: any): any;
 
     restructure(newColumnNames: any): any;
@@ -273,6 +275,8 @@ export namespace DataFrame {
         function rename(columnName: any, replacement: any): any;
 
         function renameAll(newColumnNames: any): any;
+
+        function renameSome(columnsMap: Map<any,any>): any;
 
         function replace(value: any, replacement: any, columnNames: any): any;
 
@@ -499,6 +503,12 @@ export namespace DataFrame {
         }
 
         namespace renameAll {
+            const prototype: {
+            };
+
+        }
+
+        namespace renameSome {
             const prototype: {
             };
 

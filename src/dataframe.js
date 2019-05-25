@@ -758,6 +758,23 @@ class DataFrame {
     }
 
     /**
+     * Rename selective columns.
+     * @param {Map} columnsMap Key value pairs of columns to rename and new column names of the DataFrame.
+     * @returns {DataFrame} A new DataFrame with the new column names.
+     * @example
+     * df.renameSome({'column1':'columnA', 'column3':'columnB', 'column50':'columnC'])
+     */
+    renameSome(columnsMap) {
+        let availableColumnNames = this[__columns__];
+        Object.entries(columnsMap).forEach(([key,value])=>{
+            let position = availableColumnNames.indexOf(key);
+            position > -1 && (availableColumnNames[position] = value);
+        });
+
+        return this.renameAll(availableColumnNames);
+    }
+
+    /**
      * Cast each column into a given type.
      * @param {Array} typeFunctions The functions used to cast columns.
      * @returns {DataFrame} A new DataFrame with the columns having new types.
