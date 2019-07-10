@@ -10,7 +10,7 @@
 
 **Changes**:
 
--   Fix core-js version in order to avoid errors related to core-js 3 npm support.
+-   Fix core-js version in order to avoid errors related to core-js 3 npm support. Thank you to @kbrown and @Wildhammer.
 
 ---
 
