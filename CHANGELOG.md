@@ -2,6 +2,18 @@
 
 ---
 
+## v1.4.2
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+-   Fix core-js version in order to avoid errors related to core-js 3 npm support. Thank you to @kbrown and @Wildhammer.
+
+---
+
 ## v1.4.1
 
 **Author**: Guillaume Mousnier
