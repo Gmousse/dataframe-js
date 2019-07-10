@@ -1,6 +1,6 @@
 {
     "name": "dataframe-js",
-    "version": "1.4.1",
+    "version": "1.4.2",
     "description": "Immutable and functional data structure for datascientists and developpers",
     "keywords": [
         "DataFrame",
@@ -69,6 +69,7 @@
     },
     "dependencies": {
         "@babel/polyfill": "~7.2.5",
+        "core-js": "^2.5.7",
         "d3-dsv": "~1.0.10",
         "d3-request": "~1.0.6"
     },
