@@ -5,7 +5,7 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.4.1](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.4.2](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
 
 **Last Update**:
 
