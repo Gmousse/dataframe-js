@@ -15,7 +15,7 @@ var dfjs = (function (exports) {
 	});
 
 	var _core = createCommonjsModule(function (module) {
-	var core = module.exports = { version: '2.6.1' };
+	var core = module.exports = { version: '2.6.5' };
 	if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 	});
 	var _core_1 = _core.version;
@@ -111,14 +111,31 @@ var dfjs = (function (exports) {
 	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 	};
 
+	var _library = false;
+
+	var _shared = createCommonjsModule(function (module) {
+	var SHARED = '__core-js_shared__';
+	var store = _global[SHARED] || (_global[SHARED] = {});
+
+	(module.exports = function (key, value) {
+	  return store[key] || (store[key] = value !== undefined ? value : {});
+	})('versions', []).push({
+	  version: _core.version,
+	  mode: 'global',
+	  copyright: '© 2019 Denis Pushkarev (zloirock.ru)'
+	});
+	});
+
+	var _functionToString = _shared('native-function-to-string', Function.toString);
+
 	var _redefine = createCommonjsModule(function (module) {
 	var SRC = _uid('src');
+
 	var TO_STRING = 'toString';
-	var $toString = Function[TO_STRING];
-	var TPL = ('' + $toString).split(TO_STRING);
+	var TPL = ('' + _functionToString).split(TO_STRING);
 
 	_core.inspectSource = function (it) {
-	  return $toString.call(it);
+	  return _functionToString.call(it);
 	};
 
 	(module.exports = function (O, key, val, safe) {
@@ -138,7 +155,7 @@ var dfjs = (function (exports) {
 	  }
 	// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
 	})(Function.prototype, TO_STRING, function toString() {
-	  return typeof this == 'function' && this[SRC] || $toString.call(this);
+	  return typeof this == 'function' && this[SRC] || _functionToString.call(this);
 	});
 	});
 
@@ -259,21 +276,6 @@ var dfjs = (function (exports) {
 	};
 
 	var _iterators = {};
-
-	var _library = false;
-
-	var _shared = createCommonjsModule(function (module) {
-	var SHARED = '__core-js_shared__';
-	var store = _global[SHARED] || (_global[SHARED] = {});
-
-	(module.exports = function (key, value) {
-	  return store[key] || (store[key] = value !== undefined ? value : {});
-	})('versions', []).push({
-	  version: _core.version,
-	  mode: 'global',
-	  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
-	});
-	});
 
 	var _wks = createCommonjsModule(function (module) {
 	var store = _shared('wks');
@@ -1108,12 +1110,12 @@ var dfjs = (function (exports) {
 	          break;
 	        default: // \d\d?
 	          var n = +ch;
-	          if (n === 0) return ch;
+	          if (n === 0) return match;
 	          if (n > m) {
 	            var f = floor$1(n / 10);
-	            if (f === 0) return ch;
+	            if (f === 0) return match;
 	            if (f <= m) return captures[f - 1] === undefined ? ch.charAt(1) : captures[f - 1] + ch.charAt(1);
-	            return ch;
+	            return match;
 	          }
 	          capture = captures[n - 1];
 	      }
@@ -3932,9 +3934,10 @@ var dfjs = (function (exports) {
 	var $SPLIT = 'split';
 	var LENGTH = 'length';
 	var LAST_INDEX$1 = 'lastIndex';
+	var MAX_UINT32 = 0xffffffff;
 
-	// eslint-disable-next-line no-empty
-	var SUPPORTS_Y = !!(function () { try { return new RegExp('x', 'y'); } catch (e) {} })();
+	// babel-minify transpiles RegExp('x', 'y') -> /x/y and it causes SyntaxError
+	var SUPPORTS_Y = !_fails(function () { });
 
 	// @@split logic
 	_fixReWks('split', 2, function (defined, SPLIT, $split, maybeCallNative) {
@@ -3959,7 +3962,7 @@ var dfjs = (function (exports) {
 	                  (separator.unicode ? 'u' : '') +
 	                  (separator.sticky ? 'y' : '');
 	      var lastLastIndex = 0;
-	      var splitLimit = limit === undefined ? 4294967295 : limit >>> 0;
+	      var splitLimit = limit === undefined ? MAX_UINT32 : limit >>> 0;
 	      // Make `global` and avoid `lastIndex` issues by working with a copy
 	      var separatorCopy = new RegExp(separator.source, flags + 'g');
 	      var match, lastIndex, lastLength;
@@ -4013,14 +4016,14 @@ var dfjs = (function (exports) {
 
 	      var unicodeMatching = rx.unicode;
 	      var flags = (rx.ignoreCase ? 'i' : '') +
-	                    (rx.multiline ? 'm' : '') +
-	                    (rx.unicode ? 'u' : '') +
-	                    (SUPPORTS_Y ? 'y' : 'g');
+	                  (rx.multiline ? 'm' : '') +
+	                  (rx.unicode ? 'u' : '') +
+	                  (SUPPORTS_Y ? 'y' : 'g');
 
 	      // ^(? + rx + ) is needed, in combination with some S slicing, to
 	      // simulate the 'y' flag.
 	      var splitter = new C(SUPPORTS_Y ? rx : '^(?:' + rx.source + ')', flags);
-	      var lim = limit === undefined ? 0xffffffff : limit >>> 0;
+	      var lim = limit === undefined ? MAX_UINT32 : limit >>> 0;
 	      if (lim === 0) return [];
 	      if (S.length === 0) return _regexpExecAbstract(splitter, S) === null ? [S] : [];
 	      var p = 0;
@@ -4113,7 +4116,7 @@ var dfjs = (function (exports) {
 	          return _context.stop();
 	      }
 	    }
-	  }, _marked, this);
+	  }, _marked);
 	}
 	function match(value) {
 	  for (var _len = arguments.length, cases = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -4225,7 +4228,7 @@ var dfjs = (function (exports) {
 	          return _context2.stop();
 	      }
 	    }
-	  }, _marked2, this, [[5, 20, 24, 32], [25,, 27, 31]]);
+	  }, _marked2, null, [[5, 20, 24, 32], [25,, 27, 31]]);
 	}
 
 	function iter(data, func) {
@@ -4524,31 +4527,30 @@ var dfjs = (function (exports) {
 	    value:
 	    /*#__PURE__*/
 	    regeneratorRuntime.mark(function value() {
-	      var _arr, _i, value;
+	      var _i, _Object$values, value;
 
 	      return regeneratorRuntime.wrap(function value$(_context) {
 	        while (1) {
 	          switch (_context.prev = _context.next) {
 	            case 0:
-	              _arr = Object.values(this[__values__]);
-	              _i = 0;
+	              _i = 0, _Object$values = Object.values(this[__values__]);
 
-	            case 2:
-	              if (!(_i < _arr.length)) {
-	                _context.next = 9;
+	            case 1:
+	              if (!(_i < _Object$values.length)) {
+	                _context.next = 8;
 	                break;
 	              }
 
-	              value = _arr[_i];
-	              _context.next = 6;
+	              value = _Object$values[_i];
+	              _context.next = 5;
 	              return value;
 
-	            case 6:
+	            case 5:
 	              _i++;
-	              _context.next = 2;
+	              _context.next = 1;
 	              break;
 
-	            case 9:
+	            case 8:
 	            case "end":
 	              return _context.stop();
 	          }
@@ -5427,10 +5429,8 @@ var dfjs = (function (exports) {
 	    value: function _columnsAreEquals(columns) {
 	      var columns2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this[__columns__$1];
 
-	      var _arr = Object.keys(columns);
-
-	      for (var _i = 0; _i < _arr.length; _i++) {
-	        var key = _arr[_i];
+	      for (var _i = 0, _Object$keys = Object.keys(columns); _i < _Object$keys.length; _i++) {
+	        var key = _Object$keys[_i];
 	        if (columns[key] !== columns2[key]) return false;
 	      }
 
@@ -6424,8 +6424,8 @@ var dfjs = (function (exports) {
 	        var sortedRowsWithMissingValues = [];
 	        var sortedRowsWithoutMissingValues = [];
 	        sortedRows.forEach(function (row) {
-	          for (var _i2 = 0; _i2 < _columnNames.length; _i2++) {
-	            var col = _columnNames[_i2];
+	          for (var _i2 = 0, _columnNames2 = _columnNames; _i2 < _columnNames2.length; _i2++) {
+	            var col = _columnNames2[_i2];
 
 	            if (_checkMissingValue(row.get(col))) {
 	              sortedRowsWithMissingValues.push(row);
