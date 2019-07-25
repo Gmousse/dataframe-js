@@ -2,6 +2,18 @@
 
 ---
 
+## v1.4.3
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+-   Switching to core-js 3. Thanks to @kbrown and @Wildhammer. That was a nightmare.
+
+---
+
 ## v1.4.2
 
 **Author**: Guillaume Mousnier
