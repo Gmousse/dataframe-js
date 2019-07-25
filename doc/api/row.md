@@ -15,7 +15,7 @@
 
 ## Row
 
-[src/row.js:11-198][11]
+[src/row.js:11-185][11]
 
 Row data structure used into the dataframe-js.
 
@@ -26,7 +26,7 @@ Row data structure used into the dataframe-js.
 
 ### toDict
 
-[src/row.js:91-93][15]
+[src/row.js:78-80][15]
 
 Convert Row into dict / hash / object.
 
@@ -40,7 +40,7 @@ Returns **[Object][13]** The Row converted into dict.
 
 ### toArray
 
-[src/row.js:101-103][16]
+[src/row.js:88-90][16]
 
 Convert Row into Array, loosing column names.
 
@@ -54,7 +54,7 @@ Returns **[Array][12]** The Row values converted into Array.
 
 ### size
 
-[src/row.js:111-113][17]
+[src/row.js:98-100][17]
 
 Get the Row size.
 
@@ -68,7 +68,7 @@ Returns **Int** The Row length.
 
 ### hash
 
-[src/row.js:121-123][18]
+[src/row.js:108-110][18]
 
 Get the Row hash code.
 
@@ -82,7 +82,7 @@ Returns **Int** The Row hash unique code.
 
 ### has
 
-[src/row.js:132-134][19]
+[src/row.js:119-121][19]
 
 Check if row contains a column.
 
@@ -100,7 +100,7 @@ Returns **[Boolean][21]** The presence or not of the column.
 
 ### select
 
-[src/row.js:143-153][22]
+[src/row.js:130-140][22]
 
 Select columns into the Row.
 
@@ -118,7 +118,7 @@ Returns **[Row][14]** A new Row containing only the selected columns.
 
 ### get
 
-[src/row.js:162-167][23]
+[src/row.js:149-154][23]
 
 Get a Row value by its column.
 
@@ -136,7 +136,7 @@ Returns **any** The selected value.
 
 ### set
 
-[src/row.js:176-181][24]
+[src/row.js:163-168][24]
 
 Set a Row value by its column, or create a new value if column doesn't exist.
 
@@ -155,7 +155,7 @@ Returns **[Row][14]** A new Row with the modified / new value.
 
 ### delete
 
-[src/row.js:190-197][25]
+[src/row.js:177-184][25]
 
 Delete a Row value by its column.
 
@@ -191,7 +191,7 @@ Returns **[Row][14]** A new Row without the deleted value.
 
 [10]: #delete
 
-[11]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L11-L198 "Source code on GitHub"
+[11]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L11-L185 "Source code on GitHub"
 
 [12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
@@ -199,24 +199,24 @@ Returns **[Row][14]** A new Row without the deleted value.
 
 [14]: #row
 
-[15]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L91-L93 "Source code on GitHub"
+[15]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L78-L80 "Source code on GitHub"
 
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L101-L103 "Source code on GitHub"
+[16]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L88-L90 "Source code on GitHub"
 
-[17]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L111-L113 "Source code on GitHub"
+[17]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L98-L100 "Source code on GitHub"
 
-[18]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L121-L123 "Source code on GitHub"
+[18]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L108-L110 "Source code on GitHub"
 
-[19]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L132-L134 "Source code on GitHub"
+[19]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L119-L121 "Source code on GitHub"
 
 [20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[22]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L143-L153 "Source code on GitHub"
+[22]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L130-L140 "Source code on GitHub"
 
-[23]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L162-L167 "Source code on GitHub"
+[23]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L149-L154 "Source code on GitHub"
 
-[24]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L176-L181 "Source code on GitHub"
+[24]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L163-L168 "Source code on GitHub"
 
-[25]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/row.js#L190-L197 "Source code on GitHub"
+[25]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/row.js#L177-L184 "Source code on GitHub"

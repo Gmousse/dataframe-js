@@ -115,17 +115,17 @@ export class DataFrame {
 
     static defaultModules: any[];
 
-    static fromCSV(pathOrFile: any, ...args: any[]): any;
+    static fromCSV(...args: any[]): any;
 
-    static fromDSV(pathOrFile: any, ...args: any[]): any;
+    static fromDSV(...args: any[]): any;
 
-    static fromJSON(pathOrFile: any): any;
+    static fromJSON(...args: any[]): any;
 
-    static fromPSV(pathOrFile: any, ...args: any[]): any;
+    static fromPSV(...args: any[]): any;
 
-    static fromTSV(pathOrFile: any, ...args: any[]): any;
+    static fromTSV(...args: any[]): any;
 
-    static fromText(pathOrFile: any, ...args: any[]): any;
+    static fromText(...args: any[]): any;
 
     static setDefaultModules(...args: any[]): void;
 
@@ -177,541 +177,6 @@ export namespace DataFrame {
 
     }
 
-    namespace fromCSV {
-        const prototype: {
-        };
-
-    }
-
-    namespace fromDSV {
-        const prototype: {
-        };
-
-    }
-
-    namespace fromJSON {
-        const prototype: {
-        };
-
-    }
-
-    namespace fromPSV {
-        const prototype: {
-        };
-
-    }
-
-    namespace fromTSV {
-        const prototype: {
-        };
-
-    }
-
-    namespace fromText {
-        const prototype: {
-        };
-
-    }
-
-    namespace prototype {
-        function bisect(percentage: any): any;
-
-        function cast(columnName: any, typeFunction: any): any;
-
-        function castAll(typeFunctions: any): any;
-
-        function chain(...args: any[]): any;
-
-        function count(): any;
-
-        function countValue(valueToCount: any, ...args: any[]): any;
-
-        function diff(dfToDiff: any, columnNames: any): any;
-
-        function dim(): any;
-
-        function distinct(columnName: any): any;
-
-        function drop(columnName: any): any;
-
-        function dropDuplicates(...args: any[]): any;
-
-        function dropMissingValues(columnNames: any): any;
-
-        function fillMissingValues(replacement: any, columnNames: any): any;
-
-        function filter(condition: any): any;
-
-        function find(condition: any): any;
-
-        function fullJoin(dfToJoin: any, columnNames: any): any;
-
-        function getRow(index: any): any;
-
-        function groupBy(...args: any[]): any;
-
-        function head(...args: any[]): any;
-
-        function innerJoin(dfToJoin: any, columnNames: any): any;
-
-        function join(dfToJoin: any, columnNames: any, ...args: any[]): any;
-
-        function leftJoin(dfToJoin: any, columnNames: any): any;
-
-        function listColumns(): any;
-
-        function map(func: any): any;
-
-        function outerJoin(dfToJoin: any, columnNames: any): any;
-
-        function push(...args: any[]): any;
-
-        function reduce(func: any, init: any): any;
-
-        function reduceRight(func: any, init: any): any;
-
-        function rename(columnName: any, replacement: any): any;
-
-        function renameAll(newColumnNames: any): any;
-
-        function replace(value: any, replacement: any, columnNames: any): any;
-
-        function restructure(newColumnNames: any): any;
-
-        function rightJoin(dfToJoin: any, columnNames: any): any;
-
-        function sample(percentage: any): any;
-
-        function select(...args: any[]): any;
-
-        function setRow(index: any, ...args: any[]): any;
-
-        function show(...args: any[]): any;
-
-        function shuffle(): any;
-
-        function slice(startIndex: any, endIndex: any): any;
-
-        function sortBy(columnNames: any, ...args: any[]): any;
-
-        function tail(...args: any[]): any;
-
-        function toArray(columnName: any): any;
-
-        function toCSV(...args: any[]): any;
-
-        function toCollection(ofRows: any): any;
-
-        function toDSV(...args: any[]): any;
-
-        function toDict(): any;
-
-        function toJSON(...args: any[]): any;
-
-        function toPSV(...args: any[]): any;
-
-        function toTSV(...args: any[]): any;
-
-        function toText(...args: any[]): any;
-
-        function transpose(tranposeColumnNames: any): any;
-
-        function union(dfToUnion: any): any;
-
-        function unique(columnName: any): any;
-
-        function where(condition: any): any;
-
-        function withColumn(columnName: any, ...args: any[]): any;
-
-        namespace bisect {
-            const prototype: {
-            };
-
-        }
-
-        namespace cast {
-            const prototype: {
-            };
-
-        }
-
-        namespace castAll {
-            const prototype: {
-            };
-
-        }
-
-        namespace chain {
-            const prototype: {
-            };
-
-        }
-
-        namespace count {
-            const prototype: {
-            };
-
-        }
-
-        namespace countValue {
-            const prototype: {
-            };
-
-        }
-
-        namespace diff {
-            const prototype: {
-            };
-
-        }
-
-        namespace dim {
-            const prototype: {
-            };
-
-        }
-
-        namespace distinct {
-            const prototype: {
-            };
-
-        }
-
-        namespace drop {
-            const prototype: {
-            };
-
-        }
-
-        namespace dropDuplicates {
-            const prototype: {
-            };
-
-        }
-
-        namespace dropMissingValues {
-            const prototype: {
-            };
-
-        }
-
-        namespace fillMissingValues {
-            const prototype: {
-            };
-
-        }
-
-        namespace filter {
-            const prototype: {
-            };
-
-        }
-
-        namespace find {
-            const prototype: {
-            };
-
-        }
-
-        namespace fullJoin {
-            const prototype: {
-            };
-
-        }
-
-        namespace getRow {
-            const prototype: {
-            };
-
-        }
-
-        namespace groupBy {
-            const prototype: {
-            };
-
-        }
-
-        namespace head {
-            const prototype: {
-            };
-
-        }
-
-        namespace innerJoin {
-            const prototype: {
-            };
-
-        }
-
-        namespace join {
-            const prototype: {
-            };
-
-        }
-
-        namespace leftJoin {
-            const prototype: {
-            };
-
-        }
-
-        namespace listColumns {
-            const prototype: {
-            };
-
-        }
-
-        namespace map {
-            const prototype: {
-            };
-
-        }
-
-        namespace outerJoin {
-            const prototype: {
-            };
-
-        }
-
-        namespace push {
-            const prototype: {
-            };
-
-        }
-
-        namespace reduce {
-            const prototype: {
-            };
-
-        }
-
-        namespace reduceRight {
-            const prototype: {
-            };
-
-        }
-
-        namespace rename {
-            const prototype: {
-            };
-
-        }
-
-        namespace renameAll {
-            const prototype: {
-            };
-
-        }
-
-        namespace replace {
-            const prototype: {
-            };
-
-        }
-
-        namespace restructure {
-            const prototype: {
-            };
-
-        }
-
-        namespace rightJoin {
-            const prototype: {
-            };
-
-        }
-
-        namespace sample {
-            const prototype: {
-            };
-
-        }
-
-        namespace select {
-            const prototype: {
-            };
-
-        }
-
-        namespace setRow {
-            const prototype: {
-            };
-
-        }
-
-        namespace show {
-            const prototype: {
-            };
-
-        }
-
-        namespace shuffle {
-            const prototype: {
-            };
-
-        }
-
-        namespace slice {
-            const prototype: {
-            };
-
-        }
-
-        namespace sortBy {
-            const prototype: {
-            };
-
-        }
-
-        namespace tail {
-            const prototype: {
-            };
-
-        }
-
-        namespace toArray {
-            const prototype: {
-            };
-
-        }
-
-        namespace toCSV {
-            const prototype: {
-            };
-
-        }
-
-        namespace toCollection {
-            const prototype: {
-            };
-
-        }
-
-        namespace toDSV {
-            const prototype: {
-            };
-
-        }
-
-        namespace toDict {
-            const prototype: {
-            };
-
-        }
-
-        namespace toJSON {
-            const prototype: {
-            };
-
-        }
-
-        namespace toPSV {
-            const prototype: {
-            };
-
-        }
-
-        namespace toTSV {
-            const prototype: {
-            };
-
-        }
-
-        namespace toText {
-            const prototype: {
-            };
-
-        }
-
-        namespace transpose {
-            const prototype: {
-            };
-
-        }
-
-        namespace union {
-            const prototype: {
-            };
-
-        }
-
-        namespace unique {
-            const prototype: {
-            };
-
-        }
-
-        namespace where {
-            const prototype: {
-            };
-
-        }
-
-        namespace withColumn {
-            const prototype: {
-            };
-
-        }
-
-    }
-
-    namespace setDefaultModules {
-        const prototype: {
-        };
-
-    }
-
-    namespace sql {
-        namespace dropTable {
-            const prototype: {
-            };
-
-        }
-
-        namespace dropTables {
-            const prototype: {
-            };
-
-        }
-
-        namespace listTables {
-            const prototype: {
-            };
-
-        }
-
-        namespace prototype {
-            function register(tableName: any, ...args: any[]): any;
-
-            namespace register {
-                // Too-deep object hierarchy from dataframe_js.DataFrame.sql.prototype.register
-                const prototype: any;
-
-            }
-
-        }
-
-        namespace registerTable {
-            const prototype: {
-            };
-
-        }
-
-        namespace renameTable {
-            const prototype: {
-            };
-
-        }
-
-        namespace request {
-            const prototype: {
-            };
-
-        }
-
-    }
-
 }
 
 export namespace Errors {
@@ -736,30 +201,12 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
-
     }
 
     namespace FileNotFoundError {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
 
     }
 
@@ -768,30 +215,12 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
-
     }
 
     namespace NoSuchColumnError {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
 
     }
 
@@ -800,30 +229,12 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
-
     }
 
     namespace TableAlreadyExistsError {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
 
     }
 
@@ -832,100 +243,12 @@ export namespace Errors {
 
         function captureStackTrace(p0: any, p1: any): any;
 
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
-
     }
 
     namespace WrongTableNameError {
         const stackTraceLimit: number;
 
         function captureStackTrace(p0: any, p1: any): any;
-
-        namespace prototype {
-            const message: string;
-
-            const name: string;
-
-            function toString(): any;
-
-        }
-
-    }
-
-}
-
-export namespace Row {
-    namespace prototype {
-        function get(columnToGet: any): any;
-
-        function has(columnName: any): any;
-
-        function hash(): any;
-
-        function select(...args: any[]): any;
-
-        function set(columnToSet: any, value: any): any;
-
-        function size(): any;
-
-        function toArray(): any;
-
-        function toDict(): any;
-
-        namespace get {
-            const prototype: {
-            };
-
-        }
-
-        namespace has {
-            const prototype: {
-            };
-
-        }
-
-        namespace hash {
-            const prototype: {
-            };
-
-        }
-
-        namespace select {
-            const prototype: {
-            };
-
-        }
-
-        namespace set {
-            const prototype: {
-            };
-
-        }
-
-        namespace size {
-            const prototype: {
-            };
-
-        }
-
-        namespace toArray {
-            const prototype: {
-            };
-
-        }
-
-        namespace toDict {
-            const prototype: {
-            };
-
-        }
 
     }
 
