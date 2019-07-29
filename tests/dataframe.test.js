@@ -109,45 +109,16 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .renameAll(["c16", "c17", "c18"])
-            .listColumns(),
-        ["c16", "c17", "c18"],
-        "renamed."
-    );
-
-    assert.deepEqual(
-        df
-            .select("c2", "c3", "c4")
-            .renameAll(["c16", "c17", "c18"])
-            .toArray()[0],
-        [6, 9, 10],
-        "renamed without altering data."
-    );
-
-    assert.deepEqual(
-        df
-            .select("c2", "c3", "c4")
-            .rename("c2", "cRenamed")
-            .listColumns(),
-        ["cRenamed", "c3", "c4"],
-        "renamed individually."
-    );
-
-    assert.deepEqual(
-        df
-            .select("c2", "c3", "c4")
-            .renameSome({"c2":"c16", "c3":"c17", "c4":"c18"})
+            .rename({"c2":"c16", "c3":"c17", "c4":"c18"})
             .listColumns(),
         ["c16", "c17", "c18"],
         "renamed selectively."
     );
 
-
-
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .renameSome({"c2":"c16", "c3":"c17", "c4":"c18"})
+            .rename({"c2":"c16", "c3":"c17", "c4":"c18"})
             .toArray()[0],
         [6, 9, 10],
         "renamed selectively without altering data."
@@ -156,7 +127,7 @@ test("DataFrame columns can be", assert => {
     assert.deepEqual(
         df
             .select("c2", "c3", "c4")
-            .renameSome({})
+            .rename({})
             .listColumns(),
         ["c2", "c3", "c4"],
         "renamed selectively"
@@ -289,15 +260,6 @@ test("DataFrame columns can be", assert => {
     );
 
     assert.deepEqual(df.toArray("c2"), [6, 2, 6], "converted into Array.");
-});
-
-test("DataFrame columns can't be ", assert => {
-    assert.is(
-        tryCatch(() => new DataFrame([{ c1: 1, c2: 3 }]).renameAll(["c1"]))
-            .name,
-        "WrongSchemaError",
-        "renamed when providing different columns number, throwing WrongSchemaError."
-    );
 });
 
 test("DataFrame rows can be ", assert => {

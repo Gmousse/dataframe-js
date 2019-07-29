@@ -29,7 +29,7 @@ DataFrame.fromCSV(
         // | 10        | 1st class | adults    | man       | yes       |
 
         // Ok, in the csv, the first column was row index named as ''. We will rename this column.
-        const cleanDF = df.rename("", "id");
+        const cleanDF = df.rename({"":"id"});
 
         // If we look at columnNames, the row index is replaced by the 'id' column name.
         console.log(cleanDF.listColumns());
@@ -51,7 +51,7 @@ DataFrame.fromCSV(
         // Ok, now we have the repartition of passengers by class + age + sex + survived.
         // But it could be easier to read if we rename the aggregation and sort rows by passengers.
         const cleanCountByGroup = countByGroup
-            .rename("aggregation", "passengers")
+            .rename({"aggregation": "passengers"})
             .sortBy("passengers", true);
 
         // And now show the result
@@ -77,7 +77,7 @@ DataFrame.fromCSV(
         const passengersByGroup = cleanDF
             .groupBy("class", "age", "sex")
             .aggregate(group => group.count())
-            .rename("aggregation", "totalPassengers");
+            .rename({"aggregation": "totalPassengers"});
         // Then we have to join with the cleanCountByGroup table.
         // And we compute a new Column, survival, to expose the percentage of survivors.
         // Then, we drop totalPassengers column which is now useless.
@@ -117,12 +117,12 @@ DataFrame.fromCSV(
         informationsByGroup
             .groupBy("sex")
             .aggregate(group => group.stat.mean("survival"))
-            .rename("aggregation", "mean")
+            .rename({"aggregation": "mean"})
             .show();
         informationsByGroup
             .groupBy("sex")
             .aggregate(group => group.stat.sd("survival"))
-            .rename("aggregation", "standard_deviation")
+            .rename({"aggregation":"standard_deviation"})
             .show();
         // | sex       | mean      |
         // ------------------------
@@ -138,11 +138,11 @@ DataFrame.fromCSV(
         const survivalMeanByAge = informationsByGroup
             .groupBy("age")
             .aggregate(group => group.stat.mean("survival"))
-            .rename("aggregation", "mean");
+            .rename({"aggregation":"mean"});
         const survivalSDByAge = informationsByGroup
             .groupBy("age")
             .aggregate(group => group.stat.sd("survival"))
-            .rename("aggregation", "standard_deviation");
+            .rename({"aggregation":"standard_deviation"});
 
         survivalMeanByAge.show();
         survivalSDByAge.show();
@@ -172,8 +172,14 @@ DataFrame.fromCSV(
         transposedAgeEffect.show();
         // Now we will use the previously removed age column as columnNames.
         // Then we reorganize columns order.
+        const oldColumns = transposedAgeEffect.listColumns();
+        const newColumns = [...ageEffect.toArray("age"), ""];
+        const columnsMap = oldColumns.reduce(function(columns, oldColumn, i){
+            columns[oldColumn] = newColumns[i];
+            return columns;
+        },{});
         const transposedAgeEffectWithColumnNames = transposedAgeEffect
-            .renameAll([...ageEffect.toArray("age"), ""])
+            .rename(columnsMap)
             .restructure(["", "adults", "child"]); // you can also .select('', 'adults', 'child');
         // Which gives the good table:
         transposedAgeEffectWithColumnNames.show();

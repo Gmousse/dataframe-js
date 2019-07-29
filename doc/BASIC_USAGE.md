@@ -120,8 +120,8 @@ Each group in the GroupedDataFrame is a DataFrame. When you aggregate a GroupedD
 ````js
 // Some examples
 const groupedDF = df.groupBy('column1', 'column2');
-groupedDF.aggregate(group => group.count()).rename('aggregation', 'groupCount');
-df.groupBy('column2', 'column3').aggregate(group => group.stat.mean('column4')).rename('aggregation', 'groupMean');
+groupedDF.aggregate(group => group.count()).rename({'aggregation': 'groupCount'});
+df.groupBy('column2', 'column3').aggregate(group => group.stat.mean('column4')).rename({'aggregation':'groupMean'});
 ````
 
 ### Stat Module

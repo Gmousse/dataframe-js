@@ -59,11 +59,7 @@ export class DataFrame {
 
     reduceRight(func: any, init: any): any;
 
-    rename(columnName: any, replacement: any): any;
-
-    renameAll(newColumnNames: any): any;
-
-    renameSome(columnsMap: Map<any,any>): any;
+    rename(columnsMap: Map<any,any>): any;
 
     replace(value: any, replacement: any, columnNames: any): any;
 
@@ -272,11 +268,7 @@ export namespace DataFrame {
 
         function reduceRight(func: any, init: any): any;
 
-        function rename(columnName: any, replacement: any): any;
-
-        function renameAll(newColumnNames: any): any;
-
-        function renameSome(columnsMap: Map<any,any>): any;
+        function rename(columnsMap: Map<any,any>): any;
 
         function replace(value: any, replacement: any, columnNames: any): any;
 
@@ -497,18 +489,6 @@ export namespace DataFrame {
         }
 
         namespace rename {
-            const prototype: {
-            };
-
-        }
-
-        namespace renameAll {
-            const prototype: {
-            };
-
-        }
-
-        namespace renameSome {
             const prototype: {
             };
 

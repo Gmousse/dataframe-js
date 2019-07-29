@@ -182,15 +182,15 @@ function parseSelections(selections) {
                     ["distinct", ""],
                     [" ", ""]
                 );
-                return df =>
-                    df
-                        .distinct(columnName)
-                        .rename(
-                            columnName,
-                            value[0].includes("AS")
-                                ? value[0].split("AS")[1].replace(" ", "")
-                                : columnName
-                        );
+                return df => {
+                        let finalDf = df
+                        .distinct(columnName);
+
+                        let newColumnName = value[0].includes("AS")? 
+                        (value[0].split("AS")[1].replace(" ", "")):(columnName)
+
+                        return finalDf.rename({[columnName]: newColumnName});
+                    }
             }
         ],
         [
@@ -221,20 +221,29 @@ function parseSelections(selections) {
         ],
         [
             () => true,
-            value => df =>
-                df
+            value => df => {
+                let finalDf = df
                     .select(
                         ...value.map(column =>
                             column.split(" AS ")[0].replace(" ", "")
                         )
-                    )
-                    .renameAll(
-                        value.map(column =>
-                            column.includes("AS")
-                                ? column.split("AS")[1].replace(" ", "")
-                                : column
-                        )
-                    )
+                    );
+
+                let columnsMap = value.reduce(function(columns, column){
+                    let oldColumnName,  newColumnName;
+                    column.includes("AS")? (
+                        oldColumnName = column.split("AS")[0].replace(" ", ""), 
+                        newColumnName = column.split("AS")[1].replace(" ", "")
+                    ):(
+                        oldColumnName = column, 
+                        newColumnName = column
+                    );
+                    columns[oldColumnName] = newColumnName;
+                    return columns;
+                },{});
+
+                return finalDf.rename(columnsMap);
+            }
         ]
     );
 }

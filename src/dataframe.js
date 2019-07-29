@@ -729,49 +729,20 @@ class DataFrame {
     }
 
     /**
-     * Rename each column.
-     * @param {Array} newColumnNames The new column names of the DataFrame.
-     * @returns {DataFrame} A new DataFrame with the new column names.
-     * @example
-     * df.renameAll(['column1', 'column3', 'column4'])
-     */
-    renameAll(newColumnNames) {
-        if (newColumnNames.length !== this[__columns__].length) {
-            throw new WrongSchemaError(newColumnNames, this[__columns__]);
-        }
-        return this.__newInstance__(this.toArray(), newColumnNames);
-    }
-
-    /**
-     * Rename a column.
-     * @param {String} columnName The column to rename.
-     * @param {String} replacement The new name for the column.
-     * @returns {DataFrame} A new DataFrame with the new column name.
-     * @example
-     * df.rename('column1', 'columnRenamed')
-     */
-    rename(columnName, replacement) {
-        const newColumnNames = this[__columns__].map(column =>
-            column === columnName ? replacement : column
-        );
-        return this.renameAll(newColumnNames);
-    }
-
-    /**
      * Rename selective columns.
      * @param {Map} columnsMap Key value pairs of columns to rename and new column names of the DataFrame.
      * @returns {DataFrame} A new DataFrame with the new column names.
      * @example
-     * df.renameSome({'column1':'columnA', 'column3':'columnB', 'column50':'columnC'])
+     * df.rename({'column1':'columnA', 'column3':'columnB', 'column50':'columnC'])
      */
-    renameSome(columnsMap) {
+    rename(columnsMap) {
         let availableColumnNames = this[__columns__];
         Object.entries(columnsMap).forEach(([key,value])=>{
             let position = availableColumnNames.indexOf(key);
             position > -1 && (availableColumnNames[position] = value);
         });
 
-        return this.renameAll(availableColumnNames);
+        return this.__newInstance__(this.toArray(), availableColumnNames);
     }
 
     /**

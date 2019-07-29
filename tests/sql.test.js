@@ -87,7 +87,7 @@ test("DataFrame sql module can ", assert => {
             .toDict(),
         df2
             .select("column3", "column4")
-            .renameAll(["column1", "column2"])
+            .rename({"column3": "column1", "column4": "column2"})
             .toDict(),
         "select specific columns from a table and renamed them."
     );
@@ -161,7 +161,7 @@ test("DataFrame sql module can ", assert => {
                 "SELECT * FROM tmp UNION SELECT id, id2, column3 AS column1, column4 AS column2 FROM tmp2"
             )
             .toDict(),
-        df1.union(df2.renameAll(["id", "id2", "column1", "column2"])).toDict(),
+        df1.union(df2.rename({"id":"id", "id2":"id2", "column3":"column1", "column4":"column2"})).toDict(),
         "select everything from an union between 2 queries."
     );
 
@@ -171,7 +171,7 @@ test("DataFrame sql module can ", assert => {
             .toDict(),
         df1
             .distinct("column1")
-            .rename("column1", "distinctC1")
+            .rename({"column1": "distinctC1"})
             .toDict(),
         "select column with distinct values and rename it."
     );
@@ -332,7 +332,7 @@ test("DataFrame sql module can't ", assert => {
     );
 
     assert.deepEqual(
-        tryCatch(() => DataFrame.sql.request("SELECT column1 FROM tmp2")).name,
+        tryCatch(() => DataFrame.sql.request("SELECT column9 FROM tmp2")).name,
         "NoSuchColumnError",
         "execute a query with a wrong column name, throwing NoSuchColumnError."
     );
