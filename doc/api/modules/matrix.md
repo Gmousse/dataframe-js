@@ -101,16 +101,16 @@ Returns **DataFrame** A new n x n DataFrame resulting to the product of two Data
 
 [5]: #dot
 
-[6]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/matrix.js#L8-L103 "Source code on GitHub"
+[6]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/matrix.js#L8-L103 "Source code on GitHub"
 
-[7]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/matrix.js#L26-L34 "Source code on GitHub"
+[7]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/matrix.js#L26-L34 "Source code on GitHub"
 
 [8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[9]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/matrix.js#L43-L58 "Source code on GitHub"
+[9]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/matrix.js#L43-L58 "Source code on GitHub"
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/matrix.js#L67-L71 "Source code on GitHub"
+[10]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/matrix.js#L67-L71 "Source code on GitHub"
 
 [11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[12]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/matrix.js#L80-L102 "Source code on GitHub"
+[12]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/matrix.js#L80-L102 "Source code on GitHub"

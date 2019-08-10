@@ -1,8 +1,7 @@
 import test from "ava";
 
-import GroupedDataFrame from "../src/groupedDataframe";
+import { groupBy, GroupedDataFrame } from "../src/group";
 import DataFrame from "../src/dataframe";
-import { tryCatch } from "./utils";
 
 test("GroupedDataFrame can be ", assert => {
     const df = new DataFrame(
@@ -18,7 +17,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        [...new GroupedDataFrame(df, "column3")].map(({ group }) =>
+        Array.from(groupBy(df, ["column3"])).map(({ group }) =>
             group.toCollection()
         )[0],
         [
@@ -31,7 +30,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        [...new GroupedDataFrame(df, "column3", "column2")].map(({ group }) =>
+        Array.from(groupBy(df, ["column3", "column2"])).map(({ group }) =>
             group.toCollection()
         )[0],
         [
@@ -42,7 +41,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1")
+        groupBy(df, ["column1"])
             .toCollection()
             .map(x => Object.keys(x)),
         [
@@ -53,7 +52,7 @@ test("GroupedDataFrame can be ", assert => {
         "converted into a collection of dictionnaries containing each group."
     );
     assert.deepEqual(
-        [...new GroupedDataFrame(df, "column1")].map(x => Object.keys(x)),
+        Array.from(groupBy(df, ["column1"])).map(x => Object.keys(x)),
         [
             ["groupKey", "hash", "group"],
             ["groupKey", "hash", "group"],
@@ -62,7 +61,7 @@ test("GroupedDataFrame can be ", assert => {
         "converted into a collection of dictionnaries containing each group when destructured."
     );
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1", "column3").show(true),
+        groupBy(df, ["column1", "column3"]).show(true),
         [
             '--\n[{"column1":1}]\n--',
             "| column1   | column2   | column3   |",
@@ -87,7 +86,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1")
+        groupBy(df, ["column1"])
             .map((row, i) => row.set("idx", i))
             .drop("column3")
             .toCollection(),
@@ -103,7 +102,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1")
+        groupBy(df, ["column1"])
             .filter((row, i) => i === 0)
             .drop("column3")
             .toCollection(),
@@ -116,7 +115,7 @@ test("GroupedDataFrame can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1")
+        groupBy(df, ["column1"])
             .chain(
                 (row, i) => i === 0,
                 row => row.set("column4", row.get("column1") * 2)
@@ -146,7 +145,7 @@ test("GroupedDataFrame groups can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column1", "column2").listGroups(),
+        groupBy(df, ["column1", "column2"]).listGroups(),
         [
             { column1: 1, column2: "On the road" },
             { column1: 3, column2: "again" },
@@ -158,7 +157,7 @@ test("GroupedDataFrame groups can be ", assert => {
     );
 
     assert.deepEqual(
-        new GroupedDataFrame(df, "column3", "column2")
+        groupBy(df, ["column3", "column2"])
             .aggregate(group => group.count())
             .toCollection()[0],
         { column3: undefined, column2: "On the road", aggregation: 2 },

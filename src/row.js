@@ -1,4 +1,4 @@
-import { match, arrayEqual } from "./reusables";
+import { arrayEqual } from "./reusables";
 import { ArgumentTypeError, NoSuchColumnError } from "./errors";
 import { hashCode } from "./reusables";
 
@@ -46,24 +46,11 @@ class Row {
     }
 
     _build(data) {
-        return match(
-            data,
-            [value => value instanceof Array, () => this._fromArray(data)],
-            [
-                value => value instanceof Row,
-                () => this._fromObject(data[__values__])
-            ],
-            [
-                value => value instanceof Object && value !== null,
-                () => this._fromObject(data)
-            ],
-            [
-                () => true,
-                value => {
-                    throw new ArgumentTypeError(value, "Row | Array | Object");
-                }
-            ]
-        );
+        if (data instanceof Array) return this._fromArray(data);
+        if (data instanceof Row) return this._fromObject(data[__values__]);
+        if (data instanceof Object && data !== null)
+            return this._fromObject(data);
+        throw new ArgumentTypeError(data, "Row | Array | Object");
     }
 
     _fromObject(object) {

@@ -1,4 +1,4 @@
-import { match, xContains, xSplit, xReplace } from "../../reusables";
+import { xContains, xSplit, xReplace, makeGenerator } from "../../reusables";
 import { SQLParseError } from "../../errors";
 
 const REPLACMENTS = [
@@ -29,6 +29,15 @@ const SELECT_FUNCTIONS = {
     MIN: (df, column) => df.stat.min(column),
     AVG: (df, column) => df.stat.mean(column)
 };
+
+function match(value, ...cases) {
+    const casesGen = makeGenerator(cases);
+    const checker = nextCase =>
+        nextCase[0](value)
+            ? nextCase[1](value)
+            : checker(casesGen.next().value);
+    return checker(casesGen.next().value);
+}
 
 function sqlArgsToArray(args) {
     return xReplace(args.join(" "), [" ", ""]).split(",");

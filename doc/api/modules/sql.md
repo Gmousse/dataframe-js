@@ -150,24 +150,24 @@ DataFrame.registerTable('tmp', df);
 
 [8]: #registertable
 
-[9]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L12-L109 "Source code on GitHub"
+[9]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L12-L109 "Source code on GitHub"
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L105-L108 "Source code on GitHub"
+[10]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L105-L108 "Source code on GitHub"
 
 [11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[13]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L20-L24 "Source code on GitHub"
+[13]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L20-L24 "Source code on GitHub"
 
-[14]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L31-L33 "Source code on GitHub"
+[14]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L31-L33 "Source code on GitHub"
 
-[15]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L41-L43 "Source code on GitHub"
+[15]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L41-L43 "Source code on GitHub"
 
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L53-L56 "Source code on GitHub"
+[16]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L53-L56 "Source code on GitHub"
 
-[17]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L64-L66 "Source code on GitHub"
+[17]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L64-L66 "Source code on GitHub"
 
 [18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[19]: https://git@github.com/:Gmousse/dataframe-js/blob/153117a0ab1dc7e38f78ced97c6a1b6999bb8bd5/src/modules/sql/index.js#L76-L87 "Source code on GitHub"
+[19]: https://git@github.com/:Gmousse/dataframe-js/blob/bd8db8f53d30d3b950f0a681557671873a9731a1/src/modules/sql/index.js#L76-L87 "Source code on GitHub"

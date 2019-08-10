@@ -75,4 +75,6 @@ in the browser (1.4.0):
 
 ## Contribution
 
+[The code of conduct](https://gmousse.gitbooks.io/dataframe-js/content/CODE_OF_CONDUCT.md)
+
 [How to contribute ?](https://gmousse.gitbooks.io/dataframe-js/content/CONTRIBUTING.html)
