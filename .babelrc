@@ -7,7 +7,8 @@
                     "node": "0.12",
                     "browsers": ["> 1%", "last 2 versions", "ie > 9"]
                 },
-                "useBuiltIns": "usage"
+                "useBuiltIns": "usage",
+                "corejs": { "version": 3, "proposals": true }
             }
         ]
     ],
