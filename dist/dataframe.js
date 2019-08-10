@@ -6308,7 +6308,17 @@ var dfjs = (function (exports) {
 
 	var csv = dsv(",");
 
+	var csvParse = csv.parse;
+	var csvParseRows = csv.parseRows;
+	var csvFormat = csv.format;
+	var csvFormatRows = csv.formatRows;
+
 	var tsv = dsv("\t");
+
+	var tsvParse = tsv.parse;
+	var tsvParseRows = tsv.parseRows;
+	var tsvFormat = tsv.format;
+	var tsvFormatRows = tsv.formatRows;
 
 	function saveFile(path, content) {
 	  try {

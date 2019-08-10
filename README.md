@@ -5,9 +5,9 @@
 
 **Official Documentation**: <https://gmousse.gitbooks.io/dataframe-js/>
 
-**Current Version**: [1.4.2](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
+**Current Version**: [1.4.3](https://gmousse.gitbooks.io/dataframe-js/content/CHANGELOG.html)
 
-**Last Update**:
+**Last Major Update**:
 
 -   Bugfixes and refactor
 -   Change build ecosystem (easier, smaller bundles)
