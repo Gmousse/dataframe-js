@@ -2,6 +2,19 @@
 
 ---
 
+## v1.4.4
+
+**Author**: Guillaume Mousnier
+
+**Type**: Hotfix
+
+**Changes**:
+
+-   Fixing file path parsing on windows. Thanks to @blockems
+-   Fixing documentation issues. Thanks to @dhorvay
+
+---
+
 ## v1.4.3
 
 **Author**: Guillaume Mousnier

@@ -1,8 +1,10 @@
 import { text, json } from "d3-request";
 import { dsvFormat } from "d3-dsv";
-import { __columns__ } from "./symbol";
 
+import { __columns__ } from "./symbol";
 import { FileNotFoundError } from "./errors";
+
+const FILE_PATTERN = /^(?:[/]|[./]|(?:[a-zA-z]:[\/])).*$/;
 
 function saveFile(path, content) {
     try {
@@ -15,15 +17,17 @@ function saveFile(path, content) {
 function loadTextFile(file, func) {
     if (FileReader && File) {
         const reader = new FileReader();
-        reader.onload = event => func(event.target.result);
+        reader.onload = (event) => func(event.target.result);
         reader.readAsText(file);
     }
 }
 
 function addFileProtocol(path) {
-    return path.startsWith("/") || path.startsWith("./") || path.startsWith("C") || /^[a-z]:[/\\]/i.test(path)
-        ? `file://${path}`
-        : path;
+    const isValidFilePath = String(path).match(FILE_PATTERN);
+    if (isValidFilePath) {
+        return `file://${path}`;
+    }
+    return path;
 }
 
 function toDSV(df, sep = ";", header = true, path = undefined) {
@@ -65,8 +69,8 @@ function toJSON(df, asCollection = false, path = undefined) {
 
 function fromDSV(pathOrFile, sep = ";", header = true) {
     const parser = dsvFormat(sep);
-    return new Promise(resolve => {
-        const parseText = fileContent => {
+    return new Promise((resolve) => {
+        const parseText = (fileContent) => {
             if (fileContent.includes("Error: ENOENT")) return resolve(null);
             // compatible utf8-bom(byte-order-mark)
             if (fileContent[0].toString(16) === '\uFEFF') {
@@ -80,7 +84,7 @@ function fromDSV(pathOrFile, sep = ";", header = true) {
         return typeof pathOrFile === "string"
             ? text(addFileProtocol(pathOrFile), parseText)
             : loadTextFile(pathOrFile, parseText);
-    }).then(fileContent => {
+    }).then((fileContent) => {
         if (fileContent === null) {
             throw new FileNotFoundError(pathOrFile);
         }
@@ -105,11 +109,11 @@ function fromPSV(pathOrFile, header = true) {
 }
 
 function fromJSON(pathOrFile) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         return typeof pathOrFile === "string"
             ? json(addFileProtocol(pathOrFile), resolve)
-            : loadTextFile(pathOrFile, txt => resolve(JSON.parse(txt)));
-    }).then(fileContent => {
+            : loadTextFile(pathOrFile, (txt) => resolve(JSON.parse(txt)));
+    }).then((fileContent) => {
         if (fileContent === null) {
             throw new FileNotFoundError(pathOrFile);
         }

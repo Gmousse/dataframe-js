@@ -3,212 +3,263 @@
 ### Table of Contents
 
 -   [Stat][1]
-    -   [sum][2]
-    -   [max][3]
-    -   [min][4]
-    -   [mean][5]
-    -   [average][6]
-    -   [var][7]
-    -   [sd][8]
-    -   [stats][9]
+    -   [Parameters][2]
+    -   [sum][3]
+        -   [Parameters][4]
+        -   [Examples][5]
+    -   [max][6]
+        -   [Parameters][7]
+        -   [Examples][8]
+    -   [min][9]
+        -   [Parameters][10]
+        -   [Examples][11]
+    -   [mean][12]
+        -   [Parameters][13]
+        -   [Examples][14]
+    -   [average][15]
+        -   [Parameters][16]
+        -   [Examples][17]
+    -   [var][18]
+        -   [Parameters][19]
+        -   [Examples][20]
+    -   [sd][21]
+        -   [Parameters][22]
+        -   [Examples][23]
+    -   [stats][24]
+        -   [Parameters][25]
+        -   [Examples][26]
 
 ## Stat
 
-[src/modules/stat.js:6-154][10]
+[src/modules/stat.js:6-154][27]
 
 Stat module for DataFrame, providing basic statistical metrics for numeric columns.
 
-**Parameters**
+### Parameters
 
 -   `df` **DataFrame** An instance of DataFrame.
 
 ### sum
 
-[src/modules/stat.js:29-39][11]
+[src/modules/stat.js:29-39][28]
 
 Compute the sum of a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.sum('column1')
 ```
 
-Returns **[Number][13]** The sum of the column.
+Returns **[Number][30]** The sum of the column.
 
 ### max
 
-[src/modules/stat.js:48-52][14]
+[src/modules/stat.js:48-52][31]
 
 Compute the maximal value into a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.max('column1')
 ```
 
-Returns **[Number][13]** The maximal value into the column.
+Returns **[Number][30]** The maximal value into the column.
 
 ### min
 
-[src/modules/stat.js:61-65][15]
+[src/modules/stat.js:61-65][32]
 
 Compute the minimal value into a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.min('column1')
 ```
 
-Returns **[Number][13]** The minimal value into the column.
+Returns **[Number][30]** The minimal value into the column.
 
 ### mean
 
-[src/modules/stat.js:74-87][16]
+[src/modules/stat.js:74-87][33]
 
 Compute the mean value into a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate,isNumber(n.get(columnName)) ? p + Number( containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate,isNumber(n.get(columnName)) ? p + Number( containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.mean('column1')
 ```
 
-Returns **[Number][13]** The mean value into the column.
+Returns **[Number][30]** The mean value into the column.
 
 ### average
 
-[src/modules/stat.js:97-99][17]
+[src/modules/stat.js:97-99][34]
 
 Compute the mean value into a numeric column.
 Alias from mean.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.min('column1')
 ```
 
-Returns **[Number][13]** The mean value into the column.
+Returns **[Number][30]** The mean value into the column.
 
 ### var
 
-[src/modules/stat.js:109-121][18]
+[src/modules/stat.js:109-121][35]
 
 Compute the variance into a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
--   `population` **[Boolean][19]** Population mode. If true, provide the population variance, not the sample one. (optional, default `false`)
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
+-   `population` **[Boolean][36]** Population mode. If true, provide the population variance, not the sample one. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.var('column1')
 ```
 
-Returns **[Number][13]** The variance into the column.
+Returns **[Number][30]** The variance into the column.
 
 ### sd
 
-[src/modules/stat.js:131-133][20]
+[src/modules/stat.js:131-133][37]
 
 Compute the standard deviation into a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
--   `population` **[Boolean][19]** Population mode. If true, provide the population standard deviation, not the sample one. (optional, default `false`)
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
+-   `population` **[Boolean][36]** Population mode. If true, provide the population standard deviation, not the sample one. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.sd('column1')
 ```
 
-Returns **[Number][13]** The standard deviation into the column.
+Returns **[Number][30]** The standard deviation into the column.
 
 ### stats
 
-[src/modules/stat.js:142-153][21]
+[src/modules/stat.js:142-153][38]
 
 Compute all the stats available with the Stat module on a numeric column.
 
-**Parameters**
+#### Parameters
 
--   `columnName` **[String][12]** The column to evaluate, containing Numbers.
+-   `columnName` **[String][29]** The column to evaluate, containing Numbers.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.stat.stats('column1')
 ```
 
-Returns **[Object][22]** An dictionnary containing all statistical metrics available.
+Returns **[Object][39]** An dictionnary containing all statistical metrics available.
 
 [1]: #stat
 
-[2]: #sum
+[2]: #parameters
 
-[3]: #max
+[3]: #sum
 
-[4]: #min
+[4]: #parameters-1
 
-[5]: #mean
+[5]: #examples
 
-[6]: #average
+[6]: #max
 
-[7]: #var
+[7]: #parameters-2
 
-[8]: #sd
+[8]: #examples-1
 
-[9]: #stats
+[9]: #min
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L6-L154 "Source code on GitHub"
+[10]: #parameters-3
 
-[11]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L29-L39 "Source code on GitHub"
+[11]: #examples-2
 
-[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[12]: #mean
 
-[13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[13]: #parameters-4
 
-[14]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L48-L52 "Source code on GitHub"
+[14]: #examples-3
 
-[15]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L61-L65 "Source code on GitHub"
+[15]: #average
 
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L74-L87 "Source code on GitHub"
+[16]: #parameters-5
 
-[17]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L97-L99 "Source code on GitHub"
+[17]: #examples-4
 
-[18]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L109-L121 "Source code on GitHub"
+[18]: #var
 
-[19]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[19]: #parameters-6
 
-[20]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L131-L133 "Source code on GitHub"
+[20]: #examples-5
 
-[21]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L142-L153 "Source code on GitHub"
+[21]: #sd
 
-[22]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object
+[22]: #parameters-7
+
+[23]: #examples-6
+
+[24]: #stats
+
+[25]: #parameters-8
+
+[26]: #examples-7
+
+[27]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L6-L154 "Source code on GitHub"
+
+[28]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L29-L39 "Source code on GitHub"
+
+[29]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[30]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[31]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L48-L52 "Source code on GitHub"
+
+[32]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L61-L65 "Source code on GitHub"
+
+[33]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L74-L87 "Source code on GitHub"
+
+[34]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L97-L99 "Source code on GitHub"
+
+[35]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L109-L121 "Source code on GitHub"
+
+[36]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[37]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L131-L133 "Source code on GitHub"
+
+[38]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/stat.js#L142-L153 "Source code on GitHub"
+
+[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

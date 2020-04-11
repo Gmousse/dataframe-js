@@ -58,7 +58,7 @@
         "check-node-version": "~3.2.0",
         "coveralls": "^3.0.0",
         "cross-env": "^5.2.0",
-        "documentation": "^6.3.2",
+        "documentation": "^12.3.0",
         "dts-gen": "~0.5.7",
         "eslint": "~5.11.1",
         "nyc": "^11.7.1",
