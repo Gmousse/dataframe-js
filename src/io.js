@@ -4,7 +4,7 @@ import { dsvFormat } from "d3-dsv";
 import { __columns__ } from "./symbol";
 import { FileNotFoundError } from "./errors";
 
-const FILE_PATTERN = /^(?:[/]|[./]|(?:[a-zA-z]:\/)).*$/;
+const FILE_PATTERN = /^(?:[/]|[./]|(?:[a-zA-z]:[\/])).*$/;
 
 function saveFile(path, content) {
     try {
@@ -72,6 +72,10 @@ function fromDSV(pathOrFile, sep = ";", header = true) {
     return new Promise((resolve) => {
         const parseText = (fileContent) => {
             if (fileContent.includes("Error: ENOENT")) return resolve(null);
+            // compatible utf8-bom(byte-order-mark)
+            if (fileContent[0].toString(16) === '\uFEFF') {
+                fileContent = fileContent.slice(1);
+            }
             const data = header
                 ? parser.parse(fileContent)
                 : parser.parseRows(fileContent);
