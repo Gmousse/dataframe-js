@@ -33,7 +33,7 @@ class DataFrame {
      * DataFrame.fromDSV('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
     static fromDSV(...args) {
-        return io.fromDSV(...args).then(content => new DataFrame(content));
+        return io.fromDSV(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -50,7 +50,7 @@ class DataFrame {
      * DataFrame.fromText('/my/absolue/path/myfile.txt', ';', true).then(df => df.show())
      */
     static fromText(...args) {
-        return io.fromText(...args).then(content => new DataFrame(content));
+        return io.fromText(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -66,7 +66,7 @@ class DataFrame {
      * DataFrame.fromCSV('/my/absolue/path/myfile.csv', true).then(df => df.show())
      */
     static fromCSV(...args) {
-        return io.fromCSV(...args).then(content => new DataFrame(content));
+        return io.fromCSV(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -82,7 +82,7 @@ class DataFrame {
      * DataFrame.fromTSV('/my/absolue/path/myfile.tsv', true).then(df => df.show())
      */
     static fromTSV(...args) {
-        return io.fromTSV(...args).then(content => new DataFrame(content));
+        return io.fromTSV(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -98,7 +98,7 @@ class DataFrame {
      * DataFrame.fromPSV('/my/absolue/path/myfile.psv', true).then(df => df.show())
      */
     static fromPSV(...args) {
-        return io.fromPSV(...args).then(content => new DataFrame(content));
+        return io.fromPSV(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -112,7 +112,7 @@ class DataFrame {
      * DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
      */
     static fromJSON(...args) {
-        return io.fromJSON(...args).then(content => new DataFrame(content));
+        return io.fromJSON(...args).then((content) => new DataFrame(content));
     }
 
     /**
@@ -185,7 +185,7 @@ class DataFrame {
     }
 
     __instanciateModules__(modules, df = undefined) {
-        return modules.map(Plugin => {
+        return modules.map((Plugin) => {
             const pluginInstance = new Plugin(df ? df : this);
             return { [pluginInstance.name]: pluginInstance };
         });
@@ -207,7 +207,7 @@ class DataFrame {
                             data
                                 .slice(0, 10)
                                 .concat(data.slice(-10, -1))
-                                .map(row => Object.keys(row))
+                                .map((row) => Object.keys(row))
                                 .reduce((p, n) => p.concat(n))
                         )
                     )
@@ -224,13 +224,13 @@ class DataFrame {
 
     _fromDict(dict, columns) {
         return [
-            transpose(Object.values(dict)).map(row => new Row(row, columns)),
+            transpose(Object.values(dict)).map((row) => new Row(row, columns)),
             columns
         ];
     }
 
     _fromArray(array, columns) {
-        return [array.map(row => new Row(row, columns)), columns];
+        return [array.map((row) => new Row(row, columns)), columns];
     }
 
     _joinByType(gdf1, gdf2, type, newColumns) {
@@ -244,8 +244,8 @@ class DataFrame {
                     const gdf2Collection = gdf2.get(hash).group.toCollection();
                     const combinedGroup = group
                         .toCollection()
-                        .map(row => {
-                            return gdf2Collection.map(row2 =>
+                        .map((row) => {
+                            return gdf2Collection.map((row2) =>
                                 Object.assign({}, row2, row)
                             );
                         })
@@ -255,13 +255,14 @@ class DataFrame {
                         newColumns
                     );
                 }
-                const filterCondition = bool => (bool ? modifiedGroup : false);
+                const filterCondition = (bool) =>
+                    bool ? modifiedGroup : false;
                 if (type === "full") return modifiedGroup;
                 return type === "out"
                     ? filterCondition(!isContained)
                     : filterCondition(isContained);
             })
-            .filter(group => group);
+            .filter((group) => group);
     }
 
     _join(dfToJoin, columnNames, types) {
@@ -286,7 +287,7 @@ class DataFrame {
                         ? this._joinByType(gdfToJoin, gdf, types[1], newColumns)
                         : [])
                 ],
-                group => group.restructure(newColumns)
+                (group) => group.restructure(newColumns)
             )
         ]
             .reduce((p, n) => p.union(n))
@@ -399,9 +400,9 @@ class DataFrame {
     toDict() {
         return Object.assign(
             {},
-            ...Object.entries(this.transpose().toArray()).map(
-                ([index, column]) => ({ [this[__columns__][index]]: column })
-            )
+            ...Object.entries(
+                this.transpose().toArray()
+            ).map(([index, column]) => ({ [this[__columns__][index]]: column }))
         );
     }
 
@@ -414,8 +415,8 @@ class DataFrame {
      */
     toArray(columnName) {
         return columnName
-            ? Array.from(this).map(row => row.get(columnName))
-            : Array.from(this).map(row => row.toArray());
+            ? Array.from(this).map((row) => row.get(columnName))
+            : Array.from(this).map((row) => row.toArray());
     }
 
     /**
@@ -428,7 +429,7 @@ class DataFrame {
     toCollection(ofRows) {
         return ofRows
             ? Array.from(this)
-            : Array.from(this).map(row => row.toDict());
+            : Array.from(this).map((row) => row.toDict());
     }
 
     /**
@@ -442,9 +443,9 @@ class DataFrame {
      * const stringDF = df.show(10, true)
      */
     show(rows = 10, quiet = false) {
-        const makeRow = row =>
+        const makeRow = (row) =>
             `| ${row
-                .map(column => {
+                .map((column) => {
                     const columnAsString = String(column);
                     return columnAsString.length > 9
                         ? columnAsString.substring(0, 6) + "..."
@@ -459,7 +460,7 @@ class DataFrame {
             Array(header.length).join("-"),
             ...iter(
                 this[__rows__],
-                row => {
+                (row) => {
                     token++;
                     return makeRow(row.toArray());
                 },
@@ -526,7 +527,9 @@ class DataFrame {
      * df.select('column1').countValue(5)
      */
     countValue(valueToCount, columnName = this[__columns__][0]) {
-        return this.filter(row => row.get(columnName) === valueToCount).count();
+        return this.filter(
+            (row) => row.get(columnName) === valueToCount
+        ).count();
     }
 
     /**
@@ -555,7 +558,7 @@ class DataFrame {
                 ? columnNames
                 : this[__columns__];
         const values = Array.isArray(value) ? value : [value];
-        return this.map(row =>
+        return this.map((row) =>
             (columns.length > 0 ? columns : this[__columns__]).reduce(
                 (p, n) =>
                     values.includes(p.get(n)) ? p.set(n, replacement) : p,
@@ -609,7 +612,7 @@ class DataFrame {
      */
     select(...columnNames) {
         return this.__newInstance__(
-            this[__rows__].map(row => row.select(...columnNames)),
+            this[__rows__].map((row) => row.select(...columnNames)),
             columnNames
         );
     }
@@ -670,7 +673,7 @@ class DataFrame {
      * df.rename('column1', 'columnRenamed')
      */
     rename(columnName, replacement) {
-        const newColumnNames = this[__columns__].map(column =>
+        const newColumnNames = this[__columns__].map((column) =>
             column === columnName ? replacement : column
         );
         return this.renameAll(newColumnNames);
@@ -688,7 +691,7 @@ class DataFrame {
             throw new WrongSchemaError(typeFunctions, this[__columns__]);
         }
         return this.map(
-            row =>
+            (row) =>
                 new Row(
                     row
                         .toArray()
@@ -708,7 +711,7 @@ class DataFrame {
      * df.cast('column1', (val) => new MyCustomClass(val))
      */
     cast(columnName, typeFunction) {
-        return this.withColumn(columnName, row =>
+        return this.withColumn(columnName, (row) =>
             typeFunction(row.get(columnName))
         );
     }
@@ -722,8 +725,8 @@ class DataFrame {
      */
     drop(columnName) {
         return this.__newInstance__(
-            this[__rows__].map(row => row.delete(columnName)),
-            this[__columns__].filter(column => column !== columnName)
+            this[__rows__].map((row) => row.delete(columnName)),
+            this[__columns__].filter((column) => column !== columnName)
         );
     }
 
@@ -758,7 +761,7 @@ class DataFrame {
     filter(condition) {
         const func =
             typeof condition === "object"
-                ? row =>
+                ? (row) =>
                       Object.entries(condition)
                           .map(([column, value]) =>
                               Object.is(row.get(column), value)
@@ -870,7 +873,7 @@ class DataFrame {
                 ? columnNames
                 : this[__columns__];
 
-        return this.filter(row => {
+        return this.filter((row) => {
             for (const col of cols) {
                 if ([NaN, undefined, null].includes(row.get(col))) {
                     return false;
@@ -924,7 +927,7 @@ class DataFrame {
         return this.__newInstance__(
             iter(
                 this.shuffle()[__rows__],
-                row => {
+                (row) => {
                     token++;
                     return row;
                 },
@@ -947,7 +950,7 @@ class DataFrame {
         const restRows = [];
         return [
             this.__newInstance__(
-                iter(this.shuffle()[__rows__], row => {
+                iter(this.shuffle()[__rows__], (row) => {
                     if (token < nRows) {
                         token++;
                         return row;
@@ -997,11 +1000,11 @@ class DataFrame {
             ? missingValuesPosition
             : "first";
 
-        const _checkMissingValue = v => [NaN, null, undefined].includes(v);
+        const _checkMissingValue = (v) => [NaN, null, undefined].includes(v);
 
         const sortedRows = this[__rows__].sort((p, n) => {
             return _columnNames
-                .map(col => {
+                .map((col) => {
                     const [pValue, nValue] = [p.get(col), n.get(col)];
                     if (_checkMissingValue(pValue)) {
                         return _missingValuesPosition === "last" ? 1 : -1;
@@ -1027,7 +1030,7 @@ class DataFrame {
         if (_columnNames.length > 1) {
             const sortedRowsWithMissingValues = [];
             const sortedRowsWithoutMissingValues = [];
-            sortedRows.forEach(row => {
+            sortedRows.forEach((row) => {
                 for (const col of _columnNames) {
                     if (_checkMissingValue(row.get(col))) {
                         sortedRowsWithMissingValues.push(row);
@@ -1231,14 +1234,27 @@ class DataFrame {
     /**
      * Modify a Row a the given index.
      * @param {Number} [index=0] The index to select the row.
+     * @param {Row => Row} [func=0] The function to modify the row.
      * @returns {DataFrame} A new DataFrame with the modified Row.
      * @example
      * df2.setRowByIndex(1, row => row.set("column1", 33))
      */
-    setRow(index, func = row => row) {
+    setRow(index, func = (row) => row) {
         const newRows = Array.from(this[__rows__]);
         newRows[index] = func(newRows[index]);
         return this.__newInstance__(newRows, this[__columns__]);
+    }
+
+    /**
+     * Modify a Row in place (by mutation) at the given index.
+     * @param {Number} [index=0] The index to select the row.
+     * @returns {DataFrame} The current DataFrame with the modified row.
+     * @example
+     * df2.setRowByIndex(1, row => row.set("column1", 33))
+     */
+    setRowInPlace(index, func = (row) => row) {
+        this[__rows__][index] = func(this[__rows__][index]);
+        return this;
     }
 }
 

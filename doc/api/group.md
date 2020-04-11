@@ -227,32 +227,32 @@ Returns **DataFrame** The tidy DataFrame.
 
 [11]: #melt
 
-[12]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L6-L239 "Source code on GitHub"
+[12]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L6-L239 "Source code on GitHub"
 
 [13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
-[14]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L39-L41 "Source code on GitHub"
+[14]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L39-L41 "Source code on GitHub"
 
 [15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
-[16]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L50-L60 "Source code on GitHub"
+[16]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L50-L60 "Source code on GitHub"
 
 [17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[18]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L68-L70 "Source code on GitHub"
+[18]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L68-L70 "Source code on GitHub"
 
-[19]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L78-L80 "Source code on GitHub"
+[19]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L78-L80 "Source code on GitHub"
 
-[20]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L89-L95 "Source code on GitHub"
+[20]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L89-L95 "Source code on GitHub"
 
 [21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[22]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L104-L114 "Source code on GitHub"
+[22]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L104-L114 "Source code on GitHub"
 
-[23]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L129-L135 "Source code on GitHub"
+[23]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L129-L135 "Source code on GitHub"
 
-[24]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L145-L153 "Source code on GitHub"
+[24]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L145-L153 "Source code on GitHub"
 
-[25]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L163-L191 "Source code on GitHub"
+[25]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L163-L191 "Source code on GitHub"
 
-[26]: https://github.com/Gmousse/dataframe-js/blob/9d6226a62667b8882276bd190eb520086d57ee2e/src/group.js#L201-L238 "Source code on GitHub"
+[26]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/group.js#L201-L238 "Source code on GitHub"

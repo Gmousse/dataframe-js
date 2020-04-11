@@ -187,28 +187,28 @@ Returns **[Object][22]** An dictionnary containing all statistical metrics avail
 
 [9]: #stats
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L6-L154 "Source code on GitHub"
+[10]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L6-L154 "Source code on GitHub"
 
-[11]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L29-L39 "Source code on GitHub"
+[11]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L29-L39 "Source code on GitHub"
 
 [12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[14]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L48-L52 "Source code on GitHub"
+[14]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L48-L52 "Source code on GitHub"
 
-[15]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L61-L65 "Source code on GitHub"
+[15]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L61-L65 "Source code on GitHub"
 
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L74-L87 "Source code on GitHub"
+[16]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L74-L87 "Source code on GitHub"
 
-[17]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L97-L99 "Source code on GitHub"
+[17]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L97-L99 "Source code on GitHub"
 
-[18]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L109-L121 "Source code on GitHub"
+[18]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L109-L121 "Source code on GitHub"
 
 [19]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[20]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L131-L133 "Source code on GitHub"
+[20]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L131-L133 "Source code on GitHub"
 
-[21]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/stat.js#L142-L153 "Source code on GitHub"
+[21]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/modules/stat.js#L142-L153 "Source code on GitHub"
 
 [22]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object

@@ -2,6 +2,19 @@
 
 ---
 
+## v1.5.0
+
+**Author**: Guillaume Mousnier
+
+**Type**: Feature
+
+**Changes**:
+
+-   Fixing documentation issues. Thanks to @dhorvay.
+-   Adding setRowInPlace (mutation variant of setRow)
+
+---
+
 ## v1.4.3
 
 **Author**: Guillaume Mousnier
