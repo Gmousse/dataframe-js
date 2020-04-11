@@ -3,36 +3,49 @@
 ### Table of Contents
 
 -   [SQL][1]
-    -   [register][2]
-    -   [request][3]
-    -   [dropTables][4]
-    -   [dropTable][5]
-    -   [renameTable][6]
-    -   [listTables][7]
-    -   [registerTable][8]
+    -   [Parameters][2]
+    -   [register][3]
+        -   [Parameters][4]
+        -   [Examples][5]
+    -   [request][6]
+        -   [Parameters][7]
+        -   [Examples][8]
+    -   [dropTables][9]
+        -   [Examples][10]
+    -   [dropTable][11]
+        -   [Parameters][12]
+        -   [Examples][13]
+    -   [renameTable][14]
+        -   [Parameters][15]
+        -   [Examples][16]
+    -   [listTables][17]
+        -   [Examples][18]
+    -   [registerTable][19]
+        -   [Parameters][20]
+        -   [Examples][21]
 
 ## SQL
 
-[src/modules/sql/index.js:12-109][9]
+[src/modules/sql/index.js:12-109][22]
 
 SQL module for DataFrame, providing SQL-like syntax for data exploration in DataFrames.
 
-**Parameters**
+### Parameters
 
 -   `df` **DataFrame** An instance of DataFrame.
 
 ### register
 
-[src/modules/sql/index.js:105-108][10]
+[src/modules/sql/index.js:105-108][23]
 
 Register the DataFrame as temporary table.
 
-**Parameters**
+#### Parameters
 
--   `tableName` **[String][11]** The name of the table.
--   `overwrite` **[Boolean][12]** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String][24]** The name of the table.
+-   `overwrite` **[Boolean][25]** Overwrite if the table already exists. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 df.sql.register('tmp');
@@ -40,15 +53,15 @@ df.sql.register('tmp');
 
 ### request
 
-[src/modules/sql/index.js:20-24][13]
+[src/modules/sql/index.js:20-24][26]
 
 Request on a SQL query.
 
-**Parameters**
+#### Parameters
 
--   `query` **[String][11]** A SQL query to request.
+-   `query` **[String][24]** A SQL query to request.
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.request('SELECT * FROM tmp');
@@ -58,11 +71,11 @@ Returns **any** The result of the query.
 
 ### dropTables
 
-[src/modules/sql/index.js:31-33][14]
+[src/modules/sql/index.js:31-33][27]
 
 Drop or remove all registered tables.
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.dropTables();
@@ -70,15 +83,15 @@ DataFrame.dropTables();
 
 ### dropTable
 
-[src/modules/sql/index.js:41-43][15]
+[src/modules/sql/index.js:41-43][28]
 
 Drop or remove a registered table.
 
-**Parameters**
+#### Parameters
 
--   `tableName` **[String][11]** The registered table to drop.
+-   `tableName` **[String][24]** The registered table to drop.
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.dropTable('tmp1');
@@ -86,17 +99,17 @@ DataFrame.dropTable('tmp1');
 
 ### renameTable
 
-[src/modules/sql/index.js:53-56][16]
+[src/modules/sql/index.js:53-56][29]
 
 Rename a registered table.
 
-**Parameters**
+#### Parameters
 
--   `tableName` **[String][11]** The registered table to rename.
--   `replacement` **[String][11]** The new table name.
--   `overwrite` **[Boolean][12]** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String][24]** The registered table to rename.
+-   `replacement` **[String][24]** The new table name.
+-   `overwrite` **[Boolean][25]** Overwrite if the table already exists. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.renameTable('tmp1', 'notTmp1');
@@ -104,31 +117,31 @@ DataFrame.renameTable('tmp1', 'notTmp1');
 
 ### listTables
 
-[src/modules/sql/index.js:64-66][17]
+[src/modules/sql/index.js:64-66][30]
 
 List all registered tables.
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.listTables();
 ```
 
-Returns **[Array][18]** A list of the registered tables.
+Returns **[Array][31]** A list of the registered tables.
 
 ### registerTable
 
-[src/modules/sql/index.js:76-87][19]
+[src/modules/sql/index.js:76-87][32]
 
 Register a DataFrame as a temporary table.
 
-**Parameters**
+#### Parameters
 
 -   `df` **DataFrame** The DataFrame to register.
--   `tableName` **[String][11]** The temporary table name.
--   `overwrite` **[Boolean][12]** Overwrite if the table already exists. (optional, default `false`)
+-   `tableName` **[String][24]** The temporary table name.
+-   `overwrite` **[Boolean][25]** Overwrite if the table already exists. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 DataFrame.registerTable('tmp', df);
@@ -136,38 +149,64 @@ DataFrame.registerTable('tmp', df);
 
 [1]: #sql
 
-[2]: #register
+[2]: #parameters
 
-[3]: #request
+[3]: #register
 
-[4]: #droptables
+[4]: #parameters-1
 
-[5]: #droptable
+[5]: #examples
 
-[6]: #renametable
+[6]: #request
 
-[7]: #listtables
+[7]: #parameters-2
 
-[8]: #registertable
+[8]: #examples-1
 
-[9]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L12-L109 "Source code on GitHub"
+[9]: #droptables
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L105-L108 "Source code on GitHub"
+[10]: #examples-2
 
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[11]: #droptable
 
-[12]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[12]: #parameters-3
 
-[13]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L20-L24 "Source code on GitHub"
+[13]: #examples-3
 
-[14]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L31-L33 "Source code on GitHub"
+[14]: #renametable
 
-[15]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L41-L43 "Source code on GitHub"
+[15]: #parameters-4
 
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L53-L56 "Source code on GitHub"
+[16]: #examples-4
 
-[17]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L64-L66 "Source code on GitHub"
+[17]: #listtables
 
-[18]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[18]: #examples-5
 
-[19]: https://git@github.com/:Gmousse/dataframe-js/blob/e6b340df36723b9f006c2a37ba7551672309be2e/src/modules/sql/index.js#L76-L87 "Source code on GitHub"
+[19]: #registertable
+
+[20]: #parameters-5
+
+[21]: #examples-6
+
+[22]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L12-L109 "Source code on GitHub"
+
+[23]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L105-L108 "Source code on GitHub"
+
+[24]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+
+[25]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[26]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L20-L24 "Source code on GitHub"
+
+[27]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L31-L33 "Source code on GitHub"
+
+[28]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L41-L43 "Source code on GitHub"
+
+[29]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L53-L56 "Source code on GitHub"
+
+[30]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L64-L66 "Source code on GitHub"
+
+[31]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+
+[32]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/sql/index.js#L76-L87 "Source code on GitHub"
