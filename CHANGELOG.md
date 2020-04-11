@@ -10,7 +10,8 @@
 
 **Changes**:
 
--   Fixing file path parsing on windows.
+-   Fixing file path parsing on windows. Thanks to @blockems
+-   Fixing documentation issues. Thanks to @dhorvay
 
 ---
 

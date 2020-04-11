@@ -2,7 +2,7 @@ const exec = require("child_process").exec;
 
 const FILES_TO_DOC = [
     "dataframe",
-    "groupedDataframe",
+    "group",
     "row",
     "modules/sql/index",
     "modules/stat",
@@ -31,7 +31,7 @@ function clean() {
 function buildMD() {
     return new Promise(() => {
         console.log("Building markdown doc:");
-        FILES_TO_DOC.forEach(file => {
+        FILES_TO_DOC.forEach((file) => {
             const output = file.endsWith("/index")
                 ? file.replace("/index", "")
                 : file;
