@@ -3,256 +3,267 @@
 ### Table of Contents
 
 -   [GroupedDataFrame][1]
-    -   [toCollection][2]
-    -   [show][3]
-    -   [listGroups][4]
-    -   [listHashs][5]
-    -   [map][6]
-    -   [filter][7]
-    -   [chain][8]
-    -   [aggregate][9]
-    -   [pivot][10]
-    -   [melt][11]
+    -   [Parameters][2]
+    -   [toCollection][3]
+        -   [Examples][4]
+    -   [show][5]
+        -   [Parameters][6]
+        -   [Examples][7]
+    -   [listGroups][8]
+        -   [Examples][9]
+    -   [listHashs][10]
+        -   [Examples][11]
+    -   [map][12]
+        -   [Parameters][13]
+        -   [Examples][14]
+    -   [filter][15]
+        -   [Parameters][16]
+        -   [Examples][17]
+    -   [chain][18]
+        -   [Parameters][19]
+        -   [Examples][20]
+    -   [aggregate][21]
+        -   [Parameters][22]
+        -   [Examples][23]
+    -   [pivot][24]
+        -   [Parameters][25]
+        -   [Examples][26]
+    -   [melt][27]
+        -   [Parameters][28]
+        -   [Examples][29]
 
 ## GroupedDataFrame
 
-[src/group.js:6-239][12]
+[src/group.js:6-239][30]
 
 Grouped DataFrame structure grouping DataFrame rows by column value.
 
-**Parameters**
+### Parameters
 
 -   `df` **DataFrame** The DataFrame to group by.
--   `columnNames`  
--   `groups`  
--   `hashes`  
--   `columnName` **[String][13]** The column used for the group by.
+-   `columnNames`
+-   `groups`
+-   `hashes`
+-   `columnName` **[String][31]** The column used for the group by.
 
 ### toCollection
 
-[src/group.js:39-41][14]
+[src/group.js:39-41][32]
 
 Convert GroupedDataFrame into collection (Array) of dictionnaries (Object).
 
-**Examples**
+#### Examples
 
 ```javascript
 groupedDF.toCollection();
 ```
 
-Returns **[Array][15]** An Array containing group: {groupKey, group}.
+Returns **[Array][33]** An Array containing group: {groupKey, group}.
 
 ### show
 
-[src/group.js:50-60][16]
+[src/group.js:50-60][34]
 
 Display the GroupedDataFrame as String Table.
 
-**Parameters**
+#### Parameters
 
--   `quiet` **[Boolean][17]** Quiet mode. If true, it doesn't trigger console.log(). (optional, default `false`)
+-   `quiet` **[Boolean][35]** Quiet mode. If true, it doesn't trigger console.log(). (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
-groupedDf.show()
+groupedDf.show();
 ```
 
-Returns **[String][13]** The GroupedDataFrame as String Table.
+Returns **[String][31]** The GroupedDataFrame as String Table.
 
 ### listGroups
 
-[src/group.js:68-70][18]
+[src/group.js:68-70][36]
 
 List GroupedDataFrame groups.
 
-**Examples**
+#### Examples
 
 ```javascript
-gdf.listGroups()
+gdf.listGroups();
 ```
 
-Returns **[Array][15]** An Array containing GroupedDataFrame group names.
+Returns **[Array][33]** An Array containing GroupedDataFrame group names.
 
 ### listHashs
 
-[src/group.js:78-80][19]
+[src/group.js:78-80][37]
 
 List GroupedDataFrame groups as a hashCode.
 
-**Examples**
+#### Examples
 
 ```javascript
-gdf.listHashCodes()
+gdf.listHashCodes();
 ```
 
-Returns **[Array][15]** An Array containing GroupedDataFrame hash codes.
+Returns **[Array][33]** An Array containing GroupedDataFrame hash codes.
 
 ### map
 
-[src/group.js:89-95][20]
+[src/group.js:89-95][38]
 
 Map on DataFrame groups.
 
-**Parameters**
+#### Parameters
 
--   `func` **[Function][21]** The function to apply to each row of each group.
+-   `func` **[Function][39]** The function to apply to each row of each group.
 
-**Examples**
+#### Examples
 
 ```javascript
-groupedDF.map((row,i) => row.set('b', row.get('a')*i));
+groupedDF.map((row, i) => row.set("b", row.get("a") * i));
 ```
 
 Returns **DataFrame** A new DataFrame containing the result.
 
 ### filter
 
-[src/group.js:104-114][22]
+[src/group.js:104-114][40]
 
 Filter a grouped DataFrame.
 
-**Parameters**
+#### Parameters
 
--   `condition` **[Function][21]** A filter function or a column/value object.
+-   `condition` **[Function][39]** A filter function or a column/value object.
 
-**Examples**
+#### Examples
 
 ```javascript
-groupedDF.filter((row,i) => (i === 0));
+groupedDF.filter((row, i) => i === 0);
 ```
 
 Returns **DataFrame** A new filtered DataFrame.
 
 ### chain
 
-[src/group.js:129-135][23]
+[src/group.js:129-135][41]
 
 Chain maps and filters functions on DataFrame by optimizing their executions.
 If a function returns boolean, it's a filter. Else it's a map.
 It can be 10 - 100 x faster than standard chains of .map() and .filter().
 
-**Parameters**
+#### Parameters
 
--   `funcs` **...[Function][21]** Functions to apply on the DataFrame rows taking the row as parameter.
+-   `funcs` **...[Function][39]** Functions to apply on the DataFrame rows taking the row as parameter.
 
-**Examples**
+#### Examples
 
 ```javascript
 groupedDF.chain(
-     (row, i) => (i === 0), // filter
-     row => row.set('column1', 3),  // map
-     row => row.get('column2') === '5' // filter
-)
+    (row, i) => i === 0, // filter
+    (row) => row.set("column1", 3), // map
+    (row) => row.get("column2") === "5" // filter
+);
 ```
 
 Returns **DataFrame** A new DataFrame with modified rows.
 
 ### aggregate
 
-[src/group.js:145-153][24]
+[src/group.js:145-153][42]
 
 Create an aggregation from a function.
 
-**Parameters**
+#### Parameters
 
--   `func` **[Function][21]** The aggregation function.
--   `columnName` **[String][13]** The column name created by the aggregation. (optional, default `'aggregation'`)
+-   `func` **[Function][39]** The aggregation function.
+-   `columnName` **[String][31]** The column name created by the aggregation. (optional, default `'aggregation'`)
 
-**Examples**
+#### Examples
 
 ```javascript
-groupedDF.aggregate(group => group.stat.sum('column1'));
+groupedDF.aggregate((group) => group.stat.sum("column1"));
 ```
 
 Returns **DataFrame** A new DataFrame with a column 'aggregation' containing the result.
 
 ### pivot
 
-[src/group.js:163-191][25]
+[src/group.js:163-191][43]
 
 Pivot a GroupedDataFrame.
 
-**Parameters**
+#### Parameters
 
--   `columnToPivot` **[String][13]** The column which will be transposed as columns.
--   `func` **[Function][21]** The function to define each column value from a DataFrame. (optional, default `(gdf)=>gdf.count()`)
+-   `columnToPivot` **[String][31]** The column which will be transposed as columns.
+-   `func` **[Function][39]** The function to define each column value from a DataFrame. (optional, default `(gdf)=>gdf.count()`)
 
-**Examples**
+#### Examples
 
 ```javascript
-df.groupBy('carType').pivot('carModel', values => values.stat.sum('kms'))
+df.groupBy("carType").pivot("carModel", (values) => values.stat.sum("kms"));
 ```
 
 Returns **DataFrame** The pivot DataFrame.
 
 ### melt
 
-[src/group.js:201-238][26]
+[src/group.js:201-238][44]
 
 Melt a DataFrame to make it tidy. It's the reverse of GroupedDataFrame.pivot().
 
-**Parameters**
+#### Parameters
 
--   `variableColumnName` **[String][13]** The column name containing values. (optional, default `'value'`)
--   `valueColumnName`   (optional, default `"value"`)
+-   `variableColumnName` **[String][31]** The column name containing values. (optional, default `'value'`)
+-   `valueColumnName` (optional, default `"value"`)
 
-**Examples**
+#### Examples
 
 ```javascript
-df.groupBy('carType').melt('kms')
+df.groupBy("carType").melt("kms");
 ```
 
 Returns **DataFrame** The tidy DataFrame.
 
 [1]: #groupeddataframe
-
-[2]: #tocollection
-
-[3]: #show
-
-[4]: #listgroups
-
-[5]: #listhashs
-
-[6]: #map
-
-[7]: #filter
-
-[8]: #chain
-
-[9]: #aggregate
-
-[10]: #pivot
-
-[11]: #melt
-
-[12]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L6-L239 "Source code on GitHub"
-
-[13]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
-
-[14]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L39-L41 "Source code on GitHub"
-
-[15]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
-
-[16]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L50-L60 "Source code on GitHub"
-
-[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
-
-[18]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L68-L70 "Source code on GitHub"
-
-[19]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L78-L80 "Source code on GitHub"
-
-[20]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L89-L95 "Source code on GitHub"
-
-[21]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
-
-[22]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L104-L114 "Source code on GitHub"
-
-[23]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L129-L135 "Source code on GitHub"
-
-[24]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L145-L153 "Source code on GitHub"
-
-[25]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L163-L191 "Source code on GitHub"
-
-[26]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/group.js#L201-L238 "Source code on GitHub"
+[2]: #parameters
+[3]: #tocollection
+[4]: #examples
+[5]: #show
+[6]: #parameters-1
+[7]: #examples-1
+[8]: #listgroups
+[9]: #examples-2
+[10]: #listhashs
+[11]: #examples-3
+[12]: #map
+[13]: #parameters-2
+[14]: #examples-4
+[15]: #filter
+[16]: #parameters-3
+[17]: #examples-5
+[18]: #chain
+[19]: #parameters-4
+[20]: #examples-6
+[21]: #aggregate
+[22]: #parameters-5
+[23]: #examples-7
+[24]: #pivot
+[25]: #parameters-6
+[26]: #examples-8
+[27]: #melt
+[28]: #parameters-7
+[29]: #examples-9
+[30]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L6-L239 "Source code on GitHub"
+[31]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
+[32]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L39-L41 "Source code on GitHub"
+[33]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
+[34]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L50-L60 "Source code on GitHub"
+[35]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[36]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L68-L70 "Source code on GitHub"
+[37]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L78-L80 "Source code on GitHub"
+[38]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L89-L95 "Source code on GitHub"
+[39]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
+[40]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L104-L114 "Source code on GitHub"
+[41]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L129-L135 "Source code on GitHub"
+[42]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L145-L153 "Source code on GitHub"
+[43]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L163-L191 "Source code on GitHub"
+[44]: https://github.com/Gmousse/dataframe-js/blob/39ec0d8bdfadd0253fd5c19e0d92a95b2166d05e/src/group.js#L201-L238 "Source code on GitHub"
