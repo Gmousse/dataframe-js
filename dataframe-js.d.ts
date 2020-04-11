@@ -75,6 +75,8 @@ export class DataFrame {
 
     setRow(index: any, ...args: any[]): any;
 
+    setRowInPlace(index: any, ...args: any[]): any;
+
     show(...args: any[]): any;
 
     shuffle(): any;

@@ -1447,7 +1447,7 @@ DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
 
 [64]: #fromjson
 
-[65]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L11-L1259 "Source code on GitHub"
+[65]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L11-L1259 "Source code on GitHub"
 
 [66]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array
 
@@ -1455,136 +1455,136 @@ DataFrame.fromJSON('/my/absolute/path/myfile.json').then(df => df.show())
 
 [68]: #dataframe
 
-[69]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L314-L316 "Source code on GitHub"
+[69]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L314-L316 "Source code on GitHub"
 
 [70]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String
 
 [71]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
 
-[72]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L329-L331 "Source code on GitHub"
+[72]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L329-L331 "Source code on GitHub"
 
-[73]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L344-L346 "Source code on GitHub"
+[73]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L344-L346 "Source code on GitHub"
 
-[74]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L359-L361 "Source code on GitHub"
+[74]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L359-L361 "Source code on GitHub"
 
-[75]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L376-L378 "Source code on GitHub"
+[75]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L376-L378 "Source code on GitHub"
 
-[76]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L390-L392 "Source code on GitHub"
+[76]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L390-L392 "Source code on GitHub"
 
-[77]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L400-L407 "Source code on GitHub"
+[77]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L400-L407 "Source code on GitHub"
 
-[78]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L416-L420 "Source code on GitHub"
+[78]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L416-L420 "Source code on GitHub"
 
-[79]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L429-L433 "Source code on GitHub"
+[79]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L429-L433 "Source code on GitHub"
 
-[80]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L445-L474 "Source code on GitHub"
+[80]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L445-L474 "Source code on GitHub"
 
 [81]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
 
-[82]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L482-L484 "Source code on GitHub"
+[82]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L482-L484 "Source code on GitHub"
 
-[83]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L493-L508 "Source code on GitHub"
+[83]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L493-L508 "Source code on GitHub"
 
-[84]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L516-L518 "Source code on GitHub"
+[84]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L516-L518 "Source code on GitHub"
 
-[85]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L529-L533 "Source code on GitHub"
+[85]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L529-L533 "Source code on GitHub"
 
-[86]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L542-L544 "Source code on GitHub"
+[86]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L542-L544 "Source code on GitHub"
 
-[87]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L555-L568 "Source code on GitHub"
+[87]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L555-L568 "Source code on GitHub"
 
-[88]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L577-L582 "Source code on GitHub"
+[88]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L577-L582 "Source code on GitHub"
 
-[89]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L592-L594 "Source code on GitHub"
+[89]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L592-L594 "Source code on GitHub"
 
-[90]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L602-L604 "Source code on GitHub"
+[90]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L602-L604 "Source code on GitHub"
 
-[91]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L613-L618 "Source code on GitHub"
+[91]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L613-L618 "Source code on GitHub"
 
-[92]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L629-L638 "Source code on GitHub"
+[92]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L629-L638 "Source code on GitHub"
 
 [93]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Statements/function
 
-[94]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L649-L651 "Source code on GitHub"
+[94]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L649-L651 "Source code on GitHub"
 
-[95]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L660-L665 "Source code on GitHub"
+[95]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L660-L665 "Source code on GitHub"
 
-[96]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L675-L680 "Source code on GitHub"
+[96]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L675-L680 "Source code on GitHub"
 
-[97]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L689-L702 "Source code on GitHub"
+[97]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L689-L702 "Source code on GitHub"
 
-[98]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L713-L717 "Source code on GitHub"
+[98]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L713-L717 "Source code on GitHub"
 
-[99]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L726-L731 "Source code on GitHub"
+[99]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L726-L731 "Source code on GitHub"
 
-[100]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L746-L751 "Source code on GitHub"
+[100]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L746-L751 "Source code on GitHub"
 
-[101]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L761-L775 "Source code on GitHub"
+[101]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L761-L775 "Source code on GitHub"
 
-[102]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L786-L788 "Source code on GitHub"
+[102]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L786-L788 "Source code on GitHub"
 
-[103]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L798-L800 "Source code on GitHub"
+[103]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L798-L800 "Source code on GitHub"
 
-[104]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L809-L814 "Source code on GitHub"
+[104]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L809-L814 "Source code on GitHub"
 
-[105]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L828-L832 "Source code on GitHub"
+[105]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L828-L832 "Source code on GitHub"
 
-[106]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L842-L846 "Source code on GitHub"
+[106]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L842-L846 "Source code on GitHub"
 
-[107]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L855-L861 "Source code on GitHub"
+[107]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L855-L861 "Source code on GitHub"
 
-[108]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L870-L884 "Source code on GitHub"
+[108]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L870-L884 "Source code on GitHub"
 
-[109]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L894-L896 "Source code on GitHub"
+[109]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L894-L896 "Source code on GitHub"
 
-[110]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L904-L915 "Source code on GitHub"
+[110]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L904-L915 "Source code on GitHub"
 
-[111]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L924-L938 "Source code on GitHub"
+[111]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L924-L938 "Source code on GitHub"
 
-[112]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L947-L964 "Source code on GitHub"
+[112]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L947-L964 "Source code on GitHub"
 
-[113]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L977-L979 "Source code on GitHub"
+[113]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L977-L979 "Source code on GitHub"
 
-[114]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L992-L1056 "Source code on GitHub"
+[114]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L992-L1056 "Source code on GitHub"
 
-[115]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1065-L1078 "Source code on GitHub"
+[115]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1065-L1078 "Source code on GitHub"
 
-[116]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1089-L1098 "Source code on GitHub"
+[116]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1089-L1098 "Source code on GitHub"
 
-[117]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1110-L1112 "Source code on GitHub"
+[117]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1110-L1112 "Source code on GitHub"
 
-[118]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1123-L1125 "Source code on GitHub"
+[118]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1123-L1125 "Source code on GitHub"
 
-[119]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1136-L1138 "Source code on GitHub"
+[119]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1136-L1138 "Source code on GitHub"
 
-[120]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1149-L1151 "Source code on GitHub"
+[120]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1149-L1151 "Source code on GitHub"
 
-[121]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1162-L1164 "Source code on GitHub"
+[121]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1162-L1164 "Source code on GitHub"
 
-[122]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1174-L1176 "Source code on GitHub"
+[122]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1174-L1176 "Source code on GitHub"
 
-[123]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1186-L1188 "Source code on GitHub"
+[123]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1186-L1188 "Source code on GitHub"
 
-[124]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1198-L1200 "Source code on GitHub"
+[124]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1198-L1200 "Source code on GitHub"
 
-[125]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1213-L1221 "Source code on GitHub"
+[125]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1213-L1221 "Source code on GitHub"
 
-[126]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1230-L1232 "Source code on GitHub"
+[126]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1230-L1232 "Source code on GitHub"
 
-[127]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1242-L1246 "Source code on GitHub"
+[127]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1242-L1246 "Source code on GitHub"
 
-[128]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L1255-L1258 "Source code on GitHub"
+[128]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L1255-L1258 "Source code on GitHub"
 
-[129]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L18-L20 "Source code on GitHub"
+[129]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L18-L20 "Source code on GitHub"
 
-[130]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L35-L37 "Source code on GitHub"
+[130]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L35-L37 "Source code on GitHub"
 
-[131]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L52-L54 "Source code on GitHub"
+[131]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L52-L54 "Source code on GitHub"
 
-[132]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L68-L70 "Source code on GitHub"
+[132]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L68-L70 "Source code on GitHub"
 
-[133]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L84-L86 "Source code on GitHub"
+[133]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L84-L86 "Source code on GitHub"
 
-[134]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L100-L102 "Source code on GitHub"
+[134]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L100-L102 "Source code on GitHub"
 
-[135]: https://git@github.com/:Gmousse/dataframe-js/blob/c8bed984ae3fc9fb6e30aac0d04d1ac519894998/src/dataframe.js#L114-L116 "Source code on GitHub"
+[135]: https://git@github.com/:Gmousse/dataframe-js/blob/1473e98bea606d05502c2e0b52e57f196eabc7b9/src/dataframe.js#L114-L116 "Source code on GitHub"
