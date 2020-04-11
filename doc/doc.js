@@ -2,7 +2,7 @@ const exec = require("child_process").exec;
 
 const FILES_TO_DOC = [
     "dataframe",
-    "groupedDataframe",
+    "group",
     "row",
     "modules/sql/index",
     "modules/stat",
