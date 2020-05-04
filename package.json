@@ -22,7 +22,7 @@
         "url": "https://github.com/Gmousse/dataframe-js.git"
     },
     "main": "./lib/index.js",
-    "types" "./dataframe-js.d.ts",
+    "types": "./dataframe-js.d.ts",
     "scripts": {
         "lint": "check-node-version --node \">= 4\" && eslint -c .eslintrc ./src || check-node-version --node \"< 4\"",
         "prettier": "prettier --write 'src/**/*'",
