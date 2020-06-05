@@ -12,6 +12,14 @@ export function isNumber(x) {
     return !isNaN(parseFloat(x)) && isFinite(x);
 }
 
+export function isDate(x) {
+    return !isNaN(Date.parse(x))
+}
+
+export function isEmpty(x) {
+    return x == null || x == "";
+}
+
 export function arrayEqual(a, b, byOrder = false) {
     return byOrder
         ? Object.keys(a)

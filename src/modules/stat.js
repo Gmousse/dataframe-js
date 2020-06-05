@@ -1,4 +1,4 @@
-import { isNumber } from "../reusables";
+import { isNumber, isEmpty, isDate } from "../reusables";
 
 /**
  * Stat module for DataFrame, providing basic statistical metrics for numeric columns.
@@ -133,6 +133,32 @@ class Stat {
     }
 
     /**
+     * returns the data type of the data, for a specific column
+     * @param {String} columnName The column to evaluate, containing Numbers, Strings or Dates
+     * @returns {String} numeric / nominal / date / null
+     * @example
+     * df.stat.datatype('column1')
+     */
+    datatype(columnName) {
+        return this.df.reduce((p, n) => {
+            let v = n.get(columnName); 
+            if (isEmpty(v)) {
+                return p;
+            }
+            
+            if (isNumber(v)) {
+                return p == null || p == "numeric" ? "numeric" : "mixed"
+            } 
+            
+            if (isDate(v)) {
+                return p == null || p == 'date' ? 'date' : "mixed"
+            }
+            
+            return p == null || p == "nominal" ? "nominal" : "mixed"
+        }, null);
+    }
+
+    /**
      * Compute all the stats available with the Stat module on a numeric column.
      * @param {String} columnName The column to evaluate, containing Numbers.
      * @returns {Object} An dictionnary containing all statistical metrics available.
@@ -148,7 +174,8 @@ class Stat {
             var: this.var(columnName),
             varpop: this.var(columnName, true),
             sd: this.sd(columnName),
-            sdpop: this.sd(columnName, true)
+            sdpop: this.sd(columnName, true),
+            datatype: this.datatype(columnName)
         };
     }
 }

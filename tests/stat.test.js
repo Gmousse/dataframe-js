@@ -7,9 +7,11 @@ test("DataFrame stat module can ", assert => {
         {
             column1: [3, 6, 8],
             column2: ["3", "4", "5", "6", "yolo"],
-            column3: []
+            column3: [],
+            column4: [1, 3, "4", ""],
+            column5: ['06/05/2020']
         },
-        ["column1", "column2", "column3"]
+        ["column1", "column2", "column3", "column4", "column5"]
     );
 
     assert.is(df.stat.sum("column1"), 17, "compute the sum of a column.");
@@ -71,6 +73,7 @@ test("DataFrame stat module can ", assert => {
     assert.deepEqual(
         df.stat.stats("column1"),
         {
+            datatype: 'numeric',
             sum: 17,
             mean: 5.666666666666667,
             min: 3,
@@ -82,6 +85,36 @@ test("DataFrame stat module can ", assert => {
         },
         "compute all these stats for a column."
     );
+
+    assert.is(
+        df.stat.datatype("column1"),
+        "numeric",
+        "check numeric data type"
+    )
+
+    assert.is(
+        df.stat.datatype("column2"),
+        "mixed",
+        "check mixed data type"
+    )
+
+    assert.is(
+        df.stat.datatype("column3"),
+        null,
+        "check no data type"
+    )
+
+    assert.is(
+        df.stat.datatype("column4"),
+        "numeric",
+        "check nominal data type"
+    )
+
+    assert.is(
+        df.stat.datatype("column5"),
+        "date",
+        "check date data type"
+    )
 });
 
 test("DataFrame stat module works with negative values ", assert => {
