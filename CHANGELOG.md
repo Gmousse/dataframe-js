@@ -10,8 +10,21 @@
 
 **Changes**:
 
--   Fixing documentation issues. Thanks to @dhorvay.
 -   Adding setRowInPlace (mutation variant of setRow)
+
+---
+
+## v1.4.4
+
+**Author**: Guillaume Mousnier
+  
+**Type**: Hotfix
+
+**Changes**:
+
+-   Fixing utf8-bom issues. Thanks to @iamweilee.
+-   Fixing file path parsing on windows. Thanks to @blockems and @iamweilee
+-   Fixing documentation issues. Thanks to @dhorvay and @ThatIsAPseudo
 
 ---
 

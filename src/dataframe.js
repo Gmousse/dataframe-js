@@ -475,9 +475,9 @@ class DataFrame {
 
     /**
      * Get the DataFrame dimensions.
-     * @returns {Array} The DataFrame dimensions. [height, weight]
+     * @returns {Array} The DataFrame dimensions. [height, width]
      * @example
-     * const [height, weight] = df.dim()
+     * const [height, width] = df.dim()
      */
     dim() {
         return [this.count(), this[__columns__].length];
