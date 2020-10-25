@@ -9,17 +9,22 @@ const FILES_TO_DOC = [
     "modules/matrix"
 ];
 
-clean().then(buildMD);
+clean()
+    .then(buildMD)
+    .then(() => process.exit(0))
+    .catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });
 
 function clean() {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         console.log("Cleaning the doc folder.");
         exec(
             "shx rm -rf doc/md && shx mkdir doc/md && mkdir doc/md/modules",
             (err, stdout, stderr) => {
                 if (stderr) {
                     console.error(stderr);
-                    reject(stderr);
                 }
                 console.log("doc/ cleaned.\n");
                 resolve();
