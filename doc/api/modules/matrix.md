@@ -3,51 +3,60 @@
 ### Table of Contents
 
 -   [Matrix][1]
-    -   [isCommutative][2]
-    -   [add][3]
-    -   [product][4]
-    -   [dot][5]
+    -   [Parameters][2]
+    -   [isCommutative][3]
+        -   [Parameters][4]
+        -   [Examples][5]
+    -   [add][6]
+        -   [Parameters][7]
+        -   [Examples][8]
+    -   [product][9]
+        -   [Parameters][10]
+        -   [Examples][11]
+    -   [dot][12]
+        -   [Parameters][13]
+        -   [Examples][14]
 
 ## Matrix
 
-[src/modules/matrix.js:8-103][6]
+[src/modules/matrix.js:8-103][15]
 
 Matrix module for DataFrame, providing basic mathematical matrix computations.
 
-**Parameters**
+### Parameters
 
 -   `df` **DataFrame** An instance of DataFrame.
 
 ### isCommutative
 
-[src/modules/matrix.js:26-34][7]
+[src/modules/matrix.js:26-34][16]
 
 Check if two DataFrames are commutative, if both have the same dimensions.
 
-**Parameters**
+#### Parameters
 
 -   `df` **DataFrame** The second DataFrame to check.
--   `reverse` **[Boolean][8]** Revert the second DataFrame before the comparison. (optional, default `false`)
+-   `reverse` **[Boolean][17]** Revert the second DataFrame before the comparison. (optional, default `false`)
 
-**Examples**
+#### Examples
 
 ```javascript
 df.matrix.isCommutative(df2)
 ```
 
-Returns **[Boolean][8]** True if they are commutative, else false.
+Returns **[Boolean][17]** True if they are commutative, else false.
 
 ### add
 
-[src/modules/matrix.js:43-58][9]
+[src/modules/matrix.js:43-58][18]
 
 Provide an elements pairwise addition of two DataFrames having the same dimensions.
 
-**Parameters**
+#### Parameters
 
 -   `df` **DataFrame** The second DataFrame to add.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.matrix.add(df2)
@@ -57,15 +66,15 @@ Returns **DataFrame** A new DataFrame resulting to the addition two DataFrames.
 
 ### product
 
-[src/modules/matrix.js:67-71][10]
+[src/modules/matrix.js:67-71][19]
 
 Provide a scalar product between a number and a DataFrame.
 
-**Parameters**
+#### Parameters
 
--   `number` **[Number][11]** The number to multiply.
+-   `number` **[Number][20]** The number to multiply.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.matrix.product(6)
@@ -75,15 +84,15 @@ Returns **DataFrame** A new DataFrame resulting to the scalar product.
 
 ### dot
 
-[src/modules/matrix.js:80-102][12]
+[src/modules/matrix.js:80-102][21]
 
 Multiply one DataFrame n x p and a second p x n.
 
-**Parameters**
+#### Parameters
 
 -   `df` **DataFrame** The second DataFrame to multiply.
 
-**Examples**
+#### Examples
 
 ```javascript
 df.matrix.dot(df)
@@ -93,24 +102,42 @@ Returns **DataFrame** A new n x n DataFrame resulting to the product of two Data
 
 [1]: #matrix
 
-[2]: #iscommutative
+[2]: #parameters
 
-[3]: #add
+[3]: #iscommutative
 
-[4]: #product
+[4]: #parameters-1
 
-[5]: #dot
+[5]: #examples
 
-[6]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/matrix.js#L8-L103 "Source code on GitHub"
+[6]: #add
 
-[7]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/matrix.js#L26-L34 "Source code on GitHub"
+[7]: #parameters-2
 
-[8]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+[8]: #examples-1
 
-[9]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/matrix.js#L43-L58 "Source code on GitHub"
+[9]: #product
 
-[10]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/matrix.js#L67-L71 "Source code on GitHub"
+[10]: #parameters-3
 
-[11]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+[11]: #examples-2
 
-[12]: https://git@github.com/:Gmousse/dataframe-js/blob/ec685babaf21f5c5c74b51405f3b5344642b8849/src/modules/matrix.js#L80-L102 "Source code on GitHub"
+[12]: #dot
+
+[13]: #parameters-4
+
+[14]: #examples-3
+
+[15]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/matrix.js#L8-L103 "Source code on GitHub"
+
+[16]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/matrix.js#L26-L34 "Source code on GitHub"
+
+[17]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Boolean
+
+[18]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/matrix.js#L43-L58 "Source code on GitHub"
+
+[19]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/matrix.js#L67-L71 "Source code on GitHub"
+
+[20]: https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number
+
+[21]: https://github.com/Gmousse/dataframe-js/blob/fd7c801fad4d628c3524afbfa0694a919fa2070b/src/modules/matrix.js#L80-L102 "Source code on GitHub"

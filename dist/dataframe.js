@@ -5800,21 +5800,41 @@ var dfjs = (function (exports) {
 	  }
 	});
 
-	var nativeStartsWith = ''.startsWith;
-	var min$4 = Math.min;
+	// @@match logic
+	fixRegexpWellKnownSymbolLogic('match', 1, function (MATCH, nativeMatch, maybeCallNative) {
+	  return [
+	    // `String.prototype.match` method
+	    // https://tc39.github.io/ecma262/#sec-string.prototype.match
+	    function match(regexp) {
+	      var O = requireObjectCoercible(this);
+	      var matcher = regexp == undefined ? undefined : regexp[MATCH];
+	      return matcher !== undefined ? matcher.call(regexp, O) : new RegExp(regexp)[MATCH](String(O));
+	    },
+	    // `RegExp.prototype[@@match]` method
+	    // https://tc39.github.io/ecma262/#sec-regexp.prototype-@@match
+	    function (regexp) {
+	      var res = maybeCallNative(nativeMatch, regexp, this);
+	      if (res.done) return res.value;
 
-	// `String.prototype.startsWith` method
-	// https://tc39.github.io/ecma262/#sec-string.prototype.startswith
-	_export({ target: 'String', proto: true, forced: !correctIsRegexpLogic('startsWith') }, {
-	  startsWith: function startsWith(searchString /* , position = 0 */) {
-	    var that = String(requireObjectCoercible(this));
-	    notARegexp(searchString);
-	    var index = toLength(min$4(arguments.length > 1 ? arguments[1] : undefined, that.length));
-	    var search = String(searchString);
-	    return nativeStartsWith
-	      ? nativeStartsWith.call(that, search, index)
-	      : that.slice(index, index + search.length) === search;
-	  }
+	      var rx = anObject(regexp);
+	      var S = String(this);
+
+	      if (!rx.global) return regexpExecAbstract(rx, S);
+
+	      var fullUnicode = rx.unicode;
+	      rx.lastIndex = 0;
+	      var A = [];
+	      var n = 0;
+	      var result;
+	      while ((result = regexpExecAbstract(rx, S)) !== null) {
+	        var matchStr = String(result[0]);
+	        A[n] = matchStr;
+	        if (matchStr === '') rx.lastIndex = advanceStringIndex(S, toLength(rx.lastIndex), fullUnicode);
+	        n++;
+	      }
+	      return n === 0 ? null : A;
+	    }
+	  ];
 	});
 
 	var prefix = "$";
@@ -6308,17 +6328,9 @@ var dfjs = (function (exports) {
 
 	var csv = dsv(",");
 
-	var csvParse = csv.parse;
-	var csvParseRows = csv.parseRows;
-	var csvFormat = csv.format;
-	var csvFormatRows = csv.formatRows;
-
 	var tsv = dsv("\t");
 
-	var tsvParse = tsv.parse;
-	var tsvParseRows = tsv.parseRows;
-	var tsvFormat = tsv.format;
-	var tsvFormatRows = tsv.formatRows;
+	var FILE_PATTERN = /^(?:[/]|[./]|(?:[a-zA-z]:\/)).*$/;
 
 	function saveFile(path, content) {
 	  try {
@@ -6341,7 +6353,13 @@ var dfjs = (function (exports) {
 	}
 
 	function addFileProtocol(path) {
-	  return path.startsWith("/") || path.startsWith("./") || path.startsWith("C") ? "file://".concat(path) : path;
+	  var isValidFilePath = String(path).match(FILE_PATTERN);
+
+	  if (isValidFilePath) {
+	    return "file://".concat(path);
+	  }
+
+	  return path;
 	}
 
 	function toDSV(df) {
