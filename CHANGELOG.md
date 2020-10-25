@@ -12,7 +12,7 @@
 
 -   Fixing utf8-bom issues. Thanks to @iamweilee.
 -   Fixing file path parsing on windows. Thanks to @blockems and @iamweilee
--   Fixing documentation issues. Thanks to @dhorvay
+-   Fixing documentation issues. Thanks to @dhorvay and @ThatIsAPseudo
 
 ---
 
