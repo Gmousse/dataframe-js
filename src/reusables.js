@@ -1,6 +1,6 @@
 export function isArrayOfType(value, ofType, index = 0) {
     return value instanceof Array &&
-        value.hasOwnProperty(index) &&
+        Object.prototype.hasOwnProperty.call(value, index) &&
         (ofType === String
             ? typeof value[index] === "string"
             : value[index] instanceof ofType)
@@ -15,17 +15,17 @@ export function isNumber(x) {
 export function arrayEqual(a, b, byOrder = false) {
     return byOrder
         ? Object.keys(a)
-              .map(x => a[x] === b[x])
+              .map((x) => a[x] === b[x])
               .reduce((p, n) => (p ? n : p), true)
-        : [...new Set(a.filter(x => !new Set(b).has(x)))].length === 0;
+        : [...new Set(a.filter((x) => !new Set(b).has(x)))].length === 0;
 }
 
 export function transpose(table) {
     const tableSize = table
-        .map(row => row.length)
+        .map((row) => row.length)
         .reduce((p, n) => Math.max(p, n), 0);
-    return [...Array(tableSize).keys()].map(index =>
-        table.map(row => row[index])
+    return [...Array(tableSize).keys()].map((index) =>
+        table.map((row) => row[index])
     );
 }
 
@@ -58,7 +58,7 @@ export function chain(data, ...operations) {
                     const next = prev ? n(prev, i) : false;
                     return next === true ? prev : next;
                 },
-                x => x
+                (x) => x
             )
         )
     );
@@ -67,7 +67,9 @@ export function chain(data, ...operations) {
 export function xSplit(stringToSplit, ...patterns) {
     return patterns.reduce(
         (prev, next) =>
-            prev.map(str => str.split(next)).reduce((p, n) => [...p, ...n], []),
+            prev
+                .map((str) => str.split(next))
+                .reduce((p, n) => [...p, ...n], []),
         [stringToSplit]
     );
 }
@@ -80,7 +82,7 @@ export function xReplace(stringToReplace, ...patterns) {
 }
 
 export function xContains(stringToFilter, ...patterns) {
-    return patterns.filter(pattern => stringToFilter.includes(pattern));
+    return patterns.filter((pattern) => stringToFilter.includes(pattern));
 }
 
 export function hashCode(str) {
