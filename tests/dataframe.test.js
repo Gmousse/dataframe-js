@@ -489,6 +489,18 @@ test("DataFrame rows can be ", (assert) => {
     );
 
     assert.deepEqual(
+        df3
+            .groupBy("id")
+            .aggregate({ output: (group) => group.count() })
+            .toDict(),
+        {
+            id: [3, 6, 8, 1],
+            output: [2, 1, 2, 2]
+        },
+        "groupBy and compute (by aggregation) the count by group via object params."
+    );
+
+    assert.deepEqual(
         df4
             .groupBy("id", "id2")
             .aggregate((group) => group.count())
@@ -499,6 +511,22 @@ test("DataFrame rows can be ", (assert) => {
             aggregation: [2, 1, 2, 1, 1, 1]
         },
         "groupBy on multiple columns and compute the count by group."
+    );
+
+    assert.deepEqual(
+        df4b
+            .groupBy('test1')
+            .aggregate({
+                test2: group => group.stat.mean('test2'),
+                test3: group => group.stat.max('test3')
+            })
+            .toDict(),
+        {
+            test1: [95, 94],
+            test2: [91, 96],
+            test3: [76, 99]
+        },
+        "groupBy on multiple columns via Object and compute independent aggregations."
     );
 
     assert.deepEqual(
