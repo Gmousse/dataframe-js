@@ -420,9 +420,9 @@ class DataFrame {
     }
 
     /**
-     * Convert DataFrame into Array of dictionnaries. You can also return Rows instead of dictionnaries.
-     * @param {Boolean} [ofRows] Return a collection of Rows instead of dictionnaries.
-     * @returns {Array} The DataFrame converted into Array of dictionnaries (or Rows).
+     * Convert DataFrame into Array of dictionaries. You can also return Rows instead of dictionaries.
+     * @param {Boolean} [ofRows] Return a collection of Rows instead of dictionaries.
+     * @returns {Array} The DataFrame converted into Array of dictionaries (or Rows).
      * @example
      * df.toCollection()
      */
@@ -433,7 +433,7 @@ class DataFrame {
     }
 
     /**
-     * Display the DataFrame as String Table. Can only return a sring instead of displaying the DataFrame.
+     * Display the DataFrame as String Table. Can only return a string instead of displaying the DataFrame.
      * @param {Number} [rows=10] The number of lines to display.
      * @param {Boolean} [quiet=false] Quiet mode. If true, only returns a string instead of console.log().
      * @returns {String} The DataFrame as String Table.
@@ -486,17 +486,17 @@ class DataFrame {
     /**
      * Transpose a DataFrame. Rows become columns and conversely. n x p => p x n.
      * @param {Boolean} [transposeColumnNames=false] An option to transpose columnNames in a rowNames column.
-     * @returns {ÐataFrame} A new transposed DataFrame.
+     * @returns {DataFrame} A new transposed DataFrame.
      * @example
      * df.transpose()
      */
-    transpose(tranposeColumnNames) {
+    transpose(transposeColumnNames) {
         const newColumns = [
-            ...(tranposeColumnNames ? ["rowNames"] : []),
+            ...(transposeColumnNames ? ["rowNames"] : []),
             ...[...Array(this.count()).keys()].reverse()
         ];
         const transposedRows = transpose(
-            (tranposeColumnNames
+            (transposeColumnNames
                 ? this.push(this[__columns__])
                 : this
             ).toArray()
@@ -756,7 +756,7 @@ class DataFrame {
      * @returns {DataFrame} A new filtered DataFrame.
      * @example
      * df.filter(row => row.get('column1') >= 3)
-     * df.filter({'column2': 5, 'column1': 3}))
+     * df.filter({'column2': 5, 'column1': 3})
      */
     filter(condition) {
         const func =
@@ -781,7 +781,7 @@ class DataFrame {
      * @returns {DataFrame} A new filtered DataFrame.
      * @example
      * df.where(row => row.get('column1') >= 3)
-     * df.where({'column2': 5, 'column1': 3}))
+     * df.where({'column2': 5, 'column1': 3})
      */
     where(condition) {
         return this.filter(condition);
@@ -916,7 +916,7 @@ class DataFrame {
 
     /**
      * Return a random sample of rows.
-     * @param {Number} percentage A percentage of the orignal DataFrame giving the sample size.
+     * @param {Number} percentage A percentage of the original DataFrame giving the sample size.
      * @returns {DataFrame} A sample DataFrame
      * @example
      * df.sample(0.3)
@@ -939,7 +939,7 @@ class DataFrame {
 
     /**
      * Randomly split a DataFrame into 2 DataFrames.
-     * @param {Number} percentage A percentage of the orignal DataFrame giving the first DataFrame size. The second takes the rest.
+     * @param {Number} percentage A percentage of the original DataFrame giving the first DataFrame size. The second takes the rest.
      * @returns {Array} An Array containing the two DataFrames. First, the X% DataFrame then the rest DataFrame.
      * @example
      * const [30DF, 70DF] = df.bisect(0.3)
