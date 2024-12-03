@@ -136,19 +136,31 @@ class GroupedDataFrame {
 
     /**
      * Create an aggregation from a function.
-     * @param {Function} func The aggregation function.
+     * @param {Function | Object} func The aggregation function or an Object with keys representing
+     *     the output column, and values as aggregation functions.
      * @param {String} [columnName='aggregation'] The column name created by the aggregation.
      * @returns {DataFrame} A new DataFrame with a column 'aggregation' containing the result.
      * @example
      * groupedDF.aggregate(group => group.stat.sum('column1'));
+     * groupedDF.aggregate({ 'column1': group => group.stat.sum('column1') })
      */
     aggregate(func, columnName = "aggregation") {
+        // Convert into an object, where keys are the target column name, and
+        // values are the aggregation function.
+        const mappings = (typeof func == 'function') ? { [columnName]: func } : func;
+
         return this.df.__newInstance__(
-            [...this].map(({ group, groupKey }) => ({
-                ...groupKey,
-                [columnName]: func(group, groupKey)
-            })),
-            [...this.on, columnName]
+            [...this].map(({ group, groupKey }) => {
+                var transformed = { ...groupKey };
+
+                for (const column in mappings) {
+                    const aggregationFunc = mappings[column];
+                    transformed[column] = aggregationFunc(group, groupKey);
+                }
+
+                return transformed;
+            }),
+            [...this.on].concat(Object.keys(mappings))
         );
     }
 
