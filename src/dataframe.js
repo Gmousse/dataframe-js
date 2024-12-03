@@ -1006,9 +1006,12 @@ class DataFrame {
             return _columnNames
                 .map((col) => {
                     const [pValue, nValue] = [p.get(col), n.get(col)];
-                    if (_checkMissingValue(pValue)) {
+                    const [pMissing, nMissing] = [_checkMissingValue(pValue),_checkMissingValue(nValue)];
+                    if (pMissing && nMissing) {
+                        return 0;
+                    } else if (pMissing) {
                         return _missingValuesPosition === "last" ? 1 : -1;
-                    } else if (_checkMissingValue(nValue)) {
+                    } else if (nMissing) {
                         return _missingValuesPosition === "last" ? -1 : 1;
                     } else if (typeof pValue !== typeof nValue) {
                         throw new MixedTypeError([
